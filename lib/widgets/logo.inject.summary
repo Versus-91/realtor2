@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/widgets/logo.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

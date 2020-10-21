@@ -1,0 +1,23 @@
+{
+  "login_start": "Below are list of strings for login",
+  "login_et_user_email": "ایمیل",
+  "login_et_user_Name":"نام کاربری ",
+  "login_et_user_password": "پسورد   ",
+  "login_et_user_Number": "شماره همراه   ",
+  "login_btn_forgot_password": "پسورد را فراموش کرده اید?",
+  "login_btn_sign_in": "ورود",
+  "login_btn_Register": "ثبت نام",
+  "login_et_Amlak_Name":"نام بنگاه املاک   ",
+  "login_et_Register_Id":"شماره ثبت  املاک   ",
+  "login_error_fill_fields": "لطفا همه گزینه ها را پر کنید",
+  "login_end": "------------------------------------------------------------------------------------",
+
+  "home_start": "Below are list of strings for home",
+  "home_tv_posts": "پست ها",
+  "home_tv_search": "جست و جو ",
+  "home_tv_error": "Error",
+  "home_tv_no_post_found": "پستی موجود نیست",
+  "home_tv_choose_language": "زبان خود را انتخاب کنید",
+  "home_end": "-------------------------------------------------------------------------------------"
+
+}
