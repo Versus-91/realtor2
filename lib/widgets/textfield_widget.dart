@@ -16,6 +16,7 @@ class TextFieldWidget extends StatelessWidget {
   final ValueChanged onChanged;
   final bool autoFocus;
   final TextInputAction inputAction;
+  final InputDecoration decoration;
 
   const TextFieldWidget({
     Key key,
@@ -33,7 +34,9 @@ class TextFieldWidget extends StatelessWidget {
     this.onFieldSubmitted,
     this.onChanged,
     this.autoFocus = false,
-    this.inputAction, List inputFormatters,
+    this.inputAction,
+    this.decoration,
+    List inputFormatters,
   }) : super(key: key);
 
   @override
@@ -52,6 +55,9 @@ class TextFieldWidget extends StatelessWidget {
         keyboardType: this.inputType,
         style: Theme.of(context).textTheme.body1,
         decoration: InputDecoration(
+            border: InputBorder.none,
+            fillColor: Color(0xfff3f3f4),
+            filled: true,
             hintText: this.hint,
             hintStyle:
                 Theme.of(context).textTheme.body1.copyWith(color: hintColor),
@@ -61,5 +67,4 @@ class TextFieldWidget extends StatelessWidget {
       ),
     );
   }
-
 }

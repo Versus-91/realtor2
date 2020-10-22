@@ -26,26 +26,6 @@ class _LoginPageState extends State<LoginPage> {
   final _formStore = FormStore(appComponent.getRepository());
   final _userNameController = TextEditingController();
   final _passwordNameController = TextEditingController();
-  Widget _backButton() {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.black),
-            ),
-            Text('Back',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500))
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _entryField(String title, {bool isPassword = false}) {
     return Container(
@@ -111,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          Text('or'),
+          Text('یا'),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -130,8 +110,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget navigate(BuildContext context) {
     Future.delayed(Duration(milliseconds: 0), () {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.home, (Route<dynamic> route) => false);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(Routes.home, (Route<dynamic> route) => true);
     });
 
     return Container();
@@ -165,15 +145,16 @@ class _LoginPageState extends State<LoginPage> {
             flex: 1,
             child: Container(
               decoration: BoxDecoration(
-                color: Color(0xff1959a9),
+                color: Colors.white,
+                border: Border.all(width: 0.3, color: Colors.grey),
                 borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(5),
-                    topLeft: Radius.circular(5)),
+                    bottomRight: Radius.circular(5),
+                    topRight: Radius.circular(5)),
               ),
               alignment: Alignment.center,
-              child: Text('f',
+              child: Text('G',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.red,
                       fontSize: 25,
                       fontWeight: FontWeight.w400)),
             ),
@@ -182,13 +163,19 @@ class _LoginPageState extends State<LoginPage> {
             flex: 5,
             child: Container(
               decoration: BoxDecoration(
-                color: Color(0xff2872ba),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    offset: Offset(0.0, 1.0), //(x,y)
+                    blurRadius: 0,
+                  ),
+                ],
                 borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(5),
-                    topRight: Radius.circular(5)),
+                    bottomLeft: Radius.circular(5),
+                    topLeft: Radius.circular(5)),
               ),
               alignment: Alignment.center,
-              child: Text('Log in with Facebook',
+              child: Text('ورود با جیمیل',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -211,29 +198,43 @@ class _LoginPageState extends State<LoginPage> {
         padding: EdgeInsets.all(15),
         alignment: Alignment.bottomCenter,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(
-              'Don\'t have an account ?',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: FlatButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Routes.home);
+                  },
+                  icon: Icon(Icons.keyboard_arrow_right),
+                  label: Text("رد شدن", style: TextStyle(color: Colors.blue))),
             ),
-            SizedBox(
-              width: 10,
-            ),
-            RichText(
-                text: TextSpan(
-                    text: 'Register',
-                    style: TextStyle(
-                        color: Color(0xfff79c4f),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Future.delayed(Duration(milliseconds: 0), () {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              Routes.register, (Route<dynamic> route) => false);
-                        });
-                      })),
+            Row(
+              children: [
+                Text(
+                  'آیا ثبت نام نکرده اید؟',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                RichText(
+                    text: TextSpan(
+                        text: 'ثبت نام',
+                        style: TextStyle(
+                            color: Color(0xfff79c4f),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Future.delayed(Duration(milliseconds: 0), () {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  Routes.register,
+                                  (Route<dynamic> route) => false);
+                            });
+                          })),
+              ],
+            )
           ],
         ),
       ),
@@ -243,27 +244,19 @@ class _LoginPageState extends State<LoginPage> {
   Widget _title() {
     return RichText(
       textAlign: TextAlign.center,
-      text: TextSpan(text: 'd', children: [
+      text: TextSpan(text: 'M', children: [
         TextSpan(
-          text: 'ev',
+          text: 'y Ho',
           style: TextStyle(color: Colors.black, fontSize: 30),
         ),
         TextSpan(
-          text: 'rnz',
+          text: 'me',
           style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
         ),
       ]),
     );
   }
 
-  Widget _emailPasswordWidget() {
-    return Column(
-      children: <Widget>[
-        _entryField("Email id"),
-        _entryField("Password", isPassword: true),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -345,16 +338,7 @@ class _LoginPageState extends State<LoginPage> {
                       //     ],
                       //   ),
                       // ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: FlatButton.icon(
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(Routes.home);
-                            },
-                            icon: Icon(Icons.keyboard_arrow_right),
-                            label: Text("رد شدن",
-                                style: TextStyle(color: Colors.blue))),
-                      ),
+
                       Observer(
                         builder: (context) {
                           return _formStore.success
@@ -367,13 +351,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 20),
                   _submitButton(),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    alignment: Alignment.centerRight,
-                    child: Text('Forgot Password ?',
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w500)),
-                  ),
                   _divider(),
                   _facebookButton(),
                   SizedBox(height: height * .055),
@@ -382,7 +359,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          Positioned(top: 40, left: 0, child: _backButton()),
           Observer(
             builder: (context) {
               return _formStore.success
