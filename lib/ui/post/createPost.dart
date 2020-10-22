@@ -135,28 +135,61 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       appBar: _buildAppBar(),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(15),
-        child: Container(
-          height: 47,
-          child: RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-            onPressed: () async {
-              _store.insertPost();
-            },
-            color: Colors.red,
-            textColor: Colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('ارسال'),
-                Icon(Icons.send),
-              ],
+        child: InkWell(
+          onTap: () async {
+            _store.insertPost();
+          },
+          child: Container(
+            height: 47,
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.symmetric(vertical: 0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Colors.grey.shade200,
+                      offset: Offset(2, 4),
+                      blurRadius: 5,
+                      spreadRadius: 2)
+                ],
+                gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [Color(0xffF77E78), Color(0xffF5150A)])),
+            child: Text(
+              'ارسال',
+              style: TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),
         ),
       ),
-      body: _buildBody(),
+      body: DefaultTabController(
+        length: 2,
+        child: Column(
+          children: <Widget>[
+            Container(
+              constraints: BoxConstraints.expand(height: 50),
+              child: TabBar(tabs: [
+                Tab(text: "خرید و فروش"),
+                Tab(text: "رهن و اجاره"),
+              ]),
+            ),
+            Expanded(
+              child: Container(
+                child: TabBarView(children: [
+                  Container(
+                    child: _buildBody(),
+                  ),
+                  Container(
+                    child: _buildBody(),
+                  ),
+                ]),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -235,7 +268,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // _buildTitleField(),
-            _buildCategoryField(),
+
             const Divider(
               height: 1,
             ),
@@ -252,6 +285,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             const Divider(
               height: 1,
             ),
+
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Row(
@@ -728,7 +762,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("نوع آگهی", style: TextStyle(color: Colors.red[300])),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List<Widget>.generate(

@@ -30,7 +30,7 @@ class _UserScreenState extends State<UserScreen> {
   void getUserLogin() async {
     var sharePerf = await SharedPreferences.getInstance();
     setState(() {
-      loggedIn = sharePerf.getBool(Preferences.is_logged_in);
+      loggedIn = sharePerf.getBool(Preferences.is_logged_in) || false;
     });
     if (loggedIn == true) {
       if (widget.userStore.user == null) widget.userStore.getUser();
@@ -97,19 +97,37 @@ class _UserScreenState extends State<UserScreen> {
           UserHomeList(store: widget.postStore)
         ],
         if (loggedIn == false)
-          Padding(
-              padding:
-                  EdgeInsets.only(left: 25, right: 20, top: 30, bottom: 40),
+          InkWell(
+            onTap: () => {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  Routes.register, (Route<dynamic> route) => false)
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10),
               child: Container(
-                  alignment: Alignment.center,
-                  child: RaisedButton(
-                      color: Colors.lightBlueAccent,
-                      child: Text('ثبت نام'),
-                      onPressed: () => {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                Routes.register,
-                                (Route<dynamic> route) => false)
-                          }))),
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(vertical: 15),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Colors.grey.shade200,
+                          offset: Offset(2, 4),
+                          blurRadius: 5,
+                          spreadRadius: 2)
+                    ],
+                    gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [Color(0xffF77E78), Color(0xffF5150A)])),
+                child: Text(
+                  'ثبت نام',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              ),
+            ),
+          ),
         Padding(
           padding: EdgeInsets.only(top: 20, left: 25, bottom: 40, right: 25),
           child: Text(

@@ -764,7 +764,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+                colors: [Color(0xffF77E78), Color(0xffF5150A)])),
         child: Text(
           'ثبت نام',
           style: TextStyle(fontSize: 20, color: Colors.white),
@@ -893,5 +893,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  // dispose:-------------------------------------------------------------------
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is removed from the Widget tree
+    _nameController.dispose();
+    _familyController.dispose();
+    _userNameController.dispose();
+    _numberController.dispose();
+    _userEmailController.dispose();
+    _passwordController.dispose();
+    _passwordFocusNode.dispose();
+    _amlakNameController.dispose();
+    _registerIdController.dispose();
+    super.dispose();
   }
 }

@@ -163,13 +163,8 @@ class _LoginPageState extends State<LoginPage> {
             flex: 5,
             child: Container(
               decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0.0, 1.0), //(x,y)
-                    blurRadius: 0,
-                  ),
-                ],
+                color: Colors.white,
+                border: Border.all(width: 0.3, color: Colors.grey),
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(5),
                     topLeft: Radius.circular(5)),
@@ -177,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
               alignment: Alignment.center,
               child: Text('ورود با جیمیل',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.grey,
                       fontSize: 18,
                       fontWeight: FontWeight.w400)),
             ),
@@ -244,19 +239,21 @@ class _LoginPageState extends State<LoginPage> {
   Widget _title() {
     return RichText(
       textAlign: TextAlign.center,
-      text: TextSpan(text: 'M', children: [
-        TextSpan(
-          text: 'y Ho',
-          style: TextStyle(color: Colors.black, fontSize: 30),
-        ),
-        TextSpan(
-          text: 'me',
-          style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
-        ),
-      ]),
+      text: TextSpan(
+          text: 'M',
+          style: TextStyle(color: Colors.blue, fontSize: 20),
+          children: [
+            TextSpan(
+              text: 'y Ho',
+              style: TextStyle(color: Colors.black, fontSize: 30),
+            ),
+            TextSpan(
+              text: 'me',
+              style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
+            ),
+          ]),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
