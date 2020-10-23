@@ -140,9 +140,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             _store.insertPost();
           },
           child: Container(
-            height: 47,
+            height: 60,
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(vertical: 0),
+            padding: EdgeInsets.symmetric(vertical: 15),
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -164,44 +164,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           ),
         ),
       ),
-      body: DefaultTabController(
-        length: 2,
-        child: Column(
-          children: <Widget>[
-            Container(
-              constraints: BoxConstraints.expand(height: 50),
-              child: TabBar(tabs: [
-                Tab(text: "خرید و فروش"),
-                Tab(text: "رهن و اجاره"),
-              ]),
-            ),
-            Expanded(
-              child: Container(
-                child: TabBarView(children: [
-                  Container(
-                    child: _buildBody(),
-                  ),
-                  Container(
-                    child: _buildBody(),
-                  ),
-                ]),
-              ),
-            )
-          ],
-        ),
-      ),
+      body: _buildBody(),
     );
   }
 
   // app bar methods:-----------------------------------------------------------
   Widget _buildAppBar() {
     return AppBar(
-      actions: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Icon(Icons.settings),
-        )
-      ],
       title: Text("ارسال آگهی"),
     );
   }
@@ -268,7 +237,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // _buildTitleField(),
-
+            _buildCategoryField(),
             const Divider(
               height: 1,
             ),
@@ -285,7 +254,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             const Divider(
               height: 1,
             ),
-
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Row(
@@ -339,6 +307,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 height: 120, // constrain height
                 child: _paths != null
                     ? Container(
+                        color: Colors.blueGrey[50],
                         padding: const EdgeInsets.only(bottom: 30.0),
                         height: MediaQuery.of(context).size.height * 0.50,
                         child: Scrollbar(
@@ -386,13 +355,26 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 15),
+              padding: const EdgeInsets.only(
+                  left: 30, right: 30, bottom: 15, top: 15),
               child: RaisedButton(
+                color: Colors.green[300],
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("آپلود عکس"),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Text(
+                        "آپلود عکس",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                     Icon(
-                      Icons.file_upload,
+                      Icons.cloud_upload,
+                      color: Colors.white,
                     ),
                   ],
                 ),
@@ -407,7 +389,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               children: [
                 const SizedBox(height: 20),
                 FloatingActionButton.extended(
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(Icons.add_location_alt),
                   label: Text("افزودن نقشه"),
                   onPressed: () {
                     Navigator.push(
@@ -439,7 +421,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   //       ),
   //       TextField(
   //         decoration: InputDecoration(
-  //           labelText: 'عنوان',
+  //            hintText: 'عنوان',
   //           // when user presses enter it will adapt to it
   //         ),
   //         keyboardType: TextInputType.multiline,
@@ -466,14 +448,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         TextField(
           decoration: InputDecoration(
             errorText: _store.formErrorStore.description,
-            labelText: 'توضیحات',
 
-            border: OutlineInputBorder(
-                borderSide: new BorderSide(color: Colors.teal)),
+            border: InputBorder.none,
+            fillColor: Color(0xfff3f3f4),
+            filled: true,
             // when user presses enter it will adapt to it
           ),
           keyboardType: TextInputType.multiline,
-          minLines: 1, //Normal textInputField will be displayed
+          minLines: 3, //Normal textInputField will be displayed
           maxLines: 5,
           controller: _descriptionController,
 
@@ -499,35 +481,26 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Widget _buildRangeAreaField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: <Widget>[
-        Text(
-          "متراژ(متر مربع)",
-          style: TextStyle(color: Colors.red[300]),
-        ),
-        Row(
-          children: <Widget>[
-            Flexible(
-              child: TextField(
-                inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-                controller: _areaController,
-                onChanged: (value) {
-                  var area = int.tryParse(_areaController.text) ?? 0;
-                  _store.setArea(area);
-                },
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  errorText: _store.formErrorStore.area,
-                  labelText: 'متراژ',
-                  border: OutlineInputBorder(
-                      borderSide: new BorderSide(color: Colors.teal)),
-                  contentPadding: EdgeInsets.all(10),
-                  hintText: 'متراژ',
-                ),
-              ),
+        Flexible(
+          child: TextField(
+            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+            controller: _areaController,
+            onChanged: (value) {
+              var area = int.tryParse(_areaController.text) ?? 0;
+              _store.setArea(area);
+            },
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              errorText: _store.formErrorStore.area,
+              hintText: 'متراژ',
+              border: InputBorder.none,
+              fillColor: Color(0xfff3f3f4),
+              filled: true,
+              contentPadding: EdgeInsets.all(10),
             ),
-          ],
+          ),
         ),
       ],
     );
@@ -557,9 +530,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         errorText: _store.formErrorStore.rahnPrice,
-                        labelText: "رهن",
-                        border: OutlineInputBorder(
-                            borderSide: new BorderSide(color: Colors.teal)),
+                        border: InputBorder.none,
+                        fillColor: Color(0xfff3f3f4),
+                        filled: true,
                         hintText: "قیمت رهن",
                         contentPadding: EdgeInsets.all(10))),
               ),
@@ -593,9 +566,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         errorText: _store.formErrorStore.rentPrice,
-                        labelText: "اجاره",
-                        border: OutlineInputBorder(
-                            borderSide: new BorderSide(color: Colors.teal)),
+                        border: InputBorder.none,
+                        fillColor: Color(0xfff3f3f4),
+                        filled: true,
                         hintText: "قیمت اجاره",
                         contentPadding: EdgeInsets.all(10))),
               ),
@@ -632,10 +605,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         errorText: _store.formErrorStore.buyPrice,
-                        labelText: "قیمت",
+                        hintText: "قیمت",
                         border: OutlineInputBorder(
                             borderSide: new BorderSide(color: Colors.teal)),
-                        hintText: " قیمت",
                         contentPadding: EdgeInsets.all(10))),
               ),
             ],
@@ -651,42 +623,32 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         return _districtStore.districtList != null
             ? Container(
                 padding: EdgeInsets.only(top: 10, bottom: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: <Widget>[
-                    Text(
-                      "موقعیت",
-                      style: TextStyle(color: Colors.red[300]),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Flexible(
-                          child: DropdownButtonFormField<int>(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      new BorderSide(color: Colors.teal)),
-                              labelText: "محله",
-                              contentPadding: EdgeInsets.all(10),
-                            ),
-                            onChanged: (int val) => setState(() => {
-                                  selectedItem = val,
-                                  _store.setDistrict(val),
-                                }),
-                            items: _districtStore.districtList.districts
-                                .map((item) {
-                              return DropdownMenuItem<int>(
-                                child: Text(item.name),
-                                value: item.id,
-                              );
-                            }).toList(),
-                          ),
+                    Flexible(
+                      child: DropdownButtonFormField<int>(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3f3f4),
+                          filled: true,
+                          hintText: "محله",
+                          contentPadding: EdgeInsets.all(10),
                         ),
-                      ],
-                    )
+                        onChanged: (int val) => setState(() => {
+                              selectedItem = val,
+                              _store.setDistrict(val),
+                            }),
+                        items:
+                            _districtStore.districtList.districts.map((item) {
+                          return DropdownMenuItem<int>(
+                            child: Text(item.name),
+                            value: item.id,
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   ],
-                ),
-              )
+                ))
             : Container(
                 child: FlatButton(
                     onPressed: () {
@@ -706,41 +668,31 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         return _cityStore.cityList != null
             ? Container(
                 padding: EdgeInsets.only(top: 10, bottom: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: <Widget>[
-                    Text(
-                      "موقعیت",
-                      style: TextStyle(color: Colors.red[300]),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Flexible(
-                          child: DropdownButtonFormField<int>(
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      new BorderSide(color: Colors.teal)),
-                              labelText: "شهر",
-                              contentPadding: EdgeInsets.all(10),
-                            ),
-                            onChanged: (int val) => setState(() => {
-                                  selectedItem = val,
-                                  _store.setCity(val),
-                                }),
-                            items: _cityStore.cityList.cities.map((item) {
-                              return DropdownMenuItem<int>(
-                                child: Text(item.name),
-                                value: item.id,
-                              );
-                            }).toList(),
-                          ),
+                    Flexible(
+                      child: DropdownButtonFormField<int>(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3f3f4),
+                          filled: true,
+                          hintText: "شهر",
+                          contentPadding: EdgeInsets.all(10),
                         ),
-                      ],
-                    )
+                        onChanged: (int val) => setState(() => {
+                              selectedItem = val,
+                              _store.setCity(val),
+                            }),
+                        items: _cityStore.cityList.cities.map((item) {
+                          return DropdownMenuItem<int>(
+                            child: Text(item.name),
+                            value: item.id,
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   ],
-                ),
-              )
+                ))
             : Container(
                 child: FlatButton(
                     onPressed: () {
@@ -774,20 +726,40 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             _categoryText = category.name;
                             _store.setCategory(category.id);
                           }
-                          return GestureDetector(
-                            onTap: () {
-                              setState(() {
+                          return Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _categoryText = category.name;
+                                  _value = category.id;
+                                });
                                 _categoryText = category.name;
-                                _value = category.id;
-                              });
-                              _categoryText = category.name;
-                              _store.setCategory(category.id);
-                            },
-                            child: Container(
-                              color: _value == category.id
-                                  ? Colors.redAccent
-                                  : Colors.transparent,
-                              child: Text(category.name),
+                                _store.setCategory(category.id);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: _value == category.id
+                                      ? Border(
+                                          bottom: BorderSide(
+                                              width: 2.0,
+                                              color: Colors.redAccent),
+                                        )
+                                      : Border(
+                                          bottom: BorderSide(
+                                              width: 2.0,
+                                              color: Colors.transparent),
+                                        ),
+                                ),
+                                child: Text(
+                                  category.name,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: _value == category.id
+                                          ? Colors.redAccent
+                                          : Colors.black),
+                                ),
+                              ),
                             ),
                           );
                         },
@@ -811,32 +783,25 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return Observer(
       builder: (context) {
         return _typeStore.typeList != null
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                    Text(
-                      "نوع ملک",
-                      style: TextStyle(color: Colors.red[300]),
-                    ),
-                    DropdownButtonFormField<int>(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: new BorderSide(color: Colors.teal)),
-                        labelText: "نوع ملک",
-                        contentPadding: EdgeInsets.all(10),
-                      ),
-                      onChanged: (int val) => setState(() => {
-                            selectedItem = val,
-                            _store.setPropertyHomeType(val),
-                          }),
-                      items: _typeStore.typeList.types.map((item) {
-                        return DropdownMenuItem<int>(
-                          child: Text(item.name),
-                          value: item.id,
-                        );
-                      }).toList(),
-                    ),
-                  ])
+            ? DropdownButtonFormField<int>(
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  fillColor: Color(0xfff3f3f4),
+                  filled: true,
+                  hintText: "نوع ملک",
+                  contentPadding: EdgeInsets.all(10),
+                ),
+                onChanged: (int val) => setState(() => {
+                      selectedItem = val,
+                      _store.setPropertyHomeType(val),
+                    }),
+                items: _typeStore.typeList.types.map((item) {
+                  return DropdownMenuItem<int>(
+                    child: Text(item.name),
+                    value: item.id,
+                  );
+                }).toList(),
+              )
             : Container(
                 child: FlatButton(
                     onPressed: () {
