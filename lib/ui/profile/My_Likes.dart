@@ -9,7 +9,6 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -31,7 +30,6 @@ class _MyLikesScreenState extends State<MyLikesScreen>
   @override
   void initState() {
     super.initState();
-    _tabbarController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -112,31 +110,38 @@ class _MyLikesScreenState extends State<MyLikesScreen>
         clipBehavior: Clip.antiAliasWithSaveLayer,
         shadowColor: Colors.black,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Expanded(
-                child: Container(
-              padding: EdgeInsets.all(5),
-              child: ListTile(
-                dense: false,
-                contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                leading: Icon(FontAwesomeIcons.heart),
-                trailing: Icon(Icons.more_vert),
-                title: Text(
-                  '${_postStore.postList.posts[position].title}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  style: Theme.of(context).textTheme.title,
-                ),
-                subtitle: Text(
-                  '${_postStore.postList.posts[position].description}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                ),
+              child: Stack(
+                children: [
+                 
+                  ListTile(
+                    dense: false,
+                    contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    // leading: Icon(FontAwesomeIcons.heart),
+                    title: Text(
+                      '${_postStore.postList.posts[position].category.name}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    subtitle: Row(
+                      children: [
+                        Icon(Icons.place),
+                        Text(
+                          '${_postStore.postList.posts[position].district.city.name},${_postStore.postList.posts[position].district.name}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            )),
+            ),
             Container(
               padding: EdgeInsets.all(4),
               width: 130,
@@ -185,7 +190,6 @@ class _MyLikesScreenState extends State<MyLikesScreen>
 
   @override
   void dispose() {
-    _tabbarController.dispose();
     super.dispose();
   }
 }
