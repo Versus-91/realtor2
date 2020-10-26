@@ -5,7 +5,7 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/userscreen.dart';
 import 'package:boilerplate/ui/home/posts_list_screen.dart';
-import 'package:boilerplate/ui/profile/profile_screen.dart';
+import 'package:boilerplate/ui/profile/profile_page.dart';
 import 'package:boilerplate/ui/search/search.dart';
 import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
           Container(child: PostsListScreen()),
           Container(
-            child: ProfileScreen(),
+            child: ProfilePage(),
           ),
           Container(
             child: SearchScreen(),
