@@ -1,14 +1,32 @@
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/routes.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/ui/profile/My_Likes.dart';
 import 'package:boilerplate/ui/profile/colors.dart';
 import 'package:boilerplate/ui/profile/my_info.dart';
 import 'package:boilerplate/ui/profile/opaque_image.dart';
 import 'package:boilerplate/ui/profile/profile_info_big_card.dart';
 import 'package:boilerplate/ui/profile/profile_info_card.dart';
-import 'package:boilerplate/ui/profile/super_likes_me_page.dart';
 import 'package:boilerplate/ui/profile/text_style.dart';
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  bool loggedIn = false;
+  UserStore _userStore;
+  AnimationController _rippleAnimationController;
+  Future<Null> getSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      loggedIn = prefs.getBool(Preferences.is_logged_in) ?? false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -32,17 +50,69 @@ class ProfilePage extends StatelessWidget {
                           children: [
                             Align(
                               alignment: Alignment.centerLeft,
-                              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  FlatButton(
-                                      onPressed: null,
-                                      child: Icon(Icons.power_settings_new,size:30,)),
                                   Text(
-                                    "My Profile",
-                                    textAlign: TextAlign.left,
+                                    "پروفایل من",
+                                    textAlign: TextAlign.right,
                                     style: headingTextStyle,
                                   ),
+                                  loggedIn
+                                      ? FlatButton(
+                                          onPressed: () {
+                                            {
+                                              SharedPreferences.getInstance()
+                                                  .then((preference) async {
+                                                preference.setBool(
+                                                    Preferences.is_logged_in,
+                                                    false);
+                                                preference.remove(
+                                                    Preferences.auth_token);
+                                                _userStore.setLoginState(false);
+                                                await _rippleAnimationController
+                                                    .forward();
+                                                Navigator.of(context)
+                                                    .pushReplacementNamed(
+                                                        Routes.login);
+                                              });
+                                            }
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.power_settings_new,
+                                                size: 30,
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(2.0),
+                                              ),
+                                              Text("خروج",
+                                                  style: whiteNameTextStyle),
+                                            ],
+                                          ))
+                                      : FlatButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(
+                                                    Routes.login);
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.login_rounded,
+                                                size: 30,
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(2.0),
+                                              ),
+                                              Text(
+                                                "ورود",
+                                                style: whiteNameTextStyle,
+                                              ),
+                                            ],
+                                          )),
                                 ],
                               ),
                             ),
@@ -83,12 +153,21 @@ class ProfilePage extends StatelessWidget {
                       ),
                       TableRow(
                         children: [
-                          ProfileInfoBigCard(
-                            secondText: "آگهی های مورد علاقه",
-                            icon: Icon(
-                              Icons.favorite,
-                              size: 32,
-                              color: blueColor,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => MyLikesScreen(),
+                                ),
+                              );
+                            },
+                            child: ProfileInfoBigCard(
+                              secondText: "آگهی های مورد علاقه",
+                              icon: Icon(
+                                Icons.favorite,
+                                size: 32,
+                                color: blueColor,
+                              ),
                             ),
                           ),
                           ProfileInfoBigCard(
@@ -115,7 +194,7 @@ class ProfilePage extends StatelessWidget {
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => SuperLikesMePage(),
+                                  builder: (context) => MyLikesScreen(),
                                 ),
                               );
                             },
@@ -146,7 +225,7 @@ class ProfilePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  ProfileInfoCard(firstText: "54%", secondText: "Progress"),
+                  ProfileInfoCard(firstText: "54%", secondText: ""),
                   SizedBox(
                     width: 10,
                   ),
@@ -157,7 +236,7 @@ class ProfilePage extends StatelessWidget {
                   SizedBox(
                     width: 10,
                   ),
-                  ProfileInfoCard(firstText: "152", secondText: "Level"),
+                  ProfileInfoCard(firstText: "152", secondText: "آگهی های من"),
                 ],
               ),
             ),

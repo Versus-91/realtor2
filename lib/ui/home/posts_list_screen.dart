@@ -281,23 +281,6 @@ class _PostsListScreenState extends State<PostsListScreen> {
     );
   }
 
-  void getSuggestion() async {
-    // //get suggestion function
-    // var res = await http.post(dataurl + "?query=" + Uri.encodeComponent(query));
-    // //in query there might be unwant character so, we encode the query to url
-    // if (res.statusCode == 200) {
-    //   setState(() {
-    //     data = json.decode(res.body);
-    //     //update data value and UI
-    //   });
-    // } else {
-    //   //there is error
-    //   setState(() {
-    //     error = true;
-    //   });
-    // }
-  }
-
   Widget _handleErrorMessage() {
     return Observer(
       builder: (context) {
