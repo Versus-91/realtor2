@@ -71,9 +71,9 @@ class _PropertyCradsState extends State<PropertyCrads> {
           );
         },
         child: Padding(
-          padding: EdgeInsets.only(top: 20, bottom: 20),
+          padding: EdgeInsets.only(top: 10, bottom: 5),
           child: Container(
-            height: 320,
+            height: 310,
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6.0)),
@@ -143,12 +143,11 @@ class _PropertyCradsState extends State<PropertyCrads> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 7.0),
                   Padding(
                     padding: EdgeInsets.only(top: 10, left: 12),
                     child: !type.contains('رهن')
                         ? Container(
-                            width: 300,
+                            width: MediaQuery.of(context).size.width-50,
                             child: Text(
                               post.price.toString(),
                               style: TextStyle(
@@ -159,67 +158,79 @@ class _PropertyCradsState extends State<PropertyCrads> {
                             ),
                           )
                         : Container(
-                            width: 300,
+                            width: MediaQuery.of(context).size.width-50,
                             child: Text(
-                              post.rent.toString() +
-                                  '--' +
-                                  post.deopsit.toString(),
+                              'رهن: ${post.deopsit} , اجاره: ${post.rent}',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w800,
                               ),
-                              textAlign: TextAlign.left,
+                              textAlign: TextAlign.right,
                             ),
                           ),
                   ),
                   SizedBox(height: 7.0),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10, left: 12, right: 12),
-                    child: Container(
-                        width: 300,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  no1,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w300,
-                                  ),
+                  Container(
+                      width: MediaQuery.of(context).size.width-20,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                no1,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w300,
                                 ),
-                                SizedBox(width: 10),
-                                Image.asset(
-                                  no1Url,
-                                  fit: BoxFit.contain,
-                                  height: 30.0,
-                                  width: 30.0,
+                              ),
+                              SizedBox(width: 10),
+                              Image.asset(
+                                no1Url,
+                                fit: BoxFit.contain,
+                                height: 30.0,
+                                width: 30.0,
+                              ),
+                            ],
+                          ),
+                           Row(
+                            children: <Widget>[
+                              Text(
+                                no1,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w300,
                                 ),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  no2 == '0' ? 'N/A' : no2,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w300,
-                                  ),
+                              ),
+                              SizedBox(width: 10),
+                              Image.asset(
+                                no1Url,
+                                fit: BoxFit.contain,
+                                height: 30.0,
+                                width: 30.0,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                no2 == '0' ? 'N/A' : no2,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w300,
                                 ),
-                                SizedBox(width: 10),
-                                Image.asset(
-                                  no2Url,
-                                  fit: BoxFit.contain,
-                                  height: 30.0,
-                                  width: 30.0,
-                                ),
-                              ],
-                            ),
-                          ],
-                        )),
-                  ),
-                  SizedBox(height: 10.0),
+                              ),
+                              SizedBox(width: 10),
+                              Image.asset(
+                                no2Url,
+                                fit: BoxFit.contain,
+                                height: 30.0,
+                                width: 30.0,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),

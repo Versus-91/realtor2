@@ -1,14 +1,16 @@
+import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
 import 'package:boilerplate/stores/form/filter_form.dart';
-import 'package:boilerplate/stores/theme/theme_store.dart';
+import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
-import 'package:boilerplate/ui/customlist/range_slider.dart';
+
 import 'package:boilerplate/ui/customlist/silder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'list_theme.dart';
 import 'model/pop_list.dart';
@@ -20,16 +22,31 @@ class FiltersScreen extends StatefulWidget {
   _FiltersScreenState createState() => _FiltersScreenState();
 }
 
+enum SelectType { Rent, Buy }
+enum SelectTypeHome { Maskoni, Tejari, Sanati }
+
 class _FiltersScreenState extends State<FiltersScreen> {
   List<SelectedPropertyTypes> popularFilterListData =
       SelectedPropertyTypes.popularFList;
   List<int> selectedTypes = [];
   List<SelectedPropertyTypes> accomodationListData;
-  ThemeStore _themeStore;
+  int _value;
+  String _categoryText = '';
+
   CityStore _cityStore;
   DistrictStore _districtStore;
   CategoryStore _categoryStore;
   TypeStore _typeStore;
+  SelectTypeHome _hometype = SelectTypeHome.Maskoni;
+  final _store = PostFormStore(appComponent.getRepository());
+  final List<bool> isSelected = [
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -39,11 +56,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     accomodationListData = widget.filterForm.selectedPropertyTypes;
-    _themeStore = Provider.of<ThemeStore>(context);
     _cityStore = Provider.of<CityStore>(context);
     _districtStore = Provider.of<DistrictStore>(context);
     _categoryStore = Provider.of<CategoryStore>(context);
     _typeStore = Provider.of<TypeStore>(context);
+
     if (!_cityStore.loading) _cityStore.getCities();
     if (!_districtStore.loading) _districtStore.getDistricts();
     if (!_categoryStore.loading) _categoryStore.getCategories();
@@ -55,6 +72,57 @@ class _FiltersScreenState extends State<FiltersScreen> {
     return Container(
       color: HotelAppTheme.buildLightTheme().backgroundColor,
       child: Scaffold(
+        bottomNavigationBar: Padding(
+            padding:
+                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Flexible(
+                    fit: FlexFit.tight,
+                    child: Container(
+                      height: 50,
+                      child: FlatButton(
+                          splashColor: Colors.red,
+                          color: Colors.red[100],
+                          onPressed: () {},
+                          child: Text(
+                            "پاک کردن گزینه ها",
+                            style: TextStyle(color: Colors.grey[600]),
+                          )),
+                    )),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Container(
+                    height: 50,
+                    child: FlatButton.icon(
+                      color: Colors.red,
+                      splashColor: Colors.red[100],
+                      icon: const Icon(FontAwesomeIcons.search, size: 18),
+                      label: Text("جست و جو",
+                          style: TextStyle(color: Colors.grey[900])),
+                      onPressed: () {
+                        var items = accomodationListData
+                            ?.where((item) =>
+                                item.id != null && item.isSelected == true)
+                            ?.toList();
+                        if (items != null && items.length > 0) {
+                          for (var type in items) {
+                            widget.filterForm.setPropertyType(type.id);
+                          }
+                        }
+                        widget.filterForm
+                            .setPropertyTypeList(accomodationListData);
+                        widget.filterForm.loading = true;
+                        Future.delayed(Duration(milliseconds: 2), () {
+                          Navigator.pop(context);
+                        });
+                      },
+                    ),
+                  ),
+                )
+              ],
+            )),
         backgroundColor: Colors.transparent,
         body: Column(
           children: <Widget>[
@@ -63,11 +131,26 @@ class _FiltersScreenState extends State<FiltersScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    priceBarFilter(),
+                    _buildCategoryField(),
                     const Divider(
                       height: 1,
                     ),
+                    _buildHomeTypeField(),
+                    const Divider(
+                      height: 1,
+                    ),
+                    priceBarFilter(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: const Divider(
+                        height: 1,
+                      ),
+                    ),
                     popularFilter(),
+                    const Divider(
+                      height: 1,
+                    ),
+                    _buildBedroomCountField(),
                     const Divider(
                       height: 1,
                     ),
@@ -83,59 +166,83 @@ class _FiltersScreenState extends State<FiltersScreen> {
             const Divider(
               height: 1,
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 16, right: 16, bottom: 16, top: 8),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: HotelAppTheme.buildLightTheme().primaryColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.6),
-                      blurRadius: 8,
-                      offset: const Offset(4, 4),
-                    ),
-                  ],
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-                    highlightColor: Colors.transparent,
-                    onTap: () {
-                      var items = accomodationListData
-                          ?.where((item) =>
-                              item.id != null && item.isSelected == true)
-                          ?.toList();
-                      if (items != null && items.length > 0) {
-                        for (var type in items) {
-                          widget.filterForm.setPropertyType(type.id);
-                        }
-                      }
-                      widget.filterForm
-                          .setPropertyTypeList(accomodationListData);
-                      widget.filterForm.loading = true;
-                      Future.delayed(Duration(milliseconds: 2), () {
-                        Navigator.pop(context);
-                      });
-                    },
-                    child: Center(
-                      child: Text(
-                        'اعمال',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                            color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryField() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15, bottom: 10),
+      child: Observer(
+        builder: (context) {
+          return _categoryStore.categoryList != null
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List<Widget>.generate(
+                        _categoryStore.categoryList.categories.length,
+                        (index) {
+                          var category =
+                              _categoryStore.categoryList.categories[index];
+                          if (_value == null) {
+                            _value = category.id;
+                            _categoryText = category.name;
+                            _store.setCategory(category.id);
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _categoryText = category.name;
+                                  _value = category.id;
+                                });
+                                _categoryText = category.name;
+                                _store.setCategory(category.id);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: _value == category.id
+                                      ? Border(
+                                          bottom: BorderSide(
+                                              width: 2.0,
+                                              color: Colors.redAccent),
+                                        )
+                                      : Border(
+                                          bottom: BorderSide(
+                                              width: 2.0,
+                                              color: Colors.transparent),
+                                        ),
+                                ),
+                                child: Text(
+                                  category.name,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: _value == category.id
+                                          ? Colors.redAccent
+                                          : Colors.black),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    )
+                  ],
+                )
+              : Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        _categoryStore.getCategories();
+                      },
+                      child: Icon(Icons.refresh)),
+                );
+        },
       ),
     );
   }
@@ -327,7 +434,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           padding:
               const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
           child: Text(
-            'Popular filters',
+            'فیلتر بر اساس :',
             textAlign: TextAlign.left,
             style: TextStyle(
                 color: Colors.grey,
@@ -401,7 +508,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             break;
           }
         } catch (e) {
-          throw(e);
+          throw (e);
         }
       }
       noList.add(Row(
@@ -414,35 +521,150 @@ class _FiltersScreenState extends State<FiltersScreen> {
     return noList;
   }
 
-  Widget priceBarFilter() {
-    return Observer(builder: (context) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+  Widget _buildHomeTypeField() {
+    return Observer(
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.only(right: 16, left: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "نوع ملک",
+                style: TextStyle(color: Colors.red[300]),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Radio(
+                    value: SelectTypeHome.Tejari,
+                    groupValue: _hometype,
+                    onChanged: (SelectTypeHome value) {
+                      _hometype = value;
+                      setState(() {
+                        var typehome = int.tryParse(value.toString());
+                      });
+                    },
+                  ),
+                  Text(
+                    'تجاری',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  Radio(
+                    value: SelectTypeHome.Maskoni,
+                    groupValue: _hometype,
+                    onChanged: (SelectTypeHome value) {
+                      _hometype = value;
+                      setState(() {
+                        var typehome = int.tryParse(value.toString());
+                      });
+                    },
+                  ),
+                  Text(
+                    'مسکونی',
+                    style: new TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  Radio(
+                    value: SelectTypeHome.Sanati,
+                    groupValue: _hometype,
+                    onChanged: (SelectTypeHome value) {
+                      _hometype = value;
+                      setState(() {
+                        var typehome = int.tryParse(value.toString());
+                      });
+                    },
+                  ),
+                  new Text(
+                    'صنعتی',
+                    style: new TextStyle(fontSize: 16.0),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildBedroomCountField() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          Text(
+            "تعداد اتاق :",
+            style: TextStyle(color: Colors.red[300]),
+          ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'قیمت',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                  fontWeight: FontWeight.normal),
+            padding: const EdgeInsets.only(top: 10),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ToggleButtons(
+                children: <Widget>[
+                  Text("+1"),
+                  Text("+2"),
+                  Text("+3"),
+                  Text("+4"),
+                  Text("+5"),
+                ],
+                onPressed: (int index) {
+                  setState(() {
+                    for (int buttonIndex = 0;
+                        buttonIndex < isSelected.length;
+                        buttonIndex++) {
+                      if (buttonIndex == index) {
+                        isSelected[buttonIndex] = true;
+                      } else {
+                        isSelected[buttonIndex] = false;
+                      }
+                    }
+                  });
+                },
+                isSelected: isSelected,
+              ),
             ),
           ),
-          RangeSliderView(
-            values: RangeValues(widget.filterForm.minPrice ?? 100,
-                widget.filterForm.maxPrice ?? 10000),
-            onChangeRangeValues: (RangeValues values) {
-              widget.filterForm.setMinPrice(values.start);
-              widget.filterForm.setMaxPrice(values.end);
-            },
-          ),
-          const SizedBox(
-            height: 8,
-          )
         ],
+      ),
+    );
+  }
+
+  Widget priceBarFilter() {
+    return Observer(builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "قیمت",
+              style: TextStyle(color: Colors.red[300]),
+            ),
+            Row(
+              children: <Widget>[
+                Flexible(
+                  child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          hintText: "پایین ترین قیمت",
+                          contentPadding: EdgeInsets.all(10))),
+                ),
+                Text("_"),
+                Flexible(
+                  child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          hintText: "بالا ترین قیمت",
+                          contentPadding: EdgeInsets.all(10))),
+                ),
+              ],
+            ),
+          ],
+        ),
       );
     });
   }

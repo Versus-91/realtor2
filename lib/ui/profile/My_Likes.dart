@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
+import 'package:boilerplate/ui/post/postscreen.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -100,141 +103,155 @@ class _MyLikesScreenState extends State<MyLikesScreen>
               Routes.post, (Route<dynamic> route) => false);
         });
       },
-      child: Card(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        shadowColor: Colors.black,
-        elevation: 3,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: ListTile(
-                    dense: false,
-                    contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 30),
-                    // leading: Icon(FontAwesomeIcons.heart),
-                    title: Text(
-                      '${_postStore.postList.posts[position].category.name}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(Icons.place),
-                            Text(
-                              '${_postStore.postList.posts[position].district.city.name},${_postStore.postList.posts[position].district.name}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
-                            ),
-                          ],
-                        ),
-                        _postStore.postList.posts[position].category.name
-                                .contains('رهن')
-                            ? Text(
-                                'اجاره: ${_postStore.postList.posts[position].rent},   رهن: ${_postStore.postList.posts[position].deopsit}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: false,
-                              )
-                            : Text(
-                                'قیمت: ${_postStore.postList.posts[position].price}',
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PostScreen(
+                      post: _postStore.postList.posts[position],
+                    )),
+          );
+        },
+        child: Card(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          shadowColor: Colors.black,
+          elevation: 3,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: ListTile(
+                      dense: false,
+                      contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      title: Text(
+                        '${_postStore.postList.posts[position].category.name}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.place),
+                              Text(
+                                '${_postStore.postList.posts[position].district.city.name},${_postStore.postList.posts[position].district.name}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
                               ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(0),
-                  width: 130,
-                  height: 100,
-                  child: _postStore.postList.posts[position].images.length > 0
-                      ? Image.network(
-                          Endpoints.baseUrl +
-                              "/" +
-                              _postStore
-                                  .postList.posts[position].images[0]?.path,
-                          fit: BoxFit.cover,
-                        )
-                      : Image.asset("assets/images/house1.jpg",
-                          fit: BoxFit.cover),
-                ),
-              ],
-            ),
-            Divider(
-              thickness: 1,
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 5.0),
-              child: IntrinsicHeight(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      child: Row(
-                        children: [Icon(FontAwesomeIcons.heart)],
+                            ],
+                          ),
+                          _postStore.postList.posts[position].category.name
+                                  .contains('رهن')
+                              ? Text(
+                                  'رهن: ${_postStore.postList.posts[position].deopsit} , اجاره: ${_postStore.postList.posts[position].rent}',
+                                  maxLines: 1,
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                )
+                              : Text(
+                                  'قیمت: ${_postStore.postList.posts[position].price}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                ),
+                        ],
                       ),
                     ),
-                    VerticalDivider(
-                      color: Colors.grey,
-                      width: 10,
-                      endIndent: 4,
-                    ),
-                    Column(
-                      children: [
-                        Text("متراژ"),
-                        Text(
-                          '${_postStore.postList.posts[position].area}',
-                          style: TextStyle(
-                              fontSize: 14, color: Colors.grey.withOpacity(1)),
-                        )
-                      ],
-                    ),
-                    VerticalDivider(
-                      color: Colors.grey,
-                      width: 10,
-                      endIndent: 4,
-                    ),
-                    Column(
-                      children: [
-                        Text("اتاق خواب"),
-                        Text(
-                          '${_postStore.postList.posts[position].bedroom}',
-                          style: TextStyle(
-                              fontSize: 14, color: Colors.grey.withOpacity(1)),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 8.0),
+                    width: 130,
+                    height: 100,
+                    child: _postStore.postList.posts[position].images.length > 0
+                        ? Image.network(
+                            Endpoints.baseUrl +
+                                "/" +
+                                _postStore
+                                    .postList.posts[position].images[0]?.path,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset("assets/images/house1.jpg",
+                            fit: BoxFit.cover),
+                  ),
+                ],
+              ),
+              Divider(
+                thickness: 1,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 5.0),
+                child: IntrinsicHeight(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Row(
+                          children: [Icon(FontAwesomeIcons.heart)],
                         ),
-                      ],
-                    ),
-                    VerticalDivider(
-                      color: Colors.grey,
-                      width: 10,
-                      endIndent: 4,
-                    ),
-                    Column(
-                      children: [
-                        Text("شناسه آگهی"),
-                        Text(
-                          '${_postStore.postList.posts[position].age}',
-                          style: TextStyle(
-                              fontSize: 14, color: Colors.grey.withOpacity(1)),
-                        )
-                      ],
-                    ),
-                  ],
+                      ),
+                      VerticalDivider(
+                        color: Colors.grey,
+                        width: 10,
+                        endIndent: 4,
+                      ),
+                      Column(
+                        children: [
+                          Text("متراژ"),
+                          Text(
+                            '${_postStore.postList.posts[position].area}',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.withOpacity(1)),
+                          )
+                        ],
+                      ),
+                      VerticalDivider(
+                        color: Colors.grey,
+                        width: 10,
+                        endIndent: 4,
+                      ),
+                      Column(
+                        children: [
+                          Text("اتاق خواب"),
+                          Text(
+                            '${_postStore.postList.posts[position].bedroom}',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.withOpacity(1)),
+                          ),
+                        ],
+                      ),
+                      VerticalDivider(
+                        color: Colors.grey,
+                        width: 10,
+                        endIndent: 4,
+                      ),
+                      Column(
+                        children: [
+                          Text("شناسه آگهی"),
+                          Text(
+                            '${_postStore.postList.posts[position].age}',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.withOpacity(1)),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

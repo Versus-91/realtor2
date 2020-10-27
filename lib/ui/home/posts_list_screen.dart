@@ -22,7 +22,6 @@ class PostsListScreen extends StatefulWidget {
 class _PostsListScreenState extends State<PostsListScreen> {
   final ScrollController _scrollController = ScrollController();
   PostStore _postStore;
-  ThemeStore _themeStore;
   PostRequest _filterRequest;
   FilterFormStore _filterForm = FilterFormStore();
   @override
@@ -35,7 +34,7 @@ class _PostsListScreenState extends State<PostsListScreen> {
     super.didChangeDependencies();
 
     // initializing stores
-    _themeStore = Provider.of<ThemeStore>(context);
+
     _postStore = Provider.of<PostStore>(context);
     // check to see if already called api
     if (!_postStore.loading) {
@@ -207,76 +206,38 @@ class _PostsListScreenState extends State<PostsListScreen> {
 
   Widget getSearchBarUI() {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8),
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: HotelAppTheme.buildLightTheme().backgroundColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        offset: const Offset(0, 2),
-                        blurRadius: 6),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 4, bottom: 4),
-                  child: TextField(
-                    onChanged: (String txt) {},
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                    cursorColor: HotelAppTheme.buildLightTheme().primaryColor,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'جست و جو',
-                    ),
-                  ),
-                ),
-              ),
+      padding: const EdgeInsets.only(
+        left: 8,
+        right: 8,
+        top: 10,
+        bottom: 8,
+      ),
+      child: Container(
+        height: 50,
+        decoration: BoxDecoration(
+          color: HotelAppTheme.buildLightTheme().backgroundColor,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(10),
+          ),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                offset: const Offset(0, 2),
+                blurRadius: 6),
+          ],
+        ),
+        child: Padding(
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 4),
+          child: TextField(
+            style: const TextStyle(fontSize: 18, color: Colors.red),
+            cursorColor: HotelAppTheme.buildLightTheme().primaryColor,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: 'جست و جوی آگهی',
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: HotelAppTheme.buildLightTheme().primaryColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.4),
-                    offset: const Offset(0, 2),
-                    blurRadius: 8.0),
-              ],
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(20),
-                ),
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Icon(FontAwesomeIcons.search,
-                      size: 20,
-                      color: HotelAppTheme.buildLightTheme().backgroundColor),
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

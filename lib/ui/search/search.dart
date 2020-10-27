@@ -1,4 +1,4 @@
-import 'package:boilerplate/constants/assets.dart';
+
 
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/routes.dart';
@@ -223,8 +223,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
           _buildHomeTypeField(),
           if (_hometype == SelectTypeHome.Maskoni) _buildmaskonibranchField(),
-          // _buildRahnPriceField(),
-          // _buildRentPriceField(),
+        
           if (_character == SelectType.Rent) ...[
             _buildRentPriceField(),
             _buildEjarePriceField(),
