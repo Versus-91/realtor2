@@ -2,6 +2,7 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/profile/My_Likes.dart';
+import 'package:boilerplate/ui/profile/account_info.dart';
 import 'package:boilerplate/ui/profile/colors.dart';
 import 'package:boilerplate/ui/profile/my_info.dart';
 import 'package:boilerplate/ui/profile/opaque_image.dart';
@@ -133,12 +134,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       TableRow(
                         children: [
-                          ProfileInfoBigCard(
-                            secondText: "اطلاعات کاربری",
-                            icon: Icon(
-                              Icons.account_circle,
-                              size: 32,
-                              color: blueColor,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => AcountInfoScreen(),
+                                ),
+                              );
+                            },
+                            child: ProfileInfoBigCard(
+                              secondText: "اطلاعات کاربری",
+                              icon: Icon(
+                                Icons.account_circle,
+                                size: 32,
+                                color: blueColor,
+                              ),
                             ),
                           ),
                           ProfileInfoBigCard(
