@@ -170,12 +170,18 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                           ),
-                          ProfileInfoBigCard(
-                            secondText: "افزودن آگهی",
-                            icon: Icon(
-                              Icons.post_add,
-                              size: 32,
-                              color: blueColor,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed(Routes.createpost);
+                            },
+                            child: ProfileInfoBigCard(
+                              secondText: "افزودن آگهی",
+                              icon: Icon(
+                                Icons.post_add,
+                                size: 32,
+                                color: blueColor,
+                              ),
                             ),
                           ),
                         ],

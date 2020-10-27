@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       vsync: this,
       duration: kRippleAnimationDuration,
     );
-    _tabbarController = TabController(length: 4, vsync: this);
+    _tabbarController = TabController(length: 3, vsync: this);
     getSharedPrefs();
   }
 
@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         tabBarColor: Colors.black,
         unselectedLabelColor: Colors.grey,
         tabBarHeight: 50,
-        length: 4,
+        length: 3,
         indicatorColor: Colors.black87,
         controller: _tabbarController,
         tabs: [
@@ -154,9 +154,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           Tab(
             icon: Icon(FontAwesomeIcons.userCircle),
           ),
-          Tab(
-            icon: Icon(FontAwesomeIcons.search),
-          )
         ],
       ),
     );
@@ -176,9 +173,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           Container(child: PostsListScreen()),
           Container(
             child: ProfilePage(),
-          ),
-          Container(
-            child: SearchScreen(),
           ),
         ]),
         // _navbarsection(),

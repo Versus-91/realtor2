@@ -259,7 +259,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             'نوع ملک',
             textAlign: TextAlign.left,
             style: TextStyle(
-                color: Colors.grey,
+                color: Colors.red,
                 fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
                 fontWeight: FontWeight.normal),
           ),
@@ -282,7 +282,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               accomodationListData.insert(
                   0,
                   SelectedPropertyTypes(
-                    titleTxt: 'All',
+                    titleTxt: 'همه موارد',
                     isSelected: false,
                   ));
             }
@@ -406,7 +406,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               'مساحت',
               textAlign: TextAlign.left,
               style: TextStyle(
-                  color: Colors.grey,
+                  color: Colors.red,
                   fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
                   fontWeight: FontWeight.normal),
             ),
@@ -437,7 +437,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             'فیلتر بر اساس :',
             textAlign: TextAlign.left,
             style: TextStyle(
-                color: Colors.grey,
+                color: Colors.red,
                 fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
                 fontWeight: FontWeight.normal),
           ),
@@ -526,61 +526,52 @@ class _FiltersScreenState extends State<FiltersScreen> {
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.only(right: 16, left: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "نوع ملک",
-                style: TextStyle(color: Colors.red[300]),
+              Radio(
+                value: SelectTypeHome.Tejari,
+                groupValue: _hometype,
+                onChanged: (SelectTypeHome value) {
+                  _hometype = value;
+                  setState(() {
+                    var typehome = int.tryParse(value.toString());
+                  });
+                },
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Radio(
-                    value: SelectTypeHome.Tejari,
-                    groupValue: _hometype,
-                    onChanged: (SelectTypeHome value) {
-                      _hometype = value;
-                      setState(() {
-                        var typehome = int.tryParse(value.toString());
-                      });
-                    },
-                  ),
-                  Text(
-                    'تجاری',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  Radio(
-                    value: SelectTypeHome.Maskoni,
-                    groupValue: _hometype,
-                    onChanged: (SelectTypeHome value) {
-                      _hometype = value;
-                      setState(() {
-                        var typehome = int.tryParse(value.toString());
-                      });
-                    },
-                  ),
-                  Text(
-                    'مسکونی',
-                    style: new TextStyle(
-                      fontSize: 16.0,
-                    ),
-                  ),
-                  Radio(
-                    value: SelectTypeHome.Sanati,
-                    groupValue: _hometype,
-                    onChanged: (SelectTypeHome value) {
-                      _hometype = value;
-                      setState(() {
-                        var typehome = int.tryParse(value.toString());
-                      });
-                    },
-                  ),
-                  new Text(
-                    'صنعتی',
-                    style: new TextStyle(fontSize: 16.0),
-                  ),
-                ],
+              Text(
+                'تجاری',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              Radio(
+                value: SelectTypeHome.Maskoni,
+                groupValue: _hometype,
+                onChanged: (SelectTypeHome value) {
+                  _hometype = value;
+                  setState(() {
+                    var typehome = int.tryParse(value.toString());
+                  });
+                },
+              ),
+              Text(
+                'مسکونی',
+                style: new TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              Radio(
+                value: SelectTypeHome.Sanati,
+                groupValue: _hometype,
+                onChanged: (SelectTypeHome value) {
+                  _hometype = value;
+                  setState(() {
+                    var typehome = int.tryParse(value.toString());
+                  });
+                },
+              ),
+              new Text(
+                'صنعتی',
+                style: new TextStyle(fontSize: 16.0),
               ),
             ],
           ),
@@ -598,6 +589,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           Text(
             "تعداد اتاق :",
             style: TextStyle(color: Colors.red[300]),
+            textAlign: TextAlign.right,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10),
@@ -642,7 +634,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           children: <Widget>[
             Text(
               "قیمت",
-              style: TextStyle(color: Colors.red[300]),
+              style: TextStyle(color: Colors.red),
             ),
             Row(
               children: <Widget>[
