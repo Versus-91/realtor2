@@ -32,27 +32,6 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
     }
   }
 
-  void _showDatePicker() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext _) {
-        return PersianDateTimePicker(
-          initial: '1398/11/20',
-          disable: ['friday', '1398/11/21', '13985/3/21'],
-          // min:"1398/11/12",
-          // max:"1398/11/25",
-          type: 'date',
-          onSelect: (date) {
-            setState(() {
-              label = date;
-            });
-          },
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,9 +100,6 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
             VerticalDivider(),
             Flexible(
               child: TextField(
-                onTap: () {
-                  _showDatePicker();
-                },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'تاریخ تولد',
