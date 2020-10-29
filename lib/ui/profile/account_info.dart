@@ -45,18 +45,42 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
-    return Column(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextField(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(children: [
+        Row(
+          children: [
+            Flexible(
+              child: TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'نام',
+                ),
+              ),
+            ),
+            VerticalDivider(),
+            Flexible(
+              child: TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'نام خانوادگی',
+                ),
+              ),
+            ),
+          ],
+        ),
+        Divider(),
+        TextField(
           obscureText: true,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
-            labelText: 'نام',
+            labelText: 'نام خانوادگی',
           ),
         ),
-      )
-    ]);
+      ]),
+    );
   }
 
   @override
