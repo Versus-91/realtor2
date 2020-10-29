@@ -245,10 +245,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(
                     width: 10,
                   ),
-                  ProfileInfoCard(
-                    hasImage: true,
-                    imagePath: "assets/icons/pulse.png",
-                  ),
                   SizedBox(
                     width: 10,
                   ),

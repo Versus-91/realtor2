@@ -201,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                             Future.delayed(Duration(milliseconds: 0), () {
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                   Routes.register,
-                                  (Route<dynamic> route) => false);
+                                  (Route<dynamic> route) => true);
                             });
                           })),
               ],
@@ -285,19 +285,7 @@ class _LoginPageState extends State<LoginPage> {
                                     TextStyle(color: Colors.blue, fontSize: 12),
                               ),
                               //Checkbox
-                              Row(
-                                children: [
-                                  Text(
-                                    "مرا به خاطر بسپار",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                  Checkbox(
-                                    activeColor: Colors.blue,
-                                    checkColor: Colors.white,
-                                    value: true,
-                                  ),
-                                ],
-                              ),
+                           
                             ],
                           )),
                       // FadeSlideTransition(

@@ -1,6 +1,9 @@
+import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/ui/login/custom_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
@@ -36,8 +39,18 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          "اطلاعات کاربری",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.red,
         elevation: 0.0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Icon(FontAwesomeIcons.infoCircle),
+          )
+        ],
       ),
       body: _buildBody(),
     );
@@ -102,11 +115,22 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
               child: TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'تاریخ تولد',
+                  labelText: 'تغییر رمز',
                 ),
               ),
             ),
           ],
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.symmetric(vertical: 15),
+          alignment: Alignment.center,
+          child: CustomButton(
+            color: Colors.red,
+            textColor: kWhite,
+            text: 'ثبت',
+            onPressed: () {},
+          ),
         ),
       ]),
     );
