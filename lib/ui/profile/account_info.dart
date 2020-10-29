@@ -2,6 +2,7 @@ import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 class AcountInfoScreen extends StatefulWidget {
   @override
@@ -12,11 +13,12 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
     with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   PostStore _postStore;
-
+  String label;
   var initialIndex = 0;
   @override
   void initState() {
     super.initState();
+    label = 'انتخاب تاریخ زمان';
   }
 
   @override
@@ -28,6 +30,27 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
     if (!_postStore.loading) {
       _postStore.getPosts();
     }
+  }
+
+  void _showDatePicker() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext _) {
+        return PersianDateTimePicker(
+          initial: '1398/11/20',
+          disable: ['friday', '1398/11/21', '13985/3/21'],
+          // min:"1398/11/12",
+          // max:"1398/11/25",
+          type: 'date',
+          onSelect: (date) {
+            setState(() {
+              label = date;
+            });
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -48,11 +71,17 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(children: [
+        TextField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: "ایمیل",
+          ),
+        ),
+        Divider(),
         Row(
           children: [
             Flexible(
               child: TextField(
-                obscureText: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'نام',
@@ -73,11 +102,35 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
         ),
         Divider(),
         TextField(
-          obscureText: true,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
-            labelText: 'نام خانوادگی',
+            labelText: 'شماره همراه',
           ),
+        ),
+        Divider(),
+        Row(
+          children: [
+            Flexible(
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'جنسیت',
+                ),
+              ),
+            ),
+            VerticalDivider(),
+            Flexible(
+              child: TextField(
+                onTap: () {
+                  _showDatePicker();
+                },
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'تاریخ تولد',
+                ),
+              ),
+            ),
+          ],
         ),
       ]),
     );
