@@ -46,11 +46,14 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
     return Column(children: [
-      TextField(
-        obscureText: true,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Password',
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextField(
+          obscureText: true,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'نام',
+          ),
         ),
       )
     ]);
