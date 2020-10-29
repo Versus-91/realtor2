@@ -7,11 +7,14 @@ import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
 
 import 'package:boilerplate/ui/customlist/silder.dart';
+import 'package:boilerplate/ui/customlist/suggestion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
+import 'address_search.dart';
 import 'list_theme.dart';
 import 'model/pop_list.dart';
 
@@ -32,7 +35,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
   List<SelectedPropertyTypes> accomodationListData;
   int _value;
   String _categoryText = '';
-
+  final _controller = TextEditingController();
   CityStore _cityStore;
   DistrictStore _districtStore;
   CategoryStore _categoryStore;
@@ -131,11 +134,43 @@ class _FiltersScreenState extends State<FiltersScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
+                    TextField(
+                      controller: _controller,
+                      readOnly: true,
+                      onTap: () async {
+                        // generate a new token here
+                        final sessionToken = Uuid().v4();
+                        final Suggestion result = await showSearch(
+                          context: context,
+                          delegate: AddressSearch(),
+                        );
+                        // This will change the text displayed in the TextField
+                        if (result != null) {
+                          setState(() {
+                            _controller.text = result.description;
+                          });
+                        }
+                      },
+                      decoration: InputDecoration(
+                        icon: Container(
+                          margin: EdgeInsets.only(left: 20),
+                          width: 10,
+                          height: 10,
+                          child: Icon(
+                            Icons.home,
+                            color: Colors.black,
+                          ),
+                        ),
+                        hintText: "جستجوی محل",
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(left: 8.0, top: 16.0),
+                      ),
+                    ),
                     _buildCategoryField(),
                     const Divider(
                       height: 1,
                     ),
-                    _buildHomeTypeField(),
+                    //_buildHomeTypeField(),
                     const Divider(
                       height: 1,
                     ),
@@ -700,7 +735,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             Expanded(
               child: Center(
                 child: Text(
-                  'Filters',
+                  'فیلتر',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 22,
