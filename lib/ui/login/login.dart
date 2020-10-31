@@ -156,49 +156,13 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _createAccountLabel() {
-    double height = (MediaQuery.of(context).size.height);
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          FlatButton.icon(
-              onPressed: () {
-                Navigator.of(context).pushNamed(Routes.home);
-              },
-              icon: Icon(Icons.keyboard_arrow_right),
-              label: Text("رد شدن", style: TextStyle(color: Colors.blue))),
-          Row(
-            children: [
-              Text(
-                'آیا ثبت نام نکرده اید؟',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              RichText(
-                  text: TextSpan(
-                      text: 'ثبت نام',
-                      style: TextStyle(
-                          color: Color(0xfff79c4f),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Future.delayed(Duration(milliseconds: 0), () {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                Routes.register,
-                                (Route<dynamic> route) => true);
-                          });
-                        })),
-            ],
-          )
-        ],
-      ),
-    );
-  }
+  // Widget _createAccountLabel() {
+  //   double height = (MediaQuery.of(context).size.height);
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(vertical: 10),
+  //     child:
+  //   );
+  // }
 
   Widget _title() {
     return Container(
@@ -245,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                   _title(),
                   SizedBox(height: height * .06),
                   Container(
-                    height: height / 2.5,
+                    height: height / 3.5,
                     child: Column(
                       children: <Widget>[
                         CustomInputField(
@@ -293,8 +257,6 @@ class _LoginPageState extends State<LoginPage> {
                   _submitButton(),
                   _divider(),
                   _facebookButton(),
-                  SizedBox(height: height * .40),
-                  _createAccountLabel(),
                 ],
               ),
             ),
@@ -310,32 +272,50 @@ class _LoginPageState extends State<LoginPage> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(15),
-        child: InkWell(
-          onTap: () async {
-          
-          },
-          child: Container(
-            height: 60,
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(vertical: 15),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Colors.grey.shade200,
-                      offset: Offset(2, 4),
-                      blurRadius: 5,
-                      spreadRadius: 2)
+        child: Container(
+          height: 60,
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.symmetric(vertical: 15),
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              FlatButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(Routes.home);
+                  },
+                  icon: Icon(Icons.keyboard_arrow_right),
+                  label: Text("رد شدن", style: TextStyle(color: Colors.blue))),
+              Row(
+                children: [
+                  Text(
+                    'آیا ثبت نام نکرده اید؟',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: RichText(
+                        text: TextSpan(
+                            text: 'ثبت نام',
+                            style: TextStyle(
+                                color: Color(0xfff79c4f),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Future.delayed(Duration(milliseconds: 0), () {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(
+                                      Routes.register,
+                                      (Route<dynamic> route) => true);
+                                });
+                              })),
+                  ),
                 ],
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Color(0xffF77E78), Color(0xffF5150A)])),
-            child: Text(
-              'ارسال',
-              style: TextStyle(fontSize: 20, color: Colors.white),
-            ),
+              )
+            ],
           ),
         ),
       ),
