@@ -191,6 +191,7 @@ class _LoginPageState extends State<LoginPage> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false, // set it to false
       body: Container(
         height: height,
         child: Stack(
@@ -209,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                   _title(),
                   SizedBox(height: height * .06),
                   Container(
-                    height: height / 3.5,
+                    height: height / 2.6,
                     child: Column(
                       children: <Widget>[
                         CustomInputField(
