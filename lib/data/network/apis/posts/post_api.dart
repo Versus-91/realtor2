@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
+import 'package:boilerplate/models/amenity/amenity_list.dart';
 import 'package:boilerplate/models/authenticate/login.dart';
 import 'package:boilerplate/models/category/categori_list.dart';
 import 'package:boilerplate/models/city/city_list.dart';
@@ -113,6 +114,14 @@ class PostApi {
     }
   }
 
+Future<AmenityList> getAmenities() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getAmenities);
+      return AmenityList.fromJson(res["result"]["items"]);
+    } catch (e) {
+      throw e;
+    }
+  }
   /// Returns list of post in response
   Future<CityList> getCities() async {
     try {

@@ -5,6 +5,7 @@ import 'package:boilerplate/di/modules/local_module.dart';
 import 'package:boilerplate/di/modules/netwok_module.dart';
 import 'package:boilerplate/di/modules/preference_module.dart';
 import 'package:boilerplate/routes.dart';
+import 'package:boilerplate/stores/amenity/amenity_store.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
   final ThemeStore _themeStore = ThemeStore(appComponent.getRepository());
   final PostStore _postStore = PostStore(appComponent.getRepository());
   final CityStore _cityStore = CityStore(appComponent.getRepository());
+  final AmenityStore _amenityStore = AmenityStore(appComponent.getRepository());
   final DistrictStore _districtStore =
       DistrictStore(appComponent.getRepository());
   final CategoryStore _categoryStore =

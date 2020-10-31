@@ -29,9 +29,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _submitButton() {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(vertical: 15),
-      alignment: Alignment.center,
+      height: 45,
       child: CustomButton(
         color: Colors.red,
         textColor: kWhite,
@@ -53,11 +51,12 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _divider() {
     return Container(
+      height: 30,
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: <Widget>[
           SizedBox(
-            width: 20,
+            width: 10,
           ),
           Expanded(
             child: Padding(
@@ -77,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           SizedBox(
-            width: 20,
+            width: 10,
           ),
         ],
       ),
@@ -90,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
           .pushNamedAndRemoveUntil(Routes.home, (Route<dynamic> route) => true);
     });
 
-    return Container();
+    return SizedBox.shrink();
   }
 
   // General Methods:-----------------------------------------------------------
@@ -110,8 +109,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _facebookButton() {
     return Container(
-      height: 50,
-      margin: EdgeInsets.symmetric(vertical: 20),
+      height: 45,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
@@ -159,75 +157,81 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _createAccountLabel() {
-    return InkWell(
-      onTap: () {
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (context) => SignUpPage()));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
-        padding: EdgeInsets.all(15),
-        alignment: Alignment.bottomCenter,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.bottomRight,
-              child: FlatButton.icon(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.home);
-                  },
-                  icon: Icon(Icons.keyboard_arrow_right),
-                  label: Text("رد شدن", style: TextStyle(color: Colors.blue))),
-            ),
-            Row(
-              children: [
-                Text(
-                  'آیا ثبت نام نکرده اید؟',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                RichText(
-                    text: TextSpan(
-                        text: 'ثبت نام',
-                        style: TextStyle(
-                            color: Color(0xfff79c4f),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Future.delayed(Duration(milliseconds: 0), () {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  Routes.register,
-                                  (Route<dynamic> route) => true);
-                            });
-                          })),
-              ],
-            )
-          ],
-        ),
+    double height = (MediaQuery.of(context).size.height);
+    return Container(
+      height: height -
+          (MediaQuery.of(context).padding.top) -
+          (height * 0.1) -
+          (height * 0.06) -
+          (height * .06) -
+          (height / 3.6) -
+          20 -
+          45 -
+          50 -
+          45 -
+          20 -
+          (height * .10) -
+          kBottomNavigationBarHeight,
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          FlatButton.icon(
+              onPressed: () {
+                Navigator.of(context).pushNamed(Routes.home);
+              },
+              icon: Icon(Icons.keyboard_arrow_right),
+              label: Text("رد شدن", style: TextStyle(color: Colors.blue))),
+          Row(
+            children: [
+              Text(
+                'آیا ثبت نام نکرده اید؟',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              RichText(
+                  text: TextSpan(
+                      text: 'ثبت نام',
+                      style: TextStyle(
+                          color: Color(0xfff79c4f),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Future.delayed(Duration(milliseconds: 0), () {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                Routes.register,
+                                (Route<dynamic> route) => true);
+                          });
+                        })),
+            ],
+          )
+        ],
       ),
     );
   }
 
   Widget _title() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-          text: 'M',
-          style: TextStyle(color: Colors.blue, fontSize: 20),
-          children: [
-            TextSpan(
-              text: 'y Ho',
-              style: TextStyle(color: Colors.black, fontSize: 30),
-            ),
-            TextSpan(
-              text: 'me',
-              style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
-            ),
-          ]),
+    return Container(
+      height: (MediaQuery.of(context).size.height) * .06,
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+            text: 'M',
+            style: TextStyle(color: Colors.blue, fontSize: 30),
+            children: [
+              TextSpan(
+                text: 'y Ho',
+                style: TextStyle(color: Colors.black, fontSize: 30),
+              ),
+              TextSpan(
+                text: 'me',
+                style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
+              ),
+            ]),
+      ),
     );
   }
 
@@ -240,20 +244,21 @@ class _LoginPageState extends State<LoginPage> {
       child: Stack(
         children: <Widget>[
           Positioned(
-              top: -height * .15,
-              right: -MediaQuery.of(context).size.width * .4,
+              top: -height * .25,
+              right: -MediaQuery.of(context).size.width * .3,
               child: BezierContainer()),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: height * .2),
-                  _title(),
-                  SizedBox(height: 50),
-                  Column(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: height * .1),
+                _title(),
+                SizedBox(height: height * .06),
+                Container(
+                  height: height / 3.5,
+                  child: Column(
                     children: <Widget>[
                       CustomInputField(
                         store: _formStore.setUserId,
@@ -264,7 +269,6 @@ class _LoginPageState extends State<LoginPage> {
                         formStore: _formStore,
                         obscureText: false,
                       ),
-
                       CustomInputField(
                         store: _formStore.setPassword,
                         isEmail: false,
@@ -274,31 +278,19 @@ class _LoginPageState extends State<LoginPage> {
                         prefixIcon: Icons.lock,
                         obscureText: true,
                       ),
-                      FlatButton(
-                          onPressed: () {},
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "رمز خود را فراموش کرده اید؟",
-                                style:
-                                    TextStyle(color: Colors.blue, fontSize: 12),
-                              ),
-                              //Checkbox
-                            ],
-                          )),
-                      // FadeSlideTransition(
-                      //   animation: widget.animation,
-                      //   additionalOffset: space,
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.start,
-                      //     children: [
-
-                      //       //Text
-                      //     ],
-                      //   ),
-                      // ),
-
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          FlatButton(
+                            onPressed: () {},
+                            child: Text(
+                              "رمز خود را فراموش کرده اید؟",
+                              style:
+                                  TextStyle(color: Colors.blue, fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
                       Observer(
                         builder: (context) {
                           return _formStore.success
@@ -309,14 +301,13 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  _submitButton(),
-                  _divider(),
-                  _facebookButton(),
-                  SizedBox(height: height * .055),
-                  _createAccountLabel(),
-                ],
-              ),
+                ),
+                _submitButton(),
+                _divider(),
+                _facebookButton(),
+                SizedBox(height: height * .15),
+                _createAccountLabel(),
+              ],
             ),
           ),
           Observer(

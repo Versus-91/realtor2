@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/models/amenity/amenity_list.dart';
 import 'package:boilerplate/models/authenticate/login.dart';
 import 'package:boilerplate/models/category/categori_list.dart';
 import 'package:boilerplate/models/city/city_list.dart';
@@ -86,7 +87,15 @@ class Repository {
       return citiesList;
     }).catchError((error) => error);
   }
+ // amenity: ---------------------------------------------------------------------
+  Future<AmenityList> getAmenities() async {
+    
+    return await _postApi.getAmenities().then((amenitiesList) {
+     
 
+      return amenitiesList;
+    }).catchError((error) => error);
+  }
   Future<User> getUser() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for

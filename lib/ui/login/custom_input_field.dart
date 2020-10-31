@@ -27,7 +27,8 @@ class CustomInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       return Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
+        
+      
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

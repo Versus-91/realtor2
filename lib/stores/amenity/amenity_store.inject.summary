@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/stores/amenity/amenity_store.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

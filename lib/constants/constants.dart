@@ -10,7 +10,7 @@ const Color kBlack = Color(0xFF2D3243);
 
 // Padding
 const double kPaddingS = 8.0;
-const double kPaddingM = 8.0;
+const double kPaddingM = 9.0;
 const double kPaddingL = 22.0;
 // Animation
 const Duration kButtonAnimationDuration = Duration(milliseconds: 600);
