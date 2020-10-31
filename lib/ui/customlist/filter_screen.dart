@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
@@ -7,16 +9,15 @@ import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
 
 import 'package:boilerplate/ui/customlist/silder.dart';
-import 'package:boilerplate/ui/customlist/suggestion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
-import 'address_search.dart';
 import 'list_theme.dart';
 import 'model/pop_list.dart';
+import 'model/suggestion.dart';
+import 'package:http/http.dart' as http;
 
 class FiltersScreen extends StatefulWidget {
   final FilterFormStore filterForm;
@@ -34,12 +35,18 @@ class _FiltersScreenState extends State<FiltersScreen> {
   List<int> selectedTypes = [];
   List<SelectedPropertyTypes> accomodationListData;
   int _value;
-  String _categoryText = '';
   final _controller = TextEditingController();
+  bool searching = true, error;
+  var data;
+  String query;
+  String dataurl =
+      "http://hmahmudi-001-site2.gtempurl.com/api/services/app/District/Find";
   CityStore _cityStore;
   DistrictStore _districtStore;
   CategoryStore _categoryStore;
   TypeStore _typeStore;
+  String _categoryText = '';
+
   SelectTypeHome _hometype = SelectTypeHome.Maskoni;
   final _store = PostFormStore(appComponent.getRepository());
   final List<bool> isSelected = [
@@ -134,36 +141,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    TextField(
-                      controller: _controller,
-                      readOnly: true,
-                      onTap: () async {
-                        final Suggestion result = await showSearch(
-                          context: context,
-                          delegate: AddressSearch(),
-                        );
-                        // This will change the text displayed in the TextField
-                        if (result != null) {
-                          setState(() {
-                            _controller.text = result.description;
-                          });
-                        }
-                      },
-                      decoration: InputDecoration(
-                        icon: Container(
-                          margin: EdgeInsets.only(left: 20),
-                          width: 10,
-                          height: 10,
-                          child: Icon(
-                            Icons.home,
-                            color: Colors.black,
-                          ),
-                        ),
-                        hintText: "جستجوی محل",
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.only(left: 8.0, top: 16.0),
-                      ),
-                    ),
+                    searching ? searchField() : Text('data'),
                     _buildCategoryField(),
                     const Divider(
                       height: 1,
@@ -224,7 +202,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                               _categoryStore.categoryList.categories[index];
                           if (_value == null) {
                             _value = category.id;
-                            _categoryText = category.name;
+                            var _categoryText = category.name;
                             _store.setCategory(category.id);
                           }
                           return Padding(
@@ -278,6 +256,78 @@ class _FiltersScreenState extends State<FiltersScreen> {
         },
       ),
     );
+  }
+
+  Widget showSearchSuggestions() {
+    List<SearchSuggestion> suggestionlist =
+        List<SearchSuggestion>.from(data["data"].map((i) {
+      return SearchSuggestion.fromJSON(i);
+    }));
+    //serilizing json data inside model list.
+    return Column(
+      children: suggestionlist.map((suggestion) {
+        return InkResponse(
+            onTap: () {
+              //when tapped on suggestion
+              print(suggestion.id); //pint student id
+            },
+            child: SizedBox(
+                width: double.infinity, //make 100% width
+                child: Card(
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    child: Text(
+                      suggestion.name,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )));
+      }).toList(),
+    );
+  }
+
+  Widget searchField() {
+    //search input field
+    return Container(
+        padding: EdgeInsets.all(20),
+        child: TextField(
+          autofocus: true,
+          style: TextStyle(color: Colors.redAccent, fontSize: 18),
+          decoration: InputDecoration(
+            hintStyle: TextStyle(color: Colors.red, fontSize: 18),
+            hintText: "جستجوی مکان",
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.black, width: 2),
+            ), //under line border, set OutlineInputBorder() for all side border
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 2),
+            ), // focused border color
+          ), //decoration for search input field
+          onChanged: (value) {
+            query = value; //update the value of query
+            getSuggestion(); //start to get suggestion
+          },
+        ));
+  }
+
+  void getSuggestion() async {
+    //get suggestion function
+    var res = await http.post(dataurl + "?query=" + Uri.encodeComponent(query));
+    //in query there might be unwant character so, we encode the query to url
+    if (res.statusCode == 200) {
+      setState(() {
+        data = json.decode(res.body);
+        //update data value and UI
+      });
+    } else {
+      //there is error
+      setState(() {
+        error = true;
+      });
+    }
   }
 
   Widget allAccommodationUI() {
