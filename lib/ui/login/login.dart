@@ -159,19 +159,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget _createAccountLabel() {
     double height = (MediaQuery.of(context).size.height);
     return Container(
-      height: height -
-          (MediaQuery.of(context).padding.top) -
-          (height * 0.1) -
-          (height * 0.06) -
-          (height * .06) -
-          (height / 3.6) -
-          20 -
-          45 -
-          50 -
-          45 -
-          20 -
-          (height * .10) -
-          kBottomNavigationBarHeight,
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -238,85 +225,120 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+
     return Scaffold(
-        body: Container(
-      height: height,
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-              top: -height * .25,
-              right: -MediaQuery.of(context).size.width * .3,
-              child: BezierContainer()),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(height: height * .1),
-                _title(),
-                SizedBox(height: height * .06),
-                Container(
-                  height: height / 3.5,
-                  child: Column(
-                    children: <Widget>[
-                      CustomInputField(
-                        store: _formStore.setUserId,
-                        controller: _userNameController,
-                        isEmail: true,
-                        label: 'نام کاربری/ایمیل',
-                        prefixIcon: Icons.person,
-                        formStore: _formStore,
-                        obscureText: false,
-                      ),
-                      CustomInputField(
-                        store: _formStore.setPassword,
-                        isEmail: false,
-                        controller: _passwordNameController,
-                        label: 'رمز ورود',
-                        formStore: _formStore,
-                        prefixIcon: Icons.lock,
-                        obscureText: true,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          FlatButton(
-                            onPressed: () {},
-                            child: Text(
-                              "رمز خود را فراموش کرده اید؟",
-                              style:
-                                  TextStyle(color: Colors.blue, fontSize: 12),
+      body: Container(
+        height: height,
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+                top: -height * .25,
+                right: -MediaQuery.of(context).size.width * .3,
+                child: BezierContainer()),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: height * .1),
+                  _title(),
+                  SizedBox(height: height * .06),
+                  Container(
+                    height: height / 2.5,
+                    child: Column(
+                      children: <Widget>[
+                        CustomInputField(
+                          store: _formStore.setUserId,
+                          controller: _userNameController,
+                          isEmail: true,
+                          label: 'نام کاربری/ایمیل',
+                          prefixIcon: Icons.person,
+                          formStore: _formStore,
+                          obscureText: false,
+                        ),
+                        CustomInputField(
+                          store: _formStore.setPassword,
+                          isEmail: false,
+                          controller: _passwordNameController,
+                          label: 'رمز ورود',
+                          formStore: _formStore,
+                          prefixIcon: Icons.lock,
+                          obscureText: true,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            FlatButton(
+                              onPressed: () {},
+                              child: Text(
+                                "رمز خود را فراموش کرده اید؟",
+                                style:
+                                    TextStyle(color: Colors.blue, fontSize: 12),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Observer(
-                        builder: (context) {
-                          return _formStore.success
-                              ? navigate(context)
-                              : _showErrorMessage(
-                                  _formStore.errorStore.errorMessage);
-                        },
-                      ),
-                    ],
+                          ],
+                        ),
+                        Observer(
+                          builder: (context) {
+                            return _formStore.success
+                                ? navigate(context)
+                                : _showErrorMessage(
+                                    _formStore.errorStore.errorMessage);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                _submitButton(),
-                _divider(),
-                _facebookButton(),
-                SizedBox(height: height * .15),
-                _createAccountLabel(),
-              ],
+                  _submitButton(),
+                  _divider(),
+                  _facebookButton(),
+                  SizedBox(height: height * .40),
+                  _createAccountLabel(),
+                ],
+              ),
+            ),
+            Observer(
+              builder: (context) {
+                return _formStore.success
+                    ? navigate(context)
+                    : SizedBox.shrink();
+              },
+            )
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.all(15),
+        child: InkWell(
+          onTap: () async {
+          
+          },
+          child: Container(
+            height: 60,
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.symmetric(vertical: 15),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Colors.grey.shade200,
+                      offset: Offset(2, 4),
+                      blurRadius: 5,
+                      spreadRadius: 2)
+                ],
+                gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [Color(0xffF77E78), Color(0xffF5150A)])),
+            child: Text(
+              'ارسال',
+              style: TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),
-          Observer(
-            builder: (context) {
-              return _formStore.success ? navigate(context) : SizedBox.shrink();
-            },
-          )
-        ],
+        ),
       ),
-    ));
+    );
   }
 }
