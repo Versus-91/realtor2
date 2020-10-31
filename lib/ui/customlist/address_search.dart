@@ -57,7 +57,7 @@ class AddressSearch extends SearchDelegate<Suggestion> {
                   ),
                   itemCount: snapshot.data.length,
                 )
-              : Container(child: Text('Loading...')),
+              : Container(child: Text('.......')),
     );
   }
 }

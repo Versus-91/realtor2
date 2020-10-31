@@ -285,7 +285,6 @@ class _LoginPageState extends State<LoginPage> {
                                     TextStyle(color: Colors.blue, fontSize: 12),
                               ),
                               //Checkbox
-                           
                             ],
                           )),
                       // FadeSlideTransition(
@@ -322,9 +321,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Observer(
             builder: (context) {
-              return _formStore.success
-                  ? navigate(context)
-                  : _showErrorMessage('_formStore.errorStore.errorMessage');
+              return _formStore.success ? navigate(context) : SizedBox.shrink();
             },
           )
         ],

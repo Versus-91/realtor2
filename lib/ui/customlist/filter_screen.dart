@@ -138,8 +138,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
                       controller: _controller,
                       readOnly: true,
                       onTap: () async {
-                        // generate a new token here
-                        final sessionToken = Uuid().v4();
                         final Suggestion result = await showSearch(
                           context: context,
                           delegate: AddressSearch(),
