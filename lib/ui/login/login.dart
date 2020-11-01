@@ -51,8 +51,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _divider() {
     return Container(
-      height: 30,
-      margin: EdgeInsets.symmetric(vertical: 10),
+      height: 20,
+      margin: EdgeInsets.symmetric(vertical: 5),
       child: Row(
         children: <Widget>[
           SizedBox(
@@ -156,14 +156,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Widget _createAccountLabel() {
-  //   double height = (MediaQuery.of(context).size.height);
-  //   return Container(
-  //     padding: EdgeInsets.symmetric(vertical: 10),
-  //     child:
-  //   );
-  // }
-
   Widget _title() {
     return Container(
       height: (MediaQuery.of(context).size.height) * .06,
@@ -210,8 +202,10 @@ class _LoginPageState extends State<LoginPage> {
                   _title(),
                   SizedBox(height: height * .06),
                   Container(
-                    height: height / 2.6,
+                  
+                    height: height / 2.4,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         CustomInputField(
                           store: _formStore.setUserId,
@@ -272,11 +266,11 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(15),
+        padding: EdgeInsets.all(5),
         child: Container(
-          height: 60,
+         
+          height: 50,
           width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.symmetric(vertical: 15),
           alignment: Alignment.center,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

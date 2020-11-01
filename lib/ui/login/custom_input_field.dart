@@ -37,7 +37,7 @@ class CustomInputField extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
             ),
             SizedBox(
-              height: 10,
+              height: 5,
             ),
             TextField(
                 controller: controller,
@@ -50,7 +50,7 @@ class CustomInputField extends StatelessWidget {
                         ? formStore.formErrorStore.userEmail
                         : formStore.formErrorStore.password,
                     border: InputBorder.none,
-                    fillColor: Color(0xfff3f3f4),
+                    fillColor: Colors.grey[300],
                     filled: true))
           ],
         ),

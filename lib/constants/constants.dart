@@ -1,11 +1,13 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 // Colors
 const Color kBlue = Color(0xFF306EFF);
 const Color kLightBlue = Color(0xFF4985FD);
 const Color kDarkBlue = Color(0xFF1046B3);
-const Color kWhite = Color(0xFFFFFFFF);
-const Color kGrey = Color(0xFFF4F5F7);
+const Color kWhite = Colors.grey;
+const Color kGrey = Colors.grey;
 const Color kBlack = Color(0xFF2D3243);
 
 // Padding
