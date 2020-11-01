@@ -9,8 +9,9 @@ class Endpoints {
 
   // connectTimeout
   static const int connectionTimeout = 30000;
- // Amenities endpoints
-  static const String getAmenities = baseUrl + "/api/services/app/Ameniti/GetAll";
+  // Amenities endpoints
+  static const String getAmenities =
+      baseUrl + "/api/services/app/Amenity/GetAll";
   // post endpoints
   static const String getPosts = baseUrl + "/api/services/app/Post/GetAll";
   static const String createPosts = baseUrl + "/api/services/app/Post/create";

@@ -1,7 +1,6 @@
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/form/filter_form.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
-import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/customlist/filter_screen.dart';
 import 'package:boilerplate/ui/customlist/list_theme.dart';
 import 'package:boilerplate/ui/home/homescreen.dart';
@@ -9,9 +8,9 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../../main.dart';
 import 'propertycrads.dart';
 
 class PostsListScreen extends StatefulWidget {
@@ -23,7 +22,7 @@ class _PostsListScreenState extends State<PostsListScreen> {
   final ScrollController _scrollController = ScrollController();
   PostStore _postStore;
   PostRequest _filterRequest;
-  FilterFormStore _filterForm = FilterFormStore();
+  FilterFormStore _filterForm = FilterFormStore(appComponent.getRepository());
   @override
   void initState() {
     super.initState();

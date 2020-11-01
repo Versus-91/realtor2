@@ -1,11 +1,11 @@
 import 'dart:convert';
-
+import 'package:boilerplate/stores/amenity/amenity_store.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
 import 'package:boilerplate/stores/form/filter_form.dart';
-import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
 
 import 'package:boilerplate/ui/customlist/silder.dart';
@@ -16,7 +16,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'list_theme.dart';
 import 'model/pop_list.dart';
-import 'model/suggestion.dart';
 import 'package:http/http.dart' as http;
 
 class FiltersScreen extends StatefulWidget {
@@ -26,29 +25,24 @@ class FiltersScreen extends StatefulWidget {
   _FiltersScreenState createState() => _FiltersScreenState();
 }
 
-enum SelectType { Rent, Buy }
-enum SelectTypeHome { Maskoni, Tejari, Sanati }
-
 class _FiltersScreenState extends State<FiltersScreen> {
   List<SelectedPropertyTypes> popularFilterListData =
       SelectedPropertyTypes.popularFList;
   List<int> selectedTypes = [];
   List<SelectedPropertyTypes> accomodationListData;
   int _value;
-  final _controller = TextEditingController();
-  bool searching = true, error;
+  final TextEditingController _typeAheadController = TextEditingController();
+  String _selectedCity;
   var data;
-  String query;
   String dataurl =
       "http://hmahmudi-001-site2.gtempurl.com/api/services/app/District/Find";
   CityStore _cityStore;
   DistrictStore _districtStore;
   CategoryStore _categoryStore;
   TypeStore _typeStore;
+  AmenityStore _amenityStore;
   String _categoryText = '';
 
-  SelectTypeHome _hometype = SelectTypeHome.Maskoni;
-  final _store = PostFormStore(appComponent.getRepository());
   final List<bool> isSelected = [
     false,
     false,
@@ -70,11 +64,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
     _districtStore = Provider.of<DistrictStore>(context);
     _categoryStore = Provider.of<CategoryStore>(context);
     _typeStore = Provider.of<TypeStore>(context);
+    _amenityStore = Provider.of<AmenityStore>(context);
 
     if (!_cityStore.loading) _cityStore.getCities();
     if (!_districtStore.loading) _districtStore.getDistricts();
     if (!_categoryStore.loading) _categoryStore.getCategories();
     if (!_typeStore.loading) _typeStore.getTypes();
+    if (!_amenityStore.loading) _amenityStore.getAmenities();
   }
 
   @override
@@ -141,7 +137,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    searching ? searchField() : Text('data'),
+                    searchField(),
                     _buildCategoryField(),
                     const Divider(
                       height: 1,
@@ -202,8 +198,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
                               _categoryStore.categoryList.categories[index];
                           if (_value == null) {
                             _value = category.id;
-                            var _categoryText = category.name;
-                            _store.setCategory(category.id);
                           }
                           return Padding(
                             padding: const EdgeInsets.all(18.0),
@@ -213,8 +207,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                   _categoryText = category.name;
                                   _value = category.id;
                                 });
-                                _categoryText = category.name;
-                                _store.setCategory(category.id);
+                                widget.filterForm.setpropertyTypes(category.id);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -258,76 +251,69 @@ class _FiltersScreenState extends State<FiltersScreen> {
     );
   }
 
-  Widget showSearchSuggestions() {
-    List<SearchSuggestion> suggestionlist =
-        List<SearchSuggestion>.from(data["data"].map((i) {
-      return SearchSuggestion.fromJSON(i);
-    }));
-    //serilizing json data inside model list.
-    return Column(
-      children: suggestionlist.map((suggestion) {
-        return InkResponse(
-            onTap: () {
-              //when tapped on suggestion
-              print(suggestion.id); //pint student id
-            },
-            child: SizedBox(
-                width: double.infinity, //make 100% width
-                child: Card(
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    child: Text(
-                      suggestion.name,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                )));
-      }).toList(),
+  Widget searchField() {
+    //search input field
+    // return GFSearchBar(
+    //   searchList: list,
+    //   searchQueryBuilder: (query, list) {
+    //     return list
+    //         .where((item) => item.toLowerCase().contains(query.toLowerCase()))
+    //         .toList();
+    //   },
+    //   overlaySearchListItemBuilder: (item) {
+    //     return Container(
+    //       padding: const EdgeInsets.all(8),
+    //       child: Text(
+    //         item,
+    //         style: const TextStyle(fontSize: 18),
+    //       ),
+    //     );
+    //   },
+    //   onItemSelected: (item) {
+    //     setState(() {
+    //       print('$item');
+    //     });
+    //   },
+    // );
+    return TypeAheadFormField(
+      textFieldConfiguration: TextFieldConfiguration(
+        decoration: InputDecoration(labelText: 'City'),
+        controller: this._typeAheadController,
+      ),
+      suggestionsCallback: (pattern) {
+        if (pattern.length >= 2) {
+          return getSuggestion(pattern);
+        }
+      },
+      itemBuilder: (context, suggestion) {
+        return ListTile(
+          title: Text(suggestion),
+        );
+      },
+      transitionBuilder: (context, suggestionsBox, controller) {
+        return suggestionsBox;
+      },
+      onSuggestionSelected: (suggestion) {
+        this._typeAheadController.text = suggestion;
+      },
+      validator: (value) => value.isEmpty ? 'نام محل را وارد کنید' : null,
+      onSaved: (value) => this._selectedCity = value,
     );
   }
 
-  Widget searchField() {
-    //search input field
-    return Container(
-        padding: EdgeInsets.all(20),
-        child: TextField(
-          autofocus: true,
-          style: TextStyle(color: Colors.redAccent, fontSize: 18),
-          decoration: InputDecoration(
-            hintStyle: TextStyle(color: Colors.red, fontSize: 18),
-            hintText: "جستجوی مکان",
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.black, width: 2),
-            ), //under line border, set OutlineInputBorder() for all side border
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.white, width: 2),
-            ), // focused border color
-          ), //decoration for search input field
-          onChanged: (value) {
-            query = value; //update the value of query
-            getSuggestion(); //start to get suggestion
-          },
-        ));
-  }
-
-  void getSuggestion() async {
+  Future<List> getSuggestion(String pattern) async {
     //get suggestion function
-    var res = await http.post(dataurl + "?query=" + Uri.encodeComponent(query));
+    var res =
+        await http.post(dataurl + "?query=" + Uri.encodeComponent(pattern));
     //in query there might be unwant character so, we encode the query to url
     if (res.statusCode == 200) {
       setState(() {
-        data = json.decode(res.body);
+        data = json.decode(res.body)["result"];
+        data = data.map((item) => item["name"]).toList();
         //update data value and UI
       });
-    } else {
-      //there is error
-      setState(() {
-        error = true;
-      });
     }
+    return data.toList();
   }
 
   Widget allAccommodationUI() {
@@ -517,7 +503,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           padding:
               const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
           child: Text(
-            'فیلتر بر اساس :',
+            'خصوصیات:',
             textAlign: TextAlign.left,
             style: TextStyle(
                 color: Colors.red,
@@ -604,65 +590,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
     return noList;
   }
 
-  Widget _buildHomeTypeField() {
-    return Observer(
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(right: 16, left: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Radio(
-                value: SelectTypeHome.Tejari,
-                groupValue: _hometype,
-                onChanged: (SelectTypeHome value) {
-                  _hometype = value;
-                  setState(() {
-                    var typehome = int.tryParse(value.toString());
-                  });
-                },
-              ),
-              Text(
-                'تجاری',
-                style: TextStyle(fontSize: 16.0),
-              ),
-              Radio(
-                value: SelectTypeHome.Maskoni,
-                groupValue: _hometype,
-                onChanged: (SelectTypeHome value) {
-                  _hometype = value;
-                  setState(() {
-                    var typehome = int.tryParse(value.toString());
-                  });
-                },
-              ),
-              Text(
-                'مسکونی',
-                style: new TextStyle(
-                  fontSize: 16.0,
-                ),
-              ),
-              Radio(
-                value: SelectTypeHome.Sanati,
-                groupValue: _hometype,
-                onChanged: (SelectTypeHome value) {
-                  _hometype = value;
-                  setState(() {
-                    var typehome = int.tryParse(value.toString());
-                  });
-                },
-              ),
-              new Text(
-                'صنعتی',
-                style: new TextStyle(fontSize: 16.0),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   Widget _buildBedroomCountField() {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
@@ -723,6 +650,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
               children: <Widget>[
                 Flexible(
                   child: TextField(
+                      onChanged: (value) {
+                        widget.filterForm.setMinPrice(double.parse(value));
+                      },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           hintText: "پایین ترین قیمت",
@@ -731,6 +661,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 Text("_"),
                 Flexible(
                   child: TextField(
+                      onChanged: (value) {
+                        widget.filterForm.setMaxPrice(double.parse(value));
+                      },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           hintText: "بالا ترین قیمت",

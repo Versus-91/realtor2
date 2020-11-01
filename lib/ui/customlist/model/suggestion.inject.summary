@@ -1,5 +1,5 @@
 {
-  "asset": "asset:boilerplate/lib/ui/customlist/address_search.dart",
+  "asset": "asset:boilerplate/lib/ui/customlist/model/suggestion.dart",
   "summary": {
     "injector": [],
     "module": [],

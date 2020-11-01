@@ -77,6 +77,7 @@ class MyApp extends StatelessWidget {
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<TypeStore>(create: (_) => _typeStore),
         Provider<UserStore>(create: (_) => _userStore),
+        Provider<AmenityStore>(create: (_) => _amenityStore),
       ],
       child: Observer(
         name: 'global-observer',

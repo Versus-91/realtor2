@@ -1,3 +1,4 @@
+import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/ui/customlist/model/pop_list.dart';
@@ -11,8 +12,9 @@ abstract class _FilterFormStore with Store {
 
   // store for handling error messages
   final ErrorStore errorStore = ErrorStore();
-
-  _FilterFormStore() {
+  Repository _repository;
+  _FilterFormStore(Repository repository) {
+    _repository = repository;
     _setupValidations();
   }
 

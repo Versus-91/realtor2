@@ -9,7 +9,7 @@ class AmenityList {
 
   factory AmenityList.fromJson(List<dynamic> json) {
     List<Amenity> amenities = List<Amenity>();
-    amenities = json.map((Amenity) => Amenity.fromMap(Amenity)).toList();
+    amenities = json.map((item) => Amenity.fromMap(item)).toList();
 
     return AmenityList(
       amenities: amenities,
