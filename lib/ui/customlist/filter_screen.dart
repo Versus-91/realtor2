@@ -495,33 +495,63 @@ class _FiltersScreenState extends State<FiltersScreen> {
   }
 
   Widget popularFilter() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-          child: Text(
-            'خصوصیات:',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                color: Colors.red,
-                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                fontWeight: FontWeight.normal),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 16, left: 16),
-          child: Column(
-            children: getPList(),
-          ),
-        ),
-        const SizedBox(
-          height: 8,
-        )
-      ],
-    );
+    return Observer(builder: (context) {
+      return _amenityStore.amenityList.amenities.length > 0
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, top: 16, bottom: 8),
+                  child: Text(
+                    'خصوصیات:',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize:
+                            MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                        fontWeight: FontWeight.normal),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16, left: 16),
+                  child: Column(
+                    children: getPList(),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                )
+              ],
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, top: 16, bottom: 8),
+                  child: Text(
+                    'خصوصیات:',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize:
+                            MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                        fontWeight: FontWeight.normal),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16, left: 16),
+                  child: Text('data'),
+                ),
+                const SizedBox(
+                  height: 8,
+                )
+              ],
+            );
+    });
   }
 
   List<Widget> getPList() {
@@ -636,45 +666,43 @@ class _FiltersScreenState extends State<FiltersScreen> {
   }
 
   Widget priceBarFilter() {
-    return Observer(builder: (context) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              "قیمت",
-              style: TextStyle(color: Colors.red),
-            ),
-            Row(
-              children: <Widget>[
-                Flexible(
-                  child: TextField(
-                      onChanged: (value) {
-                        widget.filterForm.setMinPrice(double.parse(value));
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          hintText: "پایین ترین قیمت",
-                          contentPadding: EdgeInsets.all(10))),
-                ),
-                Text("_"),
-                Flexible(
-                  child: TextField(
-                      onChanged: (value) {
-                        widget.filterForm.setMaxPrice(double.parse(value));
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          hintText: "بالا ترین قیمت",
-                          contentPadding: EdgeInsets.all(10))),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    });
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "قیمت",
+            style: TextStyle(color: Colors.red),
+          ),
+          Row(
+            children: <Widget>[
+              Flexible(
+                child: TextField(
+                    onChanged: (value) {
+                      widget.filterForm.setMinPrice(double.parse(value));
+                    },
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        hintText: "پایین ترین قیمت",
+                        contentPadding: EdgeInsets.all(10))),
+              ),
+              Text("_"),
+              Flexible(
+                child: TextField(
+                    onChanged: (value) {
+                      widget.filterForm.setMaxPrice(double.parse(value));
+                    },
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        hintText: "بالا ترین قیمت",
+                        contentPadding: EdgeInsets.all(10))),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget getAppBarUI() {
