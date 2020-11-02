@@ -78,7 +78,7 @@ class _UserScreenState extends State<UserScreen> {
                 return widget.userStore.user != null
                     ? Padding(
                         padding: EdgeInsets.only(
-                            left: 25, right: 20, top: 30, bottom: 40),
+                            left: 25, right: 20, top: 20, bottom: 40),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -92,7 +92,7 @@ class _UserScreenState extends State<UserScreen> {
                                           text: widget.userStore.user.email,
                                           style: TextStyle(
                                               fontFamily: 'ConcertOne-Regular',
-                                              color: Colors.black,
+                                              color: Colors.grey,
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16)),
                                     ],
@@ -123,7 +123,7 @@ class _UserScreenState extends State<UserScreen> {
             ],
             Padding(
               padding:
-                  EdgeInsets.only(top: 20, left: 25, bottom: 20, right: 25),
+                  EdgeInsets.only(top: 20, left: 25, bottom: 10, right: 25),
               child: Text(
                 'جست و جوهای اخیر',
                 style: TextStyle(
@@ -136,7 +136,7 @@ class _UserScreenState extends State<UserScreen> {
             if (loggedIn == false)
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 2.6,
+                height: MediaQuery.of(context).size.height / 2.5,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/backg.png'),

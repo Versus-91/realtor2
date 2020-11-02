@@ -1,11 +1,9 @@
-import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/ui/login/custom_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 class AcountInfoScreen extends StatefulWidget {
   @override
@@ -41,7 +39,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
       appBar: AppBar(
         title: Text(
           "اطلاعات کاربری",
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white,fontSize: 20),
         ),
         backgroundColor: Colors.red,
         elevation: 0.0,

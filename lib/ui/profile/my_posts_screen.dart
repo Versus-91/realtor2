@@ -13,12 +13,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class MyLikesScreen extends StatefulWidget {
+class MyPostsScreen extends StatefulWidget {
   @override
-  _MyLikesScreenState createState() => _MyLikesScreenState();
+  _MyPostsScreenState createState() => _MyPostsScreenState();
 }
 
-class _MyLikesScreenState extends State<MyLikesScreen>
+class _MyPostsScreenState extends State<MyPostsScreen>
     with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   PostStore _postStore;

@@ -20,7 +20,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
           ? Column(
               children: List<Widget>.generate(
                   widget.store.postList.posts.length, (index) {
-              var url = 'assets/images/house1.jpg';
+              var url = 'assets/images/placeholder.png';
               if (widget.store.postList.posts[index].images.length > 0) {
                 url = Endpoints.baseUrl +
                     "/" +

@@ -9,7 +9,7 @@ class MyInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           RadialProgress(
             width: 4,
@@ -18,9 +18,6 @@ class MyInfo extends StatelessWidget {
               imagePath: "assets/images/house1.jpg",
               size: Size.fromWidth(120.0),
             ),
-          ),
-          SizedBox(
-            height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -38,7 +35,6 @@ class MyInfo extends StatelessWidget {
           SizedBox(
             height: 3,
           ),
-        
         ],
       ),
     );

@@ -23,9 +23,9 @@ final TextStyle titleStyle = TextStyle(
   fontWeight: FontWeight.w600,
 );
 final TextStyle subTitleStyle = TextStyle(
-  fontSize: 18.0,
+  fontSize: 15.0,
   color: secondaryTextColor,
-  fontWeight: FontWeight.w200,
+  fontWeight: FontWeight.normal,
 );
 final TextStyle actionMenuStyle = TextStyle(
   fontSize: 16.0,

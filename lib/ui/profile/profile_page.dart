@@ -5,6 +5,7 @@ import 'package:boilerplate/ui/profile/My_Likes.dart';
 import 'package:boilerplate/ui/profile/account_info.dart';
 import 'package:boilerplate/ui/profile/colors.dart';
 import 'package:boilerplate/ui/profile/my_info.dart';
+import 'package:boilerplate/ui/profile/my_posts_screen.dart';
 import 'package:boilerplate/ui/profile/opaque_image.dart';
 import 'package:boilerplate/ui/profile/profile_info_big_card.dart';
 import 'package:boilerplate/ui/profile/profile_info_card.dart';
@@ -131,102 +132,113 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Container(
                   padding: const EdgeInsets.only(top: 50),
                   color: Color(0xfff3f3f4),
-                  child: Table(
-                    children: [
-                      TableRow(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => AcountInfoScreen(),
+                  child: SingleChildScrollView(
+                    child: Table(
+                      children: [
+                        TableRow(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => AcountInfoScreen(),
+                                  ),
+                                );
+                              },
+                              child: ProfileInfoBigCard(
+                                secondText: "اطلاعات کاربری",
+                                icon: Icon(
+                                  Icons.account_circle,
+                                  size: 25,
+                                  color: blueColor,
                                 ),
-                              );
-                            },
-                            child: ProfileInfoBigCard(
-                              secondText: "اطلاعات کاربری",
-                              icon: Icon(
-                                Icons.account_circle,
-                                size: 32,
-                                color: blueColor,
                               ),
                             ),
-                          ),
-                          ProfileInfoBigCard(
-                            secondText: "آگهی های من",
-                            icon: Image.asset(
-                              "assets/icons/checklist.png",
-                              width: 32,
-                              color: blueColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      TableRow(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => MyLikesScreen(),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => MyPostsScreen(),
+                                  ),
+                                );
+                              },
+                              child: ProfileInfoBigCard(
+                                secondText: "آگهی های من",
+                                icon: Image.asset(
+                                  "assets/icons/checklist.png",
+                                  width: 25,
+                                  color: blueColor,
                                 ),
-                              );
-                            },
-                            child: ProfileInfoBigCard(
-                              secondText: "آگهی های مورد علاقه",
-                              icon: Icon(
-                                Icons.favorite,
-                                size: 32,
-                                color: blueColor,
                               ),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed(Routes.createpost);
-                            },
-                            child: ProfileInfoBigCard(
-                              secondText: "افزودن آگهی",
-                              icon: Icon(
-                                Icons.post_add,
-                                size: 32,
-                                color: blueColor,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      TableRow(
-                        children: [
-                          ProfileInfoBigCard(
-                            secondText: "طرح های موجود",
-                            icon: Icon(
-                              Icons.remove_red_eye,
-                              size: 32,
-                              color: blueColor,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => MyLikesScreen(),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => MyLikesScreen(),
+                                  ),
+                                );
+                              },
+                              child: ProfileInfoBigCard(
+                                secondText: "آگهی های مورد علاقه",
+                                icon: Icon(
+                                  Icons.favorite,
+                                  size: 25,
+                                  color: blueColor,
                                 ),
-                              );
-                            },
-                            child: ProfileInfoBigCard(
-                              secondText: "درباره ما",
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed(Routes.createpost);
+                              },
+                              child: ProfileInfoBigCard(
+                                secondText: "افزودن آگهی",
+                                icon: Icon(
+                                  Icons.post_add,
+                                  size: 25,
+                                  color: blueColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            ProfileInfoBigCard(
+                              secondText: "طرح های موجود",
                               icon: Icon(
-                                Icons.help_outline,
-                                size: 32,
+                                Icons.remove_red_eye,
+                                size: 25,
                                 color: blueColor,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => MyLikesScreen(),
+                                  ),
+                                );
+                              },
+                              child: ProfileInfoBigCard(
+                                secondText: "درباره ما",
+                                icon: Icon(
+                                  Icons.help_outline,
+                                  size: 25,
+                                  color: blueColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

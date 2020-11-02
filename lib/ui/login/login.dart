@@ -108,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _facebookButton() {
+    double height = MediaQuery.of(context).size.width;
     return Container(
       height: 45,
       decoration: BoxDecoration(
@@ -144,11 +145,14 @@ class _LoginPageState extends State<LoginPage> {
                     topLeft: Radius.circular(5)),
               ),
               alignment: Alignment.center,
-              child: Text('ورود با جیمیل',
-                  style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 50),
+                child: Text('ورود با جیمیل',
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400)),
+              ),
             ),
           ),
         ],
@@ -202,7 +206,6 @@ class _LoginPageState extends State<LoginPage> {
                   _title(),
                   SizedBox(height: height * .06),
                   Container(
-                  
                     height: height / 2.4,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -268,7 +271,6 @@ class _LoginPageState extends State<LoginPage> {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(5),
         child: Container(
-         
           height: 50,
           width: MediaQuery.of(context).size.width,
           alignment: Alignment.center,

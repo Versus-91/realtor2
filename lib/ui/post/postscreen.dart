@@ -273,9 +273,10 @@ class _PostScreen extends State<PostScreen> {
     String description,
   ) {
     return Padding(
-        padding: EdgeInsets.only(left: 14, top: 6, right: 14),
+        padding: EdgeInsets.only(left: 14, right: 14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+        
           children: <Widget>[
             Text(
               description,

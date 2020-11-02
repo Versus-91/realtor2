@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:boilerplate/main.dart';
+import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/routes.dart';
+import 'package:boilerplate/stores/amenity/amenity_store.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
 import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
+import 'package:boilerplate/ui/customlist/list_theme.dart';
+import 'package:boilerplate/ui/customlist/model/pop_list.dart';
 import 'package:boilerplate/ui/post/user_map_screen.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
@@ -65,7 +69,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   DistrictStore _districtStore;
   CategoryStore _categoryStore;
   TypeStore _typeStore;
-
+  AmenityStore _amenityStore;
   //focus node:-----------------------------------------------------------------
 
   //stores:---------------------------------------------------------------------
@@ -119,12 +123,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     _districtStore = Provider.of<DistrictStore>(context);
     _categoryStore = Provider.of<CategoryStore>(context);
     _typeStore = Provider.of<TypeStore>(context);
-
+    _amenityStore = Provider.of<AmenityStore>(context);
     //start api request if it's not started
     if (!_cityStore.loading) _cityStore.getCities();
     if (!_districtStore.loading) _districtStore.getDistricts();
     if (!_categoryStore.loading) _categoryStore.getCategories();
     if (!_typeStore.loading) _typeStore.getTypes();
+    if (!_amenityStore.loading) _amenityStore.getAmenities();
   }
 
   @override
@@ -140,9 +145,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             _store.insertPost();
           },
           child: Container(
-            height: 60,
+            height: 45,
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(vertical: 15),
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -238,9 +242,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           children: <Widget>[
             // _buildTitleField(),
             _buildCategoryField(),
-            const Divider(
-              height: 1,
-            ),
+
             Row(
               children: [
                 Flexible(
@@ -251,9 +253,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 Flexible(child: _buildDistrictlistField()),
               ],
             ),
-            const Divider(
-              height: 1,
-            ),
+
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Row(
@@ -269,9 +269,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               ),
             ),
 
-            const Divider(
-              height: 1,
-            ),
             if (_categoryText.contains('رهن')) ...[
               Row(
                 children: [
@@ -286,20 +283,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             if (_value == 1) ...[
               _buildBuyPriceField(),
             ],
+
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 15),
+              child: _popularFilter(),
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildBedroomCountField(),
             ),
-            const Divider(
-              height: 1,
-            ),
+
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildDescriptionField(),
             ),
-            const Divider(
-              height: 1,
-            ),
+
             Padding(
               padding: const EdgeInsets.only(top: 5),
               child: Container(
@@ -311,52 +309,65 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         padding: const EdgeInsets.only(bottom: 30.0),
                         height: MediaQuery.of(context).size.height * 0.50,
                         child: Scrollbar(
-                            child: ListView.separated(
-                          itemCount: _paths != null && _paths.isNotEmpty
-                              ? _paths.length
-                              : 1,
-                          itemBuilder: (BuildContext context, int index) {
-                            final bool isMultiPath =
-                                _paths != null && _paths.isNotEmpty;
-                            final String name = 'File $index: ' +
-                                (isMultiPath
-                                    ? _paths.map((e) => e.name).toList()[index]
-                                    : _fileName ?? '...');
-                            final path = _paths
-                                .map((e) => e.path)
-                                .toList()[index]
-                                .toString();
+                          child: GridView.count(
+                            crossAxisCount: 4,
+                            children: new List<Widget>.generate(16, (index) {
+                              return new GridTile(
+                                child: new Card(
+                                    color: Colors.blue.shade200,
+                                    child: new Center(
+                                      child: new Text('tile $index'),
+                                    )),
+                              );
+                            }),
+                          ),
+                          //      ListView.separated(
+                          //   itemCount: _paths != null && _paths.isNotEmpty
+                          //       ? _paths.length
+                          //       : 1,
+                          //   itemBuilder: (BuildContext context, int index) {
+                          //     final bool isMultiPath =
+                          //         _paths != null && _paths.isNotEmpty;
+                          //     final String name = 'File $index: ' +
+                          //         (isMultiPath
+                          //             ? _paths.map((e) => e.name).toList()[index]
+                          //             : _fileName ?? '...');
+                          //     final path = _paths
+                          //         .map((e) => e.path)
+                          //         .toList()[index]
+                          //         .toString();
 
-                            return ListTile(
-                              leading: ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  minWidth: 44,
-                                  minHeight: 44,
-                                  maxWidth: 64,
-                                  maxHeight: 64,
-                                ),
-                                child: Image.file(
-                                  File(path),
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                ),
-                              ),
-                              title: Text(
-                                name,
-                              ),
-                              // subtitle: Text(path),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(),
-                        )),
+                          //     return ListTile(
+                          //       leading: ConstrainedBox(
+                          //         constraints: BoxConstraints(
+                          //           minWidth: 44,
+                          //           minHeight: 44,
+                          //           maxWidth: 64,
+                          //           maxHeight: 64,
+                          //         ),
+                          //         child: Image.file(
+                          //           File(path),
+                          //           fit: BoxFit.cover,
+                          //           width: double.infinity,
+                          //         ),
+                          //       ),
+                          //       title: Text(
+                          //         name,
+                          //       ),
+                          //       // subtitle: Text(path),
+                          //     );
+                          //   },
+                          //   separatorBuilder: (BuildContext context, int index) =>
+                          //       const Divider(),
+                          // )
+                        ),
                       )
                     : const SizedBox(),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 30, right: 30, bottom: 15, top: 15),
+              padding:
+                  const EdgeInsets.only(left: 30, right: 30, bottom: 5, top: 5),
               child: RaisedButton(
                 color: Colors.green[300],
                 child: Row(
@@ -381,9 +392,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 onPressed: () => _openFileExplorer(),
               ),
             ),
-            const Divider(
-              height: 1,
-            ),
+
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -411,31 +420,103 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
-  // Widget _buildTitleField() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(
-  //         "عنوان آگهی",
-  //         style: TextStyle(color: Colors.red[300]),
-  //       ),
-  //       TextField(
-  //         decoration: InputDecoration(
-  //            hintText: 'عنوان',
-  //           // when user presses enter it will adapt to it
-  //         ),
-  //         keyboardType: TextInputType.multiline,
-  //         minLines: 1, //Normal textInputField will be displayed
-  //         controller: _titleController,
-  //         onChanged: (value) {
-  //           _store.setTitle(_titleController.text);
-  //         },
-  //         textAlign: TextAlign.right,
-  //         textDirection: TextDirection.rtl,
-  //       ),
-  //     ],
-  //   );
-  // }
+  List<Widget> getPList(List<Amenity> amenities) {
+    final List<Widget> noList = <Widget>[];
+    int count = 0;
+    const int columnCount = 2;
+    for (int i = 0; i < amenities.length / columnCount; i++) {
+      final List<Widget> listUI = <Widget>[];
+      for (int i = 0; i < columnCount; i++) {
+        try {
+          final SelectedPropertyTypes date = SelectedPropertyTypes(
+              titleTxt: amenities[count].name,
+              icon: amenities[count].icon,
+              id: amenities[count].id,
+              isSelected: false);
+          listUI.add(Expanded(
+            child: Row(
+              children: <Widget>[
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                    onTap: () {
+                      setState(() {
+                        date.isSelected = !date.isSelected;
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            date.isSelected
+                                ? Icons.check_box
+                                : Icons.check_box_outline_blank,
+                            color: date.isSelected
+                                ? HotelAppTheme.buildLightTheme().primaryColor
+                                : Colors.grey.withOpacity(0.6),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            date.titleTxt,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ));
+          if (count < amenities.length - 1) {
+            count += 1;
+          } else {
+            break;
+          }
+        } catch (e) {
+          throw (e);
+        }
+      }
+      noList.add(Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: listUI,
+      ));
+    }
+    return noList;
+  }
+
+  Widget _popularFilter() {
+    return Observer(builder: (context) {
+      return _amenityStore.amenityList.amenities.length > 0
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'امکانات',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: Colors.red[300],
+                      fontSize:
+                          MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                      fontWeight: FontWeight.normal),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 16, left: 16),
+                  child: Column(
+                    children: getPList(_amenityStore.amenityList.amenities),
+                  ),
+                ),
+              ],
+            )
+          : SizedBox.shrink();
+    });
+  }
 
   Widget _buildDescriptionField() {
     return Column(
@@ -508,7 +589,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Widget _buildRentPriceField() {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 10),
+      padding: const EdgeInsets.only(left: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -544,76 +625,64 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Widget _buildEjarePriceField() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(" اجاره کامل", style: TextStyle(color: Colors.red[300])),
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: TextField(
-                    inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
-                    ],
-                    controller: _rentPriceController,
-                    onChanged: (value) {
-                      var price =
-                          double.tryParse(_rentPriceController.text) ?? 0;
-                      _store.setRentPrice(price);
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        errorText: _store.formErrorStore.rentPrice,
-                        border: InputBorder.none,
-                        fillColor: Color(0xfff3f3f4),
-                        filled: true,
-                        hintText: "قیمت اجاره",
-                        contentPadding: EdgeInsets.all(10))),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(" اجاره کامل", style: TextStyle(color: Colors.red[300])),
+        Row(
+          children: <Widget>[
+            Flexible(
+              child: TextField(
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                  controller: _rentPriceController,
+                  onChanged: (value) {
+                    var price = double.tryParse(_rentPriceController.text) ?? 0;
+                    _store.setRentPrice(price);
+                  },
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      errorText: _store.formErrorStore.rentPrice,
+                      border: InputBorder.none,
+                      fillColor: Color(0xfff3f3f4),
+                      filled: true,
+                      hintText: "قیمت اجاره",
+                      contentPadding: EdgeInsets.all(10))),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
   Widget _buildBuyPriceField() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            "قیمت",
-            style: TextStyle(color: Colors.red[300]),
-          ),
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: TextField(
-                    inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
-                    ],
-                    controller: _buyPriceController,
-                    onChanged: (valu) {
-                      var price =
-                          double.tryParse(_buyPriceController.text) ?? 0;
-                      _store.setBuyPrice(price);
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        errorText: _store.formErrorStore.buyPrice,
-                        hintText: "قیمت",
-                        border: OutlineInputBorder(
-                            borderSide: new BorderSide(color: Colors.teal)),
-                        contentPadding: EdgeInsets.all(10))),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          "قیمت",
+          style: TextStyle(color: Colors.red[300]),
+        ),
+        Row(
+          children: <Widget>[
+            Flexible(
+              child: TextField(
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                  controller: _buyPriceController,
+                  onChanged: (valu) {
+                    var price = double.tryParse(_buyPriceController.text) ?? 0;
+                    _store.setBuyPrice(price);
+                  },
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      errorText: _store.formErrorStore.buyPrice,
+                      hintText: "قیمت",
+                      border: OutlineInputBorder(
+                          borderSide: new BorderSide(color: Colors.teal)),
+                      contentPadding: EdgeInsets.all(10))),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -706,7 +775,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Widget _buildCategoryField() {
     return Padding(
-      padding: const EdgeInsets.only(top: 15, bottom: 10),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Observer(
         builder: (context) {
           return _categoryStore.categoryList != null
@@ -818,7 +887,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "تعداد اتاق :",
+          "تعداد اتاق ",
           style: TextStyle(color: Colors.red[300]),
         ),
         Padding(

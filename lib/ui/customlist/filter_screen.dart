@@ -468,7 +468,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   Widget popularFilter() {
     return Observer(builder: (context) {
-      return _amenityStore.amenityList.amenities.length > 0
+      return _amenityStore.amenityList != null
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
