@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:boilerplate/main.dart';
@@ -26,8 +27,6 @@ class FiltersScreen extends StatefulWidget {
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  List<SelectedPropertyTypes> popularFilterListData =
-      SelectedPropertyTypes.popularFList;
   List<int> selectedTypes = [];
   List<SelectedPropertyTypes> accomodationListData;
   int _value;
@@ -517,7 +516,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 Padding(
                   padding: const EdgeInsets.only(right: 16, left: 16),
                   child: Column(
-                    children: getPList(),
+                    children: getPList(_amenityStore.amenityList.amenities),
                   ),
                 ),
                 const SizedBox(
@@ -554,15 +553,18 @@ class _FiltersScreenState extends State<FiltersScreen> {
     });
   }
 
-  List<Widget> getPList() {
+  List<Widget> getPList(List<Amenity> amenities) {
     final List<Widget> noList = <Widget>[];
     int count = 0;
     const int columnCount = 2;
-    for (int i = 0; i < popularFilterListData.length / columnCount; i++) {
+    for (int i = 0; i < amenities.length / columnCount; i++) {
       final List<Widget> listUI = <Widget>[];
       for (int i = 0; i < columnCount; i++) {
         try {
-          final SelectedPropertyTypes date = popularFilterListData[count];
+          final SelectedPropertyTypes date = SelectedPropertyTypes(
+              titleTxt: amenities[count].name,
+              id: amenities[count].id,
+              isSelected: false);
           listUI.add(Expanded(
             child: Row(
               children: <Widget>[
@@ -601,7 +603,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               ],
             ),
           ));
-          if (count < popularFilterListData.length - 1) {
+          if (count < amenities.length - 1) {
             count += 1;
           } else {
             break;
