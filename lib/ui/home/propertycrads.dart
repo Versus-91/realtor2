@@ -38,15 +38,9 @@ class _PropertyCradsState extends State<PropertyCrads> {
                 'assets/icons/time.png',
               );
             }))
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                    padding: new EdgeInsets.only(top: 26.0),
-                    child: Text('موردی یافت نشد'))
-              ],
-            );
+          : Container(
+              padding: new EdgeInsets.only(top: 26.0),
+              child: Text('موردی یافت نشد'));
     }));
   }
 
@@ -147,7 +141,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
                     padding: EdgeInsets.only(top: 10, left: 12),
                     child: !type.contains('رهن')
                         ? Container(
-                            width: MediaQuery.of(context).size.width-50,
+                            width: MediaQuery.of(context).size.width - 50,
                             child: Text(
                               post.price.toString(),
                               style: TextStyle(
@@ -158,7 +152,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
                             ),
                           )
                         : Container(
-                            width: MediaQuery.of(context).size.width-50,
+                            width: MediaQuery.of(context).size.width - 50,
                             child: Text(
                               'رهن: ${post.deopsit} , اجاره: ${post.rent}',
                               style: TextStyle(
@@ -171,7 +165,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
                   ),
                   SizedBox(height: 7.0),
                   Container(
-                      width: MediaQuery.of(context).size.width-20,
+                      width: MediaQuery.of(context).size.width - 20,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -193,7 +187,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
                               ),
                             ],
                           ),
-                           Row(
+                          Row(
                             children: <Widget>[
                               Text(
                                 no1,
