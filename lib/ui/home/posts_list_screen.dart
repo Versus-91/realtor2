@@ -168,7 +168,7 @@ class _PostsListScreenState extends State<PostsListScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.sort,
+                            child: Icon(Icons.filter,
                                 color: HotelAppTheme.buildLightTheme()
                                     .primaryColor),
                           ),

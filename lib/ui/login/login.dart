@@ -233,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text(
                                 "رمز خود را فراموش کرده اید؟",
                                 style:
-                                    TextStyle(color: Colors.blue, fontSize: 12),
+                                    TextStyle(color: Colors.blue, fontSize: 10),
                               ),
                             ),
                           ],

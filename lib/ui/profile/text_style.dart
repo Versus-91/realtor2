@@ -2,13 +2,13 @@ import 'package:boilerplate/ui/profile/colors.dart';
 import 'package:flutter/material.dart';
 
 final TextStyle headingTextStyle = TextStyle(
-  fontSize: 26.0,
+  fontSize: 15.0,
   color: Colors.white,
-  fontWeight: FontWeight.w700,
+  fontWeight: FontWeight.w500,
   letterSpacing: 1.0,
 );
 final TextStyle whiteNameTextStyle = TextStyle(
-  fontSize: 24.0,
+  fontSize: 15.0,
   color: Colors.white,
   fontWeight: FontWeight.w600,
 );

@@ -46,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     SafeArea(
                       child: Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Column(
                           children: [
                             Align(
@@ -103,6 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             children: [
                                               Icon(
                                                 Icons.login_rounded,
+                                                color: Colors.red,
                                                 size: 30,
                                               ),
                                               Padding(
