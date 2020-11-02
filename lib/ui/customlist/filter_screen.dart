@@ -138,17 +138,15 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   children: <Widget>[
                     searchField(),
                     _buildCategoryField(),
-
-                    //_buildHomeTypeField(),
-
-                    priceBarFilter(),
-
+                    if (_categoryText.contains('اجاره')) ...[
+                      priceBarFilter('محدوده رهن'),
+                      priceBarFilter('محدوده اجاره')
+                    ] else ...[
+                      priceBarFilter('محدوده قیمت')
+                    ],
                     popularFilter(),
-
                     _buildBedroomCountField(),
-
                     distanceViewUI(),
-
                     allAccommodationUI()
                   ],
                 ),
@@ -165,7 +163,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   Widget _buildCategoryField() {
     return Padding(
-      padding: const EdgeInsets.only(top: 15, bottom: 10),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Observer(
         builder: (context) {
           return _categoryStore.categoryList != null
@@ -236,31 +234,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
   }
 
   Widget searchField() {
-    //search input field
-    // return GFSearchBar(
-    //   searchList: list,
-    //   searchQueryBuilder: (query, list) {
-    //     return list
-    //         .where((item) => item.toLowerCase().contains(query.toLowerCase()))
-    //         .toList();
-    //   },
-    //   overlaySearchListItemBuilder: (item) {
-    //     return Container(
-    //       padding: const EdgeInsets.all(8),
-    //       child: Text(
-    //         item,
-    //         style: const TextStyle(fontSize: 18),
-    //       ),
-    //     );
-    //   },
-    //   onItemSelected: (item) {
-    //     setState(() {
-    //       print('$item');
-    //     });
-    //   },
-    // );
     return Padding(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.only(top: 20, left: 14, right: 14),
       child: TypeAheadFormField(
         textFieldConfiguration: TextFieldConfiguration(
           decoration: InputDecoration(
@@ -642,14 +617,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
     );
   }
 
-  Widget priceBarFilter() {
+  Widget priceBarFilter(String label) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "محدوده قیمت",
+            label,
             style: TextStyle(
                 color: Colors.red,
                 fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,

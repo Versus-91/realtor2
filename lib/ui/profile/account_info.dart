@@ -127,7 +127,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
           alignment: Alignment.center,
           child: CustomButton(
             color: Colors.red,
-            textColor: kWhite,
+            textColor: Colors.white,
             text: 'ثبت',
             onPressed: () {},
           ),

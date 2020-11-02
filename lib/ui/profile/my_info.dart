@@ -38,20 +38,7 @@ class MyInfo extends StatelessWidget {
           SizedBox(
             height: 3,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                "assets/icons/location_pin.png",
-                width: 20.0,
-                color: Colors.white,
-              ),
-              Text(
-                "  34 kilometers",
-                style: whiteSubHeadingTextStyle,
-              )
-            ],
-          ),
+        
         ],
       ),
     );

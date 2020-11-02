@@ -129,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 flex: 5,
                 child: Container(
                   padding: const EdgeInsets.only(top: 50),
-                  color: Colors.white,
+                  color: Color(0xfff3f3f4),
                   child: Table(
                     children: [
                       TableRow(
