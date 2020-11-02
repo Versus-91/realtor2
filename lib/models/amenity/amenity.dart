@@ -2,16 +2,18 @@
 class Amenity {
   int id;
   String name;
-
-  Amenity({this.id, this.name});
+  String icon;
+  Amenity({this.id, this.name, this.icon});
 
   factory Amenity.fromMap(Map<String, dynamic> json) => Amenity(
         id: json["id"],
         name: json["name"],
+        icon: json["icon"],
       );
 
   Map<String, dynamic> toMap() => {
         "id": id,
         "name": name,
+        "icon": icon,
       };
 }

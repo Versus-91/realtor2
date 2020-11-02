@@ -278,6 +278,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14),
       child: TypeAheadFormField(
+        
         textFieldConfiguration: TextFieldConfiguration(
           decoration: InputDecoration(
               fillColor: Colors.grey[300], labelText: 'جست و جوی محله'),
