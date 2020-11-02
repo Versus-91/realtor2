@@ -138,7 +138,7 @@ class _PostScreen extends State<PostScreen> {
           ],
         ),
         Padding(
-          padding: EdgeInsets.only(top: 60, bottom: 20, right: 14, left: 14),
+          padding: EdgeInsets.only(top: 20, bottom: 20, right: 14, left: 14),
           child: Text(
             'توضیحات',
             style: TextStyle(
@@ -149,7 +149,7 @@ class _PostScreen extends State<PostScreen> {
         ),
         aboutHotel('${widget.post.description}'),
         Padding(
-          padding: EdgeInsets.only(top: 60, bottom: 20, left: 14, right: 14),
+          padding: EdgeInsets.only(top: 20, bottom: 20, left: 14, right: 14),
           child: Text(
             'امکانات',
             style: TextStyle(
@@ -161,29 +161,16 @@ class _PostScreen extends State<PostScreen> {
         amenities('assets/icons/pool.png', 'assets/icons/bed.png',
             'assets/icons/tv.png', 'Pool', '6 Beds', 'Kitchen'),
         Padding(
-          padding: EdgeInsets.only(top: 100, bottom: 100),
+          padding: EdgeInsets.only(top: 50, bottom: 50, left: 14, right: 14),
           child: Center(
-            child: ButtonTheme(
-              minWidth: 330.0,
-              height: 55.0,
-              child: RaisedButton(
-                  color: Colors.red[500],
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MapScreen(
-                                latitude: widget.post.latitude,
-                                longitude: widget.post.longitude,
-                              )),
-                    );
-                  },
-                  child: const Text('نقشه',
-                      style: TextStyle(fontSize: 20, color: Colors.white)),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(10.0))),
+              child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 250,
+            child: MapScreen(
+              latitude: widget.post.latitude,
+              longitude: widget.post.longitude,
             ),
-          ),
+          )),
         ),
       ],
     ));
