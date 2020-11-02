@@ -1,7 +1,10 @@
 class SelectedPropertyTypes {
-  SelectedPropertyTypes({this.titleTxt = '', this.isSelected = false, this.id});
+  SelectedPropertyTypes(
+      {this.titleTxt = '', this.isSelected = false, this.id, this.icon});
 
   String titleTxt;
+  String icon;
+
   bool isSelected;
   int id;
   static List<SelectedPropertyTypes> popularFList = <SelectedPropertyTypes>[

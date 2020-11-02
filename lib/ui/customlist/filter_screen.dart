@@ -138,32 +138,17 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   children: <Widget>[
                     searchField(),
                     _buildCategoryField(),
-                    const Divider(
-                      height: 1,
-                    ),
+
                     //_buildHomeTypeField(),
-                    const Divider(
-                      height: 1,
-                    ),
+
                     priceBarFilter(),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: const Divider(
-                        height: 1,
-                      ),
-                    ),
+
                     popularFilter(),
-                    const Divider(
-                      height: 1,
-                    ),
+
                     _buildBedroomCountField(),
-                    const Divider(
-                      height: 1,
-                    ),
+
                     distanceViewUI(),
-                    const Divider(
-                      height: 1,
-                    ),
+
                     allAccommodationUI()
                   ],
                 ),
@@ -275,12 +260,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
     //   },
     // );
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      padding: const EdgeInsets.all(14),
       child: TypeAheadFormField(
-        
         textFieldConfiguration: TextFieldConfiguration(
           decoration: InputDecoration(
-              fillColor: Colors.grey[300], labelText: 'جست و جوی محله'),
+              border: InputBorder.none,
+              fillColor: Color(0xfff3f3f4),
+              filled: true,
+              hintText: 'جست و جوی محله'),
           controller: this._typeAheadController,
         ),
         suggestionsCallback: (pattern) {
@@ -291,6 +278,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
         itemBuilder: (context, suggestion) {
           return ListTile(
             title: Text(suggestion),
+          );
+        },
+        noItemsFoundBuilder: (context) {
+          return Text(
+            'نتیجه ای یافت نشد!',
+            style: TextStyle(fontSize: 30, color: Colors.grey[300]),
           );
         },
         transitionBuilder: (context, suggestionsBox, controller) {
@@ -509,7 +502,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   padding: const EdgeInsets.only(
                       left: 16, right: 16, top: 16, bottom: 8),
                   child: Text(
-                    'خصوصیات:',
+                    'خصوصیات',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         color: Colors.red,
@@ -529,32 +522,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 )
               ],
             )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 16, bottom: 8),
-                  child: Text(
-                    'خصوصیات:',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontSize:
-                            MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                        fontWeight: FontWeight.normal),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16, left: 16),
-                  child: Text('data'),
-                ),
-                const SizedBox(
-                  height: 8,
-                )
-              ],
-            );
+          : SizedBox.shrink();
     });
   }
 
@@ -568,6 +536,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
         try {
           final SelectedPropertyTypes date = SelectedPropertyTypes(
               titleTxt: amenities[count].name,
+              icon: amenities[count].icon,
               id: amenities[count].id,
               isSelected: false);
           listUI.add(Expanded(
@@ -634,14 +603,15 @@ class _FiltersScreenState extends State<FiltersScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "تعداد اتاق :",
-            style: TextStyle(color: Colors.red[300]),
-            textAlign: TextAlign.right,
+            "تعداد اتاق",
+            style: TextStyle(
+                color: Colors.red,
+                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                fontWeight: FontWeight.normal),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16),
               child: ToggleButtons(
                 children: <Widget>[
                   Text("+1"),
@@ -666,7 +636,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 isSelected: isSelected,
               ),
             ),
-          ),
+          )
         ],
       ),
     );
@@ -674,38 +644,50 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   Widget priceBarFilter() {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "قیمت",
-            style: TextStyle(color: Colors.red),
+            "محدوده قیمت",
+            style: TextStyle(
+                color: Colors.red,
+                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                fontWeight: FontWeight.normal),
           ),
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: TextField(
-                    onChanged: (value) {
-                      widget.filterForm.setMinPrice(double.parse(value));
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText: "پایین ترین قیمت",
-                        contentPadding: EdgeInsets.all(10))),
-              ),
-              Text("_"),
-              Flexible(
-                child: TextField(
-                    onChanged: (value) {
-                      widget.filterForm.setMaxPrice(double.parse(value));
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText: "بالا ترین قیمت",
-                        contentPadding: EdgeInsets.all(10))),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: TextField(
+                      onChanged: (value) {
+                        widget.filterForm.setMinPrice(double.parse(value));
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3f3f4),
+                          filled: true,
+                          hintText: "پایین ترین قیمت",
+                          contentPadding: EdgeInsets.all(10))),
+                ),
+                VerticalDivider(),
+                Flexible(
+                  child: TextField(
+                      onChanged: (value) {
+                        widget.filterForm.setMaxPrice(double.parse(value));
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3f3f4),
+                          filled: true,
+                          hintText: "بالا ترین قیمت",
+                          contentPadding: EdgeInsets.all(10))),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -724,12 +706,13 @@ class _FiltersScreenState extends State<FiltersScreen> {
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, left: 8, right: 8),
+        padding:
+            EdgeInsets.only(top: MediaQuery.of(context).padding.top, left: 8),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.centerRight,
               width: AppBar().preferredSize.height + 40,
               height: AppBar().preferredSize.height,
               child: Material(
