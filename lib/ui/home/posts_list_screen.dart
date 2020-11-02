@@ -57,23 +57,13 @@ class _PostsListScreenState extends State<PostsListScreen> {
           },
           child: Column(
             children: <Widget>[
-              // getAppBarUI(),
+              getAppBarUI(),
               Expanded(
                 child: NestedScrollView(
                   controller: _scrollController,
                   headerSliverBuilder:
                       (BuildContext context, bool innerBoxIsScrolled) {
                     return <Widget>[
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                          return Column(
-                            children: <Widget>[
-                              getSearchBarUI(),
-                            ],
-                          );
-                        }, childCount: 1),
-                      ),
                       SliverPersistentHeader(
                         pinned: true,
                         floating: true,
@@ -203,39 +193,31 @@ class _PostsListScreenState extends State<PostsListScreen> {
     );
   }
 
-  Widget getSearchBarUI() {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 8,
-        right: 8,
-        top: 10,
-        bottom: 8,
+  Widget getAppBarUI() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.red,
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              offset: const Offset(0, 2),
+              blurRadius: 4.0),
+        ],
       ),
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          color: HotelAppTheme.buildLightTheme().backgroundColor,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(10),
-          ),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                offset: const Offset(0, 2),
-                blurRadius: 6),
-          ],
-        ),
-        child: Padding(
-          padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 4),
-          child: TextField(
-            style: const TextStyle(fontSize: 18, color: Colors.red),
-            cursorColor: HotelAppTheme.buildLightTheme().primaryColor,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: 'جست و جوی آگهی',
+      child: Padding(
+        padding: EdgeInsets.only(
+            top: MediaQuery.of(context).padding.top, left: 8, right: 10),
+        child: Row(
+          children: <Widget>[
+            Text(
+              'آگهی ها',
+              style: TextStyle(fontSize: 20, color: Colors.black),
             ),
-          ),
+            Container(
+              width: AppBar().preferredSize.height + 40,
+              height: AppBar().preferredSize.height,
+            )
+          ],
         ),
       ),
     );

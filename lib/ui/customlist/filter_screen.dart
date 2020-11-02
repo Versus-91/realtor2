@@ -80,7 +80,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
       child: Scaffold(
         bottomNavigationBar: Padding(
             padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -275,29 +275,33 @@ class _FiltersScreenState extends State<FiltersScreen> {
     //     });
     //   },
     // );
-    return TypeAheadFormField(
-      textFieldConfiguration: TextFieldConfiguration(
-        decoration: InputDecoration(labelText: 'City'),
-        controller: this._typeAheadController,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      child: TypeAheadFormField(
+        textFieldConfiguration: TextFieldConfiguration(
+          decoration: InputDecoration(
+              fillColor: Colors.grey[300], labelText: 'جست و جوی محله'),
+          controller: this._typeAheadController,
+        ),
+        suggestionsCallback: (pattern) {
+          if (pattern.length >= 2) {
+            return getSuggestion(pattern);
+          }
+        },
+        itemBuilder: (context, suggestion) {
+          return ListTile(
+            title: Text(suggestion),
+          );
+        },
+        transitionBuilder: (context, suggestionsBox, controller) {
+          return suggestionsBox;
+        },
+        onSuggestionSelected: (suggestion) {
+          this._typeAheadController.text = suggestion;
+        },
+        validator: (value) => value.isEmpty ? 'نام محل را وارد کنید' : null,
+        onSaved: (value) => this._selectedCity = value,
       ),
-      suggestionsCallback: (pattern) {
-        if (pattern.length >= 2) {
-          return getSuggestion(pattern);
-        }
-      },
-      itemBuilder: (context, suggestion) {
-        return ListTile(
-          title: Text(suggestion),
-        );
-      },
-      transitionBuilder: (context, suggestionsBox, controller) {
-        return suggestionsBox;
-      },
-      onSuggestionSelected: (suggestion) {
-        this._typeAheadController.text = suggestion;
-      },
-      validator: (value) => value.isEmpty ? 'نام محل را وارد کنید' : null,
-      onSaved: (value) => this._selectedCity = value,
     );
   }
 

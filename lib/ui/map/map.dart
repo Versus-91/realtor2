@@ -31,18 +31,11 @@ class _MapScreenState extends State<MapScreen> {
     // final dynamic args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       primary: true,
-      appBar: _buildAppBar(),
       body: Column(
         children: <Widget>[
           _mapSection(),
         ],
       ),
-    );
-  }
-
-  Widget _buildAppBar() {
-    return AppBar(
-      title: Text("نقشه"),
     );
   }
 
