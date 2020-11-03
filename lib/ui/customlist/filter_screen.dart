@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:boilerplate/models/district/district.dart';
+import 'package:boilerplate/models/location/locations.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -30,7 +31,7 @@ class FiltersScreen extends StatefulWidget {
 
 class _FiltersScreenState extends State<FiltersScreen> {
   PostRequest _filterRequest;
-  List<dynamic> _districts;
+  List<dynamic> _locations;
   List<int> selectedTypes = [];
   List<SelectedPropertyTypes> accomodationListData = [];
   List<SelectedPropertyTypes> amenityList = [];
@@ -292,11 +293,18 @@ class _FiltersScreenState extends State<FiltersScreen> {
         },
         onSuggestionSelected: (suggestion) {
           this._typeAheadController.text = suggestion;
-          var selectedDistrict =
-              _districts.where((element) => element.name == suggestion)?.first;
-          if (selectedDistrict != null) {
-            widget.filterForm
-                .setDistrict(selectedDistrict.id, selectedDistrict.name);
+          var selectedLocation =
+              _locations.where((element) => element.name == suggestion)?.first;
+          if (selectedLocation != null) {
+            if (selectedLocation.isCity) {
+              widget.filterForm.setDistrict(null, null);
+              widget.filterForm
+                  .setCity(selectedLocation.id, selectedLocation.name);
+            } else {
+              widget.filterForm.setCity(null, null);
+              widget.filterForm
+                  .setDistrict(selectedLocation.id, selectedLocation.name);
+            }
           }
         },
         validator: (value) => value.isEmpty ? 'نام محل را وارد کنید' : null,
@@ -313,8 +321,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
     if (res.statusCode == 200) {
       setState(() {
         data = json.decode(res.body)["result"];
-        _districts = data
-            .map((item) => District(name: item["name"], id: item["id"]))
+        _locations = data
+            .map((item) => Location(
+                name: item["name"], id: item["id"], isCity: item["isCity"]))
             .toList();
         data = data.map((item) => item["name"]).toList();
         //update data value and UI

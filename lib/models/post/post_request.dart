@@ -30,6 +30,9 @@ class PostRequest {
     if (district != null) {
       result.addAll({"district": district.toString()});
     }
+    if (city != null) {
+      result.addAll({"city": city.toString()});
+    }
     if (maxArea != null) {
       result.addAll({"maxArea": maxArea.toString()});
       result.addAll({"minArea": minArea.toString()});

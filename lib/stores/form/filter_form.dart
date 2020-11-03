@@ -1,5 +1,6 @@
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/category/category.dart';
+import 'package:boilerplate/models/city/city.dart';
 import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
@@ -14,9 +15,7 @@ abstract class _FilterFormStore with Store {
 
   // store for handling error messages
   final ErrorStore errorStore = ErrorStore();
-  Repository _repository;
-  _FilterFormStore(Repository repository) {
-    _repository = repository;
+  _FilterFormStore() {
     _setupValidations();
   }
 
@@ -47,6 +46,8 @@ abstract class _FilterFormStore with Store {
   int bedCount;
   @observable
   District district = District();
+  @observable
+  City city = City();
   @observable
   List<int> amenities = new List<int>();
   @observable
@@ -89,6 +90,12 @@ abstract class _FilterFormStore with Store {
   }
 
   @action
+  void setCity(int value, String name) {
+    city.name = name;
+    city.id = value;
+  }
+
+  @action
   void setCategory(int id, String name) {
     category.id = id;
     category.name = name;
@@ -102,6 +109,7 @@ abstract class _FilterFormStore with Store {
         minArea: 0,
         maxArea: area?.floor(),
         district: district.id,
+        city: city.id,
         category: category.id,
         types: propertyTypes,
         amenities: amenities);

@@ -21,7 +21,7 @@ class PostsListScreen extends StatefulWidget {
 class _PostsListScreenState extends State<PostsListScreen> {
   final ScrollController _scrollController = ScrollController();
   PostStore _postStore;
-  FilterFormStore _filterForm = FilterFormStore(appComponent.getRepository());
+  FilterFormStore _filterForm = FilterFormStore();
   @override
   void initState() {
     super.initState();
