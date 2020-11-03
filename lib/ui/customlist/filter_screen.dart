@@ -79,7 +79,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
       _typeStore.getTypes();
     if (!_amenityStore.loading && _amenityStore.amenityList == null)
       _amenityStore.getAmenities();
-    _typeAheadController.text = widget.filterForm.district.name;
+    _typeAheadController.text = widget.filterForm.district.name == null
+        ? widget.filterForm.city.name
+        : widget.filterForm.district.name;
   }
 
   @override
@@ -154,7 +156,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     _buildCategoryField(),
                     Observer(
                       builder: (context) {
-                        if (widget.filterForm.category != null &&
+                        if (widget.filterForm.category.name != null &&
                             widget.filterForm.category.name.contains('اجاره')) {
                           return Column(
                             children: [
@@ -202,7 +204,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
                           var category =
                               _categoryStore.categoryList.categories[index];
                           _value = widget.filterForm.category.id;
-                          if (_value == null) {
+                          if (_value == null &&
+                              !category.name.contains('اجاره')) {
                             _value = category.id;
                             widget.filterForm
                                 .setCategory(category.id, category.name);
@@ -265,6 +268,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
       child: TypeAheadFormField(
         textFieldConfiguration: TextFieldConfiguration(
           decoration: InputDecoration(
+              suffixIcon: IconButton(
+                onPressed: () {
+                  widget.filterForm.setDistrict(null, null);
+                  widget.filterForm.setCity(null, null);
+                  _typeAheadController.clear();
+                },
+                icon: Icon(Icons.clear),
+              ),
               border: InputBorder.none,
               fillColor: Color(0xfff3f3f4),
               filled: true,
@@ -293,17 +304,16 @@ class _FiltersScreenState extends State<FiltersScreen> {
         },
         onSuggestionSelected: (suggestion) {
           this._typeAheadController.text = suggestion;
-          var selectedLocation =
-              _locations.where((element) => element.name == suggestion)?.first;
+          var selectedLocation = _locations
+              .where((element) => suggestion.contains(element.name))
+              ?.first;
           if (selectedLocation != null) {
             if (selectedLocation.isCity) {
               widget.filterForm.setDistrict(null, null);
-              widget.filterForm
-                  .setCity(selectedLocation.id, selectedLocation.name);
+              widget.filterForm.setCity(selectedLocation.id, suggestion);
             } else {
               widget.filterForm.setCity(null, null);
-              widget.filterForm
-                  .setDistrict(selectedLocation.id, selectedLocation.name);
+              widget.filterForm.setDistrict(selectedLocation.id, suggestion);
             }
           }
         },
@@ -325,7 +335,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
             .map((item) => Location(
                 name: item["name"], id: item["id"], isCity: item["isCity"]))
             .toList();
-        data = data.map((item) => item["name"]).toList();
+        data = data.map((item) {
+          var locationLabel = item["isCity"] == true ? "شهر" : "منطقه";
+          return locationLabel + " " + item["name"];
+        }).toList();
         //update data value and UI
       });
     }
