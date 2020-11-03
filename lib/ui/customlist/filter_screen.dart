@@ -269,13 +269,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
         textFieldConfiguration: TextFieldConfiguration(
           decoration: InputDecoration(
               suffixIcon: IconButton(
-                onPressed: () {
-                  widget.filterForm.setDistrict(null, null);
-                  widget.filterForm.setCity(null, null);
-                  _typeAheadController.clear();
-                },
-                icon: Icon(Icons.clear),
-              ),
+                  onPressed: () {
+                    widget.filterForm.setDistrict(null, null);
+                    widget.filterForm.setCity(null, null);
+                    _typeAheadController.clear();
+                  },
+                  icon: Icon(Icons.clear)),
               border: InputBorder.none,
               fillColor: Color(0xfff3f3f4),
               filled: true,
