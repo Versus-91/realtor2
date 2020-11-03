@@ -44,7 +44,7 @@ abstract class _FilterFormStore with Store {
   @observable
   int district;
   @observable
-  List<int> types = new List<int>();
+  List<int> amenities = new List<int>();
   @observable
   bool loading = false;
 
@@ -64,10 +64,8 @@ abstract class _FilterFormStore with Store {
   }
 
   @action
-  void setPropertyType(int value) {
-    if (!types.contains(value)) {
-      types.add(value);
-    }
+  void setAmenity(int value) {
+    amenities.contains(value) ? amenities.remove(value) : amenities.add(value);
   }
 
   @action
@@ -81,6 +79,11 @@ abstract class _FilterFormStore with Store {
   }
 
   @action
+  void setCategory(int value) {
+    category = value;
+  }
+
+  @action
   PostRequest applyFilters() {
     return PostRequest(
         maxPrice: maxPrice?.floor(),
@@ -89,7 +92,8 @@ abstract class _FilterFormStore with Store {
         maxArea: area?.floor(),
         district: district,
         category: category,
-        types: types);
+        types: propertyTypes,
+        amenities: amenities);
   }
 
   @action

@@ -7,18 +7,19 @@ class PostRequest {
   int city;
   int category;
   List<int> types;
+  List<int> amenities;
   int age;
-  PostRequest({
-    this.minPrice,
-    this.maxPrice,
-    this.minArea,
-    this.maxArea,
-    this.district,
-    this.city,
-    this.category,
-    this.types,
-    this.age,
-  });
+  PostRequest(
+      {this.minPrice,
+      this.maxPrice,
+      this.minArea,
+      this.maxArea,
+      this.district,
+      this.city,
+      this.category,
+      this.types,
+      this.age,
+      this.amenities});
   Map<String, dynamic> toJson() {
     Map<String, dynamic> result = new Map();
     result.addAll({"minPrice": minPrice.toString()});
@@ -28,7 +29,7 @@ class PostRequest {
       result.addAll({"minArea": minArea.toString()});
     }
     result.addAll({"type": types.map((e) => e.toString()).toList()});
-
+    result.addAll({"amenities": amenities.map((e) => e.toString()).toList()});
     return result;
   }
 }

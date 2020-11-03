@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:boilerplate/models/amenity/amenity.dart';
+import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
+import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
@@ -21,14 +21,17 @@ import 'package:http/http.dart' as http;
 
 class FiltersScreen extends StatefulWidget {
   final FilterFormStore filterForm;
-  FiltersScreen({@required this.filterForm});
+  final PostStore postStore;
+  FiltersScreen({@required this.filterForm, @required this.postStore});
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
+  PostRequest _filterRequest;
   List<int> selectedTypes = [];
   List<SelectedPropertyTypes> accomodationListData;
+  List<SelectedPropertyTypes> amenityList = [];
   int _value;
   final TextEditingController _typeAheadController = TextEditingController();
   String _selectedCity;
@@ -65,11 +68,16 @@ class _FiltersScreenState extends State<FiltersScreen> {
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
 
-    if (!_cityStore.loading) _cityStore.getCities();
-    if (!_districtStore.loading) _districtStore.getDistricts();
-    if (!_categoryStore.loading) _categoryStore.getCategories();
-    if (!_typeStore.loading) _typeStore.getTypes();
-    if (!_amenityStore.loading) _amenityStore.getAmenities();
+    if (!_cityStore.loading && _cityStore.cityList == null)
+      _cityStore.getCities();
+    if (!_districtStore.loading && _districtStore.districtList == null)
+      _districtStore.getDistricts();
+    if (!_categoryStore.loading && _categoryStore.categoryList == null)
+      _categoryStore.getCategories();
+    if (!_typeStore.loading && _typeStore.typeList == null)
+      _typeStore.getTypes();
+    if (!_amenityStore.loading && _amenityStore.amenityList == null)
+      _amenityStore.getAmenities();
   }
 
   @override
@@ -113,12 +121,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             ?.toList();
                         if (items != null && items.length > 0) {
                           for (var type in items) {
-                            widget.filterForm.setPropertyType(type.id);
+                            widget.filterForm.setpropertyTypes(type.id);
                           }
                         }
                         widget.filterForm
                             .setPropertyTypeList(accomodationListData);
                         widget.filterForm.loading = true;
+                        _filterRequest = widget.filterForm.applyFilters();
+                        widget.postStore.getPosts(request: _filterRequest);
                         Future.delayed(Duration(milliseconds: 2), () {
                           Navigator.pop(context);
                         });
@@ -180,6 +190,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
                               _categoryStore.categoryList.categories[index];
                           if (_value == null) {
                             _value = category.id;
+                            widget.filterForm.setCategory(category.id);
+                            _categoryText = category.name;
                           }
                           return Padding(
                             padding: const EdgeInsets.all(18.0),
@@ -189,7 +201,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                   _categoryText = category.name;
                                   _value = category.id;
                                 });
-                                widget.filterForm.setpropertyTypes(category.id);
+                                widget.filterForm.setCategory(category.id);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -246,7 +258,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           controller: this._typeAheadController,
         ),
         suggestionsCallback: (pattern) {
-          if (pattern.length >= 2) {
+          if (pattern.trim().length >= 2 && pattern.trim() != _selectedCity) {
             return getSuggestion(pattern);
           }
         },
@@ -305,15 +317,15 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 fontWeight: FontWeight.normal),
           ),
         ),
+        if (accomodationListData.length > 1) ...[
+          Padding(
+            padding: const EdgeInsets.only(right: 16, left: 16),
+            child: Column(
+              children: getAccomodationListUI(),
+            ),
+          )
+        ],
         Observer(builder: (context) {
-          if (accomodationListData.length > 1) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 16, left: 16),
-              child: Column(
-                children: getAccomodationListUI(),
-              ),
-            );
-          }
           if (_typeStore.typeList != null) {
             if (accomodationListData.length == 0) {
               accomodationListData = _typeStore.typeList.types
@@ -468,52 +480,62 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   Widget popularFilter() {
     return Observer(builder: (context) {
-      return _amenityStore.amenityList != null
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 16, bottom: 8),
-                  child: Text(
-                    'خصوصیات',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontSize:
-                            MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                        fontWeight: FontWeight.normal),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16, left: 16),
-                  child: Column(
-                    children: getPList(_amenityStore.amenityList.amenities),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                )
-              ],
+      if (_amenityStore.amenityList != null) {
+        if (amenityList.length == 0) {
+          amenityList = _amenityStore.amenityList.amenities
+              .map((item) => SelectedPropertyTypes(
+                    id: item.id,
+                    titleTxt: item.name,
+                    isSelected: widget.filterForm.amenities
+                            .where((m) => m == item.id)
+                            .isNotEmpty
+                        ? true
+                        : false,
+                  ))
+              .toList();
+        }
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 16, right: 16, top: 16, bottom: 8),
+              child: Text(
+                'خصوصیات',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                    fontWeight: FontWeight.normal),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16, left: 16),
+              child: Column(
+                children: getPList(),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
             )
-          : SizedBox.shrink();
+          ],
+        );
+      } else {
+        return SizedBox.shrink();
+      }
     });
   }
 
-  List<Widget> getPList(List<Amenity> amenities) {
+  List<Widget> getPList() {
     final List<Widget> noList = <Widget>[];
     int count = 0;
     const int columnCount = 2;
-    for (int i = 0; i < amenities.length / columnCount; i++) {
+    for (int i = 0; i < amenityList.length / columnCount; i++) {
       final List<Widget> listUI = <Widget>[];
       for (int i = 0; i < columnCount; i++) {
         try {
-          final SelectedPropertyTypes date = SelectedPropertyTypes(
-              titleTxt: amenities[count].name,
-              icon: amenities[count].icon,
-              id: amenities[count].id,
-              isSelected: false);
+          final SelectedPropertyTypes amenity = amenityList[count];
           listUI.add(Expanded(
             child: Row(
               children: <Widget>[
@@ -523,7 +545,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                     onTap: () {
                       setState(() {
-                        date.isSelected = !date.isSelected;
+                        amenity.isSelected = !amenity.isSelected;
+                        widget.filterForm.setAmenity(amenity.id);
                       });
                     },
                     child: Padding(
@@ -531,10 +554,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
                       child: Row(
                         children: <Widget>[
                           Icon(
-                            date.isSelected
+                            amenity.isSelected
                                 ? Icons.check_box
                                 : Icons.check_box_outline_blank,
-                            color: date.isSelected
+                            color: amenity.isSelected
                                 ? HotelAppTheme.buildLightTheme().primaryColor
                                 : Colors.grey.withOpacity(0.6),
                           ),
@@ -542,7 +565,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             width: 4,
                           ),
                           Text(
-                            date.titleTxt,
+                            amenity.titleTxt,
                           ),
                         ],
                       ),
@@ -552,7 +575,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               ],
             ),
           ));
-          if (count < amenities.length - 1) {
+          if (count < amenityList.length - 1) {
             count += 1;
           } else {
             break;

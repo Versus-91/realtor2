@@ -116,18 +116,18 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
     });
   }
 
-  final _$typesAtom = Atom(name: '_FilterFormStore.types');
+  final _$amenitiesAtom = Atom(name: '_FilterFormStore.amenities');
 
   @override
-  List<int> get types {
-    _$typesAtom.reportRead();
-    return super.types;
+  List<int> get amenities {
+    _$amenitiesAtom.reportRead();
+    return super.amenities;
   }
 
   @override
-  set types(List<int> value) {
-    _$typesAtom.reportWrite(value, super.types, () {
-      super.types = value;
+  set amenities(List<int> value) {
+    _$amenitiesAtom.reportWrite(value, super.amenities, () {
+      super.amenities = value;
     });
   }
 
@@ -183,11 +183,11 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
-  void setPropertyType(int value) {
+  void setAmenity(int value) {
     final _$actionInfo = _$_FilterFormStoreActionController.startAction(
-        name: '_FilterFormStore.setPropertyType');
+        name: '_FilterFormStore.setAmenity');
     try {
-      return super.setPropertyType(value);
+      return super.setAmenity(value);
     } finally {
       _$_FilterFormStoreActionController.endAction(_$actionInfo);
     }
@@ -210,6 +210,17 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
         name: '_FilterFormStore.setDistrict');
     try {
       return super.setDistrict(value);
+    } finally {
+      _$_FilterFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setCategory(int value) {
+    final _$actionInfo = _$_FilterFormStoreActionController.startAction(
+        name: '_FilterFormStore.setCategory');
+    try {
+      return super.setCategory(value);
     } finally {
       _$_FilterFormStoreActionController.endAction(_$actionInfo);
     }
@@ -247,7 +258,7 @@ propertyTypes: ${propertyTypes},
 area: ${area},
 category: ${category},
 district: ${district},
-types: ${types},
+amenities: ${amenities},
 loading: ${loading}
     ''';
   }

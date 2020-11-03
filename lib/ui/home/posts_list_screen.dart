@@ -21,7 +21,6 @@ class PostsListScreen extends StatefulWidget {
 class _PostsListScreenState extends State<PostsListScreen> {
   final ScrollController _scrollController = ScrollController();
   PostStore _postStore;
-  PostRequest _filterRequest;
   FilterFormStore _filterForm = FilterFormStore(appComponent.getRepository());
   @override
   void initState() {
@@ -31,16 +30,7 @@ class _PostsListScreenState extends State<PostsListScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    // initializing stores
-
     _postStore = Provider.of<PostStore>(context);
-    // check to see if already called api
-    if (!_postStore.loading) {
-      _filterRequest == null
-          ? _postStore.getPosts()
-          : _postStore.getPosts(request: _filterRequest);
-    }
   }
 
   @override
@@ -73,20 +63,28 @@ class _PostsListScreenState extends State<PostsListScreen> {
                       ),
                     ];
                   },
-                  body: PropertyCrads(
-                    store: _postStore,
+                  body: Observer(
+                    builder: (context) {
+                      return _postStore.loading
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : PropertyCrads(
+                              store: _postStore,
+                            );
+                    },
                   ),
                 ),
               ),
-              Observer(builder: (context) {
-                if (_filterForm.loading) {
-                  _filterRequest = _filterForm.applyFilters();
-                  _postStore.getPosts(request: _filterRequest);
-                  _filterForm.loading = false;
-                  return SizedBox.shrink();
-                }
-                return SizedBox.shrink();
-              })
+              // Observer(builder: (context) {
+              //   if (_filterForm.loading) {
+              //     _filterRequest = _filterForm.applyFilters();
+              //     _postStore.getPosts(request: _filterRequest);
+              //     _filterForm.loading = false;
+              //     return SizedBox.shrink();
+              //   }
+              //   return SizedBox.shrink();
+              // })
             ],
           ),
         ),
@@ -122,18 +120,30 @@ class _PostsListScreenState extends State<PostsListScreen> {
                 const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
             child: Row(
               children: <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'تعداد پست ها :${_postStore.postList?.posts?.length ?? 'N/A'}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w200,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
+                Expanded(child: Observer(
+                  builder: (context) {
+                    return _postStore.postList != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'تعداد پست ها :${_postStore.postList.posts?.length}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w200,
+                                fontSize: 16,
+                              ),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'تعداد پست ها :${'N/A'}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w200,
+                                fontSize: 16,
+                              ),
+                            ));
+                  },
+                )),
                 Material(
                   color: Colors.transparent,
                   child: InkWell(
@@ -151,6 +161,7 @@ class _PostsListScreenState extends State<PostsListScreen> {
                         MaterialPageRoute<dynamic>(
                             builder: (BuildContext context) => FiltersScreen(
                                   filterForm: _filterForm,
+                                  postStore: _postStore,
                                 ),
                             fullscreenDialog: true),
                       );

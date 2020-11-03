@@ -16,31 +16,44 @@ class _PropertyCradsState extends State<PropertyCrads> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(child: Observer(builder: (context) {
-      return widget.store.postList != null
-          ? Column(
+      if (widget.store.postList != null) {
+        if (widget.store.postList.posts.length == 0) {
+          return Container(
+            padding: EdgeInsets.all(24),
+            alignment: Alignment.center,
+            child: Center(
+              child: Text(
+                "نتیجه ای پیدا نشد",
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        } else {
+          return Column(
               children: List<Widget>.generate(
                   widget.store.postList.posts.length, (index) {
-              var url = 'assets/images/placeholder.png';
-              if (widget.store.postList.posts[index].images.length > 0) {
-                url = Endpoints.baseUrl +
-                    "/" +
-                    widget.store.postList.posts[index].images[0]?.path;
-              }
+            var url = 'assets/images/placeholder.png';
+            if (widget.store.postList.posts[index].images.length > 0) {
+              url = Endpoints.baseUrl +
+                  "/" +
+                  widget.store.postList.posts[index].images[0]?.path;
+            }
 
-              return houseWidget(
-                widget.store.postList.posts[index],
-                url,
-                widget.store.postList.posts[index].category.name,
-                '${widget.store.postList.posts[index].district.city.name}, ${widget.store.postList.posts[index].district.name}',
-                '${widget.store.postList.posts[index].bedroom}',
-                'assets/images/bed.png',
-                '${widget.store.postList.posts[index].age}',
-                'assets/icons/time.png',
-              );
-            }))
-          : Container(
-              padding: new EdgeInsets.only(top: 26.0),
-              child: Text('موردی یافت نشد'));
+            return houseWidget(
+              widget.store.postList.posts[index],
+              url,
+              widget.store.postList.posts[index].category.name,
+              '${widget.store.postList.posts[index].district.city.name}, ${widget.store.postList.posts[index].district.name}',
+              '${widget.store.postList.posts[index].bedroom}',
+              'assets/images/bed.png',
+              '${widget.store.postList.posts[index].age}',
+              'assets/icons/time.png',
+            );
+          }));
+        }
+      } else {
+        return Container(child: Center(child: CircularProgressIndicator()));
+      }
     }));
   }
 
