@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
@@ -41,7 +42,7 @@ abstract class _FilterFormStore with Store {
   @observable
   double area;
   @observable
-  int category;
+  Category category = Category();
   @observable
   int bedCount;
   @observable
@@ -88,8 +89,9 @@ abstract class _FilterFormStore with Store {
   }
 
   @action
-  void setCategory(int value) {
-    category = value;
+  void setCategory(int id, String name) {
+    category.id = id;
+    category.name = name;
   }
 
   @action
@@ -100,7 +102,7 @@ abstract class _FilterFormStore with Store {
         minArea: 0,
         maxArea: area?.floor(),
         district: district.id,
-        category: category,
+        category: category.id,
         types: propertyTypes,
         amenities: amenities);
     if (prevRequest == request) {

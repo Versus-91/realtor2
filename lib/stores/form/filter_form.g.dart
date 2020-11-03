@@ -89,13 +89,13 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   final _$categoryAtom = Atom(name: '_FilterFormStore.category');
 
   @override
-  int get category {
+  Category get category {
     _$categoryAtom.reportRead();
     return super.category;
   }
 
   @override
-  set category(int value) {
+  set category(Category value) {
     _$categoryAtom.reportWrite(value, super.category, () {
       super.category = value;
     });
@@ -242,11 +242,11 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
-  void setCategory(int value) {
+  void setCategory(int id, String name) {
     final _$actionInfo = _$_FilterFormStoreActionController.startAction(
         name: '_FilterFormStore.setCategory');
     try {
-      return super.setCategory(value);
+      return super.setCategory(id, name);
     } finally {
       _$_FilterFormStoreActionController.endAction(_$actionInfo);
     }

@@ -45,8 +45,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
   CategoryStore _categoryStore;
   TypeStore _typeStore;
   AmenityStore _amenityStore;
-  String _categoryText = '';
-
   final List<bool> isSelected = [
     false,
     false,
@@ -153,12 +151,21 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   children: <Widget>[
                     searchField(),
                     _buildCategoryField(),
-                    if (_categoryText.contains('اجاره')) ...[
-                      priceBarFilter('محدوده رهن'),
-                      priceBarFilter('محدوده اجاره')
-                    ] else ...[
-                      priceBarFilter('محدوده قیمت')
-                    ],
+                    Observer(
+                      builder: (context) {
+                        if (widget.filterForm.category != null &&
+                            widget.filterForm.category.name.contains('اجاره')) {
+                          return Column(
+                            children: [
+                              priceBarFilter('محدوده رهن'),
+                              priceBarFilter('محدوده اجاره')
+                            ],
+                          );
+                        } else {
+                          return priceBarFilter('محدوده قیمت');
+                        }
+                      },
+                    ),
                     popularFilter(),
                     _buildBedroomCountField(),
                     distanceViewUI(),
@@ -193,21 +200,21 @@ class _FiltersScreenState extends State<FiltersScreen> {
                         (index) {
                           var category =
                               _categoryStore.categoryList.categories[index];
-                          _value = widget.filterForm.category;
+                          _value = widget.filterForm.category.id;
                           if (_value == null) {
                             _value = category.id;
-                            widget.filterForm.setCategory(category.id);
-                            _categoryText = category.name;
+                            widget.filterForm
+                                .setCategory(category.id, category.name);
                           }
                           return Padding(
                             padding: const EdgeInsets.all(18.0),
                             child: GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  _categoryText = category.name;
                                   _value = category.id;
                                 });
-                                widget.filterForm.setCategory(category.id);
+                                widget.filterForm
+                                    .setCategory(category.id, category.name);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
