@@ -4,6 +4,7 @@ import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/ui/post/postscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PropertyCrads extends StatefulWidget {
   PropertyCrads({this.store});
@@ -42,12 +43,6 @@ class _PropertyCradsState extends State<PropertyCrads> {
             return houseWidget(
               widget.store.postList.posts[index],
               url,
-              widget.store.postList.posts[index].category.name,
-              '${widget.store.postList.posts[index].district.city.name}, ${widget.store.postList.posts[index].district.name}',
-              '${widget.store.postList.posts[index].bedroom}',
-              'assets/images/bed.png',
-              '${widget.store.postList.posts[index].age}',
-              'assets/icons/time.png',
             );
           }));
         }
@@ -60,12 +55,6 @@ class _PropertyCradsState extends State<PropertyCrads> {
   Widget houseWidget(
     Post post,
     String imageurl,
-    String type,
-    String place,
-    String no1,
-    String no1Url,
-    String no2,
-    String no2Url,
   ) {
     return GestureDetector(
         onTap: () {
@@ -80,7 +69,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
         child: Padding(
           padding: EdgeInsets.only(top: 10, bottom: 5),
           child: Container(
-            height: 310,
+            height: 290,
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6.0)),
@@ -119,7 +108,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
                             child: Row(
                               children: <Widget>[
                                 Text(
-                                  type,
+                                  post.category.name,
                                   style: TextStyle(
                                     fontSize: 12,
                                   ),
@@ -138,7 +127,9 @@ class _PropertyCradsState extends State<PropertyCrads> {
                           child: Padding(
                             padding: EdgeInsets.all(5.0),
                             child: Text(
-                              place,
+                              post.district.city.name +
+                                  " " +
+                                  post.district.name,
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Color(0xff1089ff),
@@ -152,7 +143,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 10, left: 12),
-                    child: !type.contains('رهن')
+                    child: !post.category.name.contains('رهن')
                         ? Container(
                             width: MediaQuery.of(context).size.width - 50,
                             child: Text(
@@ -185,55 +176,48 @@ class _PropertyCradsState extends State<PropertyCrads> {
                           Row(
                             children: <Widget>[
                               Text(
-                                no1,
+                                post.bedroom.toString(),
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w300,
                                 ),
                               ),
                               SizedBox(width: 10),
-                              Image.asset(
-                                no1Url,
-                                fit: BoxFit.contain,
-                                height: 30.0,
-                                width: 30.0,
-                              ),
+                              FaIcon(Icons.king_bed)
+                              // Image.asset(
+                              //   no1Url,
+                              //   fit: BoxFit.contain,
+                              //   height: 30.0,
+                              //   width: 30.0,
+                              // ),
                             ],
                           ),
                           Row(
                             children: <Widget>[
                               Text(
-                                no1,
+                                post.area.toString() + " " + 'متر مربع',
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w300,
                                 ),
                               ),
                               SizedBox(width: 10),
-                              Image.asset(
-                                no1Url,
-                                fit: BoxFit.contain,
-                                height: 30.0,
-                                width: 30.0,
-                              ),
+                              FaIcon(Icons.square_foot),
                             ],
                           ),
                           Row(
                             children: <Widget>[
                               Text(
-                                no2 == '0' ? 'N/A' : no2,
+                                post.age.toString() == '0'
+                                    ? 'N/A'
+                                    : post.age.toString(),
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w300,
                                 ),
                               ),
                               SizedBox(width: 10),
-                              Image.asset(
-                                no2Url,
-                                fit: BoxFit.contain,
-                                height: 30.0,
-                                width: 30.0,
-                              ),
+                              FaIcon(Icons.access_alarm_outlined)
                             ],
                           ),
                         ],
