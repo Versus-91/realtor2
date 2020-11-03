@@ -52,7 +52,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
           }));
         }
       } else {
-        return Container(child: Center(child: CircularProgressIndicator()));
+        return Container(child: Center(child: Text('برای جستجو کلیک کنید.')));
       }
     }));
   }

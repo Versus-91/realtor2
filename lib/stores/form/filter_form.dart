@@ -42,15 +42,22 @@ abstract class _FilterFormStore with Store {
   @observable
   int category;
   @observable
+  int bedCount;
+  @observable
   int district;
   @observable
   List<int> amenities = new List<int>();
   @observable
   bool loading = false;
-
+  PostRequest prevRequest;
   @action
   void setMinPrice(double value) {
     minPrice = value;
+  }
+
+  @action
+  void setBedCount(int number) {
+    bedCount = number;
   }
 
   @action
@@ -85,7 +92,7 @@ abstract class _FilterFormStore with Store {
 
   @action
   PostRequest applyFilters() {
-    return PostRequest(
+    var request = PostRequest(
         maxPrice: maxPrice?.floor(),
         minPrice: minPrice?.floor(),
         minArea: 0,
@@ -94,6 +101,12 @@ abstract class _FilterFormStore with Store {
         category: category,
         types: propertyTypes,
         amenities: amenities);
+    if (prevRequest == request) {
+      request = null;
+    } else {
+      prevRequest = request;
+    }
+    return request;
   }
 
   @action

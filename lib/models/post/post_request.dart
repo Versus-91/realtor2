@@ -24,6 +24,7 @@ class PostRequest {
     Map<String, dynamic> result = new Map();
     result.addAll({"minPrice": minPrice.toString()});
     result.addAll({"maxPrice": minPrice.toString()});
+    result.addAll({"category": category.toString()});
     if (maxArea != null) {
       result.addAll({"maxArea": maxArea.toString()});
       result.addAll({"minArea": minArea.toString()});
@@ -31,5 +32,20 @@ class PostRequest {
     result.addAll({"type": types.map((e) => e.toString()).toList()});
     result.addAll({"amenities": amenities.map((e) => e.toString()).toList()});
     return result;
+  }
+
+  @override
+  bool operator ==(other) {
+    return (other is PostRequest) &&
+        minPrice == other.minPrice &&
+        maxPrice == other.maxPrice &&
+        minArea == other.minArea &&
+        maxArea == other.maxArea &&
+        district == other.district &&
+        city == other.city &&
+        category == other.category &&
+        types == other.types &&
+        amenities == other.amenities &&
+        age == other.age;
   }
 }

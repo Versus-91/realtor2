@@ -114,7 +114,7 @@ class PostApi {
     }
   }
 
-Future<AmenityList> getAmenities() async {
+  Future<AmenityList> getAmenities() async {
     try {
       final res = await _dioClient.get(Endpoints.getAmenities);
       return AmenityList.fromJson(res["result"]["items"]);
@@ -122,6 +122,7 @@ Future<AmenityList> getAmenities() async {
       throw e;
     }
   }
+
   /// Returns list of post in response
   Future<CityList> getCities() async {
     try {

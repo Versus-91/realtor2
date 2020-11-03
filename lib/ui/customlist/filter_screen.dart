@@ -128,7 +128,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             .setPropertyTypeList(accomodationListData);
                         widget.filterForm.loading = true;
                         _filterRequest = widget.filterForm.applyFilters();
-                        widget.postStore.getPosts(request: _filterRequest);
+                        if (_filterRequest != null) {
+                          widget.postStore.getPosts(request: _filterRequest);
+                        }
                         Future.delayed(Duration(milliseconds: 2), () {
                           Navigator.pop(context);
                         });
@@ -188,6 +190,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                         (index) {
                           var category =
                               _categoryStore.categoryList.categories[index];
+                          _value = widget.filterForm.category;
                           if (_value == null) {
                             _value = category.id;
                             widget.filterForm.setCategory(category.id);
@@ -347,13 +350,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
               ),
             );
           } else {
-            return Padding(
-              padding: const EdgeInsets.all(70),
-              child: Column(
-                children: [
-                  new CircularProgressIndicator(),
-                  new Text("Loading"),
-                ],
+            return Container(
+              child: Center(
+                child: new Text("فیلتری انتخاب نشده "),
               ),
             );
           }
@@ -601,7 +600,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "تعداد اتاق",
+            "تعداد ",
             style: TextStyle(
                 color: Colors.red,
                 fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
@@ -625,8 +624,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
                         buttonIndex++) {
                       if (buttonIndex == index) {
                         isSelected[buttonIndex] = true;
+                        widget.filterForm.setBedCount(index + 1);
                       } else {
                         isSelected[buttonIndex] = false;
+                        widget.filterForm.setBedCount(null);
                       }
                     }
                   });

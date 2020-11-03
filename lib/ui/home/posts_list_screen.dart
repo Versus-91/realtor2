@@ -65,7 +65,7 @@ class _PostsListScreenState extends State<PostsListScreen> {
                   },
                   body: Observer(
                     builder: (context) {
-                      return _postStore.loading
+                      return _postStore.loading == true
                           ? Center(
                               child: CircularProgressIndicator(),
                             )
