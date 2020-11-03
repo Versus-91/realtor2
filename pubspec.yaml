@@ -38,6 +38,7 @@ dependencies:
   # The following adds the shared pref as a dependency in your application
   shared_preferences: ^0.5.10
   flutter_typeahead: ^1.8.8
+  collection: ^1.14.13
 
   # A composable, Future-based library for making HTTP requests.
   http: ^0.12.2

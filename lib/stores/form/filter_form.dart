@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/ui/customlist/model/pop_list.dart';
@@ -44,7 +45,7 @@ abstract class _FilterFormStore with Store {
   @observable
   int bedCount;
   @observable
-  int district;
+  District district = District();
   @observable
   List<int> amenities = new List<int>();
   @observable
@@ -81,8 +82,9 @@ abstract class _FilterFormStore with Store {
   }
 
   @action
-  void setDistrict(int value) {
-    district = value;
+  void setDistrict(int value, String name) {
+    district.name = name;
+    district.id = value;
   }
 
   @action
@@ -97,14 +99,24 @@ abstract class _FilterFormStore with Store {
         minPrice: minPrice?.floor(),
         minArea: 0,
         maxArea: area?.floor(),
-        district: district,
+        district: district.id,
         category: category,
         types: propertyTypes,
         amenities: amenities);
     if (prevRequest == request) {
       request = null;
     } else {
-      prevRequest = request;
+      prevRequest = PostRequest(
+          age: request.age,
+          amenities: request.amenities.toList(),
+          types: request.types.toList(),
+          category: request.category,
+          city: request.city,
+          maxArea: request.maxArea,
+          minArea: request.minArea,
+          maxPrice: request.maxPrice,
+          minPrice: request.minPrice,
+          district: request.district);
     }
     return request;
   }

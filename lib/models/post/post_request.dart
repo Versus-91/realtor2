@@ -1,3 +1,5 @@
+import 'package:collection/equality.dart';
+
 class PostRequest {
   int minPrice;
   int maxPrice;
@@ -25,6 +27,9 @@ class PostRequest {
     result.addAll({"minPrice": minPrice.toString()});
     result.addAll({"maxPrice": minPrice.toString()});
     result.addAll({"category": category.toString()});
+    if (district != null) {
+      result.addAll({"district": district.toString()});
+    }
     if (maxArea != null) {
       result.addAll({"maxArea": maxArea.toString()});
       result.addAll({"minArea": minArea.toString()});
@@ -33,6 +38,8 @@ class PostRequest {
     result.addAll({"amenities": amenities.map((e) => e.toString()).toList()});
     return result;
   }
+
+  Function eq = const ListEquality().equals;
 
   @override
   bool operator ==(other) {
@@ -44,8 +51,8 @@ class PostRequest {
         district == other.district &&
         city == other.city &&
         category == other.category &&
-        types == other.types &&
-        amenities == other.amenities &&
+        eq(types, other.types) &&
+        eq(amenities, other.amenities) &&
         age == other.age;
   }
 }

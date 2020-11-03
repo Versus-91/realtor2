@@ -101,16 +101,31 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
     });
   }
 
+  final _$bedCountAtom = Atom(name: '_FilterFormStore.bedCount');
+
+  @override
+  int get bedCount {
+    _$bedCountAtom.reportRead();
+    return super.bedCount;
+  }
+
+  @override
+  set bedCount(int value) {
+    _$bedCountAtom.reportWrite(value, super.bedCount, () {
+      super.bedCount = value;
+    });
+  }
+
   final _$districtAtom = Atom(name: '_FilterFormStore.district');
 
   @override
-  int get district {
+  District get district {
     _$districtAtom.reportRead();
     return super.district;
   }
 
   @override
-  set district(int value) {
+  set district(District value) {
     _$districtAtom.reportWrite(value, super.district, () {
       super.district = value;
     });
@@ -161,6 +176,17 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
+  void setBedCount(int number) {
+    final _$actionInfo = _$_FilterFormStoreActionController.startAction(
+        name: '_FilterFormStore.setBedCount');
+    try {
+      return super.setBedCount(number);
+    } finally {
+      _$_FilterFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setMaxPrice(double value) {
     final _$actionInfo = _$_FilterFormStoreActionController.startAction(
         name: '_FilterFormStore.setMaxPrice');
@@ -205,11 +231,11 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
-  void setDistrict(int value) {
+  void setDistrict(int value, String name) {
     final _$actionInfo = _$_FilterFormStoreActionController.startAction(
         name: '_FilterFormStore.setDistrict');
     try {
-      return super.setDistrict(value);
+      return super.setDistrict(value, name);
     } finally {
       _$_FilterFormStoreActionController.endAction(_$actionInfo);
     }
@@ -257,6 +283,7 @@ maxPrice: ${maxPrice},
 propertyTypes: ${propertyTypes},
 area: ${area},
 category: ${category},
+bedCount: ${bedCount},
 district: ${district},
 amenities: ${amenities},
 loading: ${loading}
