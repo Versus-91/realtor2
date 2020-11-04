@@ -62,26 +62,19 @@ class FavoriteDataSource {
     }).toList();
   }
 
-  Future<PostList> getPostsFromDb() async {
-    // post list
-    var postsList;
-
+  Future<List<Post>> getPostsFromDb() async {
     // fetching data
-    final recordSnapshots = await _citiesStore.find(await _db,
-        finder: Finder(filter: Filter.byKey("favorites")));
-
+    final recordSnapshots = await _citiesStore.find(await _db);
+    List<Post> posts;
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
-      postsList = PostList(
-          posts: recordSnapshots.map((snapshot) {
+      posts = recordSnapshots.map((snapshot) {
         final post = Post.fromMap(snapshot.value);
-        // An ID is a key of a record from the database.
-        post.id = snapshot.key;
         return post;
-      }).toList());
+      }).toList();
     }
 
-    return postsList;
+    return posts;
   }
 
   Future<int> update(Post post) async {

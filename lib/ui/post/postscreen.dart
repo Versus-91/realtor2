@@ -13,14 +13,13 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreen extends State<PostScreen> {
-  bool isFavorite = false;
   @override
   void initState() {
     super.initState();
   }
 
   @override
-  void didChangeDependencies() async {
+  void didChangeDependencies() {
     super.didChangeDependencies();
     // initializing stores
   }
@@ -36,28 +35,32 @@ class _PostScreen extends State<PostScreen> {
                 height: 300.0,
                 child: Stack(
                   children: <Widget>[
-                    Carousel(
-                      images: List<Image>.generate(widget.post.images.length,
-                          (index) {
-                        return Image.network(
-                          Endpoints.baseUrl +
-                              "/" +
-                              widget.post.images[index].path,
-                          fit: BoxFit.cover,
-                        );
-                      })
-                      // Photo from https://unsplash.com/photos/BVd8jS5H7VU
-                      ,
-                      dotSize: 4.0,
-                      dotSpacing: 15.0,
-                      autoplay: false,
-                      dotColor: Colors.white,
-                      indicatorBgPadding: 50.0,
-                      dotBgColor: Colors.transparent,
-                      borderRadius: false,
-                      moveIndicatorFromBottom: 200.0,
-                      noRadiusForIndicator: true,
-                    ),
+                    if (widget.post.images.length > 0) ...[
+                      Carousel(
+                        images: List<Image>.generate(widget.post.images.length,
+                            (index) {
+                          return Image.network(
+                            Endpoints.baseUrl +
+                                "/" +
+                                widget.post.images[index].path,
+                            fit: BoxFit.cover,
+                          );
+                        })
+                        // Photo from https://unsplash.com/photos/BVd8jS5H7VU
+                        ,
+                        dotSize: 4.0,
+                        dotSpacing: 15.0,
+                        autoplay: false,
+                        dotColor: Colors.white,
+                        indicatorBgPadding: 50.0,
+                        dotBgColor: Colors.transparent,
+                        borderRadius: false,
+                        moveIndicatorFromBottom: 200.0,
+                        noRadiusForIndicator: true,
+                      )
+                    ] else ...[
+                      Center(child: Image.asset("assets/images/a.png", fit: BoxFit.fill))
+                    ],
                   ],
                 )),
             Padding(
@@ -126,10 +129,27 @@ class _PostScreen extends State<PostScreen> {
                           ],
                         ),
                         FloatingActionButton(
-                          child: Icon(
-                            Icons.favorite,
-                            color:
-                                isFavorite == true ? Colors.red : Colors.white,
+                          child: FutureBuilder(
+                            future: isSelected(widget.post.id),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return Icon(
+                                  Icons.favorite,
+                                  color: Colors.white,
+                                );
+                              } else {
+                                if (snapshot.data == true) {
+                                  return Icon(
+                                    Icons.favorite,
+                                    color: Colors.redAccent,
+                                  );
+                                }
+                                return Icon(
+                                  Icons.favorite,
+                                  color: Colors.white,
+                                );
+                              }
+                            },
                           ),
                           onPressed: () async {
                             var post = await appComponent
@@ -139,17 +159,14 @@ class _PostScreen extends State<PostScreen> {
                               await appComponent
                                   .getRepository()
                                   .addFavorite(widget.post);
-                              setState(() {
-                                isFavorite = true;
-                              });
                             } else {
                               await appComponent
                                   .getRepository()
                                   .removeFavorite(widget.post);
-                              setState(() {
-                                isFavorite = false;
-                              });
                             }
+                            setState(() {
+                              isSelected(widget.post.id);
+                            });
                           },
                         ),
                       ],
@@ -199,6 +216,14 @@ class _PostScreen extends State<PostScreen> {
         ),
       ],
     ));
+  }
+
+  Future isSelected(int id) async {
+    var post = await appComponent.getRepository().findFavoriteById(id);
+    if (post != null) {
+      return true;
+    }
+    return false;
   }
 
   Widget amenities(

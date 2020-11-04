@@ -146,6 +146,10 @@ class Repository {
     await _favoriteDataSource.delete(post);
   }
 
+  Future getFavoritesList() async {
+    return await _favoriteDataSource.getPostsFromDb();
+  }
+
   Future findFavoriteById(int id) async {
     return await _favoriteDataSource.findById(id);
   }
