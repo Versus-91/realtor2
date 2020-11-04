@@ -1,15 +1,13 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/post/post.dart';
-import 'package:boilerplate/stores/post/post_store.dart';
-import 'package:boilerplate/ui/customlist/filter_screen.dart';
+import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/ui/post/postscreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PropertyCrads extends StatefulWidget {
-  PropertyCrads({this.store});
-  final PostStore store;
+  PropertyCrads({this.postsList});
+  final PostList postsList;
   @override
   _PropertyCradsState createState() => _PropertyCradsState();
 }
@@ -17,53 +15,32 @@ class PropertyCrads extends StatefulWidget {
 class _PropertyCradsState extends State<PropertyCrads> {
   @override
   Widget build(BuildContext context) {
-    return Observer(
-      builder: (context) {
-        if (widget.store.postList != null) {
-          if (widget.store.postList.posts.length == 0) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("assets/images/404.png"),
-              ],
-            );
-          } else {
-            return SingleChildScrollView(
-              child: Column(
-                  children: List<Widget>.generate(
-                      widget.store.postList.posts.length, (index) {
-                var url = 'assets/images/a.png';
-                if (widget.store.postList.posts[index].images.length > 0) {
-                  url = Endpoints.baseUrl +
-                      "/" +
-                      widget.store.postList.posts[index].images[0]?.path;
-                }
-
-                return houseWidget(
-                  widget.store.postList.posts[index],
-                  url,
-                );
-              })),
-            );
+    if (widget.postsList.posts.length == 0) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset("assets/images/404.png"),
+        ],
+      );
+    } else {
+      return SingleChildScrollView(
+        child: Column(
+            children:
+                List<Widget>.generate(widget.postsList.posts.length, (index) {
+          var url = 'assets/images/a.png';
+          if (widget.postsList.posts[index].images.length > 0) {
+            url = Endpoints.baseUrl +
+                "/" +
+                widget.postsList.posts[index].images[0]?.path;
           }
-        } else {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("assets/images/search.png"),
-              SizedBox(
-                height: 10,
-              ),
-              RaisedButton.icon(
-                label: Text("search"),
-                onPressed: () {},
-                icon: Icon(Icons.search),
-              )
-            ],
+
+          return houseWidget(
+            widget.postsList.posts[index],
+            url,
           );
-        }
-      },
-    );
+        })),
+      );
+    }
   }
 
   Widget houseWidget(

@@ -65,13 +65,34 @@ class _PostsListScreenState extends State<PostsListScreen> {
                   },
                   body: Observer(
                     builder: (context) {
-                      return _postStore.loading == true
-                          ? Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : PropertyCrads(
-                              store: _postStore,
-                            );
+                      if (_postStore.loading == true) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        if (_postStore.postList != null) {
+                          return PropertyCrads(
+                            postsList: _postStore.postList,
+                          );
+                        } else {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset("assets/images/search.png"),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              RaisedButton.icon(
+                                label: Text("search"),
+                                onPressed: () {
+                                  openFilterScreen();
+                                },
+                                icon: Icon(Icons.search),
+                              )
+                            ],
+                          );
+                        }
+                      }
                     },
                   ),
                 ),
@@ -155,16 +176,7 @@ class _PostsListScreenState extends State<PostsListScreen> {
                       Radius.circular(4.0),
                     ),
                     onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      Navigator.push<dynamic>(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                            builder: (BuildContext context) => FiltersScreen(
-                                  filterForm: _filterForm,
-                                  postStore: _postStore,
-                                ),
-                            fullscreenDialog: true),
-                      );
+                      openFilterScreen();
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8),
@@ -201,6 +213,19 @@ class _PostsListScreenState extends State<PostsListScreen> {
           ),
         )
       ],
+    );
+  }
+
+  void openFilterScreen() {
+    FocusScope.of(context).requestFocus(FocusNode());
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+          builder: (BuildContext context) => FiltersScreen(
+                filterForm: _filterForm,
+                postStore: _postStore,
+              ),
+          fullscreenDialog: true),
     );
   }
 
