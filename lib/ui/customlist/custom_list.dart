@@ -86,7 +86,7 @@ class _HotelListViewState extends State<HotelListView> {
                                         fit: BoxFit.cover,
                                       )
                                     : Image.asset(
-                                        'assets/images/lake.jpg',
+                                        'assets/images/a.png',
                                         fit: BoxFit.cover,
                                       ),
                               ),

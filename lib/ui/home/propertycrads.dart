@@ -33,7 +33,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
           return Column(
               children: List<Widget>.generate(
                   widget.store.postList.posts.length, (index) {
-            var url = 'assets/images/placeholder.png';
+            var url = 'assets/images/a.png';
             if (widget.store.postList.posts[index].images.length > 0) {
               url = Endpoints.baseUrl +
                   "/" +
