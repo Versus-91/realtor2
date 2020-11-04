@@ -56,21 +56,6 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
     });
   }
 
-  final _$propertyTypesAtom = Atom(name: '_FilterFormStore.propertyTypes');
-
-  @override
-  List<int> get propertyTypes {
-    _$propertyTypesAtom.reportRead();
-    return super.propertyTypes;
-  }
-
-  @override
-  set propertyTypes(List<int> value) {
-    _$propertyTypesAtom.reportWrite(value, super.propertyTypes, () {
-      super.propertyTypes = value;
-    });
-  }
-
   final _$areaAtom = Atom(name: '_FilterFormStore.area');
 
   @override
@@ -158,21 +143,6 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   set amenities(List<int> value) {
     _$amenitiesAtom.reportWrite(value, super.amenities, () {
       super.amenities = value;
-    });
-  }
-
-  final _$loadingAtom = Atom(name: '_FilterFormStore.loading');
-
-  @override
-  bool get loading {
-    _$loadingAtom.reportRead();
-    return super.loading;
-  }
-
-  @override
-  set loading(bool value) {
-    _$loadingAtom.reportWrite(value, super.loading, () {
-      super.loading = value;
     });
   }
 
@@ -290,11 +260,11 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
-  void setpropertyTypes(int value) {
+  void resetForm() {
     final _$actionInfo = _$_FilterFormStoreActionController.startAction(
-        name: '_FilterFormStore.setpropertyTypes');
+        name: '_FilterFormStore.resetForm');
     try {
-      return super.setpropertyTypes(value);
+      return super.resetForm();
     } finally {
       _$_FilterFormStoreActionController.endAction(_$actionInfo);
     }
@@ -306,14 +276,12 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
 minPrice: ${minPrice},
 selectedPropertyTypes: ${selectedPropertyTypes},
 maxPrice: ${maxPrice},
-propertyTypes: ${propertyTypes},
 area: ${area},
 category: ${category},
 bedCount: ${bedCount},
 district: ${district},
 city: ${city},
-amenities: ${amenities},
-loading: ${loading}
+amenities: ${amenities}
     ''';
   }
 }

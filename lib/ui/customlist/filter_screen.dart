@@ -124,18 +124,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
                       label: Text("جست و جو",
                           style: TextStyle(color: Colors.grey[900])),
                       onPressed: () {
-                        var items = accomodationListData
-                            ?.where((item) =>
-                                item.id != null && item.isSelected == true)
-                            ?.toList();
-                        if (items != null && items.length > 0) {
-                          for (var type in items) {
-                            widget.filterForm.setpropertyTypes(type.id);
-                          }
-                        }
                         widget.filterForm
                             .setPropertyTypeList(accomodationListData);
-                        widget.filterForm.loading = true;
                         _filterRequest = widget.filterForm.applyFilters();
                         if (_filterRequest != null) {
                           widget.postStore.getPosts(request: _filterRequest);
@@ -366,14 +356,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 fontWeight: FontWeight.normal),
           ),
         ),
-        // if (accomodationListData.length > 1) ...[
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 16, left: 16),
-        //     child: Column(
-        //       children: getAccomodationListUI(),
-        //     ),
-        //   )
-        // ],
         Observer(builder: (context) {
           if (_typeStore.typeList != null) {
             if (accomodationListData.length == 0) {

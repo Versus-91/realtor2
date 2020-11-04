@@ -35,8 +35,8 @@ class _MyPostsScreenState extends State<MyPostsScreen>
 
     _postStore = Provider.of(context);
     // check to see if already called api
-    if (!_postStore.loading) {
-      _postStore.getPosts();
+    if (!_postStore.loading && _postStore.userPostList != null) {
+      _postStore.getUserPosts();
     }
   }
 
@@ -79,9 +79,10 @@ class _MyPostsScreenState extends State<MyPostsScreen>
   }
 
   Widget _buildListView() {
-    return (_postStore.postList != null && _postStore.postList.posts.length > 0)
+    return (_postStore.userPostList != null &&
+            _postStore.userPostList.posts.length > 0)
         ? ListView.builder(
-            itemCount: _postStore.postList.posts.length,
+            itemCount: _postStore.userPostList.posts.length,
             itemBuilder: (context, position) {
               return _buildListItem(position);
             },
@@ -107,7 +108,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
             context,
             MaterialPageRoute(
                 builder: (context) => PostScreen(
-                      post: _postStore.postList.posts[position],
+                      post: _postStore.userPostList.posts[position],
                     )),
           );
         },
@@ -125,7 +126,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                       dense: false,
                       contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       title: Text(
-                        '${_postStore.postList.posts[position].category.name}',
+                        '${_postStore.userPostList.posts[position].category.name}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         softWrap: false,
@@ -138,24 +139,24 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                             children: [
                               Icon(Icons.place),
                               Text(
-                                '${_postStore.postList.posts[position].district.city.name},${_postStore.postList.posts[position].district.name}',
+                                '${_postStore.userPostList.posts[position].district.city.name},${_postStore.userPostList.posts[position].district.name}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
                               ),
                             ],
                           ),
-                          _postStore.postList.posts[position].category.name
+                          _postStore.userPostList.posts[position].category.name
                                   .contains('رهن')
                               ? Text(
-                                  'رهن: ${_postStore.postList.posts[position].deopsit} , اجاره: ${_postStore.postList.posts[position].rent}',
+                                  'رهن: ${_postStore.userPostList.posts[position].deopsit} , اجاره: ${_postStore.userPostList.posts[position].rent}',
                                   maxLines: 1,
                                   style: TextStyle(fontWeight: FontWeight.w700),
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: false,
                                 )
                               : Text(
-                                  'قیمت: ${_postStore.postList.posts[position].price}',
+                                  'قیمت: ${_postStore.userPostList.posts[position].price}',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: false,
@@ -168,16 +169,18 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                     padding: EdgeInsets.only(top: 8.0),
                     width: 130,
                     height: 100,
-                    child: _postStore.postList.posts[position].images.length > 0
-                        ? Image.network(
-                            Endpoints.baseUrl +
-                                "/" +
-                                _postStore
-                                    .postList.posts[position].images[0]?.path,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.asset("assets/images/placeholder.png",
-                            fit: BoxFit.cover),
+                    child:
+                        _postStore.userPostList.posts[position].images.length >
+                                0
+                            ? Image.network(
+                                Endpoints.baseUrl +
+                                    "/" +
+                                    _postStore.userPostList.posts[position]
+                                        .images[0]?.path,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset("assets/images/placeholder.png",
+                                fit: BoxFit.cover),
                   ),
                 ],
               ),
@@ -205,7 +208,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                         children: [
                           Text("متراژ"),
                           Text(
-                            '${_postStore.postList.posts[position].area}',
+                            '${_postStore.userPostList.posts[position].area}',
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -221,7 +224,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                         children: [
                           Text("اتاق خواب"),
                           Text(
-                            '${_postStore.postList.posts[position].bedroom}',
+                            '${_postStore.userPostList.posts[position].bedroom}',
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -237,7 +240,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                         children: [
                           Text("شناسه آگهی"),
                           Text(
-                            '${_postStore.postList.posts[position].age}',
+                            '${_postStore.userPostList.posts[position].age}',
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),

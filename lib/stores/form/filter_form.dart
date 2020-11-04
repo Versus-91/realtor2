@@ -36,8 +36,7 @@ abstract class _FilterFormStore with Store {
       new List<SelectedPropertyTypes>();
   @observable
   double maxPrice = 0;
-  @observable
-  List<int> propertyTypes = [];
+
   @observable
   double area;
   @observable
@@ -50,8 +49,6 @@ abstract class _FilterFormStore with Store {
   City city = City();
   @observable
   List<int> amenities = new List<int>();
-  @observable
-  bool loading = false;
   PostRequest prevRequest;
   @action
   void setMinPrice(double value) {
@@ -110,8 +107,13 @@ abstract class _FilterFormStore with Store {
         maxArea: area?.floor(),
         district: district.id,
         city: city.id,
+        bedCount: bedCount,
         category: category.id,
-        types: propertyTypes,
+        types: selectedPropertyTypes.map((element) {
+          if (element.isSelected == true) {
+            return element.id;
+          }
+        }).toList(),
         amenities: amenities);
     if (prevRequest == request) {
       request = null;
@@ -132,20 +134,12 @@ abstract class _FilterFormStore with Store {
   }
 
   @action
-  void setpropertyTypes(int value) {
-    propertyTypes.contains(value)
-        ? propertyTypes.remove(value)
-        : propertyTypes.add(value);
-  }
-
-  @action
   void resetForm() {
     category = null;
     city = null;
     district = null;
     bedCount = null;
     amenities = null;
-    propertyTypes = null;
     area = null;
   }
 
