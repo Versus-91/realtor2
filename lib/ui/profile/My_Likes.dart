@@ -135,7 +135,10 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.place),
+                              Icon(
+                                Icons.place,
+                                color: Colors.greenAccent,
+                              ),
                               Text(
                                 '${snapshot.data[position].district.city.name},${snapshot.data[position].district.name}',
                                 maxLines: 1,
@@ -173,8 +176,7 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                                 snapshot.data[position].images[0]?.path,
                             fit: BoxFit.cover,
                           )
-                        : Image.asset("assets/images/placeholder.png",
-                            fit: BoxFit.cover),
+                        : Image.asset("assets/images/a.png", fit: BoxFit.cover),
                   ),
                 ],
               ),
@@ -190,7 +192,24 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                     children: [
                       Flexible(
                         child: Row(
-                          children: [Icon(FontAwesomeIcons.heart)],
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                await appComponent
+                                    .getRepository()
+                                    .removeFavorite(snapshot.data[position]);
+                                setState(() {
+                                  appComponent
+                                      .getRepository()
+                                      .getFavoritesList();
+                                });
+                              },
+                              child: Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       VerticalDivider(
