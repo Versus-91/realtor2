@@ -82,6 +82,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
     _typeAheadController.text = widget.filterForm.district.name == null
         ? widget.filterForm.city.name
         : widget.filterForm.district.name;
+    if (widget.filterForm.bedCount != null) {
+      isSelected[widget.filterForm.bedCount - 1] = true;
+    }
   }
 
   @override
@@ -102,7 +105,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
                       child: FlatButton(
                           splashColor: Colors.red,
                           color: Colors.red[100],
-                          onPressed: () {},
+                          onPressed: () {
+                            widget.filterForm.resetForm();
+                          },
                           child: Text(
                             "پاک کردن گزینه ها",
                             style: TextStyle(color: Colors.grey[600]),
@@ -664,11 +669,15 @@ class _FiltersScreenState extends State<FiltersScreen> {
                         buttonIndex < isSelected.length;
                         buttonIndex++) {
                       if (buttonIndex == index) {
-                        isSelected[buttonIndex] = true;
-                        widget.filterForm.setBedCount(index + 1);
+                        if (isSelected[buttonIndex] != true) {
+                          isSelected[buttonIndex] = true;
+                          widget.filterForm.setBedCount(index + 1);
+                        } else {
+                          isSelected[buttonIndex] = false;
+                          widget.filterForm.setBedCount(null);
+                        }
                       } else {
                         isSelected[buttonIndex] = false;
-                        widget.filterForm.setBedCount(null);
                       }
                     }
                   });

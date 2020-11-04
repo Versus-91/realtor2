@@ -138,6 +138,17 @@ abstract class _FilterFormStore with Store {
         : propertyTypes.add(value);
   }
 
+  @action
+  void resetForm() {
+    category = null;
+    city = null;
+    district = null;
+    bedCount = null;
+    amenities = null;
+    propertyTypes = null;
+    area = null;
+  }
+
   // general methods:-----------------------------------------------------------
   void dispose() {
     for (final d in _disposers) {

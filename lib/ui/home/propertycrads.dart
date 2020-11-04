@@ -69,7 +69,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
         child: Padding(
           padding: EdgeInsets.only(top: 10, bottom: 5),
           child: Container(
-            height: 290,
+            height: 310,
             child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6.0)),
@@ -158,7 +158,7 @@ class _PropertyCradsState extends State<PropertyCrads> {
                         : Container(
                             width: MediaQuery.of(context).size.width - 50,
                             child: Text(
-                              'رهن: ${post.deopsit} , اجاره: ${post.rent}',
+                              'رهن: ${post.deopsit} دلار -  اجاره: ${post.rent} دلار ',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w800,
@@ -173,8 +173,10 @@ class _PropertyCradsState extends State<PropertyCrads> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Row(
+                          Column(
                             children: <Widget>[
+                              FaIcon(Icons.king_bed),
+                              SizedBox(width: 10),
                               Text(
                                 post.bedroom.toString(),
                                 style: TextStyle(
@@ -182,8 +184,6 @@ class _PropertyCradsState extends State<PropertyCrads> {
                                   fontWeight: FontWeight.w300,
                                 ),
                               ),
-                              SizedBox(width: 10),
-                              FaIcon(Icons.king_bed)
                               // Image.asset(
                               //   no1Url,
                               //   fit: BoxFit.contain,
@@ -192,8 +192,10 @@ class _PropertyCradsState extends State<PropertyCrads> {
                               // ),
                             ],
                           ),
-                          Row(
+                          Column(
                             children: <Widget>[
+                              FaIcon(Icons.square_foot),
+                              SizedBox(width: 10),
                               Text(
                                 post.area.toString() + " " + 'متر مربع',
                                 style: TextStyle(
@@ -201,12 +203,12 @@ class _PropertyCradsState extends State<PropertyCrads> {
                                   fontWeight: FontWeight.w300,
                                 ),
                               ),
-                              SizedBox(width: 10),
-                              FaIcon(Icons.square_foot),
                             ],
                           ),
-                          Row(
+                          Column(
                             children: <Widget>[
+                              FaIcon(Icons.access_alarm_outlined),
+                              SizedBox(width: 10),
                               Text(
                                 post.age.toString() == '0'
                                     ? 'N/A'
@@ -216,8 +218,6 @@ class _PropertyCradsState extends State<PropertyCrads> {
                                   fontWeight: FontWeight.w300,
                                 ),
                               ),
-                              SizedBox(width: 10),
-                              FaIcon(Icons.access_alarm_outlined)
                             ],
                           ),
                         ],
