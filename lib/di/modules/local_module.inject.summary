@@ -150,6 +150,20 @@
             "dependencies": []
           },
           {
+            "name": "provideFavoriteDataSource",
+            "kind": "method",
+            "injectedType": {
+              "lookupKey": {
+                "root": "asset:boilerplate/lib/data/local/datasources/post/favorite_datasource.dart#FavoriteDataSource",
+                "qualifier": null
+              },
+              "isProvider": false
+            },
+            "singleton": true,
+            "asynchronous": false,
+            "dependencies": []
+          },
+          {
             "name": "provideCityDataSource",
             "kind": "method",
             "injectedType": {
@@ -193,6 +207,13 @@
               {
                 "lookupKey": {
                   "root": "asset:boilerplate/lib/data/local/datasources/post/post_datasource.dart#PostDataSource",
+                  "qualifier": null
+                },
+                "isProvider": false
+              },
+              {
+                "lookupKey": {
+                  "root": "asset:boilerplate/lib/data/local/datasources/post/favorite_datasource.dart#FavoriteDataSource",
                   "qualifier": null
                 },
                 "isProvider": false

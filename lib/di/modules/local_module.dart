@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:boilerplate/data/local/constants/db_constants.dart';
 import 'package:boilerplate/data/local/datasources/city_datasource.dart';
+import 'package:boilerplate/data/local/datasources/post/favorite_datasource.dart';
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
 import 'package:boilerplate/data/repository.dart';
@@ -67,7 +68,10 @@ class LocalModule extends NetworkModule {
   @provide
   @singleton
   PostDataSource providePostDataSource() => PostDataSource(database);
-
+  @provide
+  @singleton
+  FavoriteDataSource provideFavoriteDataSource() =>
+      FavoriteDataSource(database);
   @provide
   @singleton
   CityDataSource provideCityDataSource() => CityDataSource(database);
@@ -82,7 +86,9 @@ class LocalModule extends NetworkModule {
     PostApi postApi,
     SharedPreferenceHelper preferenceHelper,
     PostDataSource postDataSource,
+    FavoriteDataSource favoriteDataSource,
     CityDataSource cityDataSource,
   ) =>
-      Repository(postApi, preferenceHelper, postDataSource, cityDataSource);
+      Repository(postApi, preferenceHelper, postDataSource, favoriteDataSource,
+          cityDataSource);
 }

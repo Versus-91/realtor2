@@ -7,11 +7,12 @@ import '../../data/network/dio_client.dart' as _i6;
 import '../../data/network/rest_client.dart' as _i7;
 import '../../data/network/apis/posts/post_api.dart' as _i8;
 import '../../data/local/datasources/post/post_datasource.dart' as _i9;
-import '../../data/local/datasources/city_datasource.dart' as _i10;
-import '../../data/repository.dart' as _i11;
-import 'dart:async' as _i12;
-import '../modules/netwok_module.dart' as _i13;
-import '../../main.dart' as _i14;
+import '../../data/local/datasources/post/favorite_datasource.dart' as _i10;
+import '../../data/local/datasources/city_datasource.dart' as _i11;
+import '../../data/repository.dart' as _i12;
+import 'dart:async' as _i13;
+import '../modules/netwok_module.dart' as _i14;
+import '../../main.dart' as _i15;
 
 class AppComponent$Injector implements _i1.AppComponent {
   AppComponent$Injector._(this._localModule, this._preferenceModule);
@@ -32,12 +33,14 @@ class AppComponent$Injector implements _i1.AppComponent {
 
   _i9.PostDataSource _singletonPostDataSource;
 
-  _i10.CityDataSource _singletonCityDataSource;
+  _i10.FavoriteDataSource _singletonFavoriteDataSource;
 
-  _i11.Repository _singletonRepository;
+  _i11.CityDataSource _singletonCityDataSource;
 
-  static _i12.Future<_i1.AppComponent> create(
-      _i13.NetworkModule _,
+  _i12.Repository _singletonRepository;
+
+  static _i13.Future<_i1.AppComponent> create(
+      _i14.NetworkModule _,
       _i2.LocalModule localModule,
       _i3.PreferenceModule preferenceModule) async {
     final injector = AppComponent$Injector._(localModule, preferenceModule);
@@ -45,12 +48,13 @@ class AppComponent$Injector implements _i1.AppComponent {
     return injector;
   }
 
-  _i14.MyApp _createMyApp() => _i14.MyApp();
-  _i11.Repository _createRepository() =>
+  _i15.MyApp _createMyApp() => _i15.MyApp();
+  _i12.Repository _createRepository() =>
       _singletonRepository ??= _localModule.provideRepository(
           _createPostApi(),
           _createSharedPreferenceHelper(),
           _createPostDataSource(),
+          _createFavoriteDataSource(),
           _createCityDataSource());
   _i8.PostApi _createPostApi() => _singletonPostApi ??=
       _localModule.providePostApi(_createDioClient(), _createRestClient());
@@ -65,10 +69,12 @@ class AppComponent$Injector implements _i1.AppComponent {
       _singletonRestClient ??= _localModule.provideRestClient();
   _i9.PostDataSource _createPostDataSource() =>
       _singletonPostDataSource ??= _localModule.providePostDataSource();
-  _i10.CityDataSource _createCityDataSource() =>
+  _i10.FavoriteDataSource _createFavoriteDataSource() =>
+      _singletonFavoriteDataSource ??= _localModule.provideFavoriteDataSource();
+  _i11.CityDataSource _createCityDataSource() =>
       _singletonCityDataSource ??= _localModule.provideCityDataSource();
   @override
-  _i14.MyApp get app => _createMyApp();
+  _i15.MyApp get app => _createMyApp();
   @override
-  _i11.Repository getRepository() => _createRepository();
+  _i12.Repository getRepository() => _createRepository();
 }

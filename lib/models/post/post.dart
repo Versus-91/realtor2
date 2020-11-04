@@ -79,14 +79,15 @@ class Post {
         "districtId": districtId,
         "typeId": typeId,
         "latitude": latitude,
-        " longitude": longitude,
+        "longitude": longitude,
         "creationTime": creationTime,
-        " id": id,
+        "id": id,
         "deopsit": deopsit,
         "rent": rent,
         "price": price,
-        // "district": district.toMap(),
-        // "images": images.map((e) => toMapImage(e)).toList()
+        "district": district.toMap(),
+        "category": district.toMap(),
+        "images": images.map((e) => toMapImage(e)).toList()
       };
   Map<String, dynamic> toMapImage(Image img) => {"path": img.path};
 }

@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +13,14 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreen extends State<PostScreen> {
+  bool isFavorite = false;
   @override
   void initState() {
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     super.didChangeDependencies();
     // initializing stores
   }
@@ -124,8 +126,31 @@ class _PostScreen extends State<PostScreen> {
                           ],
                         ),
                         FloatingActionButton(
-                          child: const Icon(Icons.favorite),
-                          onPressed: () {},
+                          child: Icon(
+                            Icons.favorite,
+                            color:
+                                isFavorite == true ? Colors.red : Colors.white,
+                          ),
+                          onPressed: () async {
+                            var post = await appComponent
+                                .getRepository()
+                                .findFavoriteById(widget.post.id);
+                            if (post == null) {
+                              await appComponent
+                                  .getRepository()
+                                  .addFavorite(widget.post);
+                              setState(() {
+                                isFavorite = true;
+                              });
+                            } else {
+                              await appComponent
+                                  .getRepository()
+                                  .removeFavorite(widget.post);
+                              setState(() {
+                                isFavorite = false;
+                              });
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -276,7 +301,6 @@ class _PostScreen extends State<PostScreen> {
         padding: EdgeInsets.only(left: 14, right: 14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-        
           children: <Widget>[
             Text(
               description,

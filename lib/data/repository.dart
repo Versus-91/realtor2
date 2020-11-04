@@ -16,9 +16,9 @@ import 'package:boilerplate/models/user/user.dart';
 import 'package:dio/dio.dart';
 import 'package:sembast/sembast.dart';
 
-
 import 'local/constants/db_constants.dart';
 import 'local/datasources/city_datasource.dart';
+import 'local/datasources/post/favorite_datasource.dart';
 import 'network/apis/posts/post_api.dart';
 
 class Repository {
@@ -26,6 +26,7 @@ class Repository {
   final PostDataSource _postDataSource;
 
   final CityDataSource _cityDataSource;
+  final FavoriteDataSource _favoriteDataSource;
 
   // api objects
   final PostApi _postApi;
@@ -35,7 +36,7 @@ class Repository {
 
   // constructor
   Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource,
-      this._cityDataSource);
+      this._favoriteDataSource, this._cityDataSource);
 
   // Post: ---------------------------------------------------------------------
   Future<PostList> getPosts({PostRequest request}) async {
@@ -87,15 +88,14 @@ class Repository {
       return citiesList;
     }).catchError((error) => error);
   }
- // amenity: ---------------------------------------------------------------------
-  Future<AmenityList> getAmenities() async {
-    
-    return await _postApi.getAmenities().then((amenitiesList) {
-     
 
+  // amenity: ---------------------------------------------------------------------
+  Future<AmenityList> getAmenities() async {
+    return await _postApi.getAmenities().then((amenitiesList) {
       return amenitiesList;
     }).catchError((error) => error);
   }
+
   Future<User> getUser() async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
@@ -136,6 +136,18 @@ class Repository {
 
   Future logOut() async {
     await _sharedPrefsHelper.removeAuthToken();
+  }
+
+  Future addFavorite(Post post) async {
+    await _favoriteDataSource.insert(post);
+  }
+
+  Future removeFavorite(Post post) async {
+    await _favoriteDataSource.delete(post);
+  }
+
+  Future findFavoriteById(int id) async {
+    return await _favoriteDataSource.findById(id);
   }
 
   Future<List<Post>> findPostById(int id) {
