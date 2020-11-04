@@ -35,7 +35,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
 
     _postStore = Provider.of(context);
     // check to see if already called api
-    if (!_postStore.loading && _postStore.userPostList != null) {
+    if (!_postStore.loading && _postStore.userPostList == null) {
       _postStore.getUserPosts();
     }
   }
@@ -240,7 +240,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                         children: [
                           Text("شناسه آگهی"),
                           Text(
-                            '${_postStore.userPostList.posts[position].age}',
+                            '${_postStore.userPostList.posts[position].id}',
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
