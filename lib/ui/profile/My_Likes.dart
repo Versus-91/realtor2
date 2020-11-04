@@ -8,7 +8,6 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MyLikesScreen extends StatefulWidget {
   @override
@@ -93,6 +92,7 @@ class _MyLikesScreenState extends State<MyLikesScreen>
   }
 
   Widget _buildListItem(AsyncSnapshot snapshot, int position) {
+    print(snapshot.data[position].toMap());
     return GestureDetector(
       onTap: () {
         Future.delayed(Duration(milliseconds: 0), () {

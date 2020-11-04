@@ -86,7 +86,7 @@ class Post {
         "rent": rent,
         "price": price,
         "district": district.toMap(),
-        "category": district.toMap(),
+        "category": category.toMap(),
         "images": images.map((e) => toMapImage(e)).toList()
       };
   Map<String, dynamic> toMapImage(Image img) => {"path": img.path};

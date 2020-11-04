@@ -59,7 +59,9 @@ class _PostScreen extends State<PostScreen> {
                         noRadiusForIndicator: true,
                       )
                     ] else ...[
-                      Center(child: Image.asset("assets/images/a.png", fit: BoxFit.fill))
+                      Center(
+                          child: Image.asset("assets/images/a.png",
+                              fit: BoxFit.fill))
                     ],
                   ],
                 )),
@@ -202,18 +204,22 @@ class _PostScreen extends State<PostScreen> {
         ),
         amenities('assets/icons/pool.png', 'assets/icons/bed.png',
             'assets/icons/tv.png', 'Pool', '6 Beds', 'Kitchen'),
-        Padding(
-          padding: EdgeInsets.only(top: 50, bottom: 50, left: 14, right: 14),
-          child: Center(
-              child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 250,
-            child: MapScreen(
-              latitude: widget.post.latitude,
-              longitude: widget.post.longitude,
-            ),
-          )),
-        ),
+        if (widget.post.latitude == null) ...[
+          SizedBox.shrink()
+        ] else ...[
+          Padding(
+            padding: EdgeInsets.only(top: 50, bottom: 50, left: 0, right: 0),
+            child: Center(
+                child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 250,
+              child: MapScreen(
+                latitude: widget.post.latitude,
+                longitude: widget.post.longitude,
+              ),
+            )),
+          )
+        ],
       ],
     ));
   }

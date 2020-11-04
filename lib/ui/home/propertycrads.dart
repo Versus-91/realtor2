@@ -1,6 +1,7 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/ui/customlist/filter_screen.dart';
 import 'package:boilerplate/ui/post/postscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -16,40 +17,53 @@ class PropertyCrads extends StatefulWidget {
 class _PropertyCradsState extends State<PropertyCrads> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(child: Observer(builder: (context) {
-      if (widget.store.postList != null) {
-        if (widget.store.postList.posts.length == 0) {
-          return Container(
-            padding: EdgeInsets.all(24),
-            alignment: Alignment.center,
-            child: Center(
-              child: Text(
-                "نتیجه ای پیدا نشد",
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
+    return Observer(
+      builder: (context) {
+        if (widget.store.postList != null) {
+          if (widget.store.postList.posts.length == 0) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset("assets/images/404.png"),
+              ],
+            );
+          } else {
+            return SingleChildScrollView(
+              child: Column(
+                  children: List<Widget>.generate(
+                      widget.store.postList.posts.length, (index) {
+                var url = 'assets/images/a.png';
+                if (widget.store.postList.posts[index].images.length > 0) {
+                  url = Endpoints.baseUrl +
+                      "/" +
+                      widget.store.postList.posts[index].images[0]?.path;
+                }
+
+                return houseWidget(
+                  widget.store.postList.posts[index],
+                  url,
+                );
+              })),
+            );
+          }
         } else {
           return Column(
-              children: List<Widget>.generate(
-                  widget.store.postList.posts.length, (index) {
-            var url = 'assets/images/a.png';
-            if (widget.store.postList.posts[index].images.length > 0) {
-              url = Endpoints.baseUrl +
-                  "/" +
-                  widget.store.postList.posts[index].images[0]?.path;
-            }
-
-            return houseWidget(
-              widget.store.postList.posts[index],
-              url,
-            );
-          }));
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset("assets/images/search.png"),
+              SizedBox(
+                height: 10,
+              ),
+              RaisedButton.icon(
+                label: Text("search"),
+                onPressed: () {},
+                icon: Icon(Icons.search),
+              )
+            ],
+          );
         }
-      } else {
-        return Container(child: Center(child: Text('برای جستجو کلیک کنید.')));
-      }
-    }));
+      },
+    );
   }
 
   Widget houseWidget(
