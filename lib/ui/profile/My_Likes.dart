@@ -148,18 +148,35 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                             ],
                           ),
                           snapshot.data[position].category.name.contains('رهن')
-                              ? Text(
-                                  'رهن: ${snapshot.data[position].deopsit} , اجاره: ${snapshot.data[position].rent}',
-                                  maxLines: 1,
-                                  style: TextStyle(fontWeight: FontWeight.w700),
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
+                              ? Row(
+                                  children: [
+                                    Icon(
+                                      Icons.monetization_on,
+                                      color: Colors.greenAccent,
+                                    ),
+                                    Text(
+                                      'رهن: ${snapshot.data[position].deopsit} , اجاره: ${snapshot.data[position].rent}',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700),
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
+                                    ),
+                                  ],
                                 )
-                              : Text(
-                                  'قیمت: ${snapshot.data[position].price}',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
+                              : Row(
+                                  children: [
+                                    Icon(
+                                      Icons.monetization_on,
+                                      color: Colors.greenAccent,
+                                    ),
+                                    Text(
+                                      'قیمت: ${snapshot.data[position].price}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
+                                    ),
+                                  ],
                                 ),
                         ],
                       ),
@@ -253,7 +270,7 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                         children: [
                           Text("شناسه آگهی"),
                           Text(
-                            '${snapshot.data[position].age}',
+                            '${snapshot.data[position].id}',
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
