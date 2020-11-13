@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -18,11 +19,16 @@ class UserScreen extends StatefulWidget {
   _UserScreenState createState() => _UserScreenState();
 }
 
-class _UserScreenState extends State<UserScreen> {
+class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
+  AnimationController _rippleAnimationController;
   bool loggedIn = false;
   @override
   void initState() {
     super.initState();
+    _rippleAnimationController = AnimationController(
+      vsync: this,
+      duration: kRippleAnimationDuration,
+    );
     getUserLogin();
   }
 
@@ -63,10 +69,22 @@ class _UserScreenState extends State<UserScreen> {
                       size: 40,
                     ))
                 : FlatButton(
-                    onPressed: () => {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              Routes.login, (Route<dynamic> route) => true)
-                        },
+                    onPressed: () {
+                      if (loggedIn) {
+                        SharedPreferences.getInstance()
+                            .then((preference) async {
+                          preference.setBool(Preferences.is_logged_in, false);
+                          preference.remove(Preferences.auth_token);
+                          widget.userStore.setLoginState(false);
+                          await _rippleAnimationController.forward();
+                          Navigator.of(context)
+                              .pushReplacementNamed(Routes.login);
+                        });
+                      } else {
+                        Navigator.of(context)
+                            .pushReplacementNamed(Routes.login);
+                      }
+                    },
                     child: Icon(
                       Icons.power_settings_new_rounded,
                       size: 40,

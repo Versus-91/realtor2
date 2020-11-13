@@ -84,7 +84,7 @@ abstract class _FormStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
-  void setUserId(String value) {
+  void setUserLogin(String value) {
     userEmail = value;
   }
 

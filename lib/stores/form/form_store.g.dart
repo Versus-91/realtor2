@@ -241,11 +241,11 @@ mixin _$FormStore on _FormStore, Store {
   final _$_FormStoreActionController = ActionController(name: '_FormStore');
 
   @override
-  void setUserId(String value) {
-    final _$actionInfo =
-        _$_FormStoreActionController.startAction(name: '_FormStore.setUserId');
+  void setUserLogin(String value) {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.setUserLogin');
     try {
-      return super.setUserId(value);
+      return super.setUserLogin(value);
     } finally {
       _$_FormStoreActionController.endAction(_$actionInfo);
     }

@@ -210,24 +210,68 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        CustomInputField(
-                          store: _formStore.setUserId,
-                          controller: _userNameController,
-                          isEmail: true,
-                          label: 'نام کاربری/ایمیل',
-                          prefixIcon: Icons.person,
-                          formStore: _formStore,
-                          obscureText: false,
-                        ),
-                        CustomInputField(
-                          store: _formStore.setPassword,
-                          isEmail: false,
-                          controller: _passwordNameController,
-                          label: 'رمز ورود',
-                          formStore: _formStore,
-                          prefixIcon: Icons.lock,
-                          obscureText: true,
-                        ),
+                        Observer(builder: (context) {
+                          return Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'ایمیل',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                TextField(
+                                    controller: _userNameController,
+                                    onChanged: (value) {
+                                      _formStore.setUserLogin(
+                                          _userNameController.text);
+                                    },
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                        errorText:
+                                            _formStore.formErrorStore.userEmail,
+                                        border: InputBorder.none,
+                                        fillColor: Colors.grey[300],
+                                        filled: true))
+                              ],
+                            ),
+                          );
+                        }),
+                        Observer(builder: (context) {
+                          return Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'رمز',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                TextField(
+                                    controller: _passwordNameController,
+                                    onChanged: (value) {
+                                      _formStore.setPassword(
+                                          _passwordNameController.text);
+                                    },
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                        errorText:
+                                            _formStore.formErrorStore.password,
+                                        border: InputBorder.none,
+                                        fillColor: Colors.grey[300],
+                                        filled: true))
+                              ],
+                            ),
+                          );
+                        }),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -257,13 +301,6 @@ class _LoginPageState extends State<LoginPage> {
                   _facebookButton(),
                 ],
               ),
-            ),
-            Observer(
-              builder: (context) {
-                return _formStore.success
-                    ? navigate(context)
-                    : SizedBox.shrink();
-              },
             )
           ],
         ),
