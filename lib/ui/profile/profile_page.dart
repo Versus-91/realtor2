@@ -33,6 +33,16 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  void getUserLogin() async {
+    var sharePerf = await SharedPreferences.getInstance();
+    setState(() {
+      loggedIn = sharePerf.getBool(Preferences.is_logged_in) || false;
+    });
+    if (loggedIn == true) {
+      if (_userStore.user == null) _userStore.getUser();
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -79,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     textAlign: TextAlign.right,
                                     style: headingTextStyle,
                                   ),
-                                  loggedIn
+                                  loggedIn == true
                                       ? FlatButton(
                                           onPressed: () {
                                             {

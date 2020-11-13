@@ -1,4 +1,5 @@
 import 'package:boilerplate/constants/constants.dart';
+import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
@@ -68,73 +69,73 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return Scaffold(
       appBar: EmptyAppBar(),
       body: _buildBody(),
-      // drawer: GFDrawer(
-      //   child: ListView(
-      //     padding: EdgeInsets.zero,
-      //     children: <Widget>[
-      //       GFDrawerHeader(
-      //         decoration: BoxDecoration(
-      //             gradient: LinearGradient(
-      //                 begin: Alignment.topRight,
-      //                 end: Alignment.bottomLeft,
-      //                 colors: [Colors.red[400], Colors.red[100]])),
-      //         currentAccountPicture: GFAvatar(
-      //           radius: 80.0,
-      //           backgroundImage: NetworkImage(
-      //               "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg"),
-      //         ),
-      //         child: Column(
-      //           mainAxisAlignment: MainAxisAlignment.start,
-      //           crossAxisAlignment: CrossAxisAlignment.start,
-      //           children: <Widget>[
-      //             // Text('${}'),
-      //             // Text('${user.email}'),
-      //           ],
-      //         ),
-      //       ),
-      //       ListTile(
-      //         leading: Icon(Icons.search),
-      //         title: Text('جست و جو'),
-      //         onTap: () {
-      //           Navigator.of(context).pushNamed(Routes.search);
-      //         },
-      //       ),
-      //       // ListTile(
-      //       //   leading: Icon(Icons.language),
-      //       //   title: Text('تغییر زبان'),
-      //       //   onTap: () {
-      //       //     _buildLanguageDialog();
-      //       //   },
-      //       // ),
-      //       if (loggedIn == true) ...[
-      //         ListTile(
-      //           leading: Icon(Icons.add),
-      //           title: Text('افزودن آگهی'),
-      //           onTap: () {
-      //             Navigator.of(context).pushNamed(Routes.createpost);
-      //           },
-      //         )
-      //       ],
-      //       ListTile(
-      //         leading: Icon(Icons.exit_to_app),
-      //         title: loggedIn ? Text('خروج') : Text('ورود'),
-      //         onTap: () {
-      //           if (loggedIn) {
-      //             SharedPreferences.getInstance().then((preference) async {
-      //               preference.setBool(Preferences.is_logged_in, false);
-      //               preference.remove(Preferences.auth_token);
-      //               _userStore.setLoginState(false);
-      //               await _rippleAnimationController.forward();
-      //               Navigator.of(context).pushReplacementNamed(Routes.login);
-      //             });
-      //           } else {
-      //             Navigator.of(context).pushReplacementNamed(Routes.login);
-      //           }
-      //         },
-      //       ),
-      //     ],
-      //   ),
-      // ),
+      drawer: GFDrawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            GFDrawerHeader(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [Colors.red[400], Colors.red[100]])),
+              currentAccountPicture: GFAvatar(
+                radius: 80.0,
+                backgroundImage: NetworkImage(
+                    "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg"),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // Text('${}'),
+                  // Text('${user.email}'),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.search),
+              title: Text('جست و جو'),
+              onTap: () {
+                Navigator.of(context).pushNamed(Routes.search);
+              },
+            ),
+            // ListTile(
+            //   leading: Icon(Icons.language),
+            //   title: Text('تغییر زبان'),
+            //   onTap: () {
+            //     _buildLanguageDialog();
+            //   },
+            // ),
+            if (loggedIn == true) ...[
+              ListTile(
+                leading: Icon(Icons.add),
+                title: Text('افزودن آگهی'),
+                onTap: () {
+                  Navigator.of(context).pushNamed(Routes.createpost);
+                },
+              )
+            ],
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: loggedIn ? Text('خروج') : Text('ورود'),
+              onTap: () {
+                if (loggedIn) {
+                  SharedPreferences.getInstance().then((preference) async {
+                    preference.setBool(Preferences.is_logged_in, false);
+                    preference.remove(Preferences.auth_token);
+                    _userStore.setLoginState(false);
+                    await _rippleAnimationController.forward();
+                    Navigator.of(context).pushReplacementNamed(Routes.login);
+                  });
+                } else {
+                  Navigator.of(context).pushReplacementNamed(Routes.login);
+                }
+              },
+            ),
+          ],
+        ),
+      ),
       bottomNavigationBar: GFTabBar(
         labelColor: Colors.white,
         tabBarColor: Colors.black,

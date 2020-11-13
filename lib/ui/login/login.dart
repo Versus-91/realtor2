@@ -4,6 +4,7 @@ import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/ui/login/blaziercontainer.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +18,13 @@ class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
 
   final String title;
+  final formStore = FormStore(appComponent.getRepository());
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formStore = FormStore(appComponent.getRepository());
   final _userNameController = TextEditingController();
   final _passwordNameController = TextEditingController();
 
@@ -35,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         textColor: kWhite,
         text: 'ورود',
         onPressed: () {
-          _formStore.login().then((value) {
+          widget.formStore.login().then((value) {
             if (value == true) {
               SharedPreferences.getInstance().then((prefs) {
                 prefs.setBool(Preferences.is_logged_in, true);
@@ -85,11 +86,11 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget navigate(BuildContext context) {
     Future.delayed(Duration(milliseconds: 0), () {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(Routes.home, (Route<dynamic> route) => true);
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          Routes.home, (Route<dynamic> route) => false);
     });
 
-    return SizedBox.shrink();
+    return Container();
   }
 
   // General Methods:-----------------------------------------------------------
@@ -227,13 +228,13 @@ class _LoginPageState extends State<LoginPage> {
                                 TextField(
                                     controller: _userNameController,
                                     onChanged: (value) {
-                                      _formStore.setUserLogin(
+                                      widget.formStore.setUserLogin(
                                           _userNameController.text);
                                     },
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                        errorText:
-                                            _formStore.formErrorStore.userEmail,
+                                        errorText: widget
+                                            .formStore.formErrorStore.userEmail,
                                         border: InputBorder.none,
                                         fillColor: Colors.grey[300],
                                         filled: true))
@@ -258,13 +259,13 @@ class _LoginPageState extends State<LoginPage> {
                                 TextField(
                                     controller: _passwordNameController,
                                     onChanged: (value) {
-                                      _formStore.setPassword(
+                                      widget.formStore.setPassword(
                                           _passwordNameController.text);
                                     },
                                     obscureText: true,
                                     decoration: InputDecoration(
-                                        errorText:
-                                            _formStore.formErrorStore.password,
+                                        errorText: widget
+                                            .formStore.formErrorStore.password,
                                         border: InputBorder.none,
                                         fillColor: Colors.grey[300],
                                         filled: true))
@@ -287,10 +288,10 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         Observer(
                           builder: (context) {
-                            return _formStore.success
+                            return widget.formStore.success
                                 ? navigate(context)
                                 : _showErrorMessage(
-                                    _formStore.errorStore.errorMessage);
+                                    widget.formStore.errorStore.errorMessage);
                           },
                         ),
                       ],
@@ -301,6 +302,14 @@ class _LoginPageState extends State<LoginPage> {
                   _facebookButton(),
                 ],
               ),
+            ),
+            Observer(
+              builder: (context) {
+                return Visibility(
+                  visible: widget.formStore.loading,
+                  child: CustomProgressIndicatorWidget(),
+                );
+              },
             )
           ],
         ),
@@ -354,5 +363,14 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  // dispose:-------------------------------------------------------------------
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is removed from the Widget tree
+    _userNameController.dispose();
+    _passwordNameController.dispose();
+    super.dispose();
   }
 }

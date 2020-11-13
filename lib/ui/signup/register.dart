@@ -166,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           inputAction: TextInputAction.next,
           focusNode: _emailFocusNode,
           onChanged: (value) {
-            _formStore.setUserId(_userEmailController.text);
+            _formStore.setUserLogin(_userEmailController.text);
           },
           onFieldSubmitted: (value) {
             FocusScope.of(context).requestFocus(_numberFocusNode);
@@ -301,7 +301,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },
       child: Container(
-     
         padding: EdgeInsets.all(5),
         alignment: Alignment.bottomCenter,
         child: Row(

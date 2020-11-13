@@ -85,7 +85,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
                 hintText: "ایمیل",
               ),
               onChanged: (value) {
-                _formStore.setUserId(_userEmailController.text);
+                _formStore.setUserLogin(_userEmailController.text);
               },
             ),
             Divider(),
