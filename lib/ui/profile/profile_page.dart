@@ -243,23 +243,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         TableRow(
                           children: [
-                            GestureDetector(
-                              // onTap: () {
-                              //   Navigator.of(context).push(
-                              //     MaterialPageRoute(
-                              //       builder: (context) => MyLikesScreen(),
-                              //     ),
-                              //   );
-                              // },
-                              child: ProfileInfoBigCard(
-                                secondText: "آگهی های مورد علاقه",
-                                icon: Icon(
-                                  Icons.favorite,
-                                  size: 25,
-                                  color: blueColor,
-                                ),
-                              ),
-                            ),
+                            Container(),
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(
