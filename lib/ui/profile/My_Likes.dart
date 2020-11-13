@@ -33,6 +33,11 @@ class _MyLikesScreenState extends State<MyLikesScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          automaticallyImplyLeading: false,
+        title: Text(
+          'آگهی های مورد علاقه',
+          style: TextStyle(fontSize: 20, color: Colors.black),
+        ),
         backgroundColor: Colors.red,
         elevation: 0.0,
       ),

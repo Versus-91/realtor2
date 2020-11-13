@@ -5,8 +5,8 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/userscreen.dart';
 import 'package:boilerplate/ui/home/posts_list_screen.dart';
+import 'package:boilerplate/ui/profile/My_Likes.dart';
 import 'package:boilerplate/ui/profile/profile_page.dart';
-import 'package:boilerplate/ui/search/search.dart';
 import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,6 @@ import 'package:getwidget/getwidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/sharedpref/constants/preferences.dart';
-import '../../routes.dart';
 import '../../utils/locale/app_localization.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -49,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       vsync: this,
       duration: kRippleAnimationDuration,
     );
-    _tabbarController = TabController(length: 3, vsync: this);
+    _tabbarController = TabController(length: 4, vsync: this);
     getSharedPrefs();
   }
 
@@ -141,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         tabBarColor: Colors.black,
         unselectedLabelColor: Colors.grey,
         tabBarHeight: 50,
-        length: 3,
+        length: 4,
         indicatorColor: Colors.black87,
         controller: _tabbarController,
         tabs: [
@@ -150,6 +149,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
           Tab(
             icon: Icon(FontAwesomeIcons.list),
+          ),
+          Tab(
+            icon: Icon(FontAwesomeIcons.heart),
           ),
           Tab(
             icon: Icon(FontAwesomeIcons.userCircle),
@@ -171,6 +173,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
           ),
           Container(child: PostsListScreen()),
+          Container(
+            child: MyLikesScreen(),
+          ),
           Container(
             child: ProfilePage(),
           ),

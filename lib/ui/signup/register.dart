@@ -301,7 +301,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },
       child: Container(
-        color: Colors.amber,
+     
         padding: EdgeInsets.all(5),
         alignment: Alignment.bottomCenter,
         child: Row(

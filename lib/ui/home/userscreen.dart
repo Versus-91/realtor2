@@ -53,22 +53,27 @@ class _UserScreenState extends State<UserScreen> {
             'خانه',
             style: TextStyle(fontSize: 20, color: Colors.black),
           ),
-          actions: [
-            FlatButton(
-                onPressed: loggedIn == false
-                    ? () => {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              Routes.login, (Route<dynamic> route) => true)
-                        }
-                    : () => {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              Routes.login, (Route<dynamic> route) => true)
-                        },
-                child: Icon(
-                  Icons.account_circle,
-                  size: 40,
-                ))
-          ],
+          // actions: [
+          //   loggedIn == false
+          //       ? FlatButton(
+          //           onPressed: () => {
+          //                 Navigator.of(context).pushNamedAndRemoveUntil(
+          //                     Routes.login, (Route<dynamic> route) => true)
+          //               },
+          //           child: Icon(
+          //             Icons.account_circle,
+          //             size: 40,
+          //           ))
+          //       : FlatButton(
+          //           onPressed: () => {
+          //                 Navigator.of(context).pushNamedAndRemoveUntil(
+          //                     Routes.login, (Route<dynamic> route) => true)
+          //               },
+          //           child: Icon(
+          //             Icons.exit_to_app,
+          //             size: 40,
+          //           ))
+          // ],
           backgroundColor: Colors.red,
         ),
         body: ListView(

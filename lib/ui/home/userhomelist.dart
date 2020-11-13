@@ -20,71 +20,76 @@ class _HomeListState extends State<UserHomeList> {
       if (widget.store.userPostList != null) {
         if (widget.store.userPostList.posts.length > 0) {
           return Container(
-                height: 300,
-                width: 220,
-                child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.all(10.0),
-                    children: List<Widget>.generate(
-                        widget.store.userPostList.posts.length, (index) {
-                      var post = widget.store.userPostList.posts[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PostScreen(
-                                    post: widget
-                                        .store.userPostList.posts[index])),
-                          );
-                        },
-                        child: postCard(
-                          'assets/images/house2.jpg',
-                          "${post.categoryId}-${post.district.name} - ${post.district.city.name}-${post.typeId}",
-                          post.isVerified,
-                        ),
+            height: 300,
+            width: 220,
+            child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.all(10.0),
+                children: List<Widget>.generate(
+                    widget.store.userPostList.posts.length, (index) {
+                  var post = widget.store.userPostList.posts[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PostScreen(
+                                post: widget.store.userPostList.posts[index])),
                       );
-                    })),
-              );
+                    },
+                    child: postCard(
+                      'assets/images/house2.jpg',
+                      "${post.categoryId}-${post.district.name} - ${post.district.city.name}-${post.typeId}",
+                      post.isVerified,
+                    ),
+                  );
+                })),
+          );
         } else {
           return Container(
-                height: 300,
-                width: 220,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    RaisedButton(
-                        color: Colors.greenAccent,
-                        hoverColor: Colors.white,
-                        child: Text('ارسال آگهی جدید'),
-                        onPressed: () => print('object'))
-                  ],
-                ),
-              );
+            height: 300,
+            width: 220,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RaisedButton(
+                    color: Colors.greenAccent,
+                    hoverColor: Colors.white,
+                    child: Text('ارسال آگهی جدید'),
+                    onPressed: () => print('object'))
+              ],
+            ),
+          );
         }
       } else {
         return Container(
-          height: 360,
+          height: 300,
           width: 220,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: GFShimmer(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.topLeft,
-                stops: const <double>[0, 0.3, 0.6],
-                colors: [
-                  Colors.red[300],
-                  Colors.red[200],
-                  Colors.red[100],
-                ],
-              ),
-              showGradient: true,
-              direction: GFShimmerDirection.topToBottom,
-              duration: const Duration(milliseconds: 1500),
-              child: shimmer(context),
-            ),
-          ),
+          child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.all(10.0),
+              children: List<Widget>.generate(4, (index) {
+             
+                return Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: GFShimmer(
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.topLeft,
+                      stops: const <double>[0, 0.3, 0.6],
+                      colors: [
+                        Colors.red[300],
+                        Colors.red[200],
+                        Colors.red[100],
+                      ],
+                    ),
+                    showGradient: true,
+                    direction: GFShimmerDirection.topToBottom,
+                    duration: const Duration(milliseconds: 1500),
+                    child: shimmer(context),
+                  ),
+                );
+              })),
         );
       }
     });
