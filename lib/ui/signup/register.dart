@@ -266,7 +266,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             }
           });
         } else {
-          _showErrorMessage('فرم نامعتبر است');
+          _showErrorMessage('ف نامعتبر است');
         }
       },
       child: Container(

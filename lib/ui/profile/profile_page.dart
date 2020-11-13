@@ -1,16 +1,20 @@
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/profile/My_Likes.dart';
 import 'package:boilerplate/ui/profile/account_info.dart';
 import 'package:boilerplate/ui/profile/colors.dart';
-import 'package:boilerplate/ui/profile/my_info.dart';
 import 'package:boilerplate/ui/profile/my_posts_screen.dart';
 import 'package:boilerplate/ui/profile/opaque_image.dart';
 import 'package:boilerplate/ui/profile/profile_info_big_card.dart';
 import 'package:boilerplate/ui/profile/profile_info_card.dart';
+import 'package:boilerplate/ui/profile/radial_progress.dart';
+import 'package:boilerplate/ui/profile/rounded_image.dart';
 import 'package:boilerplate/ui/profile/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -27,6 +31,20 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       loggedIn = prefs.getBool(Preferences.is_logged_in) ?? false;
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _userStore = Provider.of<UserStore>(context);
+    if (!_userStore.loading) {
+      _userStore.getUser();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -119,7 +137,47 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ],
                               ),
                             ),
-                            MyInfo(),
+                            Observer(
+                              builder: (context) {
+                                return _userStore.user != null
+                                    ? Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            RadialProgress(
+                                              width: 4,
+                                              goalCompleted: 0.9,
+                                              child: RoundedImage(
+                                                imagePath:
+                                                    "assets/images/house1.jpg",
+                                                size: Size.fromWidth(120.0),
+                                              ),
+                                            ),
+                                            Divider(),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Text(
+                                                  _userStore.user.email,
+                                                  style: whiteNameTextStyle,
+                                                ),
+                                                Text(
+                                                  ", 24",
+                                                  style: whiteNameTextStyle,
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Text('data');
+                              },
+                            ),
                           ],
                         ),
                       ),
@@ -176,13 +234,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         TableRow(
                           children: [
                             GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => MyLikesScreen(),
-                                  ),
-                                );
-                              },
+                              // onTap: () {
+                              //   Navigator.of(context).push(
+                              //     MaterialPageRoute(
+                              //       builder: (context) => MyLikesScreen(),
+                              //     ),
+                              //   );
+                              // },
                               child: ProfileInfoBigCard(
                                 secondText: "آگهی های مورد علاقه",
                                 icon: Icon(
@@ -194,8 +252,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context)
-                                    .pushNamed(Routes.createpost);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => CreatePostScreen(),
+                                  ),
+                                );
                               },
                               child: ProfileInfoBigCard(
                                 secondText: "افزودن آگهی",

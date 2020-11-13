@@ -1,14 +1,12 @@
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/userhomelist.dart';
 import 'package:boilerplate/ui/home/recommendations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../routes.dart';
 
 class UserScreen extends StatefulWidget {
   UserScreen({Key key, this.title, this.userStore, this.postStore})
@@ -53,27 +51,27 @@ class _UserScreenState extends State<UserScreen> {
             'خانه',
             style: TextStyle(fontSize: 20, color: Colors.black),
           ),
-          // actions: [
-          //   loggedIn == false
-          //       ? FlatButton(
-          //           onPressed: () => {
-          //                 Navigator.of(context).pushNamedAndRemoveUntil(
-          //                     Routes.login, (Route<dynamic> route) => true)
-          //               },
-          //           child: Icon(
-          //             Icons.account_circle,
-          //             size: 40,
-          //           ))
-          //       : FlatButton(
-          //           onPressed: () => {
-          //                 Navigator.of(context).pushNamedAndRemoveUntil(
-          //                     Routes.login, (Route<dynamic> route) => true)
-          //               },
-          //           child: Icon(
-          //             Icons.exit_to_app,
-          //             size: 40,
-          //           ))
-          // ],
+          actions: [
+            loggedIn == false
+                ? FlatButton(
+                    onPressed: () => {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              Routes.login, (Route<dynamic> route) => true)
+                        },
+                    child: Icon(
+                      Icons.account_circle,
+                      size: 40,
+                    ))
+                : FlatButton(
+                    onPressed: () => {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              Routes.login, (Route<dynamic> route) => true)
+                        },
+                    child: Icon(
+                      Icons.power_settings_new_rounded,
+                      size: 40,
+                    ))
+          ],
           backgroundColor: Colors.red,
         ),
         body: ListView(
@@ -83,41 +81,16 @@ class _UserScreenState extends State<UserScreen> {
                 return widget.userStore.user != null
                     ? Padding(
                         padding: EdgeInsets.only(
-                            left: 25, right: 20, top: 20, bottom: 40),
+                            left: 25, right: 20, top: 20, bottom: 20),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                RichText(
-                                  text: TextSpan(
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: widget.userStore.user.email,
-                                          style: TextStyle(
-                                              fontFamily: 'ConcertOne-Regular',
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16)),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text('آگهی‏‏ های من'),
-                              ],
-                            ),
-                            CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              radius: 30,
-                              child: ClipOval(
-                                  child: Image.asset(
-                                'assets/images/animal.png',
-                                // Photo from https://unsplash.com/photos/QXevDflbl8A
-                                fit: BoxFit.cover,
-                                width: 55.0,
-                                height: 55.0,
-                              )),
+                            Text(
+                              'آگهی‏‏ های من',
+                              style: TextStyle(
+                                  fontFamily: 'ConcertOne-Regular',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
                             ),
                           ],
                         ),
