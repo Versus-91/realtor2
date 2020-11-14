@@ -41,7 +41,7 @@ class _PostScreen extends State<PostScreen> {
             Stack(
               children: <Widget>[
                 SizedBox(
-                    height: 300.0,
+                    height: 250.0,
                     child: Stack(
                       children: <Widget>[
                         if (widget.post.images.length > 0) ...[
@@ -74,115 +74,91 @@ class _PostScreen extends State<PostScreen> {
                         ],
                       ],
                     )),
-                Padding(
-                  padding: EdgeInsets.only(top: 270, left: 20, right: 20),
-                  child: Container(
-                      height: 100.0,
-                      width: MediaQuery.of(context).size.width - 24.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 2.0,
-                                color: Colors.grey.withOpacity(0.3),
-                                spreadRadius: 2.0)
-                          ]),
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20, right: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                widget.post.category.name.contains("فروش")
-                                    ? Text(
-                                        '${widget.post.price}؋',
-                                        style: TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      )
-                                    : Row(
-                                        children: [
-                                          Text(
-                                            'رهن:${widget.post.deopsit}؋',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          Text(
-                                            'اجاره:${widget.post.rent}؋',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                // Text('${widget.post.price}؋'),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[],
-                                )
-                              ],
-                            ),
-                            FloatingActionButton(
-                              child: FutureBuilder(
-                                future: isSelected(widget.post.id),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return Icon(
-                                      Icons.favorite,
-                                      color: Colors.white,
-                                    );
-                                  } else {
-                                    if (snapshot.data == true) {
-                                      return Icon(
-                                        Icons.favorite,
-                                        color: Colors.redAccent,
-                                      );
-                                    }
-                                    return Icon(
-                                      Icons.favorite,
-                                      color: Colors.white,
-                                    );
-                                  }
-                                },
-                              ),
-                              onPressed: () async {
-                                var post = await appComponent
-                                    .getRepository()
-                                    .findFavoriteById(widget.post.id);
-                                if (post == null) {
-                                  await appComponent
-                                      .getRepository()
-                                      .addFavorite(widget.post);
-                                } else {
-                                  await appComponent
-                                      .getRepository()
-                                      .removeFavorite(widget.post);
-                                }
-                                setState(() {
-                                  isSelected(widget.post.id);
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      )),
-                ),
                 AppBar(
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                 ),
+              ],
+            ),
+            Container(
+              alignment: Alignment.topLeft,
+              child: FlatButton(
+                child: FutureBuilder(
+                  future: isSelected(widget.post.id),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Icon(
+                        Icons.favorite,
+                        color: Colors.white,
+                      );
+                    } else {
+                      if (snapshot.data == true) {
+                        return Icon(
+                          Icons.favorite,
+                          color: Colors.redAccent,
+                        );
+                      }
+                      return Icon(
+                        Icons.favorite,
+                        color: Colors.white,
+                      );
+                    }
+                  },
+                ),
+                onPressed: () async {
+                  var post = await appComponent
+                      .getRepository()
+                      .findFavoriteById(widget.post.id);
+                  if (post == null) {
+                    await appComponent.getRepository().addFavorite(widget.post);
+                  } else {
+                    await appComponent
+                        .getRepository()
+                        .removeFavorite(widget.post);
+                  }
+                  setState(() {
+                    isSelected(widget.post.id);
+                  });
+                },
+              ),
+            ),
+            Divider(
+              endIndent: 150,
+              color: Colors.black54,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                widget.post.category.name.contains("فروش")
+                    ? Text(
+                        '${widget.post.price}؋',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      )
+                    : Row(
+                        children: [
+                          Text(
+                            'رهن:${widget.post.deopsit}؋',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            'اجاره:${widget.post.rent}؋',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
               ],
             ),
             Padding(
