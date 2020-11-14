@@ -27,201 +27,208 @@ class _PostScreen extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.white, //change your color here
+          ),
+          title: Text(
+            '${widget.post.category.name}/${widget.post.district.city.name}/${widget.post.district.name} ',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
         body: ListView(
-      children: <Widget>[
-        Stack(
           children: <Widget>[
-            SizedBox(
-                height: 300.0,
-                child: Stack(
-                  children: <Widget>[
-                    if (widget.post.images.length > 0) ...[
-                      Carousel(
-                        images: List<Image>.generate(widget.post.images.length,
-                            (index) {
-                          return Image.network(
-                            Endpoints.baseUrl +
-                                "/" +
-                                widget.post.images[index].path,
-                            fit: BoxFit.cover,
-                          );
-                        })
-                        // Photo from https://unsplash.com/photos/BVd8jS5H7VU
-                        ,
-                        dotSize: 4.0,
-                        dotSpacing: 15.0,
-                        autoplay: false,
-                        dotColor: Colors.white,
-                        indicatorBgPadding: 50.0,
-                        dotBgColor: Colors.transparent,
-                        borderRadius: false,
-                        moveIndicatorFromBottom: 200.0,
-                        noRadiusForIndicator: true,
-                      )
-                    ] else ...[
-                      Center(
-                          child: Image.asset("assets/images/a.png",
-                              fit: BoxFit.fill))
-                    ],
-                  ],
-                )),
-            Padding(
-              padding: EdgeInsets.only(top: 270, left: 20, right: 20),
-              child: Container(
-                  height: 100.0,
-                  width: MediaQuery.of(context).size.width - 24.0,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 2.0,
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 2.0)
-                      ]),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 20, right: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              '${widget.post.category.name}/${widget.post.district.city.name}/${widget.post.district.name} ',
-                              style:
-                                  TextStyle(fontFamily: 'ConcertOne-Regular'),
+            Stack(
+              children: <Widget>[
+                SizedBox(
+                    height: 300.0,
+                    child: Stack(
+                      children: <Widget>[
+                        if (widget.post.images.length > 0) ...[
+                          Carousel(
+                            images: List<Image>.generate(
+                                widget.post.images.length, (index) {
+                              return Image.network(
+                                Endpoints.baseUrl +
+                                    "/" +
+                                    widget.post.images[index].path,
+                                fit: BoxFit.cover,
+                              );
+                            })
+                            // Photo from https://unsplash.com/photos/BVd8jS5H7VU
+                            ,
+                            dotSize: 4.0,
+                            dotSpacing: 15.0,
+                            autoplay: false,
+                            dotColor: Colors.white,
+                            indicatorBgPadding: 50.0,
+                            dotBgColor: Colors.transparent,
+                            borderRadius: false,
+                            moveIndicatorFromBottom: 200.0,
+                            noRadiusForIndicator: true,
+                          )
+                        ] else ...[
+                          Center(
+                              child: Image.asset("assets/images/a.png",
+                                  fit: BoxFit.fill))
+                        ],
+                      ],
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(top: 270, left: 20, right: 20),
+                  child: Container(
+                      height: 100.0,
+                      width: MediaQuery.of(context).size.width - 24.0,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 2.0,
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 2.0)
+                          ]),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 20, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                widget.post.category.name.contains("فروش")
+                                    ? Text(
+                                        '${widget.post.price}؋',
+                                        style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      )
+                                    : Row(
+                                        children: [
+                                          Text(
+                                            'رهن:${widget.post.deopsit}؋',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          Text(
+                                            'اجاره:${widget.post.rent}؋',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                // Text('${widget.post.price}؋'),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[],
+                                )
+                              ],
                             ),
-                            widget.post.category.name.contains("فروش")
-                                ? Text(
-                                    '${widget.post.price}؋',
-                                    style: TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  )
-                                : Row(
-                                    children: [
-                                      Text(
-                                        'رهن:${widget.post.deopsit}؋',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Text(
-                                        'اجاره:${widget.post.rent}؋',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                            // Text('${widget.post.price}؋'),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[],
-                            )
+                            FloatingActionButton(
+                              child: FutureBuilder(
+                                future: isSelected(widget.post.id),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return Icon(
+                                      Icons.favorite,
+                                      color: Colors.white,
+                                    );
+                                  } else {
+                                    if (snapshot.data == true) {
+                                      return Icon(
+                                        Icons.favorite,
+                                        color: Colors.redAccent,
+                                      );
+                                    }
+                                    return Icon(
+                                      Icons.favorite,
+                                      color: Colors.white,
+                                    );
+                                  }
+                                },
+                              ),
+                              onPressed: () async {
+                                var post = await appComponent
+                                    .getRepository()
+                                    .findFavoriteById(widget.post.id);
+                                if (post == null) {
+                                  await appComponent
+                                      .getRepository()
+                                      .addFavorite(widget.post);
+                                } else {
+                                  await appComponent
+                                      .getRepository()
+                                      .removeFavorite(widget.post);
+                                }
+                                setState(() {
+                                  isSelected(widget.post.id);
+                                });
+                              },
+                            ),
                           ],
                         ),
-                        FloatingActionButton(
-                          child: FutureBuilder(
-                            future: isSelected(widget.post.id),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return Icon(
-                                  Icons.favorite,
-                                  color: Colors.white,
-                                );
-                              } else {
-                                if (snapshot.data == true) {
-                                  return Icon(
-                                    Icons.favorite,
-                                    color: Colors.redAccent,
-                                  );
-                                }
-                                return Icon(
-                                  Icons.favorite,
-                                  color: Colors.white,
-                                );
-                              }
-                            },
-                          ),
-                          onPressed: () async {
-                            var post = await appComponent
-                                .getRepository()
-                                .findFavoriteById(widget.post.id);
-                            if (post == null) {
-                              await appComponent
-                                  .getRepository()
-                                  .addFavorite(widget.post);
-                            } else {
-                              await appComponent
-                                  .getRepository()
-                                  .removeFavorite(widget.post);
-                            }
-                            setState(() {
-                              isSelected(widget.post.id);
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  )),
+                      )),
+                ),
+                AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                ),
+              ],
             ),
-            AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-            ),
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 20, bottom: 20, right: 14, left: 14),
-          child: Text(
-            'توضیحات',
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'ConcertOne-Regular'),
-          ),
-        ),
-        aboutHotel('${widget.post.description}'),
-        Padding(
-          padding: EdgeInsets.only(top: 20, bottom: 20, left: 14, right: 14),
-          child: Text(
-            'امکانات',
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'ConcertOne-Regular'),
-          ),
-        ),
-        amenities('assets/icons/pool.png', 'assets/icons/bed.png',
-            'assets/icons/tv.png', 'Pool', '6 Beds', 'Kitchen'),
-        if (widget.post.latitude == null) ...[
-          SizedBox.shrink()
-        ] else ...[
-          Padding(
-            padding: EdgeInsets.only(top: 50, bottom: 50, left: 0, right: 0),
-            child: Center(
-                child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 250,
-              child: MapScreen(
-                latitude: widget.post.latitude,
-                longitude: widget.post.longitude,
+            Padding(
+              padding:
+                  EdgeInsets.only(top: 20, bottom: 20, right: 14, left: 14),
+              child: Text(
+                'توضیحات',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'ConcertOne-Regular'),
               ),
-            )),
-          )
-        ],
-      ],
-    ));
+            ),
+            aboutHotel('${widget.post.description}'),
+            Padding(
+              padding:
+                  EdgeInsets.only(top: 20, bottom: 20, left: 14, right: 14),
+              child: Text(
+                'امکانات',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'ConcertOne-Regular'),
+              ),
+            ),
+            amenities('assets/icons/pool.png', 'assets/icons/bed.png',
+                'assets/icons/tv.png', 'Pool', '6 Beds', 'Kitchen'),
+            if (widget.post.latitude == null) ...[
+              SizedBox.shrink()
+            ] else ...[
+              Padding(
+                padding:
+                    EdgeInsets.only(top: 50, bottom: 50, left: 0, right: 0),
+                child: Center(
+                    child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 250,
+                  child: MapScreen(
+                    latitude: widget.post.latitude,
+                    longitude: widget.post.longitude,
+                  ),
+                )),
+              )
+            ],
+          ],
+        ));
   }
 
   Future isSelected(int id) async {

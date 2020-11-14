@@ -170,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           Container(
             child: UserScreen(
               userStore: _userStore,
-              postStore: _postStore,
+            
             ),
           ),
           Container(child: PostsListScreen()),
