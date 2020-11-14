@@ -54,7 +54,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
             color: Colors.white, //change your color here
           ),
           title: Text(
-            '${widget.post.category.name}/${widget.post.district.city.name}/${widget.post.district.name} ',
+            ' ${widget.post.district.city.name} - ${widget.post.district.name} ',
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -96,16 +96,12 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                         ],
                       ],
                     )),
-                AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                ),
               ],
             ),
             Container(
                 color: Colors.blueGrey,
                 width: MediaQuery.of(context).size.width,
-                height: 40,
+                height: 45,
                 child: Center(
                   child: Text(
                     '${widget.post.category.name}',
@@ -115,6 +111,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
             Container(
               alignment: Alignment.topLeft,
               child: FlatButton(
+                splashColor: Colors.white,
                 child: FutureBuilder(
                   future: isSelected(widget.post.id),
                   builder: (context, snapshot) {
@@ -160,6 +157,13 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Text(
+                    "برای ${widget.post.category.name}",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                   widget.post.category.name.contains("فروش")
                       ? Text(
                           '${widget.post.price}',
@@ -208,7 +212,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 child: Row(
                   children: [
                     Column(
-                      children: [Text("شناسه آگهی"), Text("123456")],
+                      children: [Text("شناسه آگهی"), Text('${widget.post.id}')],
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -219,7 +223,10 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                       ),
                     ),
                     Column(
-                      children: [Text("اتاق خواب"), Text("3")],
+                      children: [
+                        Text("اتاق خواب"),
+                        Text('${widget.post.bedroom}')
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -230,7 +237,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                       ),
                     ),
                     Column(
-                      children: [Text("متراژ"), Text("100")],
+                      children: [Text("متراژ"), Text('${widget.post.area}')],
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -255,19 +262,6 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
               ),
             ),
             aboutHotel('${widget.post.description}'),
-            Padding(
-              padding:
-                  EdgeInsets.only(top: 20, bottom: 20, left: 14, right: 14),
-              child: Text(
-                'امکانات',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'ConcertOne-Regular'),
-              ),
-            ),
-            amenities('assets/icons/pool.png', 'assets/icons/bed.png',
-                'assets/icons/tv.png', 'Pool', '6 Beds', 'Kitchen'),
             if (widget.post.latitude == null) ...[
               SizedBox.shrink()
             ] else ...[
@@ -283,7 +277,27 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                     longitude: widget.post.longitude,
                   ),
                 )),
-              )
+              ),
+              DataTable(
+                columns: const <DataColumn>[
+                  DataColumn(
+                    label: Text(
+                      'امکانات',
+                      style: TextStyle(fontStyle: FontStyle.normal),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text('وضعیت'),
+                  ),
+                ],
+                rows: <DataRow>[
+                  DataRow(
+                      cells:
+                          List.generate(widget.post.amenities.length, (index) {
+                    return DataCell(Text('19'));
+                  })),
+                ],
+              ),
             ],
           ],
         ));

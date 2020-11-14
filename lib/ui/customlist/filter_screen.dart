@@ -94,49 +94,36 @@ class _FiltersScreenState extends State<FiltersScreen> {
       child: Scaffold(
         bottomNavigationBar: Padding(
             padding:
-                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Flexible(
-                    fit: FlexFit.tight,
-                    child: Container(
-                      height: 50,
-                      child: FlatButton(
-                          splashColor: Colors.red,
-                          color: Colors.red[100],
-                          onPressed: () {
-                            widget.filterForm.resetForm();
-                          },
-                          child: Text(
-                            "پاک کردن گزینه ها",
-                            style: TextStyle(color: Colors.grey[600]),
-                          )),
-                    )),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Container(
-                    height: 50,
-                    child: FlatButton.icon(
-                      color: Colors.red,
-                      splashColor: Colors.red[100],
-                      icon: const Icon(FontAwesomeIcons.search, size: 18),
-                      label: Text("جست و جو",
-                          style: TextStyle(color: Colors.grey[900])),
-                      onPressed: () {
-                        widget.filterForm
-                            .setPropertyTypeList(accomodationListData);
-                        _filterRequest = widget.filterForm.applyFilters();
-                        if (_filterRequest != null) {
-                          widget.postStore.getPosts(request: _filterRequest);
-                        }
-                        Future.delayed(Duration(milliseconds: 2), () {
-                          Navigator.pop(context);
-                        });
-                      },
+                Container(
+                  width: MediaQuery.of(context).size.width - 20,
+                  height: 50,
+                  child: FlatButton.icon(
+                    color: Colors.red,
+                    splashColor: Colors.red[100],
+                    icon: const Icon(
+                      FontAwesomeIcons.search,
+                      size: 18,
+                      color: Colors.blueGrey,
                     ),
+                    label:
+                        Text("جست و جو", style: TextStyle(color: Colors.white)),
+                    onPressed: () {
+                      widget.filterForm
+                          .setPropertyTypeList(accomodationListData);
+                      _filterRequest = widget.filterForm.applyFilters();
+                      if (_filterRequest != null) {
+                        widget.postStore.getPosts(request: _filterRequest);
+                      }
+                      Future.delayed(Duration(milliseconds: 2), () {
+                        Navigator.pop(context);
+                      });
+                    },
                   ),
-                )
+                ),
               ],
             )),
         backgroundColor: Colors.transparent,
@@ -728,7 +715,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
   Widget getAppBarUI() {
     return Container(
       decoration: BoxDecoration(
-        color: HotelAppTheme.buildLightTheme().backgroundColor,
+        color: Colors.red,
         boxShadow: <BoxShadow>[
           BoxShadow(
               color: Colors.grey.withOpacity(0.2),

@@ -1,3 +1,4 @@
+import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/image/image.dart';
 import 'package:boilerplate/models/category/category.dart';
@@ -23,6 +24,7 @@ class Post {
   District district;
   Category category;
   List<Image> images;
+  List<Amenity> amenities;
 
   Post(
       {this.title,
@@ -34,8 +36,8 @@ class Post {
       this.bedroom,
       this.districtId,
       this.typeId,
-      this.latitude = 34.5553,
-      this.longitude = 69.2075,
+      this.latitude,
+      this.longitude,
       this.creationTime,
       this.id,
       this.deopsit,
@@ -44,7 +46,8 @@ class Post {
       this.district,
       this.category,
       this.images,
-      this.isVerified});
+      this.isVerified,
+      this.amenities});
 
   factory Post.fromMap(Map<String, dynamic> json) => Post(
       title: json["title"],
@@ -66,6 +69,7 @@ class Post {
       price: json["price"],
       district: District.fromMap(json["district"]),
       category: Category.fromMap(json["category"]),
+      amenities: Amenity.listFromJson(json["amenities"]),
       images: Image.listFromJson(json["images"]));
 
   Map<String, dynamic> toMap() => {
@@ -87,7 +91,8 @@ class Post {
         "price": price,
         "district": district.toMap(),
         "category": category.toMap(),
-        "images": images.map((e) => toMapImage(e)).toList()
+        "images": images.map((e) => toMapImage(e)).toList(),
+        "amenities": amenities.map((e) => e.id).toList()
       };
   Map<String, dynamic> toMapImage(Image img) => {"path": img.path};
 }

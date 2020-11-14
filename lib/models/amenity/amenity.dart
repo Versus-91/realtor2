@@ -16,4 +16,7 @@ class Amenity {
         "name": name,
         "icon": icon,
       };
+  static List<Amenity> listFromJson(List<dynamic> json) {
+    return json.map((item) => Amenity.fromMap(item)).toList();
+  }
 }
