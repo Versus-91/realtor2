@@ -67,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             children: <Widget>[
               Expanded(
-                flex: 4,
+                flex: 3,
                 child: Stack(
                   children: <Widget>[
                     OpaqueImage(
@@ -75,7 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     SafeArea(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
                           children: [
                             Align(
@@ -89,61 +89,41 @@ class _ProfilePageState extends State<ProfilePage> {
                                     textAlign: TextAlign.right,
                                     style: headingTextStyle,
                                   ),
-                                  loggedIn == true
-                                      ? FlatButton(
-                                          onPressed: () {
-                                            {
-                                              SharedPreferences.getInstance()
-                                                  .then((preference) async {
-                                                preference.setBool(
-                                                    Preferences.is_logged_in,
-                                                    false);
-                                                preference.remove(
-                                                    Preferences.auth_token);
-                                                _userStore.setLoginState(false);
-                                                await _rippleAnimationController
-                                                    .forward();
-                                                Navigator.of(context)
-                                                    .pushReplacementNamed(
-                                                        Routes.login);
-                                              });
-                                            }
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.power_settings_new,
-                                                size: 30,
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.all(2.0),
-                                              ),
-                                              Text("خروج",
-                                                  style: whiteNameTextStyle),
-                                            ],
-                                          ))
-                                      : FlatButton(
-                                          onPressed: () {
+                                  FlatButton(
+                                      onPressed: () {
+                                        {
+                                          SharedPreferences.getInstance()
+                                              .then((preference) async {
+                                            preference.setBool(
+                                                Preferences.is_logged_in,
+                                                false);
+                                            preference
+                                                .remove(Preferences.auth_token);
+                                            _userStore.setLoginState(false);
+                                            await _rippleAnimationController
+                                                .forward();
                                             Navigator.of(context)
                                                 .pushReplacementNamed(
                                                     Routes.login);
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.login_rounded,
-                                                color: Colors.red,
-                                                size: 30,
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.all(2.0),
-                                              ),
-                                              Text(
-                                                "ورود",
-                                                style: whiteNameTextStyle,
-                                              ),
-                                            ],
-                                          )),
+                                          });
+                                        }
+                                      },
+                                      child: Row(
+                                      
+                                        children: [
+                                          Text("خروج",
+                                              style: whiteNameTextStyle),
+                                          Divider(),
+                                          Icon(
+                                            Icons.logout,
+                                            color: Colors.red[50],
+                                            size: 30,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(2.0),
+                                          ),
+                                        ],
+                                      ))
                                 ],
                               ),
                             ),
@@ -174,8 +154,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   style: whiteNameTextStyle,
                                                 ),
                                                 Text(
-                                                  ", 24",
-                                                  style: whiteNameTextStyle,
+                                                  _userStore.user.name,
+                                                  style:
+                                                      whiteSubHeadingTextStyle,
                                                 ),
                                               ],
                                             ),
@@ -198,7 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
               Expanded(
                 flex: 5,
                 child: Container(
-                  padding: const EdgeInsets.only(top: 50),
+                  padding: const EdgeInsets.only(top: 10),
                   color: Color(0xfff3f3f4),
                   child: SingleChildScrollView(
                     child: Table(
@@ -243,7 +224,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         TableRow(
                           children: [
-                            Container(),
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(
@@ -261,10 +241,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        TableRow(
-                          children: [
                             ProfileInfoBigCard(
                               secondText: "طرح های موجود",
                               icon: Icon(
@@ -273,6 +249,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 color: blueColor,
                               ),
                             ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(
@@ -290,6 +270,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                             ),
+                            Container(),
                           ],
                         ),
                       ],
@@ -299,28 +280,28 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ],
           ),
-          Positioned(
-            top: screenHeight * (4 / 10) - 80 / 2,
-            left: 16,
-            right: 16,
-            child: Container(
-              height: 80,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  ProfileInfoCard(firstText: "54%", secondText: ""),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  ProfileInfoCard(firstText: "152", secondText: "آگهی های من"),
-                ],
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: screenHeight * (4 / 10) - 80 / 2,
+          //   left: 16,
+          //   right: 16,
+          //   child: Container(
+          //     height: 80,
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       mainAxisSize: MainAxisSize.max,
+          //       children: <Widget>[
+          //         ProfileInfoCard(firstText: "54%", secondText: ""),
+          //         SizedBox(
+          //           width: 10,
+          //         ),
+          //         SizedBox(
+          //           width: 10,
+          //         ),
+
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
