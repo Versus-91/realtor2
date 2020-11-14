@@ -4,6 +4,7 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:getwidget/getwidget.dart';
 
 class PostScreen extends StatefulWidget {
   PostScreen({this.post});
@@ -12,10 +13,12 @@ class PostScreen extends StatefulWidget {
   _PostScreen createState() => _PostScreen();
 }
 
-class _PostScreen extends State<PostScreen> {
+class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
+  TabController _tabbarController;
   @override
   void initState() {
     super.initState();
+    _tabbarController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -27,6 +30,25 @@ class _PostScreen extends State<PostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        bottomNavigationBar: GFTabBar(
+          labelColor: Colors.white,
+          tabBarColor: Colors.blueGrey,
+          unselectedLabelColor: Colors.white,
+          tabBarHeight: 50,
+          length: 3,
+          controller: _tabbarController,
+          tabs: [
+            Tab(
+              text: "نقشه",
+            ),
+            Tab(
+              text: "ارسال آگهی",
+            ),
+            Tab(
+              text: "تماس",
+            ),
+          ],
+        ),
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: Colors.white, //change your color here
@@ -81,6 +103,16 @@ class _PostScreen extends State<PostScreen> {
               ],
             ),
             Container(
+                color: Colors.blueGrey,
+                width: MediaQuery.of(context).size.width,
+                height: 40,
+                child: Center(
+                  child: Text(
+                    '${widget.post.category.name}',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                )),
+            Container(
               alignment: Alignment.topLeft,
               child: FlatButton(
                 child: FutureBuilder(
@@ -100,7 +132,7 @@ class _PostScreen extends State<PostScreen> {
                       }
                       return Icon(
                         Icons.favorite,
-                        color: Colors.white,
+                        color: Colors.grey,
                       );
                     }
                   },
@@ -122,48 +154,98 @@ class _PostScreen extends State<PostScreen> {
                 },
               ),
             ),
-            Divider(
-              endIndent: 150,
-              color: Colors.black54,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                widget.post.category.name.contains("فروش")
-                    ? Text(
-                        '${widget.post.price}؋',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.normal,
+            Padding(
+              padding: const EdgeInsets.only(right: 14),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  widget.post.category.name.contains("فروش")
+                      ? Text(
+                          '${widget.post.price}',
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        )
+                      : Row(
+                          children: [
+                            Text(
+                              'رهن:${widget.post.deopsit}',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              'اجاره:${widget.post.rent}',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
                         ),
-                      )
-                    : Row(
-                        children: [
-                          Text(
-                            'رهن:${widget.post.deopsit}؋',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'اجاره:${widget.post.rent}؋',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-              ],
+                ],
+              ),
             ),
             Padding(
-              padding:
-                  EdgeInsets.only(top: 20, bottom: 20, right: 14, left: 14),
+              padding: const EdgeInsets.only(right: 14),
+              child: Divider(
+                endIndent: MediaQuery.of(context).size.width / 1.5,
+                color: Colors.black54,
+              ),
+            ),
+            IntrinsicHeight(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  right: 14,
+                ),
+                child: Row(
+                  children: [
+                    Column(
+                      children: [Text("شناسه آگهی"), Text("123456")],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: VerticalDivider(
+                        color: Colors.grey,
+                        width: 10,
+                        endIndent: 4,
+                      ),
+                    ),
+                    Column(
+                      children: [Text("اتاق خواب"), Text("3")],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: VerticalDivider(
+                        color: Colors.grey,
+                        width: 10,
+                        endIndent: 4,
+                      ),
+                    ),
+                    Column(
+                      children: [Text("متراژ"), Text("100")],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: VerticalDivider(
+                        color: Colors.grey,
+                        width: 10,
+                        endIndent: 4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20, right: 14, left: 14),
               child: Text(
                 'توضیحات',
                 style: TextStyle(
@@ -318,7 +400,7 @@ class _PostScreen extends State<PostScreen> {
           children: <Widget>[
             Text(
               description,
-              style: TextStyle(fontSize: 20, fontFamily: 'ConcertOne-Regular'),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
             ),
           ],
         ));
