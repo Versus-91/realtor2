@@ -183,6 +183,12 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
+  Future updateUser(User user) {
+    return _postApi.updateUser(user).then((result) {
+      return result;
+    }).catchError((error) => throw error);
+  }
+
   Future<int> update(Post post) => _postDataSource
       .update(post)
       .then((id) => id)

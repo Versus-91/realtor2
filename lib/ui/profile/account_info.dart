@@ -82,7 +82,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
               controller: _userEmailController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: "ایمیل",
+                labelText: "ایمیل",
               ),
               onChanged: (value) {
                 _formStore.setUserLogin(_userEmailController.text);
@@ -106,6 +106,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
                 VerticalDivider(),
                 Flexible(
                   child: TextField(
+                    controller: _familyController,
                     obscureText: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -120,6 +121,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
             ),
             Divider(),
             TextField(
+              controller: _numberController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'شماره همراه',
@@ -133,15 +135,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
               children: [
                 Flexible(
                   child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'جنسیت',
-                    ),
-                  ),
-                ),
-                VerticalDivider(),
-                Flexible(
-                  child: TextField(
+                    controller: _passwordController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'تغییر رمز',
@@ -162,7 +156,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
                 textColor: Colors.white,
                 text: 'ثبت',
                 onPressed: () async {
-                  _store.insertPost();
+                  _formStore.updeteUser();
                 },
               ),
             ),

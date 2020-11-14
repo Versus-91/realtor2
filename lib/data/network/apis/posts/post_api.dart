@@ -94,6 +94,16 @@ class PostApi {
     }
   }
 
+  Future updateUser(User user) async {
+    try {
+      final res =
+          await _dioClient.put(Endpoints.updateUser, data: user.toMap());
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
+
   /// Returns list of post in response
   Future<CategoryList> getCategories() async {
     try {

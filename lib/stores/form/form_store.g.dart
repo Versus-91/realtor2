@@ -217,6 +217,13 @@ mixin _$FormStore on _FormStore, Store {
     return _$registerAsyncAction.run(() => super.register());
   }
 
+  final _$updeteUserAsyncAction = AsyncAction('_FormStore.updeteUser');
+
+  @override
+  Future<dynamic> updeteUser() {
+    return _$updeteUserAsyncAction.run(() => super.updeteUser());
+  }
+
   final _$loginAsyncAction = AsyncAction('_FormStore.login');
 
   @override

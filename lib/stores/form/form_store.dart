@@ -230,7 +230,26 @@ abstract class _FormStore with Store {
       return false;
     });
   }
-
+  @action
+  Future updeteUser() async {
+    var user = User(
+        email: userEmail,
+        name: name,
+       
+        surname: family,
+        phonenumber: number);
+    loading = true;
+    return _repository.updateUser(user).then((result) {
+      loading = false;
+      success = true;
+      return true;
+    }).catchError((e) {
+      loading = false;
+      success = false;
+      errorStore.errorMessage = e.toString();
+      return false;
+    });
+  }
   @action
   Future login() async {
     loading = true;

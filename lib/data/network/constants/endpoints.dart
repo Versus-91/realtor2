@@ -27,7 +27,7 @@ class Endpoints {
   static const String getuser = baseUrl + "/api/services/app/account/user";
   static const String createUser =
       baseUrl + "/api/services/app/account/register";
-
+  static const String updateUser = baseUrl + "/api/services/app/account/update";
   //Category endpoints
   static const String getTypes = baseUrl + "/api/services/app/type/GetAll";
   static const String uploadImages = baseUrl + "/stream/upload";
