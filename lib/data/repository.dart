@@ -19,6 +19,7 @@ import 'package:sembast/sembast.dart';
 import 'local/constants/db_constants.dart';
 import 'local/datasources/city_datasource.dart';
 import 'local/datasources/post/favorite_datasource.dart';
+import 'local/datasources/search_datasource.dart';
 import 'network/apis/posts/post_api.dart';
 
 class Repository {
@@ -27,6 +28,7 @@ class Repository {
 
   final CityDataSource _cityDataSource;
   final FavoriteDataSource _favoriteDataSource;
+  final SearchDataSource _searchDataSource;
 
   // api objects
   final PostApi _postApi;
@@ -36,25 +38,23 @@ class Repository {
 
   // constructor
   Repository(this._postApi, this._sharedPrefsHelper, this._postDataSource,
-      this._favoriteDataSource, this._cityDataSource);
+      this._favoriteDataSource, this._searchDataSource, this._cityDataSource);
 
   // Post: ---------------------------------------------------------------------
   Future<PostList> getPosts({PostRequest request}) async {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    await _postDataSource.deleteAll();
-    return await _postDataSource.count() > 0
-        ? _postDataSource.getPostsFromDb().then((postList) {
-            return postList;
-          }).catchError((err) => throw err)
-        : _postApi.getPosts(request: request).then((postsList) {
-            postsList.posts.forEach((post) {
-              _postDataSource.insert(post);
-            });
+    if (request != null) {
+      await _searchDataSource.insert(request);
+    }
+    return await _postApi.getPosts(request: request).then((postsList) {
+      postsList.posts.forEach((post) {
+        // _postDataSource.insert(post);
+      });
 
-            return postsList;
-          }).catchError((error) => throw error);
+      return postsList;
+    }).catchError((error) => throw error);
   }
 
   Future<PostList> getUserPosts({PostRequest request}) async {
@@ -148,6 +148,10 @@ class Repository {
 
   Future getFavoritesList() async {
     return await _favoriteDataSource.getPostsFromDb();
+  }
+
+  Future getSearchesList() async {
+    return await _searchDataSource.getSearchesFromDb();
   }
 
   Future findFavoriteById(int id) async {

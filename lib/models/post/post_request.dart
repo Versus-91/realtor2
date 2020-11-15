@@ -1,6 +1,8 @@
 import 'package:collection/equality.dart';
+import 'package:uuid/uuid.dart';
 
 class PostRequest {
+  Uuid id = Uuid();
   int minPrice;
   int maxPrice;
   int minArea;
@@ -13,7 +15,8 @@ class PostRequest {
   int age;
   int bedCount;
   PostRequest(
-      {this.minPrice,
+      {this.id,
+      this.minPrice,
       this.maxPrice,
       this.minArea,
       this.maxArea,
@@ -26,6 +29,7 @@ class PostRequest {
       this.amenities});
   Map<String, dynamic> toJson() {
     Map<String, dynamic> result = new Map();
+    result.addAll({"id": id});
     result.addAll({"minPrice": minPrice.toString()});
     result.addAll({"maxPrice": minPrice.toString()});
     result.addAll({"category": category.toString()});
@@ -48,6 +52,19 @@ class PostRequest {
     return result;
   }
 
+  factory PostRequest.fromMap(Map<String, dynamic> json) => PostRequest(
+        maxArea: int.tryParse(json["maxArea"] ?? ""),
+        minArea: int.tryParse(json["minArea"] ?? ""),
+        maxPrice: int.tryParse(json["maxPrice" ?? ""]),
+        minPrice: int.tryParse(json["minPrice"] ?? ""),
+        age: int.tryParse(json["age"] ?? ""),
+        category: int.tryParse(json["category"] ?? ""),
+        district: int.tryParse(json["district"] ?? ""),
+        city: int.tryParse(json["city"] ?? ""),
+        bedCount: int.tryParse(json["beds"] ?? ""),
+        id: json["id"],
+        // amenities: json["amenities"],
+      );
   Function eq = const ListEquality().equals;
 
   @override

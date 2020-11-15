@@ -3,8 +3,11 @@ import 'dart:ui';
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../main.dart';
 
 class UserScreen extends StatefulWidget {
   UserScreen({Key key, this.title, this.userStore}) : super(key: key);
@@ -68,22 +71,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
                 height: MediaQuery.of(context).size.height / 4,
                 width: MediaQuery.of(context).size.width,
                 alignment: Alignment.topRight,
-                child: ListView(
-                  children: <Widget>[
-                    ListTile(
-                      trailing: Icon(Icons.delete),
-                      title: Text('Sun'),
-                    ),
-                    ListTile(
-                      trailing: Icon(Icons.delete),
-                      title: Text('Moon'),
-                    ),
-                    ListTile(
-                      trailing: Icon(Icons.delete),
-                      title: Text('Star'),
-                    ),
-                  ],
-                )),
+                child: _buildListView()),
             Container(
               height: MediaQuery.of(context).size.height / 2,
               width: MediaQuery.of(context).size.width,
@@ -105,6 +93,30 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildListView() {
+    return FutureBuilder(
+      future: appComponent.getRepository().getSearchesList(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+              child: Text(
+            AppLocalizations.of(context).translate('home_tv_no_post_found'),
+          ));
+        } else {
+          return ListView.builder(
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, position) {
+              return ListTile(
+                trailing: Icon(Icons.delete),
+                title: Text(snapshot.data[position].category.toString()),
+              );
+            },
+          );
+        }
+      },
     );
   }
 }

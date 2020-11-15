@@ -97,7 +97,6 @@ class _MyLikesScreenState extends State<MyLikesScreen>
   }
 
   Widget _buildListItem(AsyncSnapshot snapshot, int position) {
-    print(snapshot.data[position].toMap());
     return GestureDetector(
       onTap: () {
         Future.delayed(Duration(milliseconds: 0), () {

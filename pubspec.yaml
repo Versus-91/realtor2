@@ -42,7 +42,7 @@ dependencies:
 
   # A composable, Future-based library for making HTTP requests.
   http: ^0.12.2
-
+  uuid: 2.2.2
   # Flogs, a powerful logging framework
   f_logs: ^1.2.2
 
