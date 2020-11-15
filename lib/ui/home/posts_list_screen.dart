@@ -97,6 +97,21 @@ class _PostsListScreenState extends State<PostsListScreen> {
                   ),
                 ),
               ),
+    
+ Row(
+   children: [
+     
+       Padding(padding: EdgeInsets.only(right: 15,bottom:10),
+                child: FloatingActionButton.extended(
+      onPressed: () {},
+      
+      label: Text("ذخیره"),
+),
+       ),
+   
+   ],
+ ),
+ 
               // Observer(builder: (context) {
               //   if (_filterForm.loading) {
               //     _filterRequest = _filterForm.applyFilters();
