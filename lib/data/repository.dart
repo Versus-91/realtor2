@@ -154,7 +154,7 @@ class Repository {
     return await _searchDataSource.getSearchesFromDb();
   }
 
-  Future removeSearch(String id) async {
+  Future removeSearch(int id) async {
     await _searchDataSource.delete(id);
   }
 

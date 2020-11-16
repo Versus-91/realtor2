@@ -2,7 +2,7 @@ import 'package:collection/equality.dart';
 import 'package:uuid/uuid.dart';
 
 class PostRequest {
-  String id;
+  int id;
   int minPrice;
   int maxPrice;
   int minArea;
@@ -100,7 +100,6 @@ class PostRequest {
         // amenities: json["amenities"],
       );
   factory PostRequest.fromMapLocalStore(Map<String, dynamic> json) {
-    var uuid = Uuid();
     return PostRequest(
       maxArea: int.tryParse(json["maxArea"] ?? ""),
       minArea: int.tryParse(json["minArea"] ?? ""),
@@ -114,7 +113,6 @@ class PostRequest {
       categoryName: json["categoryName"],
       districtName: json["cityName"],
       cityName: json["districtName"],
-      id: json["id"],
       // amenities: json["amenities"],
     );
   }

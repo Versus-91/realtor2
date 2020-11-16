@@ -116,6 +116,9 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
                       await appComponent
                           .getRepository()
                           .removeSearch(snapshot.data[position].id);
+                      setState(() {
+                        appComponent.getRepository().getSearchesList();
+                      });
                     },
                   ),
                   title: createLabel(snapshot.data[position]));
@@ -134,7 +137,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
     } else if (data.cityName != null) {
       text += "- " + data.cityName;
     }
-    text += data.id ?? 'id';
+    text += data.id.toString() ?? 'id';
     return Text(text);
   }
 }

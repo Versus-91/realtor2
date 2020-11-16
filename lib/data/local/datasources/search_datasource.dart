@@ -73,6 +73,7 @@ class SearchDataSource {
       try {
         requests = recordSnapshots.map((snapshot) {
           final post = PostRequest.fromMapLocalStore(snapshot.value);
+          post.id = snapshot.key;
           return post;
         }).toList();
       } catch (e) {
@@ -93,7 +94,7 @@ class SearchDataSource {
     );
   }
 
-  Future<int> delete(String id) async {
+  Future<int> delete(int id) async {
     final finder = Finder(filter: Filter.byKey(id));
     return await _searchesStore.delete(
       await _db,

@@ -102,7 +102,6 @@ abstract class _FilterFormStore with Store {
   @action
   PostRequest applyFilters() {
     var request = PostRequest(
-        id: Uuid().v1(),
         maxPrice: maxPrice?.floor(),
         minPrice: minPrice?.floor(),
         minArea: 0,
