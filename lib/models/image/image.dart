@@ -6,6 +6,8 @@ class Image {
   Map<String, dynamic> toMap() => {"path": path};
 
   static List<Image> listFromJson(List<dynamic> json) {
-    return json.map((item) => Image.fromJson(item)).toList();
+    return json != null
+        ? json.map((item) => Image.fromJson(item)).toList()
+        : null;
   }
 }

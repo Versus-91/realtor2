@@ -72,27 +72,31 @@ class Post {
       amenities: Amenity.listFromJson(json["amenities"]),
       images: Image.listFromJson(json["images"]));
 
-  Map<String, dynamic> toMap() => {
-        "title": 'title',
-        "age": age,
-        "categoryId": categoryId,
-        "description": description,
-        "isFeatured": isFeatured,
-        "area": area,
-        "bedroom": bedroom,
-        "districtId": districtId,
-        "typeId": typeId,
-        "latitude": latitude,
-        "longitude": longitude,
-        "creationTime": creationTime,
-        "id": id,
-        "deopsit": deopsit,
-        "rent": rent,
-        "price": price,
-        "district": district.toMap(),
-        "category": category.toMap(),
-        "images": images.map((e) => toMapImage(e)).toList(),
-        "amenities": amenities.map((e) => e.id).toList()
-      };
+  Map<String, dynamic> toMap() {
+    return {
+      "title": 'title',
+      "age": age,
+      "categoryId": categoryId,
+      "description": description,
+      "isFeatured": isFeatured,
+      "area": area,
+      "bedroom": bedroom,
+      "districtId": districtId,
+      "typeId": typeId,
+      "latitude": latitude,
+      "longitude": longitude,
+      "creationTime": creationTime,
+      "id": id,
+      "deopsit": deopsit,
+      "rent": rent,
+      "price": price,
+      "district": district.toMap(),
+      "category": category.toMap(),
+      "images": images.map((e) => toMapImage(e)).toList(),
+      "amenities":
+          amenities != null ? amenities.map((e) => e.id).toList() : null
+    };
+  }
+
   Map<String, dynamic> toMapImage(Image img) => {"path": img.path};
 }

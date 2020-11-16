@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -22,7 +23,8 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
   bool loggedIn = false;
   UserStore _userStore;
   AnimationController _rippleAnimationController;
@@ -47,14 +49,16 @@ class _ProfilePageState extends State<ProfilePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _userStore = Provider.of<UserStore>(context);
-    if (!_userStore.loading) {
-      _userStore.getUser();
-    }
+    getUserLogin();
   }
 
   @override
   void initState() {
     super.initState();
+    _rippleAnimationController = AnimationController(
+      vsync: this,
+      duration: kRippleAnimationDuration,
+    );
   }
 
   @override
@@ -109,7 +113,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                         }
                                       },
                                       child: Row(
-                                      
                                         children: [
                                           Text("خروج",
                                               style: whiteNameTextStyle),
