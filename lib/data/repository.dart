@@ -154,6 +154,10 @@ class Repository {
     return await _searchDataSource.getSearchesFromDb();
   }
 
+  Future removeSearch(String id) async {
+    await _searchDataSource.delete(id);
+  }
+
   Future findFavoriteById(int id) async {
     return await _favoriteDataSource.findById(id);
   }

@@ -6,6 +6,7 @@ import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/ui/customlist/model/pop_list.dart';
 import 'package:mobx/mobx.dart';
+import 'package:uuid/uuid.dart';
 part 'filter_form.g.dart';
 
 class FilterFormStore = _FilterFormStore with _$FilterFormStore;
@@ -101,14 +102,18 @@ abstract class _FilterFormStore with Store {
   @action
   PostRequest applyFilters() {
     var request = PostRequest(
+        id: Uuid().v1(),
         maxPrice: maxPrice?.floor(),
         minPrice: minPrice?.floor(),
         minArea: 0,
         maxArea: area?.floor(),
         district: district.id,
+        districtName: district.name,
         city: city.id,
+        cityName: city.name,
         bedCount: bedCount,
         category: category.id,
+        categoryName: category.name,
         types: selectedPropertyTypes.map((element) {
           if (element.isSelected == true) {
             return element.id;

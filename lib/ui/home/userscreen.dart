@@ -110,13 +110,31 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
             itemCount: snapshot.data.length,
             itemBuilder: (context, position) {
               return ListTile(
-                trailing: Icon(Icons.delete),
-                title: Text(snapshot.data[position].category.toString()),
-              );
+                  trailing: InkWell(
+                    child: Icon(Icons.delete),
+                    onTap: () async {
+                      await appComponent
+                          .getRepository()
+                          .removeSearch(snapshot.data[position].id);
+                    },
+                  ),
+                  title: createLabel(snapshot.data[position]));
             },
           );
         }
       },
     );
+  }
+
+  Text createLabel(dynamic data) {
+    String text = data.categoryName;
+
+    if (data.districtName != null) {
+      text += "- " + data.districtName;
+    } else if (data.cityName != null) {
+      text += "- " + data.cityName;
+    }
+    text += data.id ?? 'id';
+    return Text(text);
   }
 }

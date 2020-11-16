@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/location/locations.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';

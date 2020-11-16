@@ -21,8 +21,9 @@ class SearchDataSource {
 
   // DB functions:--------------------------------------------------------------
   Future<int> insert(PostRequest request) async {
+    await deleteAll();
     try {
-      return await _searchesStore.add(await _db, request.toJson());
+      return await _searchesStore.add(await _db, request.toJsonLocalStore());
     } catch (e) {
       throw e;
     }
@@ -31,7 +32,7 @@ class SearchDataSource {
   Future<PostRequest> findById(Uuid id) async {
     var db = await _searchesStore.find(await _db);
     var searches = db.map((e) {
-      final post = PostRequest.fromMap(e.value);
+      final post = PostRequest.fromMapLocalStore(e.value);
       return post;
     }).toList();
 
@@ -71,7 +72,7 @@ class SearchDataSource {
     if (recordSnapshots.length > 0) {
       try {
         requests = recordSnapshots.map((snapshot) {
-          final post = PostRequest.fromMap(snapshot.value);
+          final post = PostRequest.fromMapLocalStore(snapshot.value);
           return post;
         }).toList();
       } catch (e) {
@@ -92,8 +93,8 @@ class SearchDataSource {
     );
   }
 
-  Future<int> delete(PostRequest request) async {
-    final finder = Finder(filter: Filter.byKey(request.id));
+  Future<int> delete(String id) async {
+    final finder = Finder(filter: Filter.byKey(id));
     return await _searchesStore.delete(
       await _db,
       finder: finder,
