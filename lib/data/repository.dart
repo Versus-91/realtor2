@@ -45,6 +45,7 @@ class Repository {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
+
     if (request != null) {
       await _searchDataSource.insert(request);
     }

@@ -51,9 +51,13 @@ class PostRequest {
       result.addAll({"maxArea": maxArea.toString()});
       result.addAll({"minArea": minArea.toString()});
     }
-    types.removeWhere((element) => element == null);
-    result.addAll({"type": types.map((e) => e.toString()).toList()});
-    result.addAll({"amenities": amenities.map((e) => e.toString()).toList()});
+    if (types != null) {
+      types?.removeWhere((element) => element == null);
+      result.addAll({"type": types.map((e) => e.toString()).toList()});
+    }
+    if (amenities != null) {
+      result.addAll({"amenities": amenities.map((e) => e.toString()).toList()});
+    }
     return result;
   }
 
@@ -80,9 +84,14 @@ class PostRequest {
       result.addAll({"maxArea": maxArea.toString()});
       result.addAll({"minArea": minArea.toString()});
     }
-    types.removeWhere((element) => element == null);
-    result.addAll({"type": types.map((e) => e.toString()).toList()});
-    result.addAll({"amenities": amenities.map((e) => e.toString()).toList()});
+    if (types != null) {
+      types.removeWhere((element) => element == null);
+      result.addAll({"type": types.map((e) => e.toString()).toList()});
+    }
+
+    if (amenities != null) {
+      result.addAll({"amenities": amenities.map((e) => e.toString()).toList()});
+    }
     return result;
   }
 

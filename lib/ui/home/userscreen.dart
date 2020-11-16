@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/post/post_request.dart';
+import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +12,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../main.dart';
 
 class UserScreen extends StatefulWidget {
-  UserScreen({Key key, this.title, this.userStore}) : super(key: key);
+  UserScreen(
+      {Key key, this.title, this.userStore, this.postStore, this.tabController})
+      : super(key: key);
   final String title;
   final UserStore userStore;
+  final PostStore postStore;
+  final TabController tabController;
 
   @override
   _UserScreenState createState() => _UserScreenState();
@@ -110,18 +116,40 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
             itemCount: snapshot.data.length,
             itemBuilder: (context, position) {
               return ListTile(
-                  trailing: InkWell(
-                    child: Icon(Icons.delete),
-                    onTap: () async {
-                      await appComponent
-                          .getRepository()
-                          .removeSearch(snapshot.data[position].id);
-                      setState(() {
-                        appComponent.getRepository().getSearchesList();
-                      });
-                    },
-                  ),
-                  title: createLabel(snapshot.data[position]));
+                trailing: InkWell(
+                  child: Icon(Icons.delete),
+                  onTap: () async {
+                    await appComponent
+                        .getRepository()
+                        .removeSearch(snapshot.data[position].id);
+                    setState(() {
+                      appComponent.getRepository().getSearchesList();
+                    });
+                  },
+                ),
+                title: InkWell(child: createLabel(snapshot.data[position])),
+                onTap: () async {
+                  var request = PostRequest(
+                      maxPrice: snapshot.data[position].maxPrice?.floor(),
+                      minPrice: snapshot.data[position].minPrice?.floor(),
+                      minArea: 0,
+                      maxArea: snapshot.data[position].maxArea?.floor(),
+                      district: snapshot.data[position].district,
+                      districtName: snapshot.data[position].districtName,
+                      city: snapshot.data[position].city,
+                      cityName: snapshot.data[position].cityName,
+                      bedCount: snapshot.data[position].bedCount,
+                      category: snapshot.data[position].category,
+                      categoryName: snapshot.data[position].categoryName,
+                      types: snapshot.data[position]?.types,
+                      amenities: snapshot.data[position]?.amenities);
+                  await widget.postStore
+                      .getPosts(request: request)
+                      .then((value) {
+                    widget.tabController.animateTo(1);
+                  });
+                },
+              );
             },
           );
         }

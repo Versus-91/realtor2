@@ -169,9 +169,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         GFTabBarView(controller: _tabbarController, children: <Widget>[
           Container(
             child: UserScreen(
-              userStore: _userStore,
-            
-            ),
+                userStore: _userStore,
+                postStore: _postStore,
+                tabController: _tabbarController),
           ),
           Container(child: PostsListScreen()),
           Container(
