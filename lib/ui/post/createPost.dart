@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/routes.dart';
@@ -9,8 +7,8 @@ import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
 import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
-import 'package:boilerplate/ui/customlist/list_theme.dart';
-import 'package:boilerplate/ui/customlist/model/pop_list.dart';
+import 'package:boilerplate/ui/search/list_theme.dart';
+import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/ui/post/user_map_screen.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';

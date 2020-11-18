@@ -1,31 +1,56 @@
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/widgets/progress_indicator_widget.dart';
-import 'package:flushbar/flushbar_helper.dart';
+import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/ui/home/tabs/home.dart';
+import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
+import 'package:boilerplate/ui/profile/favorites_screen.dart';
+import 'package:boilerplate/ui/profile/profile.dart';
+import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../data/sharedpref/constants/preferences.dart';
+import '../../utils/locale/app_localization.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
+  UserStore _userStore;
   PostStore _postStore;
-  ThemeStore _themeStore;
   LanguageStore _languageStore;
+  ThemeStore _themeStore;
+  AnimationController _rippleAnimationController;
+  TabController _tabbarController;
+  bool loggedIn = false;
+  var initialIndex = 0;
+  Future<Null> getSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      loggedIn = prefs.getBool(Preferences.is_logged_in) ?? false;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    _rippleAnimationController = AnimationController(
+      vsync: this,
+      duration: kRippleAnimationDuration,
+    );
+    _tabbarController = TabController(length: 4, vsync: this);
+    getSharedPrefs();
   }
 
   @override
@@ -35,74 +60,104 @@ class _HomeScreenState extends State<HomeScreen> {
     // initializing stores
     _languageStore = Provider.of<LanguageStore>(context);
     _themeStore = Provider.of<ThemeStore>(context);
+    _userStore = Provider.of<UserStore>(context);
     _postStore = Provider.of<PostStore>(context);
-
-    // check to see if already called api
-    if (!_postStore.loading) {
-      _postStore.getPosts();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: EmptyAppBar(),
       body: _buildBody(),
-    );
-  }
-
-  // app bar methods:-----------------------------------------------------------
-  Widget _buildAppBar() {
-    return AppBar(
-      title: Text(AppLocalizations.of(context).translate('home_tv_posts')),
-      actions: _buildActions(context),
-    );
-  }
-
-  List<Widget> _buildActions(BuildContext context) {
-    return <Widget>[
-      _buildLanguageButton(),
-      _buildThemeButton(),
-      _buildLogoutButton(),
-    ];
-  }
-
-  Widget _buildThemeButton() {
-    return Observer(
-      builder: (context) {
-        return IconButton(
-          onPressed: () {
-            _themeStore.changeBrightnessToDark(!_themeStore.darkMode);
-          },
-          icon: Icon(
-            _themeStore.darkMode ? Icons.brightness_5 : Icons.brightness_3,
+      // drawer: GFDrawer(
+      //   child: ListView(
+      //     padding: EdgeInsets.zero,
+      //     children: <Widget>[
+      //       GFDrawerHeader(
+      //         decoration: BoxDecoration(
+      //             gradient: LinearGradient(
+      //                 begin: Alignment.topRight,
+      //                 end: Alignment.bottomLeft,
+      //                 colors: [Colors.red[400], Colors.red[100]])),
+      //         currentAccountPicture: GFAvatar(
+      //           radius: 80.0,
+      //           backgroundImage: NetworkImage(
+      //               "https://cdn.pixabay.com/photo/2017/12/03/18/04/christmas-balls-2995437_960_720.jpg"),
+      //         ),
+      //         child: Column(
+      //           mainAxisAlignment: MainAxisAlignment.start,
+      //           crossAxisAlignment: CrossAxisAlignment.start,
+      //           children: <Widget>[
+      //             // Text('${}'),
+      //             // Text('${user.email}'),
+      //           ],
+      //         ),
+      //       ),
+      //       ListTile(
+      //         leading: Icon(Icons.search),
+      //         title: Text('جست و جو'),
+      //         onTap: () {
+      //           Navigator.of(context).pushNamed(Routes.search);
+      //         },
+      //       ),
+      //       // ListTile(
+      //       //   leading: Icon(Icons.language),
+      //       //   title: Text('تغییر زبان'),
+      //       //   onTap: () {
+      //       //     _buildLanguageDialog();
+      //       //   },
+      //       // ),
+      //       if (loggedIn == true) ...[
+      //         ListTile(
+      //           leading: Icon(Icons.add),
+      //           title: Text('افزودن آگهی'),
+      //           onTap: () {
+      //             Navigator.of(context).pushNamed(Routes.createpost);
+      //           },
+      //         )
+      //       ],
+      //       ListTile(
+      //         leading: Icon(Icons.exit_to_app),
+      //         title: loggedIn ? Text('خروج') : Text('ورود'),
+      //         onTap: () {
+      //           if (loggedIn) {
+      //             SharedPreferences.getInstance().then((preference) async {
+      //               preference.setBool(Preferences.is_logged_in, false);
+      //               preference.remove(Preferences.auth_token);
+      //               _userStore.setLoginState(false);
+      //               await _rippleAnimationController.forward();
+      //               Navigator.of(context).pushReplacementNamed(Routes.login);
+      //             });
+      //           } else {
+      //             Navigator.of(context).pushReplacementNamed(Routes.login);
+      //           }
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      bottomNavigationBar: GFTabBar(
+        labelColor: Colors.black,
+        tabBarColor: Colors.white,
+        unselectedLabelColor: Colors.grey,
+        tabBarHeight: 50,
+        length: 4,
+        indicatorColor: Colors.transparent,
+        controller: _tabbarController,
+        tabs: [
+          Tab(
+            icon: Icon(FontAwesomeIcons.home),
           ),
-        );
-      },
-    );
-  }
-
-  Widget _buildLogoutButton() {
-    return IconButton(
-      onPressed: () {
-        SharedPreferences.getInstance().then((preference) {
-          preference.setBool(Preferences.is_logged_in, false);
-          Navigator.of(context).pushReplacementNamed(Routes.login);
-        });
-      },
-      icon: Icon(
-        Icons.power_settings_new,
-      ),
-    );
-  }
-
-  Widget _buildLanguageButton() {
-    return IconButton(
-      onPressed: () {
-        _buildLanguageDialog();
-      },
-      icon: Icon(
-        Icons.language,
+          Tab(
+            icon: Icon(FontAwesomeIcons.list),
+          ),
+          Tab(
+            icon: Icon(FontAwesomeIcons.heart),
+          ),
+          Tab(
+            icon: Icon(FontAwesomeIcons.userCircle),
+          ),
+        ],
       ),
     );
   }
@@ -111,85 +166,24 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBody() {
     return Stack(
       children: <Widget>[
-        _handleErrorMessage(),
-        _buildMainContent(),
+        GFTabBarView(controller: _tabbarController, children: <Widget>[
+          Container(
+            child: UserScreen(
+                userStore: _userStore,
+                postStore: _postStore,
+                tabController: _tabbarController),
+          ),
+          Container(child: SearchTabScreen()),
+          Container(
+            child: FavoritesScreen(),
+          ),
+          Container(
+            child: ProfilePage(),
+          ),
+        ]),
+        // _navbarsection(),
       ],
     );
-  }
-
-  Widget _buildMainContent() {
-    return Observer(
-      builder: (context) {
-        return _postStore.loading
-            ? CustomProgressIndicatorWidget()
-            : Material(child: _buildListView());
-      },
-    );
-  }
-
-  Widget _buildListView() {
-    return _postStore.postList != null
-        ? ListView.separated(
-            itemCount: _postStore.postList.posts.length,
-            separatorBuilder: (context, position) {
-              return Divider();
-            },
-            itemBuilder: (context, position) {
-              return _buildListItem(position);
-            },
-          )
-        : Center(
-            child: Text(
-              AppLocalizations.of(context).translate('home_tv_no_post_found'),
-            ),
-          );
-  }
-
-  Widget _buildListItem(int position) {
-    return ListTile(
-      dense: true,
-      leading: Icon(Icons.cloud_circle),
-      title: Text(
-        '${_postStore.postList.posts[position].title}',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        softWrap: false,
-        style: Theme.of(context).textTheme.title,
-      ),
-      subtitle: Text(
-        '${_postStore.postList.posts[position].description}',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        softWrap: false,
-      ),
-    );
-  }
-
-  Widget _handleErrorMessage() {
-    return Observer(
-      builder: (context) {
-        if (_postStore.errorStore.errorMessage.isNotEmpty) {
-          return _showErrorMessage(_postStore.errorStore.errorMessage);
-        }
-
-        return SizedBox.shrink();
-      },
-    );
-  }
-
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
   }
 
   _buildLanguageDialog() {
@@ -247,5 +241,37 @@ class _HomeScreenState extends State<HomeScreen> {
     ).then<void>((T value) {
       // The value passed to Navigator.pop() or null.
     });
+  }
+
+  // General Methods:-----------------------------------------------------------
+
+  @override
+  void dispose() {
+    _tabbarController.dispose();
+    super.dispose();
+  }
+}
+
+class ContestTabHeader extends SliverPersistentHeaderDelegate {
+  ContestTabHeader(
+    this.searchUI,
+  );
+  final Widget searchUI;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return searchUI;
+  }
+
+  @override
+  double get maxExtent => 52.0;
+
+  @override
+  double get minExtent => 52.0;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }

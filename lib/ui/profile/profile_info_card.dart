@@ -1,5 +1,5 @@
-import 'package:boilerplate/ui/profile/colors.dart';
-import 'package:boilerplate/ui/profile/two_line_item.dart';
+import 'package:boilerplate/ui/profile/constants/colors.dart';
+import 'package:boilerplate/ui/profile/constants/two_line_item.dart';
 import 'package:flutter/material.dart';
 
 class ProfileInfoCard extends StatelessWidget {

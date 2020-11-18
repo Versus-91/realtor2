@@ -278,26 +278,26 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                   ),
                 )),
               ),
-              DataTable(
-                columns: const <DataColumn>[
-                  DataColumn(
-                    label: Text(
-                      'امکانات',
-                      style: TextStyle(fontStyle: FontStyle.normal),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text('وضعیت'),
-                  ),
-                ],
-                rows: <DataRow>[
-                  DataRow(
-                      cells:
-                          List.generate(widget.post.amenities.length, (index) {
-                    return DataCell(Text('19'));
-                  })),
-                ],
-              ),
+              // DataTable(
+              //   columns: const <DataColumn>[
+              //     DataColumn(
+              //       label: Text(
+              //         'امکانات',
+              //         style: TextStyle(fontStyle: FontStyle.normal),
+              //       ),
+              //     ),
+              //     DataColumn(
+              //       label: Text('وضعیت'),
+              //     ),
+              //   ],
+              //   // rows: <DataRow>[
+              //   //   DataRow(
+              //   //       cells:
+              //   //           List.generate(widget.post.amenities.length, (index) {
+              //   //     return DataCell(Text('19'));
+              //   //   })),
+              //   // ],
+              // ),
             ],
           ],
         ));

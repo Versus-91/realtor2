@@ -1,4 +1,4 @@
-import 'package:boilerplate/ui/profile/text_style.dart';
+import 'package:boilerplate/ui/profile/constants/text_style.dart';
 import 'package:flutter/material.dart';
 
 class ProfileInfoBigCard extends StatelessWidget {

@@ -1,8 +1,9 @@
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
-import 'package:boilerplate/ui/login/blaziercontainer.dart';
-import 'package:boilerplate/ui/login/login.dart';
+import 'package:boilerplate/ui/authorization/login/blaziercontainer.dart';
+import 'package:boilerplate/ui/authorization/login/login.dart';
+
 import 'package:boilerplate/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,9 +11,10 @@ import 'package:provider/provider.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+
+import '../../../routes.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key key, this.title}) : super(key: key);

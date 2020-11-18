@@ -1,22 +1,27 @@
 import 'dart:ui';
 
 import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/main.dart';
 import 'package:boilerplate/routes.dart';
-import 'package:boilerplate/ui/post/postscreen.dart';
+import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class MyLikesScreen extends StatefulWidget {
+class MyPostsScreen extends StatefulWidget {
   @override
-  _MyLikesScreenState createState() => _MyLikesScreenState();
+  _MyPostsScreenState createState() => _MyPostsScreenState();
 }
 
-class _MyLikesScreenState extends State<MyLikesScreen>
+class _MyPostsScreenState extends State<MyPostsScreen>
     with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
+  PostStore _postStore;
 
   var initialIndex = 0;
   @override
@@ -27,17 +32,18 @@ class _MyLikesScreenState extends State<MyLikesScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    _postStore = Provider.of(context);
+    // check to see if already called api
+    if (!_postStore.loading && _postStore.userPostList == null) {
+      _postStore.getUserPosts();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-        title: Text(
-          'آگهی های مورد علاقه',
-          style: TextStyle(fontSize: 20, color: Colors.black),
-        ),
         backgroundColor: Colors.red,
         elevation: 0.0,
       ),
@@ -54,49 +60,41 @@ class _MyLikesScreenState extends State<MyLikesScreen>
         Padding(
           padding:
               const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 10),
-          child: Material(
-            child: _buildListView(),
-          ),
+          child: _buildMainContent(),
         ),
+        _handleErrorMessage(),
         // _navbarsection(),
       ],
     );
   }
 
-  Widget _buildListView() {
-    return FutureBuilder(
-      future: appComponent.getRepository().getFavoritesList(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-              child: Text(
-            AppLocalizations.of(context).translate('home_tv_no_post_found'),
-          ));
-        } else {
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (context, position) {
-              return _buildListItem(snapshot, position);
-            },
-          );
-        }
+  Widget _buildMainContent() {
+    return Observer(
+      builder: (context) {
+        return _postStore.loading
+            ? CustomProgressIndicatorWidget()
+            : Material(child: _buildListView());
       },
     );
-    // return (_postStore.postList != null && _postStore.postList.posts.length > 0)
-    //     ? ListView.builder(
-    //         itemCount: _postStore.postList.posts.length,
-    //         itemBuilder: (context, position) {
-    //           return _buildListItem(position);
-    //         },
-    //       )
-    //     : Center(
-    //         child: Text(
-    //           AppLocalizations.of(context).translate('home_tv_no_post_found'),
-    //         ),
-    //       );
   }
 
-  Widget _buildListItem(AsyncSnapshot snapshot, int position) {
+  Widget _buildListView() {
+    return (_postStore.userPostList != null &&
+            _postStore.userPostList.posts.length > 0)
+        ? ListView.builder(
+            itemCount: _postStore.userPostList.posts.length,
+            itemBuilder: (context, position) {
+              return _buildListItem(position);
+            },
+          )
+        : Center(
+            child: Text(
+              AppLocalizations.of(context).translate('home_tv_no_post_found'),
+            ),
+          );
+  }
+
+  Widget _buildListItem(int position) {
     return GestureDetector(
       onTap: () {
         Future.delayed(Duration(milliseconds: 0), () {
@@ -110,7 +108,7 @@ class _MyLikesScreenState extends State<MyLikesScreen>
             context,
             MaterialPageRoute(
                 builder: (context) => PostScreen(
-                      post: snapshot.data[position],
+                      post: _postStore.userPostList.posts[position],
                     )),
           );
         },
@@ -128,7 +126,7 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                       dense: false,
                       contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       title: Text(
-                        '${snapshot.data[position].category.name}',
+                        '${_postStore.userPostList.posts[position].category.name}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         softWrap: false,
@@ -139,48 +137,29 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                         children: [
                           Row(
                             children: [
-                              Icon(
-                                Icons.place,
-                                color: Colors.greenAccent,
-                              ),
+                              Icon(Icons.place),
                               Text(
-                                '${snapshot.data[position].district.city.name},${snapshot.data[position].district.name}',
+                                '${_postStore.userPostList.posts[position].district.city.name},${_postStore.userPostList.posts[position].district.name}',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
                               ),
                             ],
                           ),
-                          snapshot.data[position].category.name.contains('رهن')
-                              ? Row(
-                                  children: [
-                                    Icon(
-                                      Icons.monetization_on,
-                                      color: Colors.greenAccent,
-                                    ),
-                                    Text(
-                                      'رهن: ${snapshot.data[position].deopsit} , اجاره: ${snapshot.data[position].rent}',
-                                      maxLines: 1,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700),
-                                      overflow: TextOverflow.ellipsis,
-                                      softWrap: false,
-                                    ),
-                                  ],
+                          _postStore.userPostList.posts[position].category.name
+                                  .contains('رهن')
+                              ? Text(
+                                  'رهن: ${_postStore.userPostList.posts[position].deopsit} , اجاره: ${_postStore.userPostList.posts[position].rent}',
+                                  maxLines: 1,
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
                                 )
-                              : Row(
-                                  children: [
-                                    Icon(
-                                      Icons.monetization_on,
-                                      color: Colors.greenAccent,
-                                    ),
-                                    Text(
-                                      'قیمت: ${snapshot.data[position].price}',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      softWrap: false,
-                                    ),
-                                  ],
+                              : Text(
+                                  'قیمت: ${_postStore.userPostList.posts[position].price}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
                                 ),
                         ],
                       ),
@@ -190,14 +169,18 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                     padding: EdgeInsets.only(top: 8.0),
                     width: 130,
                     height: 100,
-                    child: snapshot.data[position].images.length > 0
-                        ? Image.network(
-                            Endpoints.baseUrl +
-                                "/" +
-                                snapshot.data[position].images[0]?.path,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.asset("assets/images/a.png", fit: BoxFit.cover),
+                    child:
+                        _postStore.userPostList.posts[position].images.length >
+                                0
+                            ? Image.network(
+                                Endpoints.baseUrl +
+                                    "/" +
+                                    _postStore.userPostList.posts[position]
+                                        .images[0]?.path,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset("assets/images/placeholder.png",
+                                fit: BoxFit.cover),
                   ),
                 ],
               ),
@@ -213,24 +196,7 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                     children: [
                       Flexible(
                         child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () async {
-                                await appComponent
-                                    .getRepository()
-                                    .removeFavorite(snapshot.data[position]);
-                                setState(() {
-                                  appComponent
-                                      .getRepository()
-                                      .getFavoritesList();
-                                });
-                              },
-                              child: Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                              ),
-                            )
-                          ],
+                          children: [Icon(FontAwesomeIcons.heart)],
                         ),
                       ),
                       VerticalDivider(
@@ -242,7 +208,7 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                         children: [
                           Text("متراژ"),
                           Text(
-                            '${snapshot.data[position].area}',
+                            '${_postStore.userPostList.posts[position].area}',
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -258,7 +224,7 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                         children: [
                           Text("اتاق خواب"),
                           Text(
-                            '${snapshot.data[position].bedroom}',
+                            '${_postStore.userPostList.posts[position].bedroom}',
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -274,7 +240,7 @@ class _MyLikesScreenState extends State<MyLikesScreen>
                         children: [
                           Text("شناسه آگهی"),
                           Text(
-                            '${snapshot.data[position].id}',
+                            '${_postStore.userPostList.posts[position].id}',
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -289,6 +255,18 @@ class _MyLikesScreenState extends State<MyLikesScreen>
           ),
         ),
       ),
+    );
+  }
+
+  Widget _handleErrorMessage() {
+    return Observer(
+      builder: (context) {
+        if (_postStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_postStore.errorStore.errorMessage);
+        }
+
+        return SizedBox.shrink();
+      },
     );
   }
 

@@ -1,4 +1,4 @@
-import 'package:boilerplate/ui/profile/colors.dart';
+import 'package:boilerplate/ui/profile/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class OpaqueImage extends StatelessWidget {

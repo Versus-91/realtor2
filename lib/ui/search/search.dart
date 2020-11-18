@@ -10,7 +10,7 @@ import 'package:boilerplate/stores/district/district_store.dart';
 import 'package:boilerplate/stores/form/filter_form.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
 
-import 'package:boilerplate/ui/customlist/silder.dart';
+import 'package:boilerplate/ui/search/silder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -20,15 +20,15 @@ import 'list_theme.dart';
 import 'model/pop_list.dart';
 import 'package:http/http.dart' as http;
 
-class FiltersScreen extends StatefulWidget {
+class SearchScreen extends StatefulWidget {
   final FilterFormStore filterForm;
   final PostStore postStore;
-  FiltersScreen({@required this.filterForm, @required this.postStore});
+  SearchScreen({@required this.filterForm, @required this.postStore});
   @override
-  _FiltersScreenState createState() => _FiltersScreenState();
+  _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _FiltersScreenState extends State<FiltersScreen> {
+class _SearchScreenState extends State<SearchScreen> {
   PostRequest _filterRequest;
   List<dynamic> _locations;
   List<int> selectedTypes = [];

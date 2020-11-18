@@ -3,16 +3,16 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
-import 'package:boilerplate/ui/profile/My_Likes.dart';
-import 'package:boilerplate/ui/profile/account_info.dart';
-import 'package:boilerplate/ui/profile/colors.dart';
-import 'package:boilerplate/ui/profile/my_posts_screen.dart';
-import 'package:boilerplate/ui/profile/opaque_image.dart';
+import 'package:boilerplate/ui/profile/favorites_screen.dart';
+import 'package:boilerplate/ui/profile/pages/account_info.dart';
+import 'package:boilerplate/ui/profile/constants/colors.dart';
+import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
+import 'package:boilerplate/ui/profile/constants/opaque_image.dart';
 import 'package:boilerplate/ui/profile/profile_info_big_card.dart';
 import 'package:boilerplate/ui/profile/profile_info_card.dart';
-import 'package:boilerplate/ui/profile/radial_progress.dart';
-import 'package:boilerplate/ui/profile/rounded_image.dart';
-import 'package:boilerplate/ui/profile/text_style.dart';
+import 'package:boilerplate/ui/profile/constants/radial_progress.dart';
+import 'package:boilerplate/ui/profile/constants/rounded_image.dart';
+import 'package:boilerplate/ui/profile/constants/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -260,7 +260,7 @@ class _ProfilePageState extends State<ProfilePage>
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => MyLikesScreen(),
+                                    builder: (context) => FavoritesScreen(),
                                   ),
                                 );
                               },

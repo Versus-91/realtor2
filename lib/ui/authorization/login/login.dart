@@ -2,7 +2,7 @@ import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
-import 'package:boilerplate/ui/login/blaziercontainer.dart';
+import 'package:boilerplate/ui/authorization/login/blaziercontainer.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -10,9 +10,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../routes.dart';
+import '../../../routes.dart';
 import 'custom_button.dart';
-import 'custom_input_field.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);

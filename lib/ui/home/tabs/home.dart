@@ -9,7 +9,7 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../main.dart';
+import '../../../main.dart';
 
 class UserScreen extends StatefulWidget {
   UserScreen(
@@ -67,23 +67,25 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
       body: Padding(
         padding: const EdgeInsets.only(top: 20, right: 10, left: 10, bottom: 0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
               "جست و جو های اخیر",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
             ),
             Container(
-                height: MediaQuery.of(context).size.height / 4,
-                width: MediaQuery.of(context).size.width,
-                alignment: Alignment.topRight,
-                child: _buildListView()),
+              height: MediaQuery.of(context).size.height / 4,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.topRight,
+              child: _buildListView(),
+            ),
             Container(
-              height: MediaQuery.of(context).size.height / 2,
+              height: MediaQuery.of(context).size.height / 3,
               width: MediaQuery.of(context).size.width,
               decoration: new BoxDecoration(
                   image: new DecorationImage(
-                image: new AssetImage("assets/images/bg10.png"),
+                image: new AssetImage("assets/images/bg11.png"),
                 fit: BoxFit.fill,
               )),
               alignment: Alignment.bottomRight,
@@ -165,7 +167,6 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
     } else if (data.cityName != null) {
       text += "- " + data.cityName;
     }
-    text += data.id.toString() ?? 'id';
     return Text(text);
   }
 }

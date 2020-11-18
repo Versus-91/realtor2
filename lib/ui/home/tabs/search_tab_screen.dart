@@ -1,24 +1,22 @@
-import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/form/filter_form.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
-import 'package:boilerplate/ui/customlist/filter_screen.dart';
-import 'package:boilerplate/ui/customlist/list_theme.dart';
-import 'package:boilerplate/ui/home/homescreen.dart';
+import 'package:boilerplate/ui/search/search.dart';
+import 'package:boilerplate/ui/search/list_theme.dart';
+import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-import '../../main.dart';
-import 'propertycrads.dart';
+import '../propertycrads.dart';
 
-class PostsListScreen extends StatefulWidget {
+class SearchTabScreen extends StatefulWidget {
   @override
-  _PostsListScreenState createState() => _PostsListScreenState();
+  _SearchTabScreenState createState() => _SearchTabScreenState();
 }
 
-class _PostsListScreenState extends State<PostsListScreen> {
+class _SearchTabScreenState extends State<SearchTabScreen> {
   final ScrollController _scrollController = ScrollController();
   PostStore _postStore;
   FilterFormStore _filterForm = FilterFormStore();
@@ -182,19 +180,33 @@ class _PostsListScreenState extends State<PostsListScreen> {
                       padding: const EdgeInsets.only(left: 8),
                       child: Row(
                         children: <Widget>[
-                          Text(
-                            'فیلتر',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w100,
-                              fontSize: 16,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'ذخیره جست و جو',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w100,
+                                fontSize: 16,
+                              ),
                             ),
+                          ),
+                          Icon(
+                            Icons.bookmark,
+                            color: Colors.blueGrey,
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.tune,
-                                color: HotelAppTheme.buildLightTheme()
-                                    .primaryColor),
+                            child: Text(
+                              'فیلتر',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w100,
+                                fontSize: 16,
+                              ),
+                            ),
                           ),
+                          Icon(Icons.tune,
+                              color:
+                                  HotelAppTheme.buildLightTheme().primaryColor),
                         ],
                       ),
                     ),
@@ -221,7 +233,7 @@ class _PostsListScreenState extends State<PostsListScreen> {
     Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => FiltersScreen(
+          builder: (BuildContext context) => SearchScreen(
                 filterForm: _filterForm,
                 postStore: _postStore,
               ),
