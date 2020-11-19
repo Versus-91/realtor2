@@ -65,42 +65,53 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
         backgroundColor: Colors.red,
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 20, right: 10, left: 10, bottom: 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              "جست و جو های اخیر",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height / 4,
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.topRight,
-              child: _buildListView(),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height / 3,
-              width: MediaQuery.of(context).size.width,
-              decoration: new BoxDecoration(
-                  image: new DecorationImage(
-                image: new AssetImage("assets/images/bg11.png"),
-                fit: BoxFit.fill,
-              )),
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton.extended(
-                onPressed: () {
-                  // Add your onPressed code here!
-                },
-                label: Text('ارسال آگهی'),
-                // icon: Icon(Icons.send),
-                backgroundColor: Colors.blueGrey,
+          padding:
+              const EdgeInsets.only(top: 20, right: 10, left: 10, bottom: 0),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "جست و جو های اخیر",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                  ),
+                  Container(
+                      decoration: new BoxDecoration(
+                      image: new DecorationImage(
+                    image: new AssetImage("assets/images/cloud.png"),
+                    fit: BoxFit.fill,
+                  )),
+                    height: MediaQuery.of(context).size.height / 4,
+                    width: MediaQuery.of(context).size.width,
+                    alignment: Alignment.topRight,
+                    child: _buildListView(),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
+              Positioned(
+                top: MediaQuery.of(context).size.height / 2.08,
+                child: Container(
+                  height: MediaQuery.of(context).size.height / 3,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: new BoxDecoration(
+                      image: new DecorationImage(
+                    image: new AssetImage("assets/images/bg11.png"),
+                    fit: BoxFit.fill,
+                  )),
+                  alignment: Alignment.bottomRight,
+                  child: FloatingActionButton.extended(
+                    onPressed: () {
+                      // Add your onPressed code here!
+                    },
+                    label: Text('ارسال آگهی'),
+                    // icon: Icon(Icons.send),
+                    backgroundColor: Colors.blueGrey,
+                  ),
+                ),
+              ),
+            ],
+          )),
     );
   }
 

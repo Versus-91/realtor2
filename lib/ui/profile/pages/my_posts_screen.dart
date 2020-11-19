@@ -44,8 +44,10 @@ class _MyPostsScreenState extends State<MyPostsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          "آگهی های من",
+        ),
         backgroundColor: Colors.red,
-        elevation: 0.0,
       ),
       body: _buildBody(),
     );

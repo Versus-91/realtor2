@@ -4,6 +4,7 @@ import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
+import 'package:boilerplate/ui/profile/pages/aboute.dart';
 import 'package:boilerplate/ui/profile/pages/account_info.dart';
 import 'package:boilerplate/ui/profile/constants/colors.dart';
 import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
@@ -63,8 +64,6 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -260,7 +259,7 @@ class _ProfilePageState extends State<ProfilePage>
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => FavoritesScreen(),
+                                    builder: (context) => AboutScreen(),
                                   ),
                                 );
                               },

@@ -21,7 +21,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
   String label;
   var initialIndex = 0;
   final _formStore = FormStore(appComponent.getRepository());
-  final _store = PostFormStore(appComponent.getRepository());
+
   @override
   void initState() {
     super.initState();
@@ -49,16 +49,9 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
       appBar: AppBar(
         title: Text(
           "مشخصات من",
-          style: TextStyle(color: Colors.white, fontSize: 20),
+          style: TextStyle(fontSize: 20),
         ),
         backgroundColor: Colors.red,
-        elevation: 0.0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Icon(FontAwesomeIcons.infoCircle),
-          )
-        ],
       ),
       body: _buildBody(),
     );

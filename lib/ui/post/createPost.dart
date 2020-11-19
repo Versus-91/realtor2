@@ -197,6 +197,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 child: Material(
                   child: Stack(
                     children: <Widget>[
+                      _handleErrorMessage(),
                       Column(
                         children: <Widget>[
                           _buildRightSide(),
@@ -298,23 +299,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
             Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: Container(
-                color: Colors.white12,
-                height: 120, // constrain height
-                child: _paths != null
-                    ? Container(
+              child: _paths != null
+                  ? Expanded(
+                      child: Container(
                         color: Colors.blueGrey[50],
-                        padding: const EdgeInsets.only(bottom: 30.0),
-                        height: MediaQuery.of(context).size.height * 0.50,
+                        height: MediaQuery.of(context).size.height * 0.25,
                         child: Scrollbar(
                           child: GridView.count(
                             crossAxisCount: 4,
-                            children: new List<Widget>.generate(16, (index) {
-                              return new GridTile(
-                                child: new Card(
+                            children:
+                                List<Widget>.generate(_paths.length, (index) {
+                              return GridTile(
+                                child: Card(
                                     color: Colors.blue.shade200,
-                                    child: new Center(
-                                      child: new Text('tile $index'),
+                                    child: Center(
+                                      child: Text('$index'),
                                     )),
                               );
                             }),
@@ -359,45 +358,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           //       const Divider(),
                           // )
                         ),
-                      )
-                    : const SizedBox(),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 30, right: 30, bottom: 5, top: 5),
-              child: RaisedButton(
-                color: Colors.green[300],
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Text(
-                        "آپلود عکس",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.cloud_upload,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-                onPressed: () => _openFileExplorer(),
-              ),
+                    )
+                  : const SizedBox(),
             ),
 
             Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 FloatingActionButton.extended(
-                  icon: const Icon(Icons.add_location_alt),
-                  label: Text("افزودن نقشه"),
+                  icon: const Icon(Icons.add),
+                  label: Text("نقشه"),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -490,7 +464,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Widget _popularFilter() {
     return Observer(builder: (context) {
-      return _amenityStore.amenityList.amenities.length > 0
+      return _amenityStore.amenityList != null &&
+              _amenityStore.amenityList.amenities.length > 0
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -948,6 +923,29 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     });
 
     return SizedBox.shrink();
+  }
+
+  Widget _handleErrorMessage() {
+    return Observer(
+      builder: (context) {
+        if (_amenityStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_amenityStore.errorStore.errorMessage);
+        }
+        if (_typeStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_typeStore.errorStore.errorMessage);
+        }
+        if (_categoryStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_categoryStore.errorStore.errorMessage);
+        }
+        if (_districtStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_districtStore.errorStore.errorMessage);
+        }
+        if (_cityStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_cityStore.errorStore.errorMessage);
+        }
+        return SizedBox.shrink();
+      },
+    );
   }
 
   dynamic successPost(String message) async {
