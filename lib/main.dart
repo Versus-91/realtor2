@@ -27,10 +27,10 @@ import 'package:boilerplate/stores/city/city_store.dart';
 AppComponent appComponent;
 
 void main() {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.black, // navigation bar color
-    // statusBarColor: Colors.black, // status bar color
-  ));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //   systemNavigationBarColor: Colors.white, // navigation bar color
+  //   // statusBarColor: Colors.black, // status bar color
+  // ));
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

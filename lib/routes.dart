@@ -1,12 +1,11 @@
 // import 'package:boilerplate/ui/firstPage/firstpage.dart';
+import 'package:boilerplate/ui/authorization/login/login.dart';
+import 'package:boilerplate/ui/authorization/signup/register.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
-import 'package:boilerplate/ui/post/postscreen.dart';
-import 'package:boilerplate/ui/search/search.dart';
-import 'package:boilerplate/ui/signup/register.dart';
+import 'package:boilerplate/ui/post/post.dart';
 import 'package:flutter/material.dart';
-import 'ui/home/homescreen.dart';
-import 'ui/login/login.dart';
+import 'ui/home/home.dart';
 import 'ui/splash/splash.dart';
 
 class Routes {
@@ -30,7 +29,6 @@ class Routes {
     login: (BuildContext context) => LoginPage(),
     home: (BuildContext context) => HomeScreen(),
     register: (BuildContext context) => RegisterScreen(),
-    search: (BuildContext context) => SearchScreen(),
     post: (BuildContext context) => PostScreen(),
     map: (BuildContext context) => MapScreen(),
     createpost: (BuildContext context) => CreatePostScreen(),

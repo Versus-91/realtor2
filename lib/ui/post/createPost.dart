@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/routes.dart';
@@ -9,8 +7,8 @@ import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
 import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
-import 'package:boilerplate/ui/customlist/list_theme.dart';
-import 'package:boilerplate/ui/customlist/model/pop_list.dart';
+import 'package:boilerplate/ui/search/list_theme.dart';
+import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/ui/post/user_map_screen.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
@@ -43,6 +41,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   String _extension;
   bool _multiPick = true;
   FileType _pickingType = FileType.image;
+  List<SelectedPropertyTypes> amenityList = [];
   TextEditingController _controller = TextEditingController();
   final List<bool> isSelected = [
     false,
@@ -199,6 +198,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 child: Material(
                   child: Stack(
                     children: <Widget>[
+                      _handleErrorMessage(),
                       Column(
                         children: <Widget>[
                           _buildRightSide(),
@@ -300,23 +300,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
             Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: Container(
-                color: Colors.white12,
-                height: 120, // constrain height
-                child: _paths != null
-                    ? Container(
+              child: _paths != null
+                  ? Expanded(
+                      child: Container(
                         color: Colors.blueGrey[50],
-                        padding: const EdgeInsets.only(bottom: 30.0),
-                        height: MediaQuery.of(context).size.height * 0.50,
+                        height: MediaQuery.of(context).size.height * 0.25,
                         child: Scrollbar(
                           child: GridView.count(
                             crossAxisCount: 4,
-                            children: new List<Widget>.generate(16, (index) {
-                              return new GridTile(
-                                child: new Card(
+                            children:
+                                List<Widget>.generate(_paths.length, (index) {
+                              return GridTile(
+                                child: Card(
                                     color: Colors.blue.shade200,
-                                    child: new Center(
-                                      child: new Text('tile $index'),
+                                    child: Center(
+                                      child: Text('$index'),
                                     )),
                               );
                             }),
@@ -361,45 +359,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           //       const Divider(),
                           // )
                         ),
-                      )
-                    : const SizedBox(),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 30, right: 30, bottom: 5, top: 5),
-              child: RaisedButton(
-                color: Colors.green[300],
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Text(
-                        "آپلود عکس",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.cloud_upload,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-                onPressed: () => _openFileExplorer(),
-              ),
+                    )
+                  : const SizedBox(),
             ),
 
             Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 FloatingActionButton.extended(
-                  icon: const Icon(Icons.add_location_alt),
-                  label: Text("افزودن نقشه"),
+                  icon: const Icon(Icons.add),
+                  label: Text("نقشه"),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -424,15 +397,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     final List<Widget> noList = <Widget>[];
     int count = 0;
     const int columnCount = 2;
-    for (int i = 0; i < amenities.length / columnCount; i++) {
+    for (int i = 0; i < amenityList.length / columnCount; i++) {
       final List<Widget> listUI = <Widget>[];
       for (int i = 0; i < columnCount; i++) {
         try {
-          final SelectedPropertyTypes date = SelectedPropertyTypes(
-              titleTxt: amenities[count].name,
-              icon: amenities[count].icon,
-              id: amenities[count].id,
-              isSelected: false);
+          final SelectedPropertyTypes amenity = amenityList[count];
           listUI.add(Expanded(
             child: Row(
               children: <Widget>[
@@ -442,18 +411,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                     onTap: () {
                       setState(() {
-                        date.isSelected = !date.isSelected;
+                        amenity.isSelected = !amenity.isSelected;
                       });
+                      _store.setAmenity(amenity.id);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: <Widget>[
                           Icon(
-                            date.isSelected
+                            amenity.isSelected
                                 ? Icons.check_box
                                 : Icons.check_box_outline_blank,
-                            color: date.isSelected
+                            color: amenity.isSelected
                                 ? HotelAppTheme.buildLightTheme().primaryColor
                                 : Colors.grey.withOpacity(0.6),
                           ),
@@ -461,7 +431,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             width: 4,
                           ),
                           Text(
-                            date.titleTxt,
+                            amenity.titleTxt,
                           ),
                         ],
                       ),
@@ -471,7 +441,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               ],
             ),
           ));
-          if (count < amenities.length - 1) {
+          if (count < amenityList.length - 1) {
             count += 1;
           } else {
             break;
@@ -492,7 +462,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Widget _popularFilter() {
     return Observer(builder: (context) {
-      return _amenityStore.amenityList.amenities.length > 0
+      if (amenityList.length == 0) {
+        amenityList = _amenityStore.amenityList.amenities
+            .map((item) => SelectedPropertyTypes(
+                  id: item.id,
+                  titleTxt: item.name,
+                  isSelected:
+                      _store.amenities.where((m) => m == item.id).isNotEmpty
+                          ? true
+                          : false,
+                ))
+            .toList();
+      }
+      return _amenityStore.amenityList != null &&
+              _amenityStore.amenityList.amenities.length > 0
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -950,6 +933,29 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     });
 
     return SizedBox.shrink();
+  }
+
+  Widget _handleErrorMessage() {
+    return Observer(
+      builder: (context) {
+        if (_amenityStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_amenityStore.errorStore.errorMessage);
+        }
+        if (_typeStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_typeStore.errorStore.errorMessage);
+        }
+        if (_categoryStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_categoryStore.errorStore.errorMessage);
+        }
+        if (_districtStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_districtStore.errorStore.errorMessage);
+        }
+        if (_cityStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_cityStore.errorStore.errorMessage);
+        }
+        return SizedBox.shrink();
+      },
+    );
   }
 
   dynamic successPost(String message) async {

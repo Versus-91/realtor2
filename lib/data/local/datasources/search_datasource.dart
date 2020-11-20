@@ -1,11 +1,13 @@
 import 'package:boilerplate/data/local/constants/db_constants.dart';
 import 'package:boilerplate/models/post/post.dart';
+import 'package:boilerplate/models/post/post_request.dart';
 import 'package:sembast/sembast.dart';
+import 'package:uuid/uuid.dart';
 
-class FavoriteDataSource {
+class SearchDataSource {
   // A Store with int keys and Map<String, dynamic> values.
   // This Store acts like a persistent map, values of which are Flogs objects converted to Map
-  final _citiesStore = intMapStoreFactory.store(DBConstants.Favorite);
+  final _searchesStore = intMapStoreFactory.store(DBConstants.Search);
 
   // Private getter to shorten the amount of code needed to get the
   // singleton instance of an opened database.
@@ -15,30 +17,31 @@ class FavoriteDataSource {
   final Future<Database> _db;
 
   // Constructor
-  FavoriteDataSource(this._db);
+  SearchDataSource(this._db);
 
   // DB functions:--------------------------------------------------------------
-  Future<int> insert(Post post) async {
+  Future<int> insert(PostRequest request) async {
+    await deleteAll();
     try {
-      return await _citiesStore.record(post.id).add(await _db, post.toMap());
+      return await _searchesStore.add(await _db, request.toJsonLocalStore());
     } catch (e) {
       throw e;
     }
   }
 
-  Future<Post> findById(int id) async {
-    var posts = await _citiesStore.find(await _db);
-    var favorites = posts.map((e) {
-      final post = Post.fromMap(e.value);
+  Future<PostRequest> findById(Uuid id) async {
+    var db = await _searchesStore.find(await _db);
+    var searches = db.map((e) {
+      final post = PostRequest.fromMapLocalStore(e.value);
       return post;
     }).toList();
 
-    return favorites.firstWhere((element) => element.id == id,
+    return searches.firstWhere((element) => id == element.id,
         orElse: () => null);
   }
 
   Future<int> count() async {
-    return await _citiesStore.count(await _db);
+    return await _searchesStore.count(await _db);
   }
 
   Future<List<Post>> getAllSortedByFilter({List<Filter> filters}) async {
@@ -47,7 +50,7 @@ class FavoriteDataSource {
         filter: Filter.and(filters),
         sortOrders: [SortOrder(DBConstants.FIELD_ID)]);
 
-    final recordSnapshots = await _citiesStore.find(
+    final recordSnapshots = await _searchesStore.find(
       await _db,
       finder: finder,
     );
@@ -61,42 +64,46 @@ class FavoriteDataSource {
     }).toList();
   }
 
-  Future<List<Post>> getPostsFromDb() async {
+  Future<List<PostRequest>> getSearchesFromDb() async {
     // fetching data
-    final recordSnapshots = await _citiesStore.find(await _db);
-    List<Post> posts;
+    final recordSnapshots = await _searchesStore.find(await _db);
+    List<PostRequest> requests;
     // Making a List<Post> out of List<RecordSnapshot>
     if (recordSnapshots.length > 0) {
-      posts = recordSnapshots.map((snapshot) {
-        final post = Post.fromMap(snapshot.value);
-        return post;
-      }).toList();
+      try {
+        requests = recordSnapshots.map((snapshot) {
+          final post = PostRequest.fromMapLocalStore(snapshot.value);
+          post.id = snapshot.key;
+          return post;
+        }).toList();
+      } catch (e) {
+        throw e;
+      }
     }
-
-    return posts;
+    return requests;
   }
 
   Future<int> update(Post post) async {
     // For filtering by key (ID), RegEx, greater than, and many other criteria,
     // we use a Finder.
     final finder = Finder(filter: Filter.byKey(post.id));
-    return await _citiesStore.update(
+    return await _searchesStore.update(
       await _db,
       post.toMap(),
       finder: finder,
     );
   }
 
-  Future<int> delete(Post post) async {
-    final finder = Finder(filter: Filter.byKey(post.id));
-    return await _citiesStore.delete(
+  Future<int> delete(int id) async {
+    final finder = Finder(filter: Filter.byKey(id));
+    return await _searchesStore.delete(
       await _db,
       finder: finder,
     );
   }
 
   Future deleteAll() async {
-    await _citiesStore.drop(
+    await _searchesStore.drop(
       await _db,
     );
   }

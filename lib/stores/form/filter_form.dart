@@ -1,10 +1,9 @@
-import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/models/city/city.dart';
 import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
-import 'package:boilerplate/ui/customlist/model/pop_list.dart';
+import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:mobx/mobx.dart';
 part 'filter_form.g.dart';
 
@@ -106,9 +105,12 @@ abstract class _FilterFormStore with Store {
         minArea: 0,
         maxArea: area?.floor(),
         district: district.id,
+        districtName: district.name,
         city: city.id,
+        cityName: city.name,
         bedCount: bedCount,
         category: category.id,
+        categoryName: category.name,
         types: selectedPropertyTypes.map((element) {
           if (element.isSelected == true) {
             return element.id;

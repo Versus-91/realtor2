@@ -164,6 +164,20 @@
             "dependencies": []
           },
           {
+            "name": "provideSearchDataSource",
+            "kind": "method",
+            "injectedType": {
+              "lookupKey": {
+                "root": "asset:boilerplate/lib/data/local/datasources/search_datasource.dart#SearchDataSource",
+                "qualifier": null
+              },
+              "isProvider": false
+            },
+            "singleton": true,
+            "asynchronous": false,
+            "dependencies": []
+          },
+          {
             "name": "provideCityDataSource",
             "kind": "method",
             "injectedType": {
@@ -214,6 +228,13 @@
               {
                 "lookupKey": {
                   "root": "asset:boilerplate/lib/data/local/datasources/post/favorite_datasource.dart#FavoriteDataSource",
+                  "qualifier": null
+                },
+                "isProvider": false
+              },
+              {
+                "lookupKey": {
+                  "root": "asset:boilerplate/lib/data/local/datasources/search_datasource.dart#SearchDataSource",
                   "qualifier": null
                 },
                 "isProvider": false

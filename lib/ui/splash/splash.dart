@@ -1,4 +1,4 @@
-import 'package:boilerplate/ui/home/homescreen.dart';
+import 'package:boilerplate/ui/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 
@@ -17,16 +17,16 @@ class _SplashScreenState extends State<MySplashScreen> {
   Widget build(BuildContext context) {
     return new SplashScreen(
       title: new Text(
-        'Welcome In SplashScreen',
+        'خوش آمدید.',
         style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
       ),
       seconds: 5,
       navigateAfterSeconds: HomeScreen(),
-      image: new Image.asset('assets/images/loading.gif'),
-      backgroundColor: Colors.black,
+      image: new Image.asset('assets/icons/splash.png'),
+      backgroundColor: Colors.white,
       styleTextUnderTheLoader: new TextStyle(),
       photoSize: 150.0,
-      loaderColor: Colors.white,
+      loaderColor: Colors.redAccent,
     );
   }
 }

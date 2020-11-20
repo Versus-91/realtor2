@@ -2,6 +2,7 @@ import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/type/type_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 part 'type_store.g.dart';
 
@@ -43,7 +44,8 @@ abstract class _TypeStore with Store {
     future.then((item) {
       this.typeList = item;
     }).catchError((error) {
-      errorStore.errorMessage = DioErrorUtil.handleError(error);
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+      
     });
   }
 }

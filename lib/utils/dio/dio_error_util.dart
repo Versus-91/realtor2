@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class DioErrorUtil {
   // general methods:------------------------------------------------------------
-  static String handleError(DioError error) {
+  static String handleError(dynamic error) {
     String errorDescription = "";
     if (error is DioError) {
       switch (error.type) {

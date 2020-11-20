@@ -1,684 +1,771 @@
-
-
-import 'package:boilerplate/main.dart';
-import 'package:boilerplate/routes.dart';
+import 'dart:convert';
+import 'package:boilerplate/models/location/locations.dart';
+import 'package:boilerplate/models/post/post_request.dart';
+import 'package:boilerplate/stores/amenity/amenity_store.dart';
+import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
-import 'package:boilerplate/stores/form/form_store.dart';
-import 'package:boilerplate/stores/theme/theme_store.dart';
+import 'package:boilerplate/stores/form/filter_form.dart';
+import 'package:boilerplate/stores/type/type_store.dart';
 
-import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/widgets/progress_indicator_widget.dart';
-import 'package:flushbar/flushbar_helper.dart';
+import 'package:boilerplate/ui/search/silder.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-
-import '../../models/city/city.dart';
+import 'list_theme.dart';
+import 'model/pop_list.dart';
+import 'package:http/http.dart' as http;
 
 class SearchScreen extends StatefulWidget {
-  SearchScreen({Key key}) : super(key: key);
+  final FilterFormStore filterForm;
+  final PostStore postStore;
+  SearchScreen({@required this.filterForm, @required this.postStore});
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
 
-enum SelectType { Rent, Buy }
-enum SelectTypeHome { Maskoni, Tejari, Sanati }
-
 class _SearchScreenState extends State<SearchScreen> {
-  int selectedItem;
-
-  int _value = 1;
+  PostRequest _filterRequest;
+  List<dynamic> _locations;
+  List<int> selectedTypes = [];
+  List<SelectedPropertyTypes> accomodationListData = [];
+  List<SelectedPropertyTypes> amenityList = [];
+  int _value;
+  final TextEditingController _typeAheadController = TextEditingController();
+  String _selectedCity;
+  var data;
+  String dataurl =
+      "http://hmahmudi-001-site2.gtempurl.com/api/services/app/District/Find";
+  CityStore _cityStore;
+  DistrictStore _districtStore;
+  CategoryStore _categoryStore;
+  TypeStore _typeStore;
+  AmenityStore _amenityStore;
   final List<bool> isSelected = [
     false,
     false,
     false,
     false,
     false,
-    false,
-    false,
-    false,
-    false
   ];
-  var citiesList = new List<City>();
-  final List<String> maskonibranch = <String>[
-    'سوییت',
-    'زمین',
-    'آپارتمان',
-    'کلنگی',
-    'ویلایی',
-    'مشارکتی'
-  ];
-
-  //text controllers:-----------------------------------------------------------
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _locationController = TextEditingController();
-  
-  // TextEditingController _rahnPriceController = TextEditingController();
-  // TextEditingController _rentPriceController = TextEditingController();
-  // TextEditingController _buyPriceController = TextEditingController();
-  // TextEditingController _rangeAreaController = TextEditingController();
-  // TextEditingController _bedroomCountController = TextEditingController();
-
-  //stores:---------------------------------------------------------------------
-  ThemeStore _themeStore;
-  CityStore _cityStore;
-  DistrictStore _districtStore;
-  SelectType _character = SelectType.Buy;
-  SelectTypeHome _hometype = SelectTypeHome.Maskoni;
-  //focus node:-----------------------------------------------------------------
-
-  //stores:---------------------------------------------------------------------
-  final _store = FormStore(appComponent.getRepository());
 
   @override
   void initState() {
     super.initState();
   }
 
- 
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    _themeStore = Provider.of<ThemeStore>(context);
+    accomodationListData = widget.filterForm.selectedPropertyTypes;
     _cityStore = Provider.of<CityStore>(context);
     _districtStore = Provider.of<DistrictStore>(context);
-    if (!_cityStore.loading) _cityStore.getCities();
-    if (!_districtStore.loading) _districtStore.getDistricts();
+    _categoryStore = Provider.of<CategoryStore>(context);
+    _typeStore = Provider.of<TypeStore>(context);
+    _amenityStore = Provider.of<AmenityStore>(context);
+
+    if (!_cityStore.loading && _cityStore.cityList == null)
+      _cityStore.getCities();
+    if (!_districtStore.loading && _districtStore.districtList == null)
+      _districtStore.getDistricts();
+    if (!_categoryStore.loading && _categoryStore.categoryList == null)
+      _categoryStore.getCategories();
+    if (!_typeStore.loading && _typeStore.typeList == null)
+      _typeStore.getTypes();
+    if (!_amenityStore.loading && _amenityStore.amenityList == null)
+      _amenityStore.getAmenities();
+    _typeAheadController.text = widget.filterForm.district.name == null
+        ? widget.filterForm.city.name
+        : widget.filterForm.district.name;
+    if (widget.filterForm.bedCount != null) {
+      isSelected[widget.filterForm.bedCount - 1] = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: _buildAppBar(),
-      body: _buildBody(),
-      bottomNavigationBar: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Flexible(
-                  fit: FlexFit.tight,
-                  child: Container(
-                    height: 50,
-                    child: FlatButton(
-                        splashColor: Colors.red,
-                        color: Colors.red[100],
-                        onPressed: () {},
-                        child: Text(
-                          "پاک کردن گزینه ها",
-                          style: TextStyle(color: Colors.grey[600]),
-                        )),
-                  )),
-              Flexible(
-                fit: FlexFit.tight,
-                child: Container(
+    return Container(
+      color: HotelAppTheme.buildLightTheme().backgroundColor,
+      child: Scaffold(
+        bottomNavigationBar: Padding(
+            padding:
+                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width - 20,
                   height: 50,
                   child: FlatButton.icon(
                     color: Colors.red,
                     splashColor: Colors.red[100],
-                    icon: const Icon(FontAwesomeIcons.search, size: 18),
-                    label: Text("جست و جو",
-                        style: TextStyle(color: Colors.grey[900])),
-                    onPressed: () {},
+                    icon: const Icon(
+                      FontAwesomeIcons.search,
+                      size: 18,
+                      color: Colors.blueGrey,
+                    ),
+                    label:
+                        Text("جست و جو", style: TextStyle(color: Colors.white)),
+                    onPressed: () {
+                      widget.filterForm
+                          .setPropertyTypeList(accomodationListData);
+                      _filterRequest = widget.filterForm.applyFilters();
+                      if (_filterRequest != null) {
+                        widget.postStore.getPosts(request: _filterRequest);
+                      }
+                      Future.delayed(Duration(milliseconds: 2), () {
+                        Navigator.pop(context);
+                      });
+                    },
                   ),
                 ),
-              )
-            ],
-          )),
-    );
-  }
-
-  // app bar methods:-----------------------------------------------------------
-  Widget _buildAppBar() {
-    return AppBar(
-      actions: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Icon(Icons.settings),
-        )
-      ],
-      title: Text(AppLocalizations.of(context).translate('home_tv_search')),
-    );
-  }
-
-  // body methods:--------------------------------------------------------------
-  Widget _buildBody() {
-    return SingleChildScrollView(
-      child: Material(
-        child: Stack(
+              ],
+            )),
+        backgroundColor: Colors.transparent,
+        body: Column(
           children: <Widget>[
-            MediaQuery.of(context).orientation == Orientation.landscape
-                ? Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: _buildLeftSide(),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: _buildRightSide(),
-                      ),
-                    ],
-                  )
-                : Column(
-                    children: <Widget>[
-                      _buildRightSide(),
-                    ],
-                  ),
-            Observer(
-              builder: (context) {
-                return _store.success
-                    ? navigate(context)
-                    : _showErrorMessage(_store.errorStore.errorMessage);
-              },
+            getAppBarUI(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    searchField(),
+                    _buildCategoryField(),
+                    Observer(
+                      builder: (context) {
+                        if (widget.filterForm.category.name != null &&
+                            widget.filterForm.category.name.contains('اجاره')) {
+                          return Column(
+                            children: [
+                              priceBarFilter('محدوده رهن'),
+                              priceBarFilter('محدوده اجاره')
+                            ],
+                          );
+                        } else {
+                          return priceBarFilter('محدوده قیمت');
+                        }
+                      },
+                    ),
+                    popularFilter(),
+                    _buildBedroomCountField(),
+                    distanceViewUI(),
+                    allAccommodationUI()
+                  ],
+                ),
+              ),
             ),
-            Observer(
-              builder: (context) {
-                return Visibility(
-                  visible: _store.loading,
-                  child: CustomProgressIndicatorWidget(),
-                );
-              },
-            )
+            const Divider(
+              height: 1,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildLeftSide() {
-    return SizedBox.expand(
-        // child: Image.asset(
-        //   Assets.carBackground,
-        //   fit: BoxFit.cover,
-        // ),
-        );
-  }
-
-  Widget _buildRightSide() {
+  Widget _buildCategoryField() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-         
-          // SizedBox(height: 40.0),
-          _buildTitleField(),
-          Divider(
-            color: Colors.grey,
-          ),
-          Row(
-            children: <Widget>[
-              _buildCitylistField(),
-              _buildDistrictlistField(),
-            ],
-          ),
-
-          _buildHomeTypeField(),
-          if (_hometype == SelectTypeHome.Maskoni) _buildmaskonibranchField(),
-        
-          if (_character == SelectType.Rent) ...[
-            _buildRentPriceField(),
-            _buildEjarePriceField(),
-          ],
-          if (_character == SelectType.Buy) _buildBuyPriceField(),
-
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: _buildRangeAreaField(),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: _buildBedroomCountField(),
-          ),
-        ],
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Observer(
+        builder: (context) {
+          return _categoryStore.categoryList != null
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List<Widget>.generate(
+                        _categoryStore.categoryList.categories.length,
+                        (index) {
+                          var category =
+                              _categoryStore.categoryList.categories[index];
+                          _value = widget.filterForm.category.id;
+                          if (_value == null &&
+                              !category.name.contains('اجاره')) {
+                            _value = category.id;
+                            widget.filterForm
+                                .setCategory(category.id, category.name);
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _value = category.id;
+                                });
+                                widget.filterForm
+                                    .setCategory(category.id, category.name);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: _value == category.id
+                                      ? Border(
+                                          bottom: BorderSide(
+                                              width: 2.0,
+                                              color: Colors.redAccent),
+                                        )
+                                      : Border(
+                                          bottom: BorderSide(
+                                              width: 2.0,
+                                              color: Colors.transparent),
+                                        ),
+                                ),
+                                child: Text(
+                                  category.name,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: _value == category.id
+                                          ? Colors.redAccent
+                                          : Colors.black),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    )
+                  ],
+                )
+              : Container(
+                  child: FlatButton(
+                      onPressed: () {
+                        _categoryStore.getCategories();
+                      },
+                      child: Icon(Icons.refresh)),
+                );
+        },
       ),
     );
   }
 
-  _buildmaskonibranchField() {
-    return Wrap(
-      children: List<Widget>.generate(
-        6,
-        (int index) {
-          return ChoiceChip(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 3),
-            // shape:RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.zero)),
-            label: Text(maskonibranch[index]),
-            selected: _value == index,
-            onSelected: (bool selected) {
-              setState(() {
-                _value = selected ? index : null;
-              });
-            },
+  Widget searchField() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, left: 14, right: 14),
+      child: TypeAheadFormField(
+        textFieldConfiguration: TextFieldConfiguration(
+          decoration: InputDecoration(
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    widget.filterForm.setDistrict(null, null);
+                    widget.filterForm.setCity(null, null);
+                    _typeAheadController.clear();
+                  },
+                  icon: Icon(Icons.clear)),
+              border: InputBorder.none,
+              fillColor: Color(0xfff3f3f4),
+              filled: true,
+              hintText: 'جست و جوی محله'),
+          controller: this._typeAheadController,
+        ),
+        suggestionsCallback: (pattern) {
+          if (pattern.trim().length >= 2 && pattern.trim() != _selectedCity) {
+            return getSuggestion(pattern);
+          }
+          return null;
+        },
+        itemBuilder: (context, suggestion) {
+          return ListTile(
+            title: Text(suggestion),
           );
         },
-      ).toList(),
-    );
-  }
-
-  
-  Widget _buildRangeAreaField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          "متراژ(متر مربع)",
-          style: TextStyle(color: Colors.red[300]),
-        ),
-        Row(
-          children: <Widget>[
-            Flexible(
-              child: TextField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(10),
-                  hintText: 'پایین ترین متراژ',
-                ),
-              ),
-            ),
-            Text("_"),
-            Flexible(
-              child: TextField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: 'بالا ترین متراژ',
-                  contentPadding: EdgeInsets.all(10),
-                ),
-              ),
-            )
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRentPriceField() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text("رهن"),
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText: "پایین ترین رهن",
-                        contentPadding: EdgeInsets.all(10))),
-              ),
-              Text("_"),
-              Flexible(
-                child: TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText: "بالا ترین رهن",
-                        contentPadding: EdgeInsets.all(10))),
-              ),
-            ],
-          ),
-        ],
+        noItemsFoundBuilder: (context) {
+          return Text(
+            'نتیجه ای یافت نشد!',
+            style: TextStyle(fontSize: 30, color: Colors.grey[300]),
+          );
+        },
+        transitionBuilder: (context, suggestionsBox, controller) {
+          return suggestionsBox;
+        },
+        onSuggestionSelected: (suggestion) {
+          this._typeAheadController.text = suggestion;
+          var selectedLocation = _locations
+              .where((element) => suggestion.contains(element.name))
+              ?.first;
+          if (selectedLocation != null) {
+            if (selectedLocation.isCity) {
+              widget.filterForm.setDistrict(null, null);
+              widget.filterForm.setCity(selectedLocation.id, suggestion);
+            } else {
+              widget.filterForm.setCity(null, null);
+              widget.filterForm.setDistrict(selectedLocation.id, suggestion);
+            }
+          }
+        },
+        validator: (value) => value.isEmpty ? 'نام محل را وارد کنید' : null,
+        onSaved: (value) => this._selectedCity = value,
       ),
     );
   }
 
-  Widget _buildEjarePriceField() {
+  Future<List> getSuggestion(String pattern) async {
+    //get suggestion function
+    var res =
+        await http.post(dataurl + "?query=" + Uri.encodeComponent(pattern));
+    //in query there might be unwant character so, we encode the query to url
+    if (res.statusCode == 200) {
+      setState(() {
+        data = json.decode(res.body)["result"];
+        _locations = data
+            .map((item) => Location(
+                name: item["name"], id: item["id"], isCity: item["isCity"]))
+            .toList();
+        data = data.map((item) {
+          var locationLabel = item["isCity"] == true ? "شهر" : "منطقه";
+          return locationLabel + " " + item["name"];
+        }).toList();
+        //update data value and UI
+      });
+    }
+    return data.toList();
+  }
+
+  Widget allAccommodationUI() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("اجاره"),
-        Row(
-          children: <Widget>[
-            Flexible(
-              child: TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      hintText: "پایین ترین اجاره",
-                      contentPadding: EdgeInsets.all(10))),
-            ),
-            Text("_"),
-            Flexible(
-              child: TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      hintText: "بالا ترین اجاره",
-                      contentPadding: EdgeInsets.all(10))),
-            ),
-          ],
+        Padding(
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+          child: Text(
+            'نوع ملک',
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                color: Colors.red,
+                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                fontWeight: FontWeight.normal),
+          ),
         ),
+        Observer(builder: (context) {
+          if (_typeStore.typeList != null) {
+            if (accomodationListData.length == 0) {
+              accomodationListData = _typeStore.typeList.types
+                  .map((item) => SelectedPropertyTypes(
+                      isSelected: false, titleTxt: item.name, id: item.id))
+                  .toList();
+              accomodationListData.insert(
+                  0,
+                  SelectedPropertyTypes(
+                    titleTxt: 'همه موارد',
+                    isSelected: false,
+                  ));
+            }
+
+            return Padding(
+              padding: const EdgeInsets.only(right: 16, left: 16),
+              child: Column(
+                children: getAccomodationListUI(),
+              ),
+            );
+          } else {
+            return Container(
+              child: Center(
+                child: new Text("فیلتری انتخاب نشده "),
+              ),
+            );
+          }
+        }),
       ],
     );
   }
 
-  Widget _buildBuyPriceField() {
+  List<Widget> getAccomodationListUI() {
+    final List<Widget> noList = <Widget>[];
+
+    for (int i = 0; i < accomodationListData.length; i++) {
+      final SelectedPropertyTypes date = accomodationListData[i];
+      noList.add(
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+            onTap: () {
+              setState(() {
+                checkAppPosition(i);
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      date.titleTxt,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  CupertinoSwitch(
+                    activeColor: date.isSelected
+                        ? HotelAppTheme.buildLightTheme().primaryColor
+                        : Colors.grey.withOpacity(0.6),
+                    onChanged: (bool value) {
+                      setState(() {
+                        checkAppPosition(i);
+                      });
+                    },
+                    value: date.isSelected,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      if (i == 0) {
+        noList.add(const Divider(
+          height: 1,
+        ));
+      }
+    }
+    return noList;
+  }
+
+  void checkAppPosition(int index) {
+    if (index == 0) {
+      if (accomodationListData[0].isSelected) {
+        accomodationListData.forEach((d) {
+          d.isSelected = false;
+        });
+      } else {
+        accomodationListData.forEach((d) {
+          d.isSelected = true;
+        });
+      }
+    } else {
+      accomodationListData[index].isSelected =
+          !accomodationListData[index].isSelected;
+
+      int count = 0;
+      for (int i = 0; i < accomodationListData.length; i++) {
+        if (i != 0) {
+          final SelectedPropertyTypes data = accomodationListData[i];
+          if (data.isSelected) {
+            count += 1;
+          }
+        }
+      }
+
+      if (count == accomodationListData.length - 1) {
+        accomodationListData[0].isSelected = true;
+      } else {
+        accomodationListData[0].isSelected = false;
+      }
+    }
+  }
+
+  Widget distanceViewUI() {
+    return Observer(builder: (context) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
+            child: Text(
+              'مساحت',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                  fontWeight: FontWeight.normal),
+            ),
+          ),
+          SliderView(
+            distValue: widget.filterForm.area ?? 100,
+            onChangedistValue: (double value) {
+              widget.filterForm.setArea(value);
+            },
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+        ],
+      );
+    });
+  }
+
+  Widget popularFilter() {
+    return Observer(builder: (context) {
+      if (_amenityStore.amenityList != null) {
+        if (amenityList.length == 0) {
+          amenityList = _amenityStore.amenityList.amenities
+              .map((item) => SelectedPropertyTypes(
+                    id: item.id,
+                    titleTxt: item.name,
+                    isSelected: widget.filterForm.amenities
+                            .where((m) => m == item.id)
+                            .isNotEmpty
+                        ? true
+                        : false,
+                  ))
+              .toList();
+        }
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 16, right: 16, top: 16, bottom: 8),
+              child: Text(
+                'خصوصیات',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                    fontWeight: FontWeight.normal),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16, left: 16),
+              child: Column(
+                children: getPList(),
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            )
+          ],
+        );
+      } else {
+        return SizedBox.shrink();
+      }
+    });
+  }
+
+  List<Widget> getPList() {
+    final List<Widget> noList = <Widget>[];
+    int count = 0;
+    const int columnCount = 2;
+    for (int i = 0; i < amenityList.length / columnCount; i++) {
+      final List<Widget> listUI = <Widget>[];
+      for (int i = 0; i < columnCount; i++) {
+        try {
+          final SelectedPropertyTypes amenity = amenityList[count];
+          listUI.add(Expanded(
+            child: Row(
+              children: <Widget>[
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                    onTap: () {
+                      setState(() {
+                        amenity.isSelected = !amenity.isSelected;
+                        widget.filterForm.setAmenity(amenity.id);
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            amenity.isSelected
+                                ? Icons.check_box
+                                : Icons.check_box_outline_blank,
+                            color: amenity.isSelected
+                                ? HotelAppTheme.buildLightTheme().primaryColor
+                                : Colors.grey.withOpacity(0.6),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            amenity.titleTxt,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ));
+          if (count < amenityList.length - 1) {
+            count += 1;
+          } else {
+            break;
+          }
+        } catch (e) {
+          throw (e);
+        }
+      }
+      noList.add(Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: listUI,
+      ));
+    }
+    return noList;
+  }
+
+  Widget _buildBedroomCountField() {
     return Padding(
-      padding: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "قیمت",
-            style: TextStyle(color: Colors.red[300]),
+            "تعداد ",
+            style: TextStyle(
+                color: Colors.red,
+                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                fontWeight: FontWeight.normal),
           ),
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText: "پایین ترین قیمت",
-                        contentPadding: EdgeInsets.all(10))),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: ToggleButtons(
+                children: <Widget>[
+                  Text("+1"),
+                  Text("+2"),
+                  Text("+3"),
+                  Text("+4"),
+                  Text("+5"),
+                ],
+                onPressed: (int index) {
+                  setState(() {
+                    for (int buttonIndex = 0;
+                        buttonIndex < isSelected.length;
+                        buttonIndex++) {
+                      if (buttonIndex == index) {
+                        if (isSelected[buttonIndex] != true) {
+                          isSelected[buttonIndex] = true;
+                          widget.filterForm.setBedCount(index + 1);
+                        } else {
+                          isSelected[buttonIndex] = false;
+                          widget.filterForm.setBedCount(null);
+                        }
+                      } else {
+                        isSelected[buttonIndex] = false;
+                      }
+                    }
+                  });
+                },
+                isSelected: isSelected,
               ),
-              Text("_"),
-              Flexible(
-                child: TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText: "بالا ترین قیمت",
-                        contentPadding: EdgeInsets.all(10))),
-              ),
-            ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget priceBarFilter(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            label,
+            style: TextStyle(
+                color: Colors.red,
+                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                fontWeight: FontWeight.normal),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: TextField(
+                      onChanged: (value) {
+                        widget.filterForm.setMinPrice(double.parse(value));
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3f3f4),
+                          filled: true,
+                          hintText: "پایین ترین قیمت",
+                          contentPadding: EdgeInsets.all(10))),
+                ),
+                VerticalDivider(),
+                Flexible(
+                  child: TextField(
+                      onChanged: (value) {
+                        widget.filterForm.setMaxPrice(double.parse(value));
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3f3f4),
+                          filled: true,
+                          hintText: "بالا ترین قیمت",
+                          contentPadding: EdgeInsets.all(10))),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildDistrictlistField() {
-    return Observer(
-      builder: (context) {
-        return _districtStore.districtList != null
-            ? Container(
-                padding: EdgeInsets.only(top: 10, bottom: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "موقعیت",
-                      style: TextStyle(color: Colors.red[300]),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        DropdownButtonFormField<int>(
-                          decoration: InputDecoration(
-                              labelText: "منطقه",
-                              contentPadding:
-                                  EdgeInsets.symmetric(vertical: 4)),
-                          onChanged: (int val) => setState(() => {
-                                selectedItem = val,
-                              }),
-                          items:
-                              _districtStore.districtList.districts.map((item) {
-                            return DropdownMenuItem<int>(
-                              child: Text(item.name),
-                              value: item.id,
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              )
-            : Container(
-                child: Text("مشکل اتصال"),
-              );
-      },
-    );
-
-    //
-  }
-
-  Widget _buildCitylistField() {
-    return Observer(
-      builder: (context) {
-        return _cityStore.cityList != null
-            ? Container(
-                padding: EdgeInsets.only(top: 10, bottom: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "موقعیت",
-                      style: TextStyle(color: Colors.red[300]),
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Flexible(
-                          child: DropdownButtonFormField<int>(
-                            decoration: InputDecoration(
-                                labelText: "شهر",
-                                contentPadding:
-                                    EdgeInsets.symmetric(vertical: 4)),
-                            onChanged: (int val) => setState(() => {
-                                  selectedItem = val,
-                                }),
-                            items: _cityStore.cityList.cities.map((item) {
-                              return DropdownMenuItem<int>(
-                                child: Text(item.name),
-                                value: item.id,
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 30,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              )
-            : Container(
-                child: Text("nist"),
-              );
-      },
-    );
-  }
-
-  Widget _buildTitleField() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15),
-      child: Observer(
-        builder: (context) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Radio(
-                value: SelectType.Buy,
-                groupValue: _character,
-                onChanged: (SelectType value) {
-                  _character = value;
-                  setState(() {
-                    var typeId = int.tryParse(value.toString());
-                    _store.setUserType(typeId);
-                  });
-                },
-              ),
-              Text(
-                'خرید',
-                style: TextStyle(fontSize: 16.0),
-              ),
-              Radio(
-                value: SelectType.Rent,
-                groupValue: _character,
-                onChanged: (SelectType value) {
-                  _character = value;
-                  setState(() {
-                    var typeId = int.tryParse(value.toString());
-                    _store.setUserType(typeId);
-                  });
-                },
-              ),
-              Text(
-                'رهن و اجاره',
-                style: TextStyle(fontSize: 16.0),
-              ),
-            ],
-          );
-        },
+  Widget getAppBarUI() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.red,
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              offset: const Offset(0, 2),
+              blurRadius: 4.0),
+        ],
       ),
-    );
-  }
-
-  Widget _buildHomeTypeField() {
-    return Observer(
-      builder: (context) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: Padding(
+        padding:
+            EdgeInsets.only(top: MediaQuery.of(context).padding.top, left: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Text(
-              "نوع ملک",
-              style: TextStyle(color: Colors.red[300]),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Radio(
-                  value: SelectTypeHome.Tejari,
-                  groupValue: _hometype,
-                  onChanged: (SelectTypeHome value) {
-                    _hometype = value;
-                    setState(() {
-                      var typehome = int.tryParse(value.toString());
-                      _store.setTypeHome(typehome);
-                    });
+            Container(
+              alignment: Alignment.centerRight,
+              width: AppBar().preferredSize.height + 40,
+              height: AppBar().preferredSize.height,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(32.0),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
                   },
-                ),
-                Text(
-                  'تجاری',
-                  style: TextStyle(fontSize: 16.0),
-                ),
-                Radio(
-                  value: SelectTypeHome.Maskoni,
-                  groupValue: _hometype,
-                  onChanged: (SelectTypeHome value) {
-                    _hometype = value;
-                    setState(() {
-                      var typehome = int.tryParse(value.toString());
-                      _store.setTypeHome(typehome);
-                    });
-                  },
-                ),
-                Text(
-                  'مسکونی',
-                  style: new TextStyle(
-                    fontSize: 16.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.close),
                   ),
                 ),
-                Radio(
-                  value: SelectTypeHome.Sanati,
-                  groupValue: _hometype,
-                  onChanged: (SelectTypeHome value) {
-                    _hometype = value;
-                    setState(() {
-                      var typehome = int.tryParse(value.toString());
-                      _store.setTypeHome(typehome);
-                    });
-                  },
-                ),
-                new Text(
-                  'صنعتی',
-                  style: new TextStyle(fontSize: 16.0),
-                ),
-              ],
+              ),
             ),
+            Expanded(
+              child: Center(
+                child: Text(
+                  'فیلتر',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 22,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: AppBar().preferredSize.height + 40,
+              height: AppBar().preferredSize.height,
+            )
           ],
-        );
-      },
-    );
-  }
-
-  Widget _buildBedroomCountField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          "تعداد اتاق :",
-          style: TextStyle(color: Colors.red[300]),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: ToggleButtons(
-              children: <Widget>[
-                Text("1"),
-                Text("2"),
-                Text("3"),
-                Text("4"),
-                Text("5"),
-                Text("6"),
-                Text("7"),
-                Text("8"),
-                Text("9"),
-              ],
-              onPressed: (int index) {
-                setState(() {
-                  for (int buttonIndex = 0;
-                      buttonIndex < isSelected.length;
-                      buttonIndex++) {
-                    if (buttonIndex == index) {
-                      isSelected[buttonIndex] = true;
-                    } else {
-                      isSelected[buttonIndex] = false;
-                    }
-                  }
-                });
-              },
-              isSelected: isSelected,
-            ),
-          ),
-        ),
-      ],
+      ),
     );
-  }
-
-  Widget navigate(BuildContext context) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.home, (Route<dynamic> route) => false);
-    });
-
-    return Container();
-  }
-
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
-  }
-
-  // dispose:-------------------------------------------------------------------
-  @override
-  void dispose() {
-    // Clean up the controller when the Widget is removed from the Widget tree
-    _titleController.dispose();
-    _locationController.dispose();
-    // _rahnPriceController.dispose();
-    // _rentPriceController.dispose();
-    // _buyPriceController.dispose();
-    // _rangeAreaController.dispose();
-    // _bedroomCountController.dispose();
-
-    super.dispose();
   }
 }
