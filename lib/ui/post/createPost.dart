@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/routes.dart';
@@ -63,6 +64,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   TextEditingController _buyPriceController = TextEditingController();
   TextEditingController _areaController = TextEditingController();
   TextEditingController _bedroomCountController = TextEditingController();
+  TextEditingController _cityController = TextEditingController();
+  TextEditingController _districtController = TextEditingController();
+  TextEditingController _hometypeController = TextEditingController();
+  //focosnode-------------------------------------------------------------------
+  FocusNode _titleFocusNode;
+  FocusNode _hometypeFocusNode;
+  FocusNode _descriptionFocusNode;
+  FocusNode _rahnPriceFocusNode;
+  FocusNode _rentPriceFocusNode;
+  FocusNode _buyPriceFocusNode;
+  FocusNode _areaFocusNode;
+  FocusNode _bedroomCountFocusNode;
+  FocusNode _cityFocusNode;
+  FocusNode _districtFocusNode;
   //stores:---------------------------------------------------------------------
   CityStore _cityStore;
   DistrictStore _districtStore;
@@ -78,11 +93,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   void initState() {
     super.initState();
     _controller.addListener(() => _extension = _controller.text);
+    _titleFocusNode = FocusNode();
+    _descriptionFocusNode = FocusNode();
+    _hometypeFocusNode = FocusNode(); 
+    _rahnPriceFocusNode = FocusNode();
+
+    _rentPriceFocusNode = FocusNode();
+
+    _buyPriceFocusNode = FocusNode();
+
+    _areaFocusNode = FocusNode();
+    _cityFocusNode = FocusNode();
+    _districtFocusNode = FocusNode();
+    _bedroomCountFocusNode = FocusNode();
   }
 
   void _openFileExplorer() async {
     try {
-      _paths = (await FilePicker.platform.pickFiles(
+      var items = (await FilePicker.platform.pickFiles(
         type: _pickingType,
         allowMultiple: _multiPick,
         allowedExtensions: (_extension?.isNotEmpty ?? false)
@@ -90,6 +118,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             : null,
       ))
           ?.files;
+      if (items != null) {
+        _paths = items;
+      }
     } on PlatformException catch (e) {
       print("Unsupported operation" + e.toString());
     } catch (ex) {
@@ -240,9 +271,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // _buildTitleField(),
             _buildCategoryField(),
-
             Row(
               children: [
                 Flexible(
@@ -253,7 +282,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 Flexible(child: _buildDistrictlistField()),
               ],
             ),
-
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: Row(
@@ -268,22 +296,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 ],
               ),
             ),
-
-            if (_categoryText.contains('رهن')) ...[
-              Row(
-                children: [
-                  Flexible(
-                    child: _buildRentPriceField(),
-                  ),
-                  Flexible(child: _buildEjarePriceField()),
-                ],
-              ),
-            ],
-
-            if (_value == 1) ...[
-              _buildBuyPriceField(),
-            ],
-
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _popularFilter(),
@@ -292,78 +304,58 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildBedroomCountField(),
             ),
-
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildDescriptionField(),
             ),
-
             Padding(
               padding: const EdgeInsets.only(top: 5),
-              child: _paths != null
-                  ? Expanded(
-                      child: Container(
-                        color: Colors.blueGrey[50],
-                        height: MediaQuery.of(context).size.height * 0.25,
-                        child: Scrollbar(
-                          child: GridView.count(
-                            crossAxisCount: 4,
-                            children:
-                                List<Widget>.generate(_paths.length, (index) {
+              child: Container(
+                color: Color(0xfff3f3f4),
+                height: MediaQuery.of(context).size.height * 0.23,
+                child: Scrollbar(
+                  child: _paths != null
+                      ? GridView.count(
+                          crossAxisCount: 4,
+                          children: [
+                            GridTile(
+                              child: InkWell(
+                                onTap: () {
+                                  _openFileExplorer();
+                                },
+                                child: Card(
+                                    color: Colors.white,
+                                    child: Center(
+                                      child: Icon(Icons.camera_alt_rounded),
+                                    )),
+                              ),
+                            ),
+                            ...List<Widget>.generate(_paths.length, (index) {
                               return GridTile(
                                 child: Card(
-                                    color: Colors.blue.shade200,
+                                    color: Colors.white,
                                     child: Center(
-                                      child: Text('$index'),
+                                      child: Image.file(
+                                        File(_paths[index].path),
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                      ),
                                     )),
                               );
-                            }),
-                          ),
-                          //      ListView.separated(
-                          //   itemCount: _paths != null && _paths.isNotEmpty
-                          //       ? _paths.length
-                          //       : 1,
-                          //   itemBuilder: (BuildContext context, int index) {
-                          //     final bool isMultiPath =
-                          //         _paths != null && _paths.isNotEmpty;
-                          //     final String name = 'File $index: ' +
-                          //         (isMultiPath
-                          //             ? _paths.map((e) => e.name).toList()[index]
-                          //             : _fileName ?? '...');
-                          //     final path = _paths
-                          //         .map((e) => e.path)
-                          //         .toList()[index]
-                          //         .toString();
-
-                          //     return ListTile(
-                          //       leading: ConstrainedBox(
-                          //         constraints: BoxConstraints(
-                          //           minWidth: 44,
-                          //           minHeight: 44,
-                          //           maxWidth: 64,
-                          //           maxHeight: 64,
-                          //         ),
-                          //         child: Image.file(
-                          //           File(path),
-                          //           fit: BoxFit.cover,
-                          //           width: double.infinity,
-                          //         ),
-                          //       ),
-                          //       title: Text(
-                          //         name,
-                          //       ),
-                          //       // subtitle: Text(path),
-                          //     );
-                          //   },
-                          //   separatorBuilder: (BuildContext context, int index) =>
-                          //       const Divider(),
-                          // )
+                            })
+                          ],
+                        )
+                      : RaisedButton(
+                          color: Color(0xfff3f3f4),
+                          child: Image.asset("assets/images/camera.png",
+                              fit: BoxFit.cover),
+                          onPressed: () {
+                            _openFileExplorer();
+                          },
                         ),
-                      ),
-                    )
-                  : const SizedBox(),
+                ),
+              ),
             ),
-
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -393,7 +385,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
-  List<Widget> getPList(List<Amenity> amenities) {
+  List<Widget> getAmeniotiesList(List<Amenity> amenities) {
     final List<Widget> noList = <Widget>[];
     int count = 0;
     const int columnCount = 2;
@@ -408,7 +400,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(100)),
                     onTap: () {
                       setState(() {
                         amenity.isSelected = !amenity.isSelected;
@@ -421,11 +413,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         children: <Widget>[
                           Icon(
                             amenity.isSelected
-                                ? Icons.check_box
-                                : Icons.check_box_outline_blank,
+                                ? Icons.check_circle_outline
+                                : Icons.radio_button_off_sharp,
                             color: amenity.isSelected
-                                ? HotelAppTheme.buildLightTheme().primaryColor
-                                : Colors.grey.withOpacity(0.6),
+                                ? Colors.green
+                                : Colors.grey.withOpacity(0.5),
                           ),
                           const SizedBox(
                             width: 4,
@@ -492,7 +484,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 Padding(
                   padding: const EdgeInsets.only(right: 16, left: 16),
                   child: Column(
-                    children: getPList(_amenityStore.amenityList.amenities),
+                    children:
+                        getAmeniotiesList(_amenityStore.amenityList.amenities),
                   ),
                 ),
               ],
@@ -584,8 +577,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     inputFormatters: [
                       WhitelistingTextInputFormatter.digitsOnly
                     ],
-                    // textInputAction: TextInputAction.next,
+                    focusNode: _rahnPriceFocusNode,
                     controller: _rahnPriceController,
+                    onSubmitted: (value) {
+                      FocusScope.of(context).requestFocus(_buyPriceFocusNode);
+                    },
                     onChanged: (value) {
                       var price =
                           double.tryParse(_rahnPriceController.text) ?? 0;
@@ -618,6 +614,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               child: TextField(
                   inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                   controller: _rentPriceController,
+                  focusNode: _rentPriceFocusNode,
+                  onSubmitted: (value) {
+                    FocusScope.of(context).requestFocus(_cityFocusNode);
+                  },
                   onChanged: (value) {
                     var price = double.tryParse(_rentPriceController.text) ?? 0;
                     _store.setRentPrice(price);
@@ -651,6 +651,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               child: TextField(
                   inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                   controller: _buyPriceController,
+                  focusNode: _buyPriceFocusNode,
+                  onSubmitted: (value) {
+                    FocusScope.of(context).requestFocus(_districtFocusNode);
+                  },
                   onChanged: (valu) {
                     var price = double.tryParse(_buyPriceController.text) ?? 0;
                     _store.setBuyPrice(price);
@@ -658,9 +662,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       errorText: _store.formErrorStore.buyPrice,
+                      border: InputBorder.none,
+                      fillColor: Color(0xfff3f3f4),
+                      filled: true,
                       hintText: "قیمت",
-                      border: OutlineInputBorder(
-                          borderSide: new BorderSide(color: Colors.teal)),
                       contentPadding: EdgeInsets.all(10))),
             ),
           ],
@@ -679,6 +684,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   children: <Widget>[
                     Flexible(
                       child: DropdownButtonFormField<int>(
+                        focusNode: _districtFocusNode,
+                        onSaved: (value) {
+                          FocusScope.of(context).requestFocus(_cityFocusNode);
+                        },
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           fillColor: Color(0xfff3f3f4),
@@ -724,6 +733,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   children: <Widget>[
                     Flexible(
                       child: DropdownButtonFormField<int>(
+                        focusNode: _cityFocusNode,
+                        onSaved: (value) {
+                          FocusScope.of(context)
+                              .requestFocus(_districtFocusNode);
+                        },
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           fillColor: Color(0xfff3f3f4),
@@ -816,7 +830,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           );
                         },
                       ).toList(),
-                    )
+                    ),
+                    if (_categoryText.contains('رهن')) ...[
+                      Row(
+                        children: [
+                          Flexible(
+                            child: _buildRentPriceField(),
+                          ),
+                          Flexible(child: _buildEjarePriceField()),
+                        ],
+                      ),
+                    ],
+                    if (_value == 1) ...[
+                      _buildBuyPriceField(),
+                    ],
                   ],
                 )
               : Container(
@@ -836,6 +863,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       builder: (context) {
         return _typeStore.typeList != null
             ? DropdownButtonFormField<int>(
+                focusNode: _,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
@@ -878,17 +906,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: ToggleButtons(
-              children: <Widget>[
-                Text("1"),
-                Text("2"),
-                Text("3"),
-                Text("4"),
-                Text("5"),
-                Text("6"),
-                Text("7"),
-                Text("8"),
-                Text("9"),
-              ],
+              children: List.generate(9, (index) {
+                return Text((index + 1).toString());
+              }),
               onPressed: (int index) {
                 setState(() {
                   for (int buttonIndex = 0;
