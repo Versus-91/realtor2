@@ -70,7 +70,8 @@ abstract class _PostFormStore with Store {
   double buyPrice = 0;
   @observable
   int countbedroom = 0;
-
+  @observable
+  List<int> amenities = new List<int>();
   // actions:-------------------------------------------------------------------
   @action
   void setLatitude(double value) {
@@ -84,7 +85,6 @@ abstract class _PostFormStore with Store {
 
   @action
   void setCategory(int value) {
-   
     categoryId = value;
   }
 
@@ -95,58 +95,51 @@ abstract class _PostFormStore with Store {
 
   @action
   void setCity(int value) {
-
     selectedCity = value;
   }
 
   @action
   void setDistrict(int value) {
-  
     selectedDistrict = value;
   }
 
- 
+  @action
+  void setAmenity(int value) {
+    amenities.contains(value) ? amenities.remove(value) : amenities.add(value);
+  }
 
   @action
   void setTitle(String value) {
-   
     title = value;
   }
 
   @action
   void setDescription(String value) {
-   
     description = value;
   }
 
   @action
   void setArea(int value) {
-  
     area = value;
   }
 
   @action
   void setRahnPrice(double value) {
-    
     rahnPrice = value;
   }
 
   @action
   void setRentPrice(double value) {
-   
-
     rentPrice = value;
   }
 
   @action
   void setBuyPrice(double value) {
-   
     buyPrice = value;
   }
 
   @action
   void setcountbedroom(int value) {
-   
     countbedroom = value;
   }
 
@@ -176,7 +169,6 @@ abstract class _PostFormStore with Store {
       loading = false;
       postId = result["id"];
     }).catchError((error) {
-   
       loading = false;
     });
   }
@@ -187,10 +179,8 @@ abstract class _PostFormStore with Store {
     _repository.uploadImages(files, id).then((result) {
       loading = false;
       success = true;
-     
     }).catchError((error) {
       loading = false;
-   
     });
   }
 

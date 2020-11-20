@@ -41,6 +41,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   String _extension;
   bool _multiPick = true;
   FileType _pickingType = FileType.image;
+  List<SelectedPropertyTypes> amenityList = [];
   TextEditingController _controller = TextEditingController();
   final List<bool> isSelected = [
     false,
@@ -396,15 +397,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     final List<Widget> noList = <Widget>[];
     int count = 0;
     const int columnCount = 2;
-    for (int i = 0; i < amenities.length / columnCount; i++) {
+    for (int i = 0; i < amenityList.length / columnCount; i++) {
       final List<Widget> listUI = <Widget>[];
       for (int i = 0; i < columnCount; i++) {
         try {
-          final SelectedPropertyTypes date = SelectedPropertyTypes(
-              titleTxt: amenities[count].name,
-              icon: amenities[count].icon,
-              id: amenities[count].id,
-              isSelected: false);
+          final SelectedPropertyTypes amenity = amenityList[count];
           listUI.add(Expanded(
             child: Row(
               children: <Widget>[
@@ -414,18 +411,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                     onTap: () {
                       setState(() {
-                        date.isSelected = !date.isSelected;
+                        amenity.isSelected = !amenity.isSelected;
                       });
+                      _store.setAmenity(amenity.id);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: <Widget>[
                           Icon(
-                            date.isSelected
+                            amenity.isSelected
                                 ? Icons.check_box
                                 : Icons.check_box_outline_blank,
-                            color: date.isSelected
+                            color: amenity.isSelected
                                 ? HotelAppTheme.buildLightTheme().primaryColor
                                 : Colors.grey.withOpacity(0.6),
                           ),
@@ -433,7 +431,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             width: 4,
                           ),
                           Text(
-                            date.titleTxt,
+                            amenity.titleTxt,
                           ),
                         ],
                       ),
@@ -443,7 +441,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               ],
             ),
           ));
-          if (count < amenities.length - 1) {
+          if (count < amenityList.length - 1) {
             count += 1;
           } else {
             break;
@@ -464,6 +462,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Widget _popularFilter() {
     return Observer(builder: (context) {
+      if (amenityList.length == 0) {
+        amenityList = _amenityStore.amenityList.amenities
+            .map((item) => SelectedPropertyTypes(
+                  id: item.id,
+                  titleTxt: item.name,
+                  isSelected:
+                      _store.amenities.where((m) => m == item.id).isNotEmpty
+                          ? true
+                          : false,
+                ))
+            .toList();
+      }
       return _amenityStore.amenityList != null &&
               _amenityStore.amenityList.amenities.length > 0
           ? Column(
