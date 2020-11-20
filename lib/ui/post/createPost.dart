@@ -462,7 +462,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Widget _popularFilter() {
     return Observer(builder: (context) {
-      if (amenityList.length == 0) {
+      if (amenityList.length == 0 && _amenityStore.amenityList != null) {
         amenityList = _amenityStore.amenityList.amenities
             .map((item) => SelectedPropertyTypes(
                   id: item.id,
