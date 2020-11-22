@@ -158,7 +158,8 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                       'رهن: ${snapshot.data[position].deopsit} ',
                                       maxLines: 1,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w700),
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16),
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: false,
                                     ),
@@ -166,7 +167,8 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                       'اجاره: ${snapshot.data[position].rent}',
                                       maxLines: 1,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w700),
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16),
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: false,
                                     ),
@@ -180,6 +182,9 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                     ),
                                     Text(
                                       'قیمت: ${snapshot.data[position].price}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: false,
@@ -191,7 +196,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 2.0,left: 8),
+                    padding: EdgeInsets.only(top: 2.0, left: 8),
                     width: 130,
                     height: 100,
                     child: snapshot.data[position].images.length > 0

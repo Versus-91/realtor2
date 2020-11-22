@@ -115,33 +115,27 @@ class _PropertyCradsState extends State<PropertyCrads>
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         softWrap: false,
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(color: Colors.blue, fontSize: 15),
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.place,
-                                color: Colors.greenAccent,
-                              ),
-                              Text(
-                                '${posts[position].district.city.name},${posts[position].district.name}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: false,
-                              ),
-                            ],
+                          Text(
+                            '${posts[position].district.city.name},${posts[position].district.name}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
                           ),
                           posts[position].category.name.contains('رهن')
                               ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
                                       'رهن: ${posts[position].deopsit}',
                                       maxLines: 1,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w700),
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16),
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: false,
                                     ),
@@ -149,7 +143,8 @@ class _PropertyCradsState extends State<PropertyCrads>
                                       ' اجاره: ${posts[position].rent}',
                                       maxLines: 1,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w700),
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16),
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: false,
                                     ),
@@ -163,6 +158,9 @@ class _PropertyCradsState extends State<PropertyCrads>
                                     ),
                                     Text(
                                       'قیمت: ${posts[position].price}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       softWrap: false,

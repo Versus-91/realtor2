@@ -95,21 +95,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                   ),
                 ),
               ),
-    
- Row(
-   children: [
-     
-       Padding(padding: EdgeInsets.only(right: 15,bottom:10),
-                child: FloatingActionButton.extended(
-      onPressed: () {},
-      
-      label: Text("ذخیره"),
-),
-       ),
-   
-   ],
- ),
- 
+
               // Observer(builder: (context) {
               //   if (_filterForm.loading) {
               //     _filterRequest = _filterForm.applyFilters();
@@ -123,6 +109,16 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
           ),
         ),
         _handleErrorMessage(),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: EdgeInsets.only(right: 15, bottom: 10),
+            child: FloatingActionButton(
+              child: Icon(Icons.save),
+              onPressed: () {},
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -195,20 +191,6 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                       padding: const EdgeInsets.only(left: 8),
                       child: Row(
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'ذخیره جست و جو',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w100,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          Icon(
-                            Icons.bookmark,
-                            color: Colors.blueGrey,
-                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
