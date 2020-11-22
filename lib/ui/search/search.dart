@@ -135,21 +135,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: <Widget>[
                     searchField(),
                     _buildCategoryField(),
-                    Observer(
-                      builder: (context) {
-                        if (widget.filterForm.category.name != null &&
-                            widget.filterForm.category.name.contains('اجاره')) {
-                          return Column(
-                            children: [
-                              priceBarFilter('محدوده رهن'),
-                              priceBarFilter('محدوده اجاره')
-                            ],
-                          );
-                        } else {
-                          return priceBarFilter('محدوده قیمت');
-                        }
-                      },
-                    ),
                     popularFilter(),
                     _buildBedroomCountField(),
                     distanceViewUI(),
@@ -228,7 +213,18 @@ class _SearchScreenState extends State<SearchScreen> {
                           );
                         },
                       ).toList(),
-                    )
+                    ),
+                    if (widget.filterForm.category.name != null &&
+                        widget.filterForm.category.name.contains('اجاره')) ...{
+                      Column(
+                        children: [
+                          depositPriceBarFilter('محدوده رهن'),
+                          rentPriceBarFilter('محدوده اجاره')
+                        ],
+                      )
+                    } else ...{
+                      priceBarFilter('محدوده قیمت')
+                    }
                   ],
                 )
               : Container(
@@ -694,6 +690,112 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: TextField(
                       onChanged: (value) {
                         widget.filterForm.setMaxPrice(double.parse(value));
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3f3f4),
+                          filled: true,
+                          hintText: "بالا ترین قیمت",
+                          contentPadding: EdgeInsets.all(10))),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget rentPriceBarFilter(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            label,
+            style: TextStyle(
+                color: Colors.red,
+                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                fontWeight: FontWeight.normal),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: TextField(
+                      onChanged: (value) {
+                        widget.filterForm.setMinRentPrice(double.parse(value));
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3f3f4),
+                          filled: true,
+                          hintText: "پایین ترین قیمت",
+                          contentPadding: EdgeInsets.all(10))),
+                ),
+                VerticalDivider(),
+                Flexible(
+                  child: TextField(
+                      onChanged: (value) {
+                        widget.filterForm.setMaxRentPrice(double.parse(value));
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3f3f4),
+                          filled: true,
+                          hintText: "بالا ترین قیمت",
+                          contentPadding: EdgeInsets.all(10))),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget depositPriceBarFilter(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            label,
+            style: TextStyle(
+                color: Colors.red,
+                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                fontWeight: FontWeight.normal),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: TextField(
+                      onChanged: (value) {
+                        widget.filterForm
+                            .setMinDepositPrice(double.parse(value));
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          fillColor: Color(0xfff3f3f4),
+                          filled: true,
+                          hintText: "پایین ترین قیمت",
+                          contentPadding: EdgeInsets.all(10))),
+                ),
+                VerticalDivider(),
+                Flexible(
+                  child: TextField(
+                      onChanged: (value) {
+                        widget.filterForm
+                            .setMaxdepositPrice(double.parse(value));
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(

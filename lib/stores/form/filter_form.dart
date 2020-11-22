@@ -31,10 +31,18 @@ abstract class _FilterFormStore with Store {
   @observable
   double minPrice = 0;
   @observable
+  double minRentPrice = 0;
+  @observable
+  double minDepositPrice = 0;
+  @observable
   List<SelectedPropertyTypes> selectedPropertyTypes =
       new List<SelectedPropertyTypes>();
   @observable
   double maxPrice = 0;
+  @observable
+  double maxRentPrice = 0;
+  @observable
+  double maxDepositPrice = 0;
 
   @observable
   double area;
@@ -55,6 +63,16 @@ abstract class _FilterFormStore with Store {
   }
 
   @action
+  void setMinRentPrice(double value) {
+    minRentPrice = value;
+  }
+
+  @action
+  void setMinDepositPrice(double value) {
+    minDepositPrice = value;
+  }
+
+  @action
   void setBedCount(int number) {
     bedCount = number;
   }
@@ -62,6 +80,16 @@ abstract class _FilterFormStore with Store {
   @action
   void setMaxPrice(double value) {
     maxPrice = value;
+  }
+
+  @action
+  void setMaxRentPrice(double value) {
+    maxRentPrice = value;
+  }
+
+  @action
+  void setMaxDepositPrice(double value) {
+    maxDepositPrice = value;
   }
 
   @action
@@ -102,6 +130,10 @@ abstract class _FilterFormStore with Store {
     var request = PostRequest(
         maxPrice: maxPrice?.floor(),
         minPrice: minPrice?.floor(),
+        maxRentPrice: maxRentPrice?.floor(),
+        minRentPrice: minRentPrice?.floor(),
+        maxDepositPrice: maxDepositPrice?.floor(),
+        minDepositPrice: minDepositPrice?.floor(),
         minArea: 0,
         maxArea: area?.floor(),
         district: district.id,
@@ -130,6 +162,10 @@ abstract class _FilterFormStore with Store {
           minArea: request.minArea,
           maxPrice: request.maxPrice,
           minPrice: request.minPrice,
+          maxRentPrice: request.maxRentPrice,
+          minRentPrice: request.minRentPrice,
+          maxDepositPrice: request.maxDepositPrice,
+          minDepositPrice: request.minDepositPrice,
           district: request.district);
     }
     return request;

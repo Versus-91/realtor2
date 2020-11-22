@@ -125,7 +125,6 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                 children: <Widget>[
                   Expanded(
                     child: ListTile(
-                      trailing: Icon(Icons.more_vert),
                       dense: false,
                       contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       title: Text(
@@ -153,14 +152,18 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                             ],
                           ),
                           snapshot.data[position].category.name.contains('رهن')
-                              ? Row(
+                              ? Column(
                                   children: [
-                                    Icon(
-                                      Icons.monetization_on,
-                                      color: Colors.greenAccent,
+                                    Text(
+                                      'رهن: ${snapshot.data[position].deopsit} ',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700),
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
                                     ),
                                     Text(
-                                      'رهن: ${snapshot.data[position].deopsit} , اجاره: ${snapshot.data[position].rent}',
+                                      'اجاره: ${snapshot.data[position].rent}',
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700),
@@ -188,7 +191,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 8.0),
+                    padding: EdgeInsets.only(top: 2.0,left: 8),
                     width: 130,
                     height: 100,
                     child: snapshot.data[position].images.length > 0
@@ -211,7 +214,6 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                 child: IntrinsicHeight(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                   
                     children: [
                       Flexible(
                         child: Row(

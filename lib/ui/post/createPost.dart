@@ -684,6 +684,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   children: <Widget>[
                     Flexible(
                       child: DropdownButtonFormField<int>(
+                        
                         focusNode: _districtFocusNode,
                         onSaved: (value) {
                           FocusScope.of(context).requestFocus(_cityFocusNode);
@@ -863,7 +864,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       builder: (context) {
         return _typeStore.typeList != null
             ? DropdownButtonFormField<int>(
-                focusNode: _,
+                focusNode: _hometypeFocusNode,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),

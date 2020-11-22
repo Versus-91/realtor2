@@ -5,6 +5,10 @@ class PostRequest {
   int id;
   int minPrice;
   int maxPrice;
+  int minRentPrice;
+  int maxRentPrice;
+  int minDepositPrice;
+  int maxDepositPrice;
   int minArea;
   int maxArea;
   int district;
@@ -24,6 +28,10 @@ class PostRequest {
       this.cityName,
       this.minPrice,
       this.maxPrice,
+      this.minRentPrice,
+      this.maxRentPrice,
+      this.minDepositPrice,
+      this.maxDepositPrice,
       this.minArea,
       this.maxArea,
       this.district,
@@ -36,7 +44,13 @@ class PostRequest {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> result = new Map();
     result.addAll({"minPrice": minPrice.toString()});
-    result.addAll({"maxPrice": minPrice.toString()});
+    result.addAll({"maxPrice": maxPrice.toString()});
+
+    result.addAll({"minRentPrice": minRentPrice.toString()});
+    result.addAll({"maxRentPrice": maxRentPrice.toString()});
+
+    result.addAll({"minDepositPrice": minDepositPrice.toString()});
+    result.addAll({"maxDepositPrice": maxDepositPrice.toString()});
     result.addAll({"category": category.toString()});
     if (district != null) {
       result.addAll({"district": district.toString()});
@@ -65,7 +79,11 @@ class PostRequest {
     Map<String, dynamic> result = new Map();
     result.addAll({"id": id});
     result.addAll({"minPrice": minPrice.toString()});
-    result.addAll({"maxPrice": minPrice.toString()});
+    result.addAll({"maxPrice": maxPrice.toString()});
+    result.addAll({"minRentPrice": minRentPrice.toString()});
+    result.addAll({"maxRentPrice": maxRentPrice.toString()});
+    result.addAll({"minDepositPrice": minDepositPrice.toString()});
+    result.addAll({"maxDepositPrice": maxDepositPrice.toString()});
     result.addAll({"category": category.toString()});
     result.addAll({"categoryName": categoryName});
     result.addAll({"cityName": cityName});
@@ -100,6 +118,10 @@ class PostRequest {
         minArea: int.tryParse(json["minArea"] ?? ""),
         maxPrice: int.tryParse(json["maxPrice" ?? ""]),
         minPrice: int.tryParse(json["minPrice"] ?? ""),
+        maxRentPrice: int.tryParse(json["maxRentPrice" ?? ""]),
+        minRentPrice: int.tryParse(json["minRentPrice"] ?? ""),
+        maxDepositPrice: int.tryParse(json["maxDepositPrice" ?? ""]),
+        minDepositPrice: int.tryParse(json["minDepositPrice"] ?? ""),
         age: int.tryParse(json["age"] ?? ""),
         category: int.tryParse(json["category"] ?? ""),
         district: int.tryParse(json["district"] ?? ""),
@@ -114,6 +136,10 @@ class PostRequest {
       minArea: int.tryParse(json["minArea"] ?? ""),
       maxPrice: int.tryParse(json["maxPrice" ?? ""]),
       minPrice: int.tryParse(json["minPrice"] ?? ""),
+      maxRentPrice: int.tryParse(json["maxRentPrice" ?? ""]),
+      minRentPrice: int.tryParse(json["minRentPrice"] ?? ""),
+      maxDepositPrice: int.tryParse(json["maxDepositPrice" ?? ""]),
+      minDepositPrice: int.tryParse(json["minDepositPrice"] ?? ""),
       age: int.tryParse(json["age"] ?? ""),
       category: int.tryParse(json["category"] ?? ""),
       district: int.tryParse(json["district"] ?? ""),
@@ -132,6 +158,10 @@ class PostRequest {
     return (other is PostRequest) &&
         minPrice == other.minPrice &&
         maxPrice == other.maxPrice &&
+        minRentPrice == other.minRentPrice &&
+        maxRentPrice == other.maxRentPrice &&
+        minDepositPrice == other.minDepositPrice &&
+        maxDepositPrice == other.maxDepositPrice &&
         minArea == other.minArea &&
         maxArea == other.maxArea &&
         district == other.district &&
@@ -147,6 +177,10 @@ class PostRequest {
   int get hashCode =>
       minPrice ^
       maxPrice ^
+      minRentPrice ^
+      maxRentPrice ^
+      minDepositPrice ^
+      maxDepositPrice ^
       minArea ^
       maxArea ^
       district ^

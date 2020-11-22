@@ -107,7 +107,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                 children: <Widget>[
                   Expanded(
                     child: ListTile(
-                      trailing: Icon(Icons.more_vert),
+                      // trailing: Icon(Icons.more_vert),
                       dense: false,
                       contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       title: Text(
@@ -135,14 +135,18 @@ class _PropertyCradsState extends State<PropertyCrads>
                             ],
                           ),
                           posts[position].category.name.contains('رهن')
-                              ? Row(
+                              ? Column(
                                   children: [
-                                    Icon(
-                                      Icons.monetization_on,
-                                      color: Colors.greenAccent,
+                                    Text(
+                                      'رهن: ${posts[position].deopsit}',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700),
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
                                     ),
                                     Text(
-                                      'رهن: ${posts[position].deopsit} , اجاره: ${posts[position].rent}',
+                                      ' اجاره: ${posts[position].rent}',
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700),
@@ -170,7 +174,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 8.0),
+                    padding: EdgeInsets.only(top: 2.0, left: 8),
                     width: 130,
                     height: 100,
                     child: posts[position].images.length > 0

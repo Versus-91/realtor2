@@ -161,6 +161,28 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
+  void setMinRentPrice(double value) {
+    final _$actionInfo = _$_FilterFormStoreActionController.startAction(
+        name: '_FilterFormStore.setMinRentPrice');
+    try {
+      return super.setMinRentPrice(value);
+    } finally {
+      _$_FilterFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setMinDepositPrice(double value) {
+    final _$actionInfo = _$_FilterFormStoreActionController.startAction(
+        name: '_FilterFormStore.setMinDepositPrice');
+    try {
+      return super.setMinDepositPrice(value);
+    } finally {
+      _$_FilterFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setBedCount(int number) {
     final _$actionInfo = _$_FilterFormStoreActionController.startAction(
         name: '_FilterFormStore.setBedCount');
@@ -177,6 +199,28 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
         name: '_FilterFormStore.setMaxPrice');
     try {
       return super.setMaxPrice(value);
+    } finally {
+      _$_FilterFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setMaxRentPrice(double value) {
+    final _$actionInfo = _$_FilterFormStoreActionController.startAction(
+        name: '_FilterFormStore.setMaxRentPrice');
+    try {
+      return super.setMaxRentPrice(value);
+    } finally {
+      _$_FilterFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setMaxdepositPrice(double value) {
+    final _$actionInfo = _$_FilterFormStoreActionController.startAction(
+        name: '_FilterFormStore.setMaxDepositPrice');
+    try {
+      return super.setMaxDepositPrice(value);
     } finally {
       _$_FilterFormStoreActionController.endAction(_$actionInfo);
     }
