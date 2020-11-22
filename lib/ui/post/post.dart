@@ -4,7 +4,7 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:getwidget/getwidget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PostScreen extends StatefulWidget {
   PostScreen({this.post});
@@ -14,11 +14,19 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
-  TabController _tabbarController;
+  AnimationController animationController;
+  Animation animation;
+  int currentState = 0;
+
   @override
   void initState() {
     super.initState();
-    _tabbarController = TabController(length: 3, vsync: this);
+    animationController =
+        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    animation = Tween(begin: 0, end: 60).animate(animationController)
+      ..addListener(() {
+        setState(() {});
+      });
   }
 
   @override
@@ -30,32 +38,34 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: GFTabBar(
-          labelColor: Colors.white,
-          tabBarColor: Colors.blueGrey,
-          unselectedLabelColor: Colors.white,
-          tabBarHeight: 50,
-          length: 3,
-          controller: _tabbarController,
-          tabs: [
-            Tab(
-              text: "نقشه",
-            ),
-            Tab(
-              text: "ارسال آگهی",
-            ),
-            Tab(
-              text: "تماس",
-            ),
-          ],
+        bottomNavigationBar: BottomAppBar(
+          child: new Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              FlatButton.icon(
+                onPressed: () {},
+                icon: Icon(Icons.save),
+                label: Text("ذخیره"),
+              ),
+              FlatButton.icon(
+                onPressed: () {},
+                label: Text("ارسال"),
+                icon: Icon(Icons.share),
+              ),
+              FlatButton.icon(
+                onPressed: () => launch("tel://21213123123"),
+                label: Text("تماس"),
+                icon: Icon(Icons.call),
+              ),
+            ],
+          ),
         ),
         appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.white, //change your color here
-          ),
+          backgroundColor: Colors.transparent,
           title: Text(
             ' ${widget.post.district.city.name} - ${widget.post.district.name} ',
-            style: TextStyle(color: Colors.white),
+            // style: TextStyle(color: Colors.white),
           ),
         ),
         body: ListView(
@@ -99,13 +109,13 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
               ],
             ),
             Container(
-                color: Colors.blueGrey,
+                color: Colors.blueGrey[700],
                 width: MediaQuery.of(context).size.width,
                 height: 45,
                 child: Center(
                   child: Text(
                     '${widget.post.category.name}',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 )),
             Container(
@@ -138,6 +148,13 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                   var post = await appComponent
                       .getRepository()
                       .findFavoriteById(widget.post.id);
+                  if (currentState == 0) {
+                    animationController.forward();
+                    currentState = 1;
+                  } else {
+                    animationController.reverse();
+                    currentState = 0;
+                  }
                   if (post == null) {
                     await appComponent.getRepository().addFavorite(widget.post);
                   } else {
