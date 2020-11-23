@@ -1,3 +1,4 @@
+import 'package:boilerplate/data/local/datasources/search_datasource.dart';
 import 'package:boilerplate/stores/form/filter_form.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/ui/search/search.dart';
@@ -19,6 +20,7 @@ class SearchTabScreen extends StatefulWidget {
 class _SearchTabScreenState extends State<SearchTabScreen> {
   final ScrollController _scrollController = ScrollController();
   PostStore _postStore;
+  SearchDataSource _searchDataSource;
   FilterFormStore _filterForm = FilterFormStore();
   @override
   void initState() {
@@ -115,7 +117,11 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
             padding: EdgeInsets.only(right: 15, bottom: 10),
             child: FloatingActionButton(
               child: Icon(Icons.save),
-              onPressed: () {},
+              onPressed: () {
+                // if (request != null) {
+                //   await _searchDataSource.insert(request);
+                // }
+              },
             ),
           ),
         ),

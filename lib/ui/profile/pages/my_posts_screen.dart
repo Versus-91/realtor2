@@ -10,6 +10,7 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -137,28 +138,41 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Icon(Icons.place),
-                              Text(
-                                '${_postStore.userPostList.posts[position].district.city.name},${_postStore.userPostList.posts[position].district.name}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: false,
-                              ),
-                            ],
+                          Text(
+                            '${_postStore.userPostList.posts[position].district.city.name},${_postStore.userPostList.posts[position].district.name}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
                           ),
                           _postStore.userPostList.posts[position].category.name
                                   .contains('رهن')
-                              ? Text(
-                                  'رهن: ${_postStore.userPostList.posts[position].deopsit} , اجاره: ${_postStore.userPostList.posts[position].rent}',
-                                  maxLines: 1,
-                                  style: TextStyle(fontWeight: FontWeight.w700),
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
+                              ? Column(
+                                  children: [
+                                    Text(
+                                      'رهن: ${_postStore.userPostList.posts[position].deopsit} ',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 17),
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
+                                    ),
+                                    Text(
+                                      'اجاره: ${_postStore.userPostList.posts[position].rent}',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 17),
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: false,
+                                    ),
+                                  ],
                                 )
                               : Text(
                                   'قیمت: ${_postStore.userPostList.posts[position].price}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 17),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: false,
@@ -168,9 +182,9 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 8.0),
+                    padding: EdgeInsets.only(left: 6),
                     width: 130,
-                    height: 100,
+                    height: 110,
                     child:
                         _postStore.userPostList.posts[position].images.length >
                                 0
@@ -195,10 +209,22 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                 child: IntrinsicHeight(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Flexible(
                         child: Row(
-                          children: [Icon(FontAwesomeIcons.heart)],
+                          children: [
+                            IconButton(
+                                icon: Icon(Icons.favorite), onPressed: null),
+                            IconButton(
+                                icon: Icon(Icons.share), onPressed: null),
+                            IconButton(
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Colors.blue,
+                                ),
+                                onPressed: null),
+                          ],
                         ),
                       ),
                       VerticalDivider(
