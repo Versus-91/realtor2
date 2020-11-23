@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:html';
+
+import 'dart:io';
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
@@ -317,28 +318,6 @@ class _ProfilePageState extends State<ProfilePage>
               ),
             ],
           ),
-          // Positioned(
-          //   top: screenHeight * (4 / 10) - 80 / 2,
-          //   left: 16,
-          //   right: 16,
-          //   child: Container(
-          //     height: 80,
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       mainAxisSize: MainAxisSize.max,
-          //       children: <Widget>[
-          //         ProfileInfoCard(firstText: "54%", secondText: ""),
-          //         SizedBox(
-          //           width: 10,
-          //         ),
-          //         SizedBox(
-          //           width: 10,
-          //         ),
-
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
