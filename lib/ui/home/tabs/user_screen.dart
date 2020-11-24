@@ -42,9 +42,9 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
     setState(() {
       loggedIn = sharePerf.getBool(Preferences.is_logged_in) || false;
     });
-    if (loggedIn == true) {
-      if (widget.userStore?.user == null) widget.userStore.getUser();
-    }
+    // if (loggedIn == true) {
+    //   if (widget.userStore?.user == null) widget.userStore.getUser();
+    // }
   }
 
   @override
