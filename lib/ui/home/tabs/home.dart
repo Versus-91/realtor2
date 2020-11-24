@@ -43,7 +43,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
       loggedIn = sharePerf.getBool(Preferences.is_logged_in) || false;
     });
     if (loggedIn == true) {
-      if (widget.userStore.user == null) widget.userStore.getUser();
+      if (widget.userStore?.user == null) widget.userStore.getUser();
     }
   }
 
@@ -77,11 +77,11 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                   ),
                   Container(
-                      decoration: new BoxDecoration(
-                      image: new DecorationImage(
-                    image: new AssetImage("assets/images/cloud.png"),
-                    fit: BoxFit.fill,
-                  )),
+                    decoration: new BoxDecoration(
+                        image: new DecorationImage(
+                      image: new AssetImage("assets/images/cloud.png"),
+                      fit: BoxFit.fill,
+                    )),
                     height: MediaQuery.of(context).size.height / 4,
                     width: MediaQuery.of(context).size.width,
                     alignment: Alignment.topRight,

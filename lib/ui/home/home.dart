@@ -1,5 +1,5 @@
 import 'package:boilerplate/constants/constants.dart';
-import 'package:boilerplate/routes.dart';
+import 'package:boilerplate/models/Nvigation/bottom_nav.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
@@ -13,8 +13,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/sharedpref/constants/preferences.dart';
@@ -29,10 +27,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   UserStore _userStore;
   PostStore _postStore;
+  int _screenNumber = 0;
+  List<BottomNav> navItems;
   LanguageStore _languageStore;
   ThemeStore _themeStore;
   AnimationController _rippleAnimationController;
-  TabController _tabbarController;
   bool loggedIn = false;
   var initialIndex = 0;
   Future<Null> getSharedPrefs() async {
@@ -49,8 +48,41 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       vsync: this,
       duration: kRippleAnimationDuration,
     );
-    _tabbarController = TabController(length: 4, vsync: this);
+    // _tabbarController = TabController(length: 4, vsync: this);
     getSharedPrefs();
+    navItems = [
+      BottomNav(
+        screen: UserScreen(
+          userStore: _userStore,
+          postStore: _postStore,
+        ),
+        navIcon: Icon(
+          Icons.home,
+        ),
+        title: 'خانه',
+      ),
+      BottomNav(
+        screen: SearchTabScreen(),
+        navIcon: Icon(
+          Icons.search,
+        ),
+        title: 'جستجو',
+      ),
+      BottomNav(
+        screen: FavoritesScreen(),
+        navIcon: Icon(
+          Icons.favorite,
+        ),
+        title: 'علاقه مندی ها',
+      ),
+      BottomNav(
+        screen: ProfilePage(),
+        navIcon: Icon(
+          Icons.person,
+        ),
+        title: 'پروفایل',
+      ),
+    ];
   }
 
   @override
@@ -68,7 +100,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: EmptyAppBar(),
-      body: _buildBody(),
+      body: navItems[_screenNumber].screen,
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.lightGreen,
+        unselectedItemColor: Colors.blueGrey,
+        currentIndex: _screenNumber,
+        onTap: (i) => setState(() {
+          _screenNumber = i;
+        }), // this will be set when a new tab is tapped
+        items: navItems
+            .map((navItem) => BottomNavigationBarItem(
+                  icon: navItem.navIcon,
+                  label: navItem.title,
+                ))
+            .toList(),
+      ),
       // drawer: GFDrawer(
       //   child: ListView(
       //     padding: EdgeInsets.zero,
@@ -136,55 +182,55 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       //     ],
       //   ),
       // ),
-      bottomNavigationBar: GFTabBar(
-        labelColor: Colors.black,
-        tabBarColor: Colors.white,
-        unselectedLabelColor: Colors.grey,
-        tabBarHeight: 50,
-        length: 4,
-        indicatorColor: Colors.transparent,
-        controller: _tabbarController,
-        tabs: [
-          Tab(
-            icon: Icon(FontAwesomeIcons.home),
-          ),
-          Tab(
-            icon: Icon(FontAwesomeIcons.list),
-          ),
-          Tab(
-            icon: Icon(FontAwesomeIcons.heart),
-          ),
-          Tab(
-            icon: Icon(FontAwesomeIcons.userCircle),
-          ),
-        ],
-      ),
+
+      //  GFTabBar(
+      //   labelColor: Colors.black,
+      //   tabBarColor: Colors.white,
+      //   unselectedLabelColor: Colors.grey,
+      //   tabBarHeight: 50,
+      //   length: 4,
+      //   indicatorColor: Colors.transparent,
+      //   controller: _tabbarController,
+      //   tabs: [
+      //     Tab(
+      //       icon: Icon(FontAwesomeIcons.home),
+      //     ),
+      //     Tab(
+      //       icon: Icon(FontAwesomeIcons.list),
+      //     ),
+      //     Tab(
+      //       icon: Icon(FontAwesomeIcons.heart),
+      //     ),
+      //     Tab(
+      //       icon: Icon(FontAwesomeIcons.userCircle),
+      //     ),
+      //   ],
+      // ),
     );
   }
 
   // body methods:--------------------------------------------------------------
-  Widget _buildBody() {
-    return Stack(
-      children: <Widget>[
-        GFTabBarView(controller: _tabbarController, children: <Widget>[
-          Container(
-            child: UserScreen(
-                userStore: _userStore,
-                postStore: _postStore,
-                tabController: _tabbarController),
-          ),
-          Container(child: SearchTabScreen()),
-          Container(
-            child: FavoritesScreen(),
-          ),
-          Container(
-            child: ProfilePage(),
-          ),
-        ]),
-        // _navbarsection(),
-      ],
-    );
-  }
+  // Widget _buildBody() {
+  //   return Stack(
+  //     children: <Widget>[
+  //       GFTabBarView(controller: _tabbarController, children: <Widget>[
+  //         Container(
+  //           child: UserScreen(
+  //               userStore: _userStore,
+  //               postStore: _postStore,
+  //               tabController: _tabbarController),
+  //         ),
+  //         Container(child: SearchTabScreen()),
+  //         Container(
+  //           child: FavoritesScreen(),
+  //         ),
+  //         Container(
+  //           child: ProfilePage(),
+  //         ),
+  //       ]),
+  //     ],
+  //   );
+  // }
 
   _buildLanguageDialog() {
     _showDialog<String>(
@@ -247,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _tabbarController.dispose();
+    //_tabbarController.dispose();
     super.dispose();
   }
 }

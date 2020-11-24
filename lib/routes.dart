@@ -4,6 +4,9 @@ import 'package:boilerplate/ui/authorization/signup/register.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/post/post.dart';
+import 'package:boilerplate/ui/profile/favorites_screen.dart';
+import 'package:boilerplate/ui/profile/profile.dart';
+import 'package:boilerplate/ui/search/search.dart';
 import 'package:flutter/material.dart';
 import 'ui/home/home.dart';
 import 'ui/splash/splash.dart';
@@ -17,6 +20,8 @@ class Routes {
   static const String home = '/home';
   static const String register = '/register';
   static const String search = '/search';
+  static const String favarite = '/favarite';
+  static const String profile = '/profile';
   static const String post = '/post';
   static const String map = '/map';
 
@@ -32,5 +37,8 @@ class Routes {
     post: (BuildContext context) => PostScreen(),
     map: (BuildContext context) => MapScreen(),
     createpost: (BuildContext context) => CreatePostScreen(),
+    search: (BuildContext context) => SearchScreen(),
+    favarite: (BuildContext context) => FavoritesScreen(),
+    profile: (BuildContext context) => ProfilePage(),
   };
 }

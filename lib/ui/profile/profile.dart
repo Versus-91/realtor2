@@ -198,11 +198,7 @@ class _ProfilePageState extends State<ProfilePage>
                           color: Colors.white,
                           splashRadius: 20,
                           onPressed: () {
-                            if (state == AppState.free)
-                              _pickImage();
-                            else if (state == AppState.picked)
-                              _cropImage();
-                            else if (state == AppState.cropped) _clearImage();
+                            _pickImage();
                           },
                         ),
                         decoration: BoxDecoration(
