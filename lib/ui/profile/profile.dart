@@ -17,7 +17,8 @@ import 'package:boilerplate/ui/profile/constants/rounded_image.dart';
 import 'package:boilerplate/ui/profile/constants/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:image_crop/image_crop.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,11 +30,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
-  final cropKey = GlobalKey<CropState>();
-  File _file;
-  File _sample;
-  File _lastCropped;
-
+  File imageFile;
   bool loggedIn = false;
   UserStore _userStore;
   AnimationController _rippleAnimationController;
@@ -193,7 +190,9 @@ class _ProfilePageState extends State<ProfilePage>
                           icon: Icon(Icons.add_a_photo),
                           color: Colors.white,
                           splashRadius: 20,
-                          onPressed: () {},
+                          onPressed: () {
+                            _getFromGallery();
+                          },
                         ),
                         decoration: BoxDecoration(
                             color: Colors.deepOrange,
@@ -316,8 +315,26 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void dispose() {
     super.dispose();
-    _file?.delete();
-    _sample?.delete();
-    _lastCropped?.delete();
+  }
+
+  _getFromGallery() async {
+    PickedFile pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+      maxWidth: 1800,
+      maxHeight: 1800,
+    );
+    _cropImage(pickedFile.path);
+  }
+
+  _cropImage(filePath) async {
+    File croppedImage = await ImageCropper.cropImage(
+      sourcePath: filePath,
+      maxWidth: 1080,
+      maxHeight: 1080,
+    );
+    if (croppedImage != null) {
+      imageFile = croppedImage;
+      setState(() {});
+    }
   }
 }

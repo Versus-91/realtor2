@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         title: 'جستجو',
       ),
       BottomNav(
-        screen: MyApp(),
+        screen: MyPage(),
         navIcon: Icon(
           Icons.favorite,
         ),
