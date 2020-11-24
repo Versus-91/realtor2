@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import 'dart:io';
+
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/routes.dart';
@@ -17,8 +17,8 @@ import 'package:boilerplate/ui/profile/constants/rounded_image.dart';
 import 'package:boilerplate/ui/profile/constants/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:image_crop/image_crop.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,16 +27,13 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-enum AppState {
-  free,
-  picked,
-  cropped,
-}
-
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
-  AppState state;
-  File imageFile;
+  final cropKey = GlobalKey<CropState>();
+  File _file;
+  File _sample;
+  File _lastCropped;
+
   bool loggedIn = false;
   UserStore _userStore;
   AnimationController _rippleAnimationController;
@@ -44,7 +41,6 @@ class _ProfilePageState extends State<ProfilePage>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       loggedIn = prefs.getBool(Preferences.is_logged_in) ?? false;
-      state = AppState.free;
     });
   }
 
@@ -197,9 +193,7 @@ class _ProfilePageState extends State<ProfilePage>
                           icon: Icon(Icons.add_a_photo),
                           color: Colors.white,
                           splashRadius: 20,
-                          onPressed: () {
-                            _pickImage();
-                          },
+                          onPressed: () {},
                         ),
                         decoration: BoxDecoration(
                             color: Colors.deepOrange,
@@ -319,57 +313,11 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
-  Future<Null> _pickImage() async {
-    imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-    if (imageFile != null) {
-      setState(() {
-        state = AppState.picked;
-      });
-    }
-  }
-
-  Future<Null> _cropImage() async {
-    File croppedFile = await ImageCropper.cropImage(
-        sourcePath: imageFile.path,
-        aspectRatioPresets: Platform.isAndroid
-            ? [
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio16x9
-              ]
-            : [
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio5x3,
-                CropAspectRatioPreset.ratio5x4,
-                CropAspectRatioPreset.ratio7x5,
-                CropAspectRatioPreset.ratio16x9
-              ],
-        androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: Colors.deepOrange,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(
-          title: 'Cropper',
-        ));
-    if (croppedFile != null) {
-      imageFile = croppedFile;
-      setState(() {
-        state = AppState.cropped;
-      });
-    }
-  }
-
-  void _clearImage() {
-    imageFile = null;
-    setState(() {
-      state = AppState.free;
-    });
+  @override
+  void dispose() {
+    super.dispose();
+    _file?.delete();
+    _sample?.delete();
+    _lastCropped?.delete();
   }
 }

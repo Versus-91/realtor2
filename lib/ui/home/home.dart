@@ -7,6 +7,7 @@ import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/tabs/user_screen.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
+import 'package:boilerplate/ui/profile/pages/a.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
 import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       vsync: this,
       duration: kRippleAnimationDuration,
     );
-    // _tabbarController = TabController(length: 4, vsync: this);
+  
     getSharedPrefs();
     navItems = [
       BottomNav(
@@ -69,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         title: 'جستجو',
       ),
       BottomNav(
-        screen: FavoritesScreen(),
+        screen: MyApp(),
         navIcon: Icon(
           Icons.favorite,
         ),
@@ -100,10 +101,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: EmptyAppBar(),
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'ارسال آگهی',
+        child: Icon(Icons.add),
+        elevation: 2.0,
+      ),
       body: navItems[_screenNumber].screen,
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.lightGreen,
-        unselectedItemColor: Colors.blueGrey,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
         currentIndex: _screenNumber,
         onTap: (i) => setState(() {
           _screenNumber = i;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BottomNav {
   Widget screen;
-  Icon navIcon;
+  Widget navIcon;
   String title;
   BottomNav({this.screen, this.navIcon, this.title});
 }

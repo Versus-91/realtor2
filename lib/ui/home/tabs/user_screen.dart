@@ -92,22 +92,13 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
               Positioned(
                 top: MediaQuery.of(context).size.height / 2.08,
                 child: Container(
-                  height: MediaQuery.of(context).size.height / 3,
+                  height: MediaQuery.of(context).size.height / 3.1,
                   width: MediaQuery.of(context).size.width,
                   decoration: new BoxDecoration(
                       image: new DecorationImage(
                     image: new AssetImage("assets/images/bg11.png"),
                     fit: BoxFit.fill,
                   )),
-                  alignment: Alignment.bottomRight,
-                  child: FloatingActionButton.extended(
-                    onPressed: () {
-                      // Add your onPressed code here!
-                    },
-                    label: Text('ارسال آگهی'),
-                    // icon: Icon(Icons.send),
-                    backgroundColor: Colors.blueGrey,
-                  ),
                 ),
               ),
             ],
