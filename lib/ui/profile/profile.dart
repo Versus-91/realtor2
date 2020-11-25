@@ -17,9 +17,6 @@ import 'package:boilerplate/ui/profile/constants/rounded_image.dart';
 import 'package:boilerplate/ui/profile/constants/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -190,9 +187,7 @@ class _ProfilePageState extends State<ProfilePage>
                           icon: Icon(Icons.add_a_photo),
                           color: Colors.white,
                           splashRadius: 20,
-                          onPressed: () {
-                            _getFromGallery();
-                          },
+                          onPressed: () {},
                         ),
                         decoration: BoxDecoration(
                             color: Colors.deepOrange,
@@ -315,26 +310,5 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void dispose() {
     super.dispose();
-  }
-
-  _getFromGallery() async {
-    PickedFile pickedFile = await ImagePicker().getImage(
-      source: ImageSource.gallery,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    _cropImage(pickedFile.path);
-  }
-
-  _cropImage(filePath) async {
-    File croppedImage = await ImageCropper.cropImage(
-      sourcePath: filePath,
-      maxWidth: 1080,
-      maxHeight: 1080,
-    );
-    if (croppedImage != null) {
-      imageFile = croppedImage;
-      setState(() {});
-    }
   }
 }

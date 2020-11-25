@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       vsync: this,
       duration: kRippleAnimationDuration,
     );
-  
+
     getSharedPrefs();
     navItems = [
       BottomNav(
@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         title: 'جستجو',
       ),
       BottomNav(
-        screen: MyPage(),
+        screen: ,
         navIcon: Icon(
           Icons.favorite,
         ),
