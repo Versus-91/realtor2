@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
@@ -27,7 +29,8 @@ abstract class _UserStore with Store {
 
   @observable
   User user;
-
+  @observable
+  File avatarImage;
   @observable
   bool success = false;
   @observable
@@ -40,6 +43,11 @@ abstract class _UserStore with Store {
     if (val == false) {
       user = null;
     }
+  }
+
+  @action
+  void setAvatarImage(File img) {
+    avatarImage = img;
   }
 
   // actions:-------------------------------------------------------------------

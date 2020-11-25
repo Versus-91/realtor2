@@ -9,7 +9,7 @@ import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/a.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
-import 'package:boilerplate/ui/profile/test.dart';
+import 'package:boilerplate/widgets/image_crop_screen.dart';
 import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   UserStore _userStore;
   PostStore _postStore;
+
   int _screenNumber = 0;
   List<BottomNav> navItems;
   LanguageStore _languageStore;
@@ -72,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         title: 'جستجو',
       ),
       BottomNav(
-        screen: AvatarPicker(),
+        screen: FavoritesScreen(),
         navIcon: Icon(
           Icons.favorite,
         ),
@@ -106,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red,
         onPressed: () {},
         tooltip: 'ارسال آگهی',
         child: Icon(Icons.add),

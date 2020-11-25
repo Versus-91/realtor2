@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/plugin/cropper.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
@@ -17,6 +18,7 @@ import 'package:boilerplate/ui/profile/constants/rounded_image.dart';
 import 'package:boilerplate/ui/profile/constants/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,6 +38,17 @@ class _ProfilePageState extends State<ProfilePage>
     setState(() {
       loggedIn = prefs.getBool(Preferences.is_logged_in) ?? false;
     });
+  }
+
+  final cropKey = GlobalKey<ImgCropState>();
+
+  Future getImage(type) async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (image == null) return;
+
+    var result = await Navigator.of(context)
+        .pushNamed(Routes.crop, arguments: {'image': image});
+    _userStore.setAvatarImage(result);
   }
 
   void getUserLogin() async {
@@ -140,14 +153,22 @@ class _ProfilePageState extends State<ProfilePage>
                                               MainAxisAlignment.start,
                                           children: [
                                             RadialProgress(
-                                              width: 4,
-                                              goalCompleted: 0.9,
-                                              child: RoundedImage(
-                                                imagePath:
-                                                    "assets/images/house1.jpg",
-                                                size: Size.fromWidth(120.0),
-                                              ),
-                                            ),
+                                                width: 4,
+                                                goalCompleted: 0.9,
+                                                child: _userStore.avatarImage ==
+                                                        null
+                                                    ? Image.asset(
+                                                        "assets/images/no-profile.jpg",
+                                                        fit: BoxFit.cover,
+                                                        width: 140,
+                                                        height: 140,
+                                                      )
+                                                    : RoundedImage(
+                                                        image: _userStore
+                                                            .avatarImage,
+                                                        size: Size.fromWidth(
+                                                            120.0),
+                                                      )),
                                             Divider(),
                                             Row(
                                               mainAxisAlignment:
@@ -170,31 +191,40 @@ class _ProfilePageState extends State<ProfilePage>
                                           ],
                                         ),
                                       )
-                                    : Text('data');
+                                    : Image.asset(
+                                        "assets/images/no-profile.jpg",
+                                        fit: BoxFit.cover,
+                                        width: 120,
+                                        height: 120,
+                                      );
                               },
                             ),
                           ],
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: 110,
-                      right: 110,
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        child: IconButton(
-                          icon: Icon(Icons.add_a_photo),
-                          color: Colors.white,
-                          splashRadius: 20,
-                          onPressed: () {},
-                        ),
-                        decoration: BoxDecoration(
-                            color: Colors.deepOrange,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                      ),
-                    ),
+                    loggedIn == true
+                        ? Positioned(
+                            top: 150,
+                            right: 110,
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              child: IconButton(
+                                icon: Icon(Icons.add_a_photo),
+                                color: Colors.white,
+                                splashRadius: 20,
+                                onPressed: () async {
+                                  getImage(ImageSource.gallery);
+                                },
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Colors.deepOrange,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                            ),
+                          )
+                        : SizedBox.shrink()
                   ],
                 ),
               ),

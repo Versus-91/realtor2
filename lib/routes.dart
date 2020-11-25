@@ -5,6 +5,7 @@ import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
+import 'package:boilerplate/widgets/image_crop_screen.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
 import 'package:boilerplate/ui/search/search.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class Routes {
   static const String profile = '/profile';
   static const String post = '/post';
   static const String map = '/map';
+  static const String crop = '/crop';
 
   static const String createpost = '/createpost';
 
@@ -40,5 +42,6 @@ class Routes {
     search: (BuildContext context) => SearchScreen(),
     favarite: (BuildContext context) => FavoritesScreen(),
     profile: (BuildContext context) => ProfilePage(),
+    crop: (BuildContext context) => ImageCropScreen(),
   };
 }
