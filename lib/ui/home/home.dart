@@ -9,6 +9,7 @@ import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/a.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
+import 'package:boilerplate/ui/profile/test.dart';
 import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/sharedpref/constants/preferences.dart';
+import '../../main.dart';
 import '../../utils/locale/app_localization.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -70,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         title: 'جستجو',
       ),
       BottomNav(
-        screen: ,
+        screen: AvatarPicker(),
         navIcon: Icon(
           Icons.favorite,
         ),
