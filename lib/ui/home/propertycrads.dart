@@ -157,7 +157,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                                       color: Colors.greenAccent,
                                     ),
                                     Text(
-                                      'قیمت: ${posts[position].price}',
+                                      'قیمت: ${posts[position].price}\$',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 16),

@@ -126,7 +126,7 @@ abstract class _FilterFormStore with Store {
   }
 
   @action
-  PostRequest applyFilters() {
+  PostRequest applyFilters({bool paginate = false}) {
     var request = PostRequest(
         maxPrice: maxPrice?.floor(),
         minPrice: minPrice?.floor(),
@@ -149,6 +149,9 @@ abstract class _FilterFormStore with Store {
           }
         }).toList(),
         amenities: amenities);
+    if (paginate) {
+      return request;
+    }
     if (prevRequest == request) {
       request = null;
     } else {

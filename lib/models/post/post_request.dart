@@ -3,6 +3,8 @@ import 'package:uuid/uuid.dart';
 
 class PostRequest {
   int id;
+  int page;
+  int pageSize;
   int minPrice;
   int maxPrice;
   int minRentPrice;
@@ -23,6 +25,8 @@ class PostRequest {
   int bedCount;
   PostRequest(
       {this.id,
+      this.page,
+      this.pageSize,
       this.districtName,
       this.categoryName,
       this.cityName,
@@ -52,6 +56,8 @@ class PostRequest {
     result.addAll({"minDepositPrice": minDepositPrice.toString()});
     result.addAll({"maxDepositPrice": maxDepositPrice.toString()});
     result.addAll({"category": category.toString()});
+    result.addAll({"maxResultCount": pageSize.toString()});
+    result.addAll({"skipCount": ((page - 1) * pageSize).toString()});
     if (district != null) {
       result.addAll({"district": district.toString()});
     }

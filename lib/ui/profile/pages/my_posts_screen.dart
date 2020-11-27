@@ -149,7 +149,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                               ? Column(
                                   children: [
                                     Text(
-                                      'رهن: ${_postStore.userPostList.posts[position].deopsit} ',
+                                      'رهن: ${_postStore.userPostList.posts[position].deopsit}\$ ',
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -158,7 +158,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                                       softWrap: false,
                                     ),
                                     Text(
-                                      'اجاره: ${_postStore.userPostList.posts[position].rent}',
+                                      'اجاره: ${_postStore.userPostList.posts[position].rent}\$',
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -169,7 +169,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                                   ],
                                 )
                               : Text(
-                                  'قیمت: ${_postStore.userPostList.posts[position].price}',
+                                  'قیمت: ${_postStore.userPostList.posts[position].price}\$',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 17),

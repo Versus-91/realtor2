@@ -29,7 +29,7 @@ class SearchDataSource {
     }
   }
 
-  Future<PostRequest> findById(Uuid id) async {
+  Future<PostRequest> findById(int id) async {
     var db = await _searchesStore.find(await _db);
     var searches = db.map((e) {
       final post = PostRequest.fromMapLocalStore(e.value);

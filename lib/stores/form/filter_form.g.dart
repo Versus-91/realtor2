@@ -24,6 +24,36 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
     });
   }
 
+  final _$minRentPriceAtom = Atom(name: '_FilterFormStore.minRentPrice');
+
+  @override
+  double get minRentPrice {
+    _$minRentPriceAtom.reportRead();
+    return super.minRentPrice;
+  }
+
+  @override
+  set minRentPrice(double value) {
+    _$minRentPriceAtom.reportWrite(value, super.minRentPrice, () {
+      super.minRentPrice = value;
+    });
+  }
+
+  final _$minDepositPriceAtom = Atom(name: '_FilterFormStore.minDepositPrice');
+
+  @override
+  double get minDepositPrice {
+    _$minDepositPriceAtom.reportRead();
+    return super.minDepositPrice;
+  }
+
+  @override
+  set minDepositPrice(double value) {
+    _$minDepositPriceAtom.reportWrite(value, super.minDepositPrice, () {
+      super.minDepositPrice = value;
+    });
+  }
+
   final _$selectedPropertyTypesAtom =
       Atom(name: '_FilterFormStore.selectedPropertyTypes');
 
@@ -53,6 +83,36 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   set maxPrice(double value) {
     _$maxPriceAtom.reportWrite(value, super.maxPrice, () {
       super.maxPrice = value;
+    });
+  }
+
+  final _$maxRentPriceAtom = Atom(name: '_FilterFormStore.maxRentPrice');
+
+  @override
+  double get maxRentPrice {
+    _$maxRentPriceAtom.reportRead();
+    return super.maxRentPrice;
+  }
+
+  @override
+  set maxRentPrice(double value) {
+    _$maxRentPriceAtom.reportWrite(value, super.maxRentPrice, () {
+      super.maxRentPrice = value;
+    });
+  }
+
+  final _$maxDepositPriceAtom = Atom(name: '_FilterFormStore.maxDepositPrice');
+
+  @override
+  double get maxDepositPrice {
+    _$maxDepositPriceAtom.reportRead();
+    return super.maxDepositPrice;
+  }
+
+  @override
+  set maxDepositPrice(double value) {
+    _$maxDepositPriceAtom.reportWrite(value, super.maxDepositPrice, () {
+      super.maxDepositPrice = value;
     });
   }
 
@@ -216,7 +276,7 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
-  void setMaxdepositPrice(double value) {
+  void setMaxDepositPrice(double value) {
     final _$actionInfo = _$_FilterFormStoreActionController.startAction(
         name: '_FilterFormStore.setMaxDepositPrice');
     try {
@@ -293,11 +353,11 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
-  PostRequest applyFilters() {
+  PostRequest applyFilters({bool paginate = false}) {
     final _$actionInfo = _$_FilterFormStoreActionController.startAction(
         name: '_FilterFormStore.applyFilters');
     try {
-      return super.applyFilters();
+      return super.applyFilters(paginate: paginate);
     } finally {
       _$_FilterFormStoreActionController.endAction(_$actionInfo);
     }
@@ -318,8 +378,12 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   String toString() {
     return '''
 minPrice: ${minPrice},
+minRentPrice: ${minRentPrice},
+minDepositPrice: ${minDepositPrice},
 selectedPropertyTypes: ${selectedPropertyTypes},
 maxPrice: ${maxPrice},
+maxRentPrice: ${maxRentPrice},
+maxDepositPrice: ${maxDepositPrice},
 area: ${area},
 category: ${category},
 bedCount: ${bedCount},

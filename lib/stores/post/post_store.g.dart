@@ -76,6 +76,36 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$pageAtom = Atom(name: '_PostStore.page');
+
+  @override
+  int get page {
+    _$pageAtom.reportRead();
+    return super.page;
+  }
+
+  @override
+  set page(int value) {
+    _$pageAtom.reportWrite(value, super.page, () {
+      super.page = value;
+    });
+  }
+
+  final _$pageSizeAtom = Atom(name: '_PostStore.pageSize');
+
+  @override
+  int get pageSize {
+    _$pageSizeAtom.reportRead();
+    return super.pageSize;
+  }
+
+  @override
+  set pageSize(int value) {
+    _$pageSizeAtom.reportWrite(value, super.pageSize, () {
+      super.pageSize = value;
+    });
+  }
+
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
 
   @override
@@ -99,6 +129,19 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.getUserPosts(request: request));
   }
 
+  final _$_PostStoreActionController = ActionController(name: '_PostStore');
+
+  @override
+  void loadNextPage() {
+    final _$actionInfo = _$_PostStoreActionController.startAction(
+        name: '_PostStore.loadNextPage');
+    try {
+      return super.loadNextPage();
+    } finally {
+      _$_PostStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -106,6 +149,8 @@ fetchPostsFuture: ${fetchPostsFuture},
 postList: ${postList},
 userPostList: ${userPostList},
 success: ${success},
+page: ${page},
+pageSize: ${pageSize},
 loading: ${loading}
     ''';
   }

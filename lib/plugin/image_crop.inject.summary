@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/plugin/image_crop.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

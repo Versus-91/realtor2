@@ -256,13 +256,15 @@ class _ProfilePageState extends State<ProfilePage>
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => MyPostsScreen(),
-                                  ),
-                                );
-                              },
+                              onTap: loggedIn == true
+                                  ? () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => MyPostsScreen(),
+                                        ),
+                                      );
+                                    }
+                                  : () {},
                               child: ProfileInfoBigCard(
                                 secondText: "آگهی های من",
                                 icon: Image.asset(

@@ -250,6 +250,21 @@ mixin _$PostFormStore on _PostFormStore, Store {
     });
   }
 
+  final _$amenitiesAtom = Atom(name: '_PostFormStore.amenities');
+
+  @override
+  List<int> get amenities {
+    _$amenitiesAtom.reportRead();
+    return super.amenities;
+  }
+
+  @override
+  set amenities(List<int> value) {
+    _$amenitiesAtom.reportWrite(value, super.amenities, () {
+      super.amenities = value;
+    });
+  }
+
   final _$insertPostAsyncAction = AsyncAction('_PostFormStore.insertPost');
 
   @override
@@ -328,6 +343,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
         name: '_PostFormStore.setDistrict');
     try {
       return super.setDistrict(value);
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setAmenity(int value) {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.setAmenity');
+    try {
+      return super.setAmenity(value);
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
@@ -516,7 +542,8 @@ area: ${area},
 rahnPrice: ${rahnPrice},
 rentPrice: ${rentPrice},
 buyPrice: ${buyPrice},
-countbedroom: ${countbedroom}
+countbedroom: ${countbedroom},
+amenities: ${amenities}
     ''';
   }
 }

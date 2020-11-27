@@ -1,5 +1,5 @@
 {
-  "asset": "asset:boilerplate/lib/ui/login/custom_clipper.dart",
+  "asset": "asset:boilerplate/lib/ui/authorization/login/custom_clipper.dart",
   "summary": {
     "injector": [],
     "module": [],

@@ -1,5 +1,5 @@
 {
-  "asset": "asset:boilerplate/lib/ui/signup/register.dart",
+  "asset": "asset:boilerplate/lib/ui/authorization/signup/register.dart",
   "summary": {
     "injector": [],
     "module": [],

@@ -71,23 +71,64 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                         );
                       } else {
                         if (_postStore.postList != null) {
-                          return PropertyCrads(
-                            postsList: _postStore.postList,
-                          );
+                          return NotificationListener<ScrollNotification>(
+                              onNotification: (ScrollNotification scrollInfo) {
+                                if (scrollInfo.metrics.pixels ==
+                                    scrollInfo.metrics.maxScrollExtent) {
+                                  if (_postStore.postList.totalCount >
+                                      _postStore.page * _postStore.pageSize) {
+                                    _postStore.loadNextPage();
+                                    var request = _filterForm.applyFilters(
+                                        paginate: true);
+                                    _postStore.getPosts(request: request);
+                                  } else {
+                                    print('already at final page');
+                                  }
+                                }
+                                return true;
+                              },
+                              child: PropertyCrads(
+                                postsList: _postStore.postList,
+                              ));
                         } else {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          return Stack(
                             children: [
-                              Image.asset("assets/images/search.png"),
-                              SizedBox(
-                                height: 10,
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset("assets/images/search.png"),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
                               ),
-                              RaisedButton.icon(
-                                label: Text("search"),
-                                onPressed: () {
-                                  openFilterScreen();
-                                },
-                                icon: Icon(Icons.search),
+                              Positioned(
+                                top: MediaQuery.of(context).size.height / 3,
+                                right: MediaQuery.of(context).size.width / 2.8,
+                                child:
+                                    //  FloatingActionButton(
+                                    //   backgroundColor: Colors.grey,
+                                    //   child: Icon(
+                                    //     Icons.search,
+                                    //   ),
+                                    //   onPressed: () {
+                                    //     // if (request != null) {
+                                    //     //   await _searchDataSource.insert(request);
+                                    //     // }
+                                    //   },
+                                    // ),
+
+                                    RaisedButton.icon(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      side: BorderSide(
+                                          color: Colors.transparent)),
+                                  label: Text("search"),
+                                  onPressed: () {
+                                    openFilterScreen();
+                                  },
+                                  icon: Icon(Icons.search),
+                                ),
                               )
                             ],
                           );
@@ -116,6 +157,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
           child: Padding(
             padding: EdgeInsets.only(right: 15, bottom: 10),
             child: FloatingActionButton(
+              heroTag: 'saveSearchButton',
               child: Icon(Icons.save),
               onPressed: () {
                 // if (request != null) {

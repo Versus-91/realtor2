@@ -76,12 +76,15 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
                     "جست و جو های اخیر",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                   ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Container(
-                    decoration: new BoxDecoration(
-                        image: new DecorationImage(
-                      image: new AssetImage("assets/images/cloud.png"),
-                      fit: BoxFit.fill,
-                    )),
+                    // decoration: new BoxDecoration(
+                    //     image: new DecorationImage(
+                    //   image: new AssetImage("assets/images/cloud.png"),
+                    //   fit: BoxFit.fill,
+                    // )),
                     height: MediaQuery.of(context).size.height / 4,
                     width: MediaQuery.of(context).size.width,
                     alignment: Alignment.topRight,
@@ -119,40 +122,45 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
           return ListView.builder(
             itemCount: snapshot.data.length,
             itemBuilder: (context, position) {
-              return ListTile(
-                trailing: InkWell(
-                  child: Icon(Icons.delete),
+              return Card(
+                color: Colors.white,
+                elevation: 5,
+                shadowColor: Colors.blue,
+                child: ListTile(
+                  trailing: InkWell(
+                    child: Icon(Icons.delete),
+                    onTap: () async {
+                      await appComponent
+                          .getRepository()
+                          .removeSearch(snapshot.data[position].id);
+                      setState(() {
+                        appComponent.getRepository().getSearchesList();
+                      });
+                    },
+                  ),
+                  title: InkWell(child: createLabel(snapshot.data[position])),
                   onTap: () async {
-                    await appComponent
-                        .getRepository()
-                        .removeSearch(snapshot.data[position].id);
-                    setState(() {
-                      appComponent.getRepository().getSearchesList();
+                    var request = PostRequest(
+                        maxPrice: snapshot.data[position].maxPrice?.floor(),
+                        minPrice: snapshot.data[position].minPrice?.floor(),
+                        minArea: 0,
+                        maxArea: snapshot.data[position].maxArea?.floor(),
+                        district: snapshot.data[position].district,
+                        districtName: snapshot.data[position].districtName,
+                        city: snapshot.data[position].city,
+                        cityName: snapshot.data[position].cityName,
+                        bedCount: snapshot.data[position].bedCount,
+                        category: snapshot.data[position].category,
+                        categoryName: snapshot.data[position].categoryName,
+                        types: snapshot.data[position]?.types,
+                        amenities: snapshot.data[position]?.amenities);
+                    await widget.postStore
+                        .getPosts(request: request)
+                        .then((value) {
+                      widget.tabController.animateTo(1);
                     });
                   },
                 ),
-                title: InkWell(child: createLabel(snapshot.data[position])),
-                onTap: () async {
-                  var request = PostRequest(
-                      maxPrice: snapshot.data[position].maxPrice?.floor(),
-                      minPrice: snapshot.data[position].minPrice?.floor(),
-                      minArea: 0,
-                      maxArea: snapshot.data[position].maxArea?.floor(),
-                      district: snapshot.data[position].district,
-                      districtName: snapshot.data[position].districtName,
-                      city: snapshot.data[position].city,
-                      cityName: snapshot.data[position].cityName,
-                      bedCount: snapshot.data[position].bedCount,
-                      category: snapshot.data[position].category,
-                      categoryName: snapshot.data[position].categoryName,
-                      types: snapshot.data[position]?.types,
-                      amenities: snapshot.data[position]?.amenities);
-                  await widget.postStore
-                      .getPosts(request: request)
-                      .then((value) {
-                    widget.tabController.animateTo(1);
-                  });
-                },
               );
             },
           );

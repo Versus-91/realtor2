@@ -23,7 +23,7 @@ import 'package:http/http.dart' as http;
 class SearchScreen extends StatefulWidget {
   final FilterFormStore filterForm;
   final PostStore postStore;
-  SearchScreen({@required this.filterForm, @required this.postStore});
+  SearchScreen({ this.filterForm,  this.postStore});
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
@@ -794,8 +794,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 Flexible(
                   child: TextField(
                       onChanged: (value) {
-                        widget.filterForm
-                            .setMaxdepositPrice(double.parse(value));
+                        // widget.filterForm
+                        //     .setMaxdepositPrice(double.parse(value));
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(

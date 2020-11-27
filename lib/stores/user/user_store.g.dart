@@ -46,6 +46,21 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  final _$avatarImageAtom = Atom(name: '_UserStore.avatarImage');
+
+  @override
+  File get avatarImage {
+    _$avatarImageAtom.reportRead();
+    return super.avatarImage;
+  }
+
+  @override
+  set avatarImage(File value) {
+    _$avatarImageAtom.reportWrite(value, super.avatarImage, () {
+      super.avatarImage = value;
+    });
+  }
+
   final _$successAtom = Atom(name: '_UserStore.success');
 
   @override
@@ -97,10 +112,22 @@ mixin _$UserStore on _UserStore, Store {
   }
 
   @override
+  void setAvatarImage(File img) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.setAvatarImage');
+    try {
+      return super.setAvatarImage(img);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchUserFuture: ${fetchUserFuture},
 user: ${user},
+avatarImage: ${avatarImage},
 success: ${success},
 isLoggedIn: ${isLoggedIn},
 loading: ${loading}

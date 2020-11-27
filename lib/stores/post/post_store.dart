@@ -33,18 +33,35 @@ abstract class _PostStore with Store {
   PostList userPostList;
   @observable
   bool success = false;
+  @observable
+  int page = 1;
+  @observable
+  int pageSize = 3;
+  @action
+  void loadNextPage() {
+    page = page + 1;
+  }
 
   @computed
-  bool get loading => fetchPostsFuture.status == FutureStatus.pending;
+  bool get loading {
+    return fetchPostsFuture.status == FutureStatus.pending;
+  }
 
   // actions:-------------------------------------------------------------------
   @action
   Future getPosts({PostRequest request}) async {
+    request.page = page;
+    request.pageSize = pageSize;
+
     final future = _repository.getPosts(request: request);
     fetchPostsFuture = ObservableFuture(future);
 
     future.then((postList) {
-      this.postList = postList;
+      if (page > 1) {
+        this.postList.posts.addAll(postList.posts);
+      } else {
+        this.postList = postList;
+      }
     }).catchError((error) {
       print(error);
       errorStore.errorMessage = DioErrorUtil.handleError(error);

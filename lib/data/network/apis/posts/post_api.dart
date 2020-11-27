@@ -39,7 +39,8 @@ class PostApi {
         uri = Uri.http(baseUrl, '/api/services/app/Post/GetAll');
       }
       final res = await _dioClient.get(uri.toString());
-      return PostList.fromJson(res["result"]["items"]);
+      return PostList.fromJson(
+          res["result"]["items"], res["result"]["totalCount"]);
     } catch (e) {
       throw e;
     }
@@ -59,7 +60,9 @@ class PostApi {
         uri = Uri.http(baseUrl, '/api/services/app/Post/GetUserPosts');
       }
       final res = await _dioClient.get(uri.toString());
-      return PostList.fromJson(res["result"]["items"]);
+
+      return PostList.fromJson(
+          res["result"]["items"], res["result"]["totalCount"]);
     } catch (e) {
       throw e;
     }
