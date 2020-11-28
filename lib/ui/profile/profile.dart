@@ -17,6 +17,7 @@ import 'package:boilerplate/ui/profile/profile_info_big_card.dart';
 import 'package:boilerplate/ui/profile/constants/radial_progress.dart';
 import 'package:boilerplate/ui/profile/constants/rounded_image.dart';
 import 'package:boilerplate/ui/profile/constants/text_style.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:dio/dio.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -58,8 +59,9 @@ class _ProfilePageState extends State<ProfilePage>
         .uploadAvatarImage(multiPartAvatarImage)
         .then((value) => _userStore.getUser())
         .catchError((error) => Flushbar(
-              message: " آپلوود عگس ناموقیت آمیز بوده است",
-              title: "خطا در آپلود:",
+              message:
+                  AppLocalizations.of(context).translate('error_upload_avatar'),
+              title: AppLocalizations.of(context).translate('error_upload'),
             ));
   }
 
@@ -115,7 +117,8 @@ class _ProfilePageState extends State<ProfilePage>
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "پروفایل من",
+                                    AppLocalizations.of(context)
+                                        .translate('profile'),
                                     textAlign: TextAlign.right,
                                     style: headingTextStyle,
                                   ),
@@ -140,7 +143,9 @@ class _ProfilePageState extends State<ProfilePage>
                                       },
                                       child: Row(
                                         children: [
-                                          Text("خروج",
+                                          Text(
+                                              AppLocalizations.of(context)
+                                                  .translate('logout'),
                                               style: whiteNameTextStyle),
                                           Divider(),
                                           Icon(
@@ -263,7 +268,8 @@ class _ProfilePageState extends State<ProfilePage>
                                 );
                               },
                               child: ProfileInfoBigCard(
-                                secondText: "اطلاعات کاربری",
+                                secondText: AppLocalizations.of(context)
+                                    .translate('account_info'),
                                 icon: Icon(
                                   Icons.account_circle,
                                   size: 25,
@@ -282,7 +288,8 @@ class _ProfilePageState extends State<ProfilePage>
                                     }
                                   : () {},
                               child: ProfileInfoBigCard(
-                                secondText: "آگهی های من",
+                                secondText: AppLocalizations.of(context)
+                                        .translate('my_posts'),
                                 icon: Image.asset(
                                   "assets/icons/checklist.png",
                                   width: 25,
@@ -295,7 +302,8 @@ class _ProfilePageState extends State<ProfilePage>
                         TableRow(
                           children: [
                             ProfileInfoBigCard(
-                              secondText: "طرح های موجود",
+                              secondText: AppLocalizations.of(context)
+                                        .translate('plants'),
                               icon: Icon(
                                 Icons.remove_red_eye,
                                 size: 25,
@@ -311,7 +319,8 @@ class _ProfilePageState extends State<ProfilePage>
                                 );
                               },
                               child: ProfileInfoBigCard(
-                                secondText: "درباره ما",
+                                secondText:AppLocalizations.of(context)
+                                        .translate('about_us'),
                                 icon: Icon(
                                   Icons.help_outline,
                                   size: 25,

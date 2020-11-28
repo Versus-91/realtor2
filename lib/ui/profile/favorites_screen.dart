@@ -35,7 +35,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'آگهی های مورد علاقه',
+          AppLocalizations.of(context).translate('favarite_posts'),
           style: TextStyle(fontSize: 20, color: Colors.black),
         ),
         backgroundColor: Colors.red,
@@ -86,18 +86,6 @@ class _FavoritesScreenState extends State<FavoritesScreen>
         }
       },
     );
-    // return (_postStore.postList != null && _postStore.postList.posts.length > 0)
-    //     ? ListView.builder(
-    //         itemCount: _postStore.postList.posts.length,
-    //         itemBuilder: (context, position) {
-    //           return _buildListItem(position);
-    //         },
-    //       )
-    //     : Center(
-    //         child: Text(
-    //           AppLocalizations.of(context).translate('home_tv_no_post_found'),
-    //         ),
-    //       );
   }
 
   Widget _buildListItem(AsyncSnapshot snapshot, int position) {
@@ -155,11 +143,16 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                               ),
                             ],
                           ),
-                          snapshot.data[position].category.name.contains('رهن')
+                          snapshot.data[position].category.name.contains(
+                                  AppLocalizations.of(context)
+                                      .translate('rahn'))
                               ? Column(
                                   children: [
                                     Text(
-                                      'رهن: ${snapshot.data[position].deopsit} ',
+                                      AppLocalizations.of(context)
+                                              .translate('rahn') +
+                                          ":" +
+                                          '${snapshot.data[position].deopsit} ',
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -168,7 +161,10 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                       softWrap: false,
                                     ),
                                     Text(
-                                      'اجاره: ${snapshot.data[position].rent}',
+                                      AppLocalizations.of(context)
+                                              .translate('rent') +
+                                          ":" +
+                                          '${snapshot.data[position].rent}',
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -185,7 +181,10 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                       color: Colors.greenAccent,
                                     ),
                                     Text(
-                                      'قیمت: ${snapshot.data[position].price}',
+                                      AppLocalizations.of(context)
+                                              .translate('price') +
+                                          ":" +
+                                          '${snapshot.data[position].price}',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 16),
@@ -257,7 +256,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                       ),
                       Column(
                         children: [
-                          Text("متراژ"),
+                          Text(AppLocalizations.of(context).translate('area')),
                           Text(
                             '${snapshot.data[position].area}',
                             style: TextStyle(
@@ -273,7 +272,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                       ),
                       Column(
                         children: [
-                          Text("اتاق خواب"),
+                          Text(AppLocalizations.of(context).translate('bed')),
                           Text(
                             '${snapshot.data[position].bedroom}',
                             style: TextStyle(
@@ -289,7 +288,8 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                       ),
                       Column(
                         children: [
-                          Text("شناسه آگهی"),
+                          Text(AppLocalizations.of(context)
+                              .translate('post_id')),
                           Text(
                             '${snapshot.data[position].id}',
                             style: TextStyle(

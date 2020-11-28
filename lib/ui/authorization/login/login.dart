@@ -147,7 +147,8 @@ class _LoginPageState extends State<LoginPage> {
               alignment: Alignment.center,
               child: Padding(
                 padding: const EdgeInsets.only(left: 50),
-                child: Text('ورود با جیمیل',
+                child: Text(
+                    AppLocalizations.of(context).translate('login_btn_gmail'),
                     style: TextStyle(
                         color: Colors.grey,
                         fontSize: 18,
@@ -216,7 +217,8 @@ class _LoginPageState extends State<LoginPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'ایمیل',
+                                  AppLocalizations.of(context)
+                                      .translate('user_email'),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15),
@@ -247,7 +249,8 @@ class _LoginPageState extends State<LoginPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'رمز',
+                                  AppLocalizations.of(context)
+                                      .translate('user_password'),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15),
@@ -278,7 +281,8 @@ class _LoginPageState extends State<LoginPage> {
                             FlatButton(
                               onPressed: () {},
                               child: Text(
-                                "رمز خود را فراموش کرده اید؟",
+                                AppLocalizations.of(context)
+                                    .translate('login_btn_forgot_password'),
                                 style:
                                     TextStyle(color: Colors.blue, fontSize: 10),
                               ),
@@ -327,11 +331,13 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.of(context).pushNamed(Routes.home);
                   },
                   icon: Icon(Icons.keyboard_arrow_right),
-                  label: Text("رد شدن", style: TextStyle(color: Colors.blue))),
+                  label: Text(AppLocalizations.of(context).translate('skip'),
+                      style: TextStyle(color: Colors.blue))),
               Row(
                 children: [
                   Text(
-                    'آیا ثبت نام نکرده اید؟',
+                    AppLocalizations.of(context)
+                        .translate('login_btn_Register'),
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(
@@ -341,7 +347,8 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: RichText(
                         text: TextSpan(
-                            text: 'ثبت نام',
+                            text: AppLocalizations.of(context)
+                                .translate('Register'),
                             style: TextStyle(
                                 color: Color(0xfff79c4f),
                                 fontSize: 13,

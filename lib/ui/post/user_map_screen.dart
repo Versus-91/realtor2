@@ -1,4 +1,5 @@
 import 'package:boilerplate/stores/form/post_form.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
@@ -55,7 +56,9 @@ class _UserMapScreenState extends State<UserMapScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('تایید مکان'),
+                Text(
+                  AppLocalizations.of(context).translate('location_submit'),
+                ),
                 Icon(Icons.send),
               ],
             ),
@@ -74,7 +77,7 @@ class _UserMapScreenState extends State<UserMapScreen> {
 
   Widget _buildAppBar() {
     return AppBar(
-      title: Text("نقشه"),
+      title: Text(AppLocalizations.of(context).translate('map')),
     );
   }
 

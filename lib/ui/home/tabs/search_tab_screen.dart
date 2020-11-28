@@ -127,7 +127,10 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                             BorderRadius.circular(10.0),
                                         side: BorderSide(
                                             color: Colors.transparent)),
-                                    label: Text("search"),
+                                    label: Text(
+                                      AppLocalizations.of(context)
+                                          .translate('search'),
+                                    ),
                                     onPressed: () {
                                       openFilterScreen();
                                     },
@@ -209,7 +212,9 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              'تعداد پست ها :${_postStore.postList.posts?.length}',
+                              AppLocalizations.of(context)
+                                      .translate('count_post') +
+                                  '${_postStore.postList.posts?.length}',
                               style: TextStyle(
                                 fontWeight: FontWeight.w200,
                                 fontSize: 16,
@@ -219,7 +224,9 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                         : Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              'تعداد پست ها :${'N/A'}',
+                              AppLocalizations.of(context)
+                                      .translate('count_post') +
+                                  '${'N/A'}',
                               style: TextStyle(
                                 fontWeight: FontWeight.w200,
                                 fontSize: 16,
@@ -247,7 +254,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              'فیلتر',
+                              AppLocalizations.of(context).translate('filter'),
                               style: TextStyle(
                                 fontWeight: FontWeight.w100,
                                 fontSize: 16,
@@ -308,7 +315,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
         child: Row(
           children: <Widget>[
             Text(
-              'آگهی ها',
+              AppLocalizations.of(context).translate('posts'),
               style: TextStyle(fontSize: 20, color: Colors.black),
             ),
             Container(

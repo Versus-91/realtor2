@@ -3,6 +3,7 @@ import 'package:boilerplate/models/location/locations.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
@@ -108,8 +109,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       size: 18,
                       color: Colors.blueGrey,
                     ),
-                    label:
-                        Text("جست و جو", style: TextStyle(color: Colors.white)),
+                    label: Text(
+                        AppLocalizations.of(context).translate('search'),
+                        style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       widget.filterForm
                           .setPropertyTypeList(accomodationListData);
@@ -215,15 +217,20 @@ class _SearchScreenState extends State<SearchScreen> {
                       ).toList(),
                     ),
                     if (widget.filterForm.category.name != null &&
-                        widget.filterForm.category.name.contains('اجاره')) ...{
+                        widget.filterForm.category.name.contains(
+                          AppLocalizations.of(context).translate('rent'),
+                        )) ...{
                       Column(
                         children: [
-                          depositPriceBarFilter('محدوده رهن'),
-                          rentPriceBarFilter('محدوده اجاره')
+                          depositPriceBarFilter(AppLocalizations.of(context)
+                              .translate('rahn_scope')),
+                          rentPriceBarFilter(AppLocalizations.of(context)
+                              .translate('rent_scope'))
                         ],
                       )
                     } else ...{
-                      priceBarFilter('محدوده قیمت')
+                      priceBarFilter(
+                          AppLocalizations.of(context).translate('price_scope'))
                     }
                   ],
                 )
@@ -255,7 +262,8 @@ class _SearchScreenState extends State<SearchScreen> {
               border: InputBorder.none,
               fillColor: Color(0xfff3f3f4),
               filled: true,
-              hintText: 'جست و جوی محله'),
+              hintText:
+                  AppLocalizations.of(context).translate('search_in_district')),
           controller: this._typeAheadController,
         ),
         suggestionsCallback: (pattern) {
@@ -271,7 +279,7 @@ class _SearchScreenState extends State<SearchScreen> {
         },
         noItemsFoundBuilder: (context) {
           return Text(
-            'نتیجه ای یافت نشد!',
+            AppLocalizations.of(context).translate('no_result'),
             style: TextStyle(fontSize: 30, color: Colors.grey[300]),
           );
         },
@@ -293,7 +301,9 @@ class _SearchScreenState extends State<SearchScreen> {
             }
           }
         },
-        validator: (value) => value.isEmpty ? 'نام محل را وارد کنید' : null,
+        validator: (value) => value.isEmpty
+            ? AppLocalizations.of(context).translate('insert_district')
+            : null,
         onSaved: (value) => this._selectedCity = value,
       ),
     );
@@ -312,7 +322,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 name: item["name"], id: item["id"], isCity: item["isCity"]))
             .toList();
         data = data.map((item) {
-          var locationLabel = item["isCity"] == true ? "شهر" : "منطقه";
+          var locationLabel = item["isCity"] == true
+              ? AppLocalizations.of(context).translate('district')
+              : AppLocalizations.of(context).translate('city');
           return locationLabel + " " + item["name"];
         }).toList();
         //update data value and UI
@@ -330,7 +342,7 @@ class _SearchScreenState extends State<SearchScreen> {
           padding:
               const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
           child: Text(
-            'نوع ملک',
+            AppLocalizations.of(context).translate('type_home'),
             textAlign: TextAlign.left,
             style: TextStyle(
                 color: Colors.red,
@@ -348,7 +360,8 @@ class _SearchScreenState extends State<SearchScreen> {
               accomodationListData.insert(
                   0,
                   SelectedPropertyTypes(
-                    titleTxt: 'همه موارد',
+                    titleTxt:
+                        AppLocalizations.of(context).translate('all_cases'),
                     isSelected: false,
                   ));
             }
@@ -362,7 +375,8 @@ class _SearchScreenState extends State<SearchScreen> {
           } else {
             return Container(
               child: Center(
-                child: new Text("فیلتری انتخاب نشده "),
+                child: new Text(
+                    AppLocalizations.of(context).translate('nofilter')),
               ),
             );
           }
@@ -511,7 +525,7 @@ class _SearchScreenState extends State<SearchScreen> {
               padding: const EdgeInsets.only(
                   left: 16, right: 16, top: 16, bottom: 8),
               child: Text(
-                'خصوصیات',
+                AppLocalizations.of(context).translate('amenities'),
                 textAlign: TextAlign.left,
                 style: TextStyle(
                     color: Colors.red,
@@ -610,7 +624,7 @@ class _SearchScreenState extends State<SearchScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "تعداد ",
+            AppLocalizations.of(context).translate('count'),
             style: TextStyle(
                 color: Colors.red,
                 fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
@@ -682,7 +696,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           border: InputBorder.none,
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
-                          hintText: "پایین ترین قیمت",
+                          hintText: AppLocalizations.of(context)
+                              .translate('lowest_price'),
                           contentPadding: EdgeInsets.all(10))),
                 ),
                 VerticalDivider(),
@@ -696,7 +711,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           border: InputBorder.none,
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
-                          hintText: "بالا ترین قیمت",
+                          hintText: AppLocalizations.of(context)
+                              .translate('highest_price'),
                           contentPadding: EdgeInsets.all(10))),
                 ),
               ],
@@ -734,7 +750,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           border: InputBorder.none,
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
-                          hintText: "پایین ترین قیمت",
+                          hintText: AppLocalizations.of(context)
+                              .translate('lowest_price'),
                           contentPadding: EdgeInsets.all(10))),
                 ),
                 VerticalDivider(),
@@ -748,7 +765,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           border: InputBorder.none,
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
-                          hintText: "بالا ترین قیمت",
+                          hintText: AppLocalizations.of(context)
+                              .translate('highest_price'),
                           contentPadding: EdgeInsets.all(10))),
                 ),
               ],
@@ -787,7 +805,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           border: InputBorder.none,
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
-                          hintText: "پایین ترین قیمت",
+                          hintText: AppLocalizations.of(context)
+                              .translate('lowest_price'),
                           contentPadding: EdgeInsets.all(10))),
                 ),
                 VerticalDivider(),
@@ -802,7 +821,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           border: InputBorder.none,
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
-                          hintText: "بالا ترین قیمت",
+                          hintText: AppLocalizations.of(context)
+                              .translate('highest_price'),
                           contentPadding: EdgeInsets.all(10))),
                 ),
               ],
@@ -853,7 +873,7 @@ class _SearchScreenState extends State<SearchScreen> {
             Expanded(
               child: Center(
                 child: Text(
-                  'فیلتر',
+                  AppLocalizations.of(context).translate('filter'),
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 22,

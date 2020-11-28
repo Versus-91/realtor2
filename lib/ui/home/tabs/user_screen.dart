@@ -58,7 +58,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'خانه',
+          AppLocalizations.of(context).translate('home'),
           style: TextStyle(fontSize: 20, color: Colors.black),
         ),
         backgroundColor: Colors.red,
@@ -72,7 +72,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "جست و جو های اخیر",
+                    AppLocalizations.of(context).translate('recent_search'),
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                   ),
                   SizedBox(
@@ -115,7 +115,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
         if (!snapshot.hasData) {
           return Center(
               child: Text(
-            AppLocalizations.of(context).translate('not_found'),
+            AppLocalizations.of(context).translate('my_posts'),
           ));
         } else {
           return ListView.builder(

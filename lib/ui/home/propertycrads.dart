@@ -126,12 +126,18 @@ class _PropertyCradsState extends State<PropertyCrads>
                             overflow: TextOverflow.ellipsis,
                             softWrap: false,
                           ),
-                          posts[position].category.name.contains('رهن')
+                          posts[position].category.name.contains(
+                                    AppLocalizations.of(context)
+                                        .translate('rahn'),
+                                  )
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'رهن: ${posts[position].deopsit}',
+                                      AppLocalizations.of(context)
+                                              .translate('rahn') +
+                                          ":" +
+                                          '${posts[position].deopsit}',
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -140,7 +146,9 @@ class _PropertyCradsState extends State<PropertyCrads>
                                       softWrap: false,
                                     ),
                                     Text(
-                                      ' اجاره: ${posts[position].rent}',
+                                      AppLocalizations.of(context)
+                                              .translate('not_found') +
+                                          ' : ${posts[position].rent}',
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -157,7 +165,9 @@ class _PropertyCradsState extends State<PropertyCrads>
                                       color: Colors.greenAccent,
                                     ),
                                     Text(
-                                      'قیمت: ${posts[position].price}\$',
+                                      AppLocalizations.of(context)
+                                              .translate('price') +
+                                          ': ${posts[position].price}\$',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 16),
@@ -229,7 +239,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                       ),
                       Column(
                         children: [
-                          Text("متراژ"),
+                          Text(  AppLocalizations.of(context).translate('area'),),
                           Text(
                             '${posts[position].area}',
                             style: TextStyle(
@@ -245,7 +255,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                       ),
                       Column(
                         children: [
-                          Text("اتاق خواب"),
+                          Text(  AppLocalizations.of(context).translate('bed'),),
                           Text(
                             '${posts[position].bedroom}',
                             style: TextStyle(
@@ -261,7 +271,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                       ),
                       Column(
                         children: [
-                          Text("شناسه آگهی"),
+                          Text(  AppLocalizations.of(context).translate('post_id'),),
                           Text(
                             '${posts[position].id}',
                             style: TextStyle(

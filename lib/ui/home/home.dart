@@ -6,6 +6,7 @@ import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,28 +66,28 @@ class _HomeScreenState extends State<HomeScreen> {
           navIcon: Icon(
             Icons.home,
           ),
-          title: 'خانه',
+          title:   AppLocalizations.of(context).translate('home'),
         ),
         BottomNav(
           screen: SearchTabScreen(),
           navIcon: Icon(
             Icons.search,
           ),
-          title: 'جستجو',
+          title:   AppLocalizations.of(context).translate('search'),
         ),
         BottomNav(
           screen: FavoritesScreen(),
           navIcon: Icon(
             Icons.favorite,
           ),
-          title: 'علاقه مندی ها',
+          title:  AppLocalizations.of(context).translate('favarits'),
         ),
         BottomNav(
           screen: ProfilePage(),
           navIcon: Icon(
             Icons.person,
           ),
-          title: 'پروفایل',
+          title:   AppLocalizations.of(context).translate('profile'),
         )
       ];
     return Scaffold(
@@ -101,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
-        tooltip: 'ارسال آگهی',
+        tooltip:   AppLocalizations.of(context).translate('send_post'),
         child: Icon(Icons.add),
         elevation: 2.0,
       ),

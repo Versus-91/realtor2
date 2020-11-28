@@ -80,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       child: Container(
         child: Row(
           children: <Widget>[
-            Text('برگشت',
+            Text(AppLocalizations.of(context).translate('back'),
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
             Icon(Icons.keyboard_arrow_left, color: Colors.black),
           ],
@@ -93,7 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          hint: "نام",
+          hint: AppLocalizations.of(context).translate('user_Name'),
           focusNode: _nameFocusNode,
           onFieldSubmitted: (value) {
             FocusScope.of(context).requestFocus(_familyFocusNode);
@@ -115,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          hint: "نام خانوادگی",
+          hint: AppLocalizations.of(context).translate('family'),
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.account_box,
           focusNode: _familyFocusNode,
@@ -159,7 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          hint: AppLocalizations.of(context).translate('login_et_user_email'),
+          hint: AppLocalizations.of(context).translate('user_email'),
           inputType: TextInputType.emailAddress,
           icon: Icons.email,
           padding: EdgeInsets.only(top: 16.0),
@@ -183,8 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          hint:
-              AppLocalizations.of(context).translate('login_et_user_password'),
+          hint: AppLocalizations.of(context).translate('user_password'),
           isObscure: true,
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.lock,
@@ -208,7 +207,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       builder: (context) {
         return TextFieldWidget(
           inputType: TextInputType.number,
-          hint: AppLocalizations.of(context).translate('login_et_user_Number'),
+          hint: AppLocalizations.of(context).translate('user_Number'),
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.phone_android,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -231,7 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (message != null && message.isNotEmpty) {
         FlushbarHelper.createSuccess(
           message: message,
-          title: 'ثبت نام',
+          title: AppLocalizations.of(context).translate('Register'),
           duration: Duration(seconds: 3),
         )..show(context).then((value) {
             Future.delayed(Duration(milliseconds: 0), () {
@@ -258,17 +257,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SharedPreferences.getInstance().then((prefs) {
                     prefs.setBool(Preferences.is_logged_in, true);
                   });
-                  _showSuccessMessage('با موفقیت ثبت نام شدید');
+                  _showSuccessMessage(
+                      AppLocalizations.of(context).translate('succes_signup'));
                 } else {
-                  _showErrorMessage('خطا در ورود به حساب');
+                  _showErrorMessage(
+                      AppLocalizations.of(context).translate('error_in_login'));
                 }
               });
             } else {
-              _showErrorMessage('خطا در ارسال اطلاعات');
+              _showErrorMessage( AppLocalizations.of(context).translate('error_in_submit'));
             }
           });
         } else {
-          _showErrorMessage('ف نامعتبر است');
+          _showErrorMessage( AppLocalizations.of(context).translate('error_in_submit'));
         }
       },
       child: Container(
@@ -289,7 +290,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 end: Alignment.centerRight,
                 colors: [Color(0xffF77E78), Color(0xffF5150A)])),
         child: Text(
-          'ثبت نام',
+           AppLocalizations.of(context).translate('Register'),
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
       ),
@@ -309,14 +310,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'قبلا ثبت نام کرده اید؟',
+                 AppLocalizations.of(context).translate('btn_Register'),
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
             SizedBox(
               width: 10,
             ),
             Text(
-              'ورود',
+              AppLocalizations.of(context).translate('Register'),
               style: TextStyle(
                   color: Color(0xfff79c4f),
                   fontSize: 13,

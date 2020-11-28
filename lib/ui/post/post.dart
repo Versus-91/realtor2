@@ -2,6 +2,7 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/ui/map/map.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -46,16 +47,22 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
               FlatButton.icon(
                 onPressed: () {},
                 icon: Icon(Icons.save),
-                label: Text("ذخیره"),
+                label: Text(
+                  AppLocalizations.of(context).translate('save'),
+                ),
               ),
               FlatButton.icon(
                 onPressed: () {},
-                label: Text("ارسال"),
+                label: Text(
+                  AppLocalizations.of(context).translate('send'),
+                ),
                 icon: Icon(Icons.share),
               ),
               FlatButton.icon(
                 onPressed: () => launch("tel://21213123123"),
-                label: Text("تماس"),
+                label: Text(
+                  AppLocalizations.of(context).translate('call'),
+                ),
                 icon: Icon(Icons.call),
               ),
             ],
@@ -175,13 +182,15 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "برای ${widget.post.category.name}",
+                    AppLocalizations.of(context).translate('for') +
+                        " ${widget.post.category.name}",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
-                  widget.post.category.name.contains("فروش")
+                  widget.post.category.name.contains(
+                          AppLocalizations.of(context).translate('sell'))
                       ? Text(
                           '${widget.post.price}',
                           style: TextStyle(
@@ -192,7 +201,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                       : Row(
                           children: [
                             Text(
-                              'رهن:${widget.post.deopsit}',
+                              AppLocalizations.of(context).translate('rahn') +
+                                  '${widget.post.deopsit}',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.normal,
@@ -202,7 +212,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                               width: 8,
                             ),
                             Text(
-                              'اجاره:${widget.post.rent}',
+                              AppLocalizations.of(context).translate('rent') +
+                                  '${widget.post.rent}',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.normal,
@@ -229,7 +240,10 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 child: Row(
                   children: [
                     Column(
-                      children: [Text("شناسه آگهی"), Text('${widget.post.id}')],
+                      children: [
+                        Text(AppLocalizations.of(context).translate('post_id')),
+                        Text('${widget.post.id}')
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -241,7 +255,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                     ),
                     Column(
                       children: [
-                        Text("اتاق خواب"),
+                        Text(AppLocalizations.of(context).translate('bed')),
                         Text('${widget.post.bedroom}')
                       ],
                     ),
@@ -254,7 +268,10 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                       ),
                     ),
                     Column(
-                      children: [Text("متراژ"), Text('${widget.post.area}')],
+                      children: [
+                        Text(AppLocalizations.of(context).translate('area')),
+                        Text('${widget.post.area}')
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -271,7 +288,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
             Padding(
               padding: EdgeInsets.only(top: 20, right: 14, left: 14),
               child: Text(
-                'توضیحات',
+                AppLocalizations.of(context).translate('description'),
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,

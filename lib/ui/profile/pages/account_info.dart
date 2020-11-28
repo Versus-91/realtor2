@@ -2,6 +2,7 @@ import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -23,7 +24,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
   @override
   void initState() {
     super.initState();
-    label = 'انتخاب تاریخ زمان';
+    label =   AppLocalizations.of(context).translate('date');
   }
 
   //text controllers:-----------------------------------------------------------
@@ -46,7 +47,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "مشخصات من",
+           AppLocalizations.of(context).translate('my_details'),
           style: TextStyle(fontSize: 20),
         ),
         backgroundColor: Colors.red,
@@ -72,7 +73,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
               controller: _userEmailController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: "ایمیل",
+                labelText:   AppLocalizations.of(context).translate('user_email'),
               ),
               onChanged: (value) {
                 _formStore.setUserLogin(_userEmailController.text);
@@ -86,7 +87,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
                     controller: _userNameController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'نام',
+                      labelText:   AppLocalizations.of(context).translate('Name'),
                     ),
                     onChanged: (value) {
                       _formStore.setName(_nameController.text);
@@ -100,7 +101,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
                     obscureText: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'نام خانوادگی',
+                      labelText:   AppLocalizations.of(context).translate('family'),
                     ),
                     onChanged: (value) {
                       _formStore.setFamily(_familyController.text);
@@ -114,7 +115,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
               controller: _numberController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'شماره همراه',
+                labelText:   AppLocalizations.of(context).translate('user_Number'),
               ),
               onChanged: (value) {
                 _formStore.setNumber(value.toString());
@@ -128,7 +129,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
                     controller: _passwordController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'تغییر رمز',
+                      labelText:   AppLocalizations.of(context).translate('chang_user_password'),
                     ),
                     onChanged: (value) {
                       _formStore.setPassword(_passwordController.text);
@@ -144,7 +145,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
               child: CustomButton(
                 color: Colors.red,
                 textColor: Colors.white,
-                text: 'ثبت',
+                text:   AppLocalizations.of(context).translate('register'),
                 onPressed: () async {
                   _formStore.updeteUser();
                 },

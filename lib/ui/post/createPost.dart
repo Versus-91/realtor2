@@ -95,7 +95,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     _controller.addListener(() => _extension = _controller.text);
     _titleFocusNode = FocusNode();
     _descriptionFocusNode = FocusNode();
-    _hometypeFocusNode = FocusNode(); 
+    _hometypeFocusNode = FocusNode();
     _rahnPriceFocusNode = FocusNode();
 
     _rentPriceFocusNode = FocusNode();
@@ -192,7 +192,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     end: Alignment.centerRight,
                     colors: [Color(0xffF77E78), Color(0xffF5150A)])),
             child: Text(
-              'ارسال',
+              AppLocalizations.of(context).translate('send'),
               style: TextStyle(fontSize: 20, color: Colors.white),
             ),
           ),
@@ -205,7 +205,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   // app bar methods:-----------------------------------------------------------
   Widget _buildAppBar() {
     return AppBar(
-      title: Text("ارسال آگهی"),
+      title: Text(
+        AppLocalizations.of(context).translate('send_post'),
+      ),
     );
   }
 
@@ -238,7 +240,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       Observer(
                         builder: (context) {
                           return _store.success
-                              ? successPost('با موفقیت ارسال شد')
+                              ? successPost(
+                                  AppLocalizations.of(context)
+                                      .translate('succes_send'),
+                                )
                               : _showErrorMessage(
                                   _store.errorStore.errorMessage);
                         },
@@ -473,7 +478,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'امکانات',
+                  AppLocalizations.of(context).translate('amenities'),
                   textAlign: TextAlign.left,
                   style: TextStyle(
                       color: Colors.red[300],
@@ -499,7 +504,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "توضیحات",
+          AppLocalizations.of(context).translate('description'),
           style: TextStyle(color: Colors.red[300]),
         ),
         TextField(
@@ -551,7 +556,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               errorText: _store.formErrorStore.area,
-              hintText: 'متراژ',
+              hintText: AppLocalizations.of(context).translate('area'),
               border: InputBorder.none,
               fillColor: Color(0xfff3f3f4),
               filled: true,
@@ -569,7 +574,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(" رهن کامل", style: TextStyle(color: Colors.red[300])),
+          Text(AppLocalizations.of(context).translate('rahne_kamel'),
+              style: TextStyle(color: Colors.red[300])),
           Row(
             children: <Widget>[
               Flexible(
@@ -593,7 +599,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         border: InputBorder.none,
                         fillColor: Color(0xfff3f3f4),
                         filled: true,
-                        hintText: "قیمت رهن",
+                        hintText: AppLocalizations.of(context)
+                            .translate('rahn_price'),
                         contentPadding: EdgeInsets.all(10))),
               ),
             ],
@@ -607,7 +614,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(" اجاره کامل", style: TextStyle(color: Colors.red[300])),
+        Text(AppLocalizations.of(context).translate('rente_kamel'),
+            style: TextStyle(color: Colors.red[300])),
         Row(
           children: <Widget>[
             Flexible(
@@ -628,7 +636,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       border: InputBorder.none,
                       fillColor: Color(0xfff3f3f4),
                       filled: true,
-                      hintText: "قیمت اجاره",
+                      hintText:
+                          AppLocalizations.of(context).translate('rent_price'),
                       contentPadding: EdgeInsets.all(10))),
             ),
           ],
@@ -642,7 +651,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "قیمت",
+          AppLocalizations.of(context).translate('price'),
           style: TextStyle(color: Colors.red[300]),
         ),
         Row(
@@ -665,7 +674,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       border: InputBorder.none,
                       fillColor: Color(0xfff3f3f4),
                       filled: true,
-                      hintText: "قیمت",
+                      hintText: AppLocalizations.of(context).translate('price'),
                       contentPadding: EdgeInsets.all(10))),
             ),
           ],
@@ -684,7 +693,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   children: <Widget>[
                     Flexible(
                       child: DropdownButtonFormField<int>(
-                        
                         focusNode: _districtFocusNode,
                         onSaved: (value) {
                           FocusScope.of(context).requestFocus(_cityFocusNode);
@@ -693,7 +701,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           border: InputBorder.none,
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
-                          hintText: "محله",
+                          hintText: AppLocalizations.of(context)
+                              .translate('district'),
                           contentPadding: EdgeInsets.all(10),
                         ),
                         onChanged: (int val) => setState(() => {
@@ -743,7 +752,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           border: InputBorder.none,
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
-                          hintText: "شهر",
+                          hintText:
+                              AppLocalizations.of(context).translate('city'),
                           contentPadding: EdgeInsets.all(10),
                         ),
                         onChanged: (int val) => setState(() => {
@@ -832,7 +842,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         },
                       ).toList(),
                     ),
-                    if (_categoryText.contains('رهن')) ...[
+                    if (_categoryText.contains(
+                      AppLocalizations.of(context).translate('rahn'),
+                    )) ...[
                       Row(
                         children: [
                           Flexible(
@@ -869,7 +881,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
                   filled: true,
-                  hintText: "نوع ملک",
+                  hintText: AppLocalizations.of(context).translate('type_home'),
                   contentPadding: EdgeInsets.all(10),
                 ),
                 onChanged: (int val) => setState(() => {
@@ -899,7 +911,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "تعداد اتاق ",
+          AppLocalizations.of(context).translate('count_room'),
           style: TextStyle(color: Colors.red[300]),
         ),
         Padding(
@@ -984,7 +996,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       if (message != null && message.isNotEmpty) {
         FlushbarHelper.createSuccess(
           message: message,
-          title: 'با موفقیت ارسال شد',
+          title: AppLocalizations.of(context).translate('succes_send'),
           duration: Duration(seconds: 3),
         )..show(context);
       }
