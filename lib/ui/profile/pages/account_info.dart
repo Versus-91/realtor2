@@ -1,12 +1,10 @@
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
-import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class AcountInfoScreen extends StatefulWidget {

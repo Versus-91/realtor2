@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
@@ -180,6 +181,19 @@ class PostApi {
     }
   }
 
+  Future uploadAvatarImage(File avatarImage) async {
+    FormData imageFormData = FormData.fromMap({
+      "files": avatarImage,
+    });
+
+    try {
+      final res = await _dioClient.post(Endpoints.uploadAvatarImage,
+          data: imageFormData);
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
   /// sample api call with default rest client
 //  Future<PostsList> getPosts() {
 //

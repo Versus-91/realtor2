@@ -6,7 +6,7 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/plugin/cropper.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
-import 'package:boilerplate/ui/post/createPost.dart';
+
 import 'package:boilerplate/ui/profile/pages/aboute.dart';
 import 'package:boilerplate/ui/profile/pages/account_info.dart';
 import 'package:boilerplate/ui/profile/constants/colors.dart';
@@ -49,6 +49,7 @@ class _ProfilePageState extends State<ProfilePage>
     var result = await Navigator.of(context)
         .pushNamed(Routes.crop, arguments: {'image': image});
     _userStore.setAvatarImage(result);
+    _userStore.uploadAvatarImage(result);
   }
 
   void getUserLogin() async {
@@ -278,23 +279,6 @@ class _ProfilePageState extends State<ProfilePage>
                         ),
                         TableRow(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => CreatePostScreen(),
-                                  ),
-                                );
-                              },
-                              child: ProfileInfoBigCard(
-                                secondText: "افزودن آگهی",
-                                icon: Icon(
-                                  Icons.post_add,
-                                  size: 25,
-                                  color: blueColor,
-                                ),
-                              ),
-                            ),
                             ProfileInfoBigCard(
                               secondText: "طرح های موجود",
                               icon: Icon(
@@ -303,10 +287,6 @@ class _ProfilePageState extends State<ProfilePage>
                                 color: blueColor,
                               ),
                             ),
-                          ],
-                        ),
-                        TableRow(
-                          children: [
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(context).push(
@@ -324,7 +304,6 @@ class _ProfilePageState extends State<ProfilePage>
                                 ),
                               ),
                             ),
-                            Container(),
                           ],
                         ),
                       ],

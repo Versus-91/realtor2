@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
@@ -230,6 +231,10 @@ class Repository {
 
   Future<void> uploadImages(List<MultipartFile> files, String id) {
     return _postApi.uploadImages(files, id);
+  }
+
+  Future<void> uploadAvatarImage(File avatarImage) {
+    return _postApi.uploadAvatarImage(avatarImage);
   }
 }
 //

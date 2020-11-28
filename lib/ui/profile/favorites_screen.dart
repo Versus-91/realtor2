@@ -68,18 +68,11 @@ class _FavoritesScreenState extends State<FavoritesScreen>
       future: appComponent.getRepository().getFavoritesList(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Stack(
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
                 child: Image.asset("assets/images/404.png"),
-              ),
-              Positioned(
-                top: MediaQuery.of(context).size.height / 3,
-                right: MediaQuery.of(context).size.width / 3,
-                child: Text(
-                  "پستی موجود نیست!",
-                  style: TextStyle(fontSize: 20, color: Colors.black),
-                ),
               ),
             ],
           );

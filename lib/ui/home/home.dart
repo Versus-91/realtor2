@@ -7,6 +7,7 @@ import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/authorization/login/login.dart';
 import 'package:boilerplate/ui/home/tabs/user_screen.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
+import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/a.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
@@ -109,7 +110,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        onPressed: () {},
+        onPressed:  () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => CreatePostScreen(),
+                                  ),
+                                );
+                              },
         tooltip: 'ارسال آگهی',
         child: Icon(Icons.add),
         elevation: 2.0,

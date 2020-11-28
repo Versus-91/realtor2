@@ -266,12 +266,12 @@ abstract class _FormStore with Store {
       loading = false;
       success = false;
       if (e != null) {
-        if (e.toString().contains("Login failed"))
+        if (e.toString().contains("وود ناموفقیت آمیز است"))
           errorStore.errorMessage =
               "نام کاربری و رمز خود را چک کنید خطا در ورود";
       } else {
         errorStore.errorMessage =
-            "Something went wrong, please check your internet connection and try again";
+            "اتصال اینترنت برقرار نیست مجددا تلاش کنید";
       }
       return false;
     });

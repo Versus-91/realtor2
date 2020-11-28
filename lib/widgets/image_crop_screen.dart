@@ -55,6 +55,7 @@ class _ImageCropScreenState extends State<ImageCropScreen> {
             final crop = cropKey.currentState;
             final croppedFile =
                 await crop.cropCompleted(args['image'], preferredSize:1000);
+                
             showImage(context, croppedFile);
           },
           tooltip: 'تایید',

@@ -33,6 +33,8 @@ abstract class _UserStore with Store {
   File avatarImage;
   @observable
   bool success = false;
+   @observable
+  bool avatarloading = false;
   @observable
   bool isLoggedIn = false;
   @computed
@@ -62,4 +64,14 @@ abstract class _UserStore with Store {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }
+   @action
+  Future uploadAvatarImage(File imageAvatar) async {
+    avatarloading = true;
+    _repository.uploadAvatarImage(avatarImage).then((result) {
+      avatarloading = false;
+      success = true;
+    }).catchError((error) {
+      avatarloading = false;
+    });
+  } 
 }
