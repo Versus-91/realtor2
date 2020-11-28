@@ -4,6 +4,7 @@ import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
+import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 part 'user_store.g.dart';
 
@@ -29,11 +30,10 @@ abstract class _UserStore with Store {
 
   @observable
   User user;
-  @observable
-  File avatarImage;
+
   @observable
   bool success = false;
-   @observable
+  @observable
   bool avatarloading = false;
   @observable
   bool isLoggedIn = false;
@@ -45,11 +45,6 @@ abstract class _UserStore with Store {
     if (val == false) {
       user = null;
     }
-  }
-
-  @action
-  void setAvatarImage(File img) {
-    avatarImage = img;
   }
 
   // actions:-------------------------------------------------------------------
@@ -64,14 +59,17 @@ abstract class _UserStore with Store {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }
-   @action
-  Future uploadAvatarImage(File imageAvatar) async {
+
+  @action
+  Future uploadAvatarImage(MultipartFile imageAvatar) async {
     avatarloading = true;
-    _repository.uploadAvatarImage(avatarImage).then((result) {
+    _repository.uploadAvatarImage(imageAvatar).then((result) {
       avatarloading = false;
       success = true;
+      return true;
     }).catchError((error) {
       avatarloading = false;
+      return false;
     });
-  } 
+  }
 }

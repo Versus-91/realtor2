@@ -46,21 +46,6 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
-  final _$avatarImageAtom = Atom(name: '_UserStore.avatarImage');
-
-  @override
-  File get avatarImage {
-    _$avatarImageAtom.reportRead();
-    return super.avatarImage;
-  }
-
-  @override
-  set avatarImage(File value) {
-    _$avatarImageAtom.reportWrite(value, super.avatarImage, () {
-      super.avatarImage = value;
-    });
-  }
-
   final _$successAtom = Atom(name: '_UserStore.success');
 
   @override
@@ -73,6 +58,21 @@ mixin _$UserStore on _UserStore, Store {
   set success(bool value) {
     _$successAtom.reportWrite(value, super.success, () {
       super.success = value;
+    });
+  }
+
+  final _$avatarloadingAtom = Atom(name: '_UserStore.avatarloading');
+
+  @override
+  bool get avatarloading {
+    _$avatarloadingAtom.reportRead();
+    return super.avatarloading;
+  }
+
+  @override
+  set avatarloading(bool value) {
+    _$avatarloadingAtom.reportWrite(value, super.avatarloading, () {
+      super.avatarloading = value;
     });
   }
 
@@ -98,6 +98,15 @@ mixin _$UserStore on _UserStore, Store {
     return _$getUserAsyncAction.run(() => super.getUser());
   }
 
+  final _$uploadAvatarImageAsyncAction =
+      AsyncAction('_UserStore.uploadAvatarImage');
+
+  @override
+  Future<dynamic> uploadAvatarImage(MultipartFile imageAvatar) {
+    return _$uploadAvatarImageAsyncAction
+        .run(() => super.uploadAvatarImage(imageAvatar));
+  }
+
   final _$_UserStoreActionController = ActionController(name: '_UserStore');
 
   @override
@@ -112,23 +121,12 @@ mixin _$UserStore on _UserStore, Store {
   }
 
   @override
-  void setAvatarImage(File img) {
-    final _$actionInfo = _$_UserStoreActionController.startAction(
-        name: '_UserStore.setAvatarImage');
-    try {
-      return super.setAvatarImage(img);
-    } finally {
-      _$_UserStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 fetchUserFuture: ${fetchUserFuture},
 user: ${user},
-avatarImage: ${avatarImage},
 success: ${success},
+avatarloading: ${avatarloading},
 isLoggedIn: ${isLoggedIn},
 loading: ${loading}
     ''';

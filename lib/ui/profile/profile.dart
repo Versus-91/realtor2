@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:boilerplate/constants/constants.dart';
+import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/plugin/cropper.dart';
 import 'package:boilerplate/routes.dart';
@@ -16,6 +17,8 @@ import 'package:boilerplate/ui/profile/profile_info_big_card.dart';
 import 'package:boilerplate/ui/profile/constants/radial_progress.dart';
 import 'package:boilerplate/ui/profile/constants/rounded_image.dart';
 import 'package:boilerplate/ui/profile/constants/text_style.dart';
+import 'package:dio/dio.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -43,13 +46,21 @@ class _ProfilePageState extends State<ProfilePage>
   final cropKey = GlobalKey<ImgCropState>();
 
   Future getImage(type) async {
+    //عکس =جوابیکه از فیوچر میاد
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
 
-    var result = await Navigator.of(context)
+    File result = await Navigator.of(context)
         .pushNamed(Routes.crop, arguments: {'image': image});
-    _userStore.setAvatarImage(result);
-    _userStore.uploadAvatarImage(result);
+    var multiPartAvatarImage = await MultipartFile.fromFile(result.path);
+
+    _userStore
+        .uploadAvatarImage(multiPartAvatarImage)
+        .then((value) => _userStore.getUser())
+        .catchError((error) => Flushbar(
+              message: " آپلوود عگس ناموقیت آمیز بوده است",
+              title: "خطا در آپلود:",
+            ));
   }
 
   void getUserLogin() async {
@@ -156,7 +167,8 @@ class _ProfilePageState extends State<ProfilePage>
                                             RadialProgress(
                                                 width: 4,
                                                 goalCompleted: 0.9,
-                                                child: _userStore.avatarImage ==
+                                                child: _userStore
+                                                            ?.user.avatar ==
                                                         null
                                                     ? Image.asset(
                                                         "assets/images/no-profile.jpg",
@@ -165,8 +177,11 @@ class _ProfilePageState extends State<ProfilePage>
                                                         height: 140,
                                                       )
                                                     : RoundedImage(
-                                                        image: _userStore
-                                                            .avatarImage,
+                                                        path:
+                                                            Endpoints.baseUrl +
+                                                                "/" +
+                                                                _userStore.user
+                                                                    .avatar,
                                                         size: Size.fromWidth(
                                                             120.0),
                                                       )),

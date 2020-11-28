@@ -181,7 +181,7 @@ class PostApi {
     }
   }
 
-  Future uploadAvatarImage(File avatarImage) async {
+  Future uploadAvatarImage(MultipartFile avatarImage) async {
     FormData imageFormData = FormData.fromMap({
       "files": avatarImage,
     });
@@ -194,6 +194,7 @@ class PostApi {
       throw e;
     }
   }
+
   /// sample api call with default rest client
 //  Future<PostsList> getPosts() {
 //

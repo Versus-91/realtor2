@@ -35,139 +35,144 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        InkWell(
-          splashColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: Column(
-            children: <Widget>[
-              getAppBarUI(),
-              Expanded(
-                child: NestedScrollView(
-                  controller: _scrollController,
-                  headerSliverBuilder:
-                      (BuildContext context, bool innerBoxIsScrolled) {
-                    return <Widget>[
-                      SliverPersistentHeader(
-                        pinned: true,
-                        floating: true,
-                        delegate: ContestTabHeader(
-                          getFilterBarUI(),
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          InkWell(
+            splashColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: Column(
+              children: <Widget>[
+                getAppBarUI(),
+                Expanded(
+                  child: NestedScrollView(
+                    controller: _scrollController,
+                    headerSliverBuilder:
+                        (BuildContext context, bool innerBoxIsScrolled) {
+                      return <Widget>[
+                        SliverPersistentHeader(
+                          pinned: true,
+                          floating: true,
+                          delegate: ContestTabHeader(
+                            getFilterBarUI(),
+                          ),
                         ),
-                      ),
-                    ];
-                  },
-                  body: Observer(
-                    builder: (context) {
-                      if (_postStore.loading == true) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        if (_postStore.postList != null) {
-                          return NotificationListener<ScrollNotification>(
-                              onNotification: (ScrollNotification scrollInfo) {
-                                if (scrollInfo.metrics.pixels ==
-                                    scrollInfo.metrics.maxScrollExtent) {
-                                  if (_postStore.postList.totalCount >
-                                      _postStore.page * _postStore.pageSize) {
-                                    _postStore.loadNextPage();
-                                    var request = _filterForm.applyFilters(
-                                        paginate: true);
-                                    _postStore.getPosts(request: request);
-                                  } else {
-                                    print('already at final page');
-                                  }
-                                }
-                                return true;
-                              },
-                              child: PropertyCrads(
-                                postsList: _postStore.postList,
-                              ));
-                        } else {
-                          return Stack(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset("assets/images/search.png"),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
-                              ),
-                              Positioned(
-                                top: MediaQuery.of(context).size.height / 3,
-                                right: MediaQuery.of(context).size.width / 2.8,
-                                child:
-                                    //  FloatingActionButton(
-                                    //   backgroundColor: Colors.grey,
-                                    //   child: Icon(
-                                    //     Icons.search,
-                                    //   ),
-                                    //   onPressed: () {
-                                    //     // if (request != null) {
-                                    //     //   await _searchDataSource.insert(request);
-                                    //     // }
-                                    //   },
-                                    // ),
-
-                                    RaisedButton.icon(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      side: BorderSide(
-                                          color: Colors.transparent)),
-                                  label: Text("search"),
-                                  onPressed: () {
-                                    openFilterScreen();
-                                  },
-                                  icon: Icon(Icons.search),
-                                ),
-                              )
-                            ],
-                          );
-                        }
-                      }
+                      ];
                     },
+                    body: Observer(
+                      builder: (context) {
+                        if (_postStore.loading == true) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else {
+                          if (_postStore.postList != null) {
+                            return NotificationListener<ScrollNotification>(
+                                onNotification:
+                                    (ScrollNotification scrollInfo) {
+                                  if (scrollInfo.metrics.pixels ==
+                                      scrollInfo.metrics.maxScrollExtent) {
+                                    if (_postStore.postList.totalCount >
+                                        _postStore.page * _postStore.pageSize) {
+                                      _postStore.loadNextPage();
+                                      var request = _filterForm.applyFilters(
+                                          paginate: true);
+                                      _postStore.getPosts(request: request);
+                                    } else {
+                                      print('already at final page');
+                                    }
+                                  }
+                                  return true;
+                                },
+                                child: PropertyCrads(
+                                  postsList: _postStore.postList,
+                                ));
+                          } else {
+                            return Stack(
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset("assets/images/search.png"),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                ),
+                                Positioned(
+                                  top: MediaQuery.of(context).size.height / 3,
+                                  right:
+                                      MediaQuery.of(context).size.width / 2.8,
+                                  child:
+                                      //  FloatingActionButton(
+                                      //   backgroundColor: Colors.grey,
+                                      //   child: Icon(
+                                      //     Icons.search,
+                                      //   ),
+                                      //   onPressed: () {
+                                      //     // if (request != null) {
+                                      //     //   await _searchDataSource.insert(request);
+                                      //     // }
+                                      //   },
+                                      // ),
+
+                                      RaisedButton.icon(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        side: BorderSide(
+                                            color: Colors.transparent)),
+                                    label: Text("search"),
+                                    onPressed: () {
+                                      openFilterScreen();
+                                    },
+                                    icon: Icon(Icons.search),
+                                  ),
+                                )
+                              ],
+                            );
+                          }
+                        }
+                      },
+                    ),
                   ),
                 ),
-              ),
 
-              // Observer(builder: (context) {
-              //   if (_filterForm.loading) {
-              //     _filterRequest = _filterForm.applyFilters();
-              //     _postStore.getPosts(request: _filterRequest);
-              //     _filterForm.loading = false;
-              //     return SizedBox.shrink();
-              //   }
-              //   return SizedBox.shrink();
-              // })
-            ],
-          ),
-        ),
-        _handleErrorMessage(),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: EdgeInsets.only(right: 15, bottom: 10),
-            child: FloatingActionButton(
-              heroTag: 'saveSearchButton',
-              child: Icon(Icons.save),
-              onPressed: () {
-                // if (request != null) {
-                //   await _searchDataSource.insert(request);
-                // }
-              },
+                // Observer(builder: (context) {
+                //   if (_filterForm.loading) {
+                //     _filterRequest = _filterForm.applyFilters();
+                //     _postStore.getPosts(request: _filterRequest);
+                //     _filterForm.loading = false;
+                //     return SizedBox.shrink();
+                //   }
+                //   return SizedBox.shrink();
+                // })
+              ],
             ),
           ),
-        ),
-      ],
+          _handleErrorMessage(),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: EdgeInsets.only(right: 15, bottom: 10),
+              child: FloatingActionButton(
+                heroTag: 'saveSearchButton',
+                child: Icon(Icons.save),
+                onPressed: () {
+                  // if (request != null) {
+                  //   await _searchDataSource.insert(request);
+                  // }
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

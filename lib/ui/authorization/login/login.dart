@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
       child: CustomButton(
         color: Colors.red,
         textColor: kWhite,
-        text: 'ورود',
+        text: AppLocalizations.of(context).translate('login_btn_sign_in'),
         onPressed: () {
           widget.formStore.login().then((value) {
             if (value == true) {
@@ -191,7 +191,6 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         height: height,
         child: Stack(
-        
           children: <Widget>[
             Positioned(
                 top: -height * .25,

@@ -233,7 +233,7 @@ class Repository {
     return _postApi.uploadImages(files, id);
   }
 
-  Future<void> uploadAvatarImage(File avatarImage) {
+  Future uploadAvatarImage(MultipartFile avatarImage) {
     return _postApi.uploadAvatarImage(avatarImage);
   }
 }

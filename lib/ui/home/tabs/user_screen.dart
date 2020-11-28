@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/post_request.dart';
+import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -12,13 +13,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../main.dart';
 
 class UserScreen extends StatefulWidget {
-  UserScreen(
-      {Key key, this.title, this.userStore, this.postStore, this.tabController})
+  UserScreen({Key key, this.title, this.userStore, this.postStore})
       : super(key: key);
   final String title;
   final UserStore userStore;
   final PostStore postStore;
-  final TabController tabController;
 
   @override
   _UserScreenState createState() => _UserScreenState();
@@ -116,7 +115,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
         if (!snapshot.hasData) {
           return Center(
               child: Text(
-            AppLocalizations.of(context).translate('home_tv_no_post_found'),
+            AppLocalizations.of(context).translate('not_found'),
           ));
         } else {
           return ListView.builder(
@@ -157,7 +156,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
                     await widget.postStore
                         .getPosts(request: request)
                         .then((value) {
-                      widget.tabController.animateTo(1);
+                      Navigator.of(context).pushNamed(Routes.search);
                     });
                   },
                 ),
@@ -172,11 +171,11 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
   Text createLabel(dynamic data) {
     String text = data.categoryName;
 
-    if (data.districtName != null) {
-      text += "- " + data.districtName;
-    } else if (data.cityName != null) {
-      text += "- " + data.cityName;
-    }
-    return Text(text);
+    // if (data.districtName != null) {
+    //   text += "- " + data.districtName;
+    // } else if (data.cityName != null) {
+    //   text += "- " + data.cityName;
+    // }
+    return Text('text');
   }
 }

@@ -23,7 +23,7 @@ import 'package:http/http.dart' as http;
 class SearchScreen extends StatefulWidget {
   final FilterFormStore filterForm;
   final PostStore postStore;
-  SearchScreen({ this.filterForm,  this.postStore});
+  SearchScreen({this.filterForm, this.postStore});
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }

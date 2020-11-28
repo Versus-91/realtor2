@@ -2,7 +2,7 @@ import 'package:boilerplate/data/local/constants/db_constants.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:sembast/sembast.dart';
-import 'package:uuid/uuid.dart';
+
 
 class SearchDataSource {
   // A Store with int keys and Map<String, dynamic> values.
