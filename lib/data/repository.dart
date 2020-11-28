@@ -13,6 +13,7 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/models/type/type_list.dart';
+import 'package:boilerplate/models/user/changepassword.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:dio/dio.dart';
 import 'package:sembast/sembast.dart';
@@ -236,5 +237,10 @@ class Repository {
   Future uploadAvatarImage(MultipartFile avatarImage) {
     return _postApi.uploadAvatarImage(avatarImage);
   }
+
+ Future<void> Changepassword(ChangePassword passwords) {
+    return _postApi.Changepassword(passwords);
+  }
+
 }
-//
+//////

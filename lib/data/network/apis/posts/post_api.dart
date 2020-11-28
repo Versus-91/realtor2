@@ -13,6 +13,8 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/models/type/type_list.dart';
+import 'package:boilerplate/models/user/changepassword.dart';
+
 import 'package:boilerplate/models/user/user.dart';
 import 'package:dio/dio.dart';
 
@@ -108,6 +110,16 @@ class PostApi {
     }
   }
 
+  Future Changepassword(ChangePassword changepassword) async {
+    try {
+      final res = await _dioClient.put(Endpoints.changepassword,
+          data: changepassword.toMap());
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
+
   /// Returns list of post in response
   Future<CategoryList> getCategories() async {
     try {
@@ -181,6 +193,7 @@ class PostApi {
     }
   }
 
+/////
   Future uploadAvatarImage(MultipartFile avatarImage) async {
     FormData imageFormData = FormData.fromMap({
       "files": avatarImage,

@@ -130,11 +130,12 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText:   AppLocalizations.of(context).translate('chang_user_password'),
-                    ),
+                    ),/////
                     onChanged: (value) {
                       _formStore.setPassword(_passwordController.text);
                     },
                   ),
+                  
                 ),
               ],
             ),

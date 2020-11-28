@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/user/changepassword.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -34,6 +35,12 @@ abstract class _UserStore with Store {
   @observable
   bool success = false;
   @observable
+  String newPassword = " ";
+  @observable
+  String confirmPassword = " ";
+  @observable
+  String oldPassword = " ";
+  @observable
   bool avatarloading = false;
   @observable
   bool isLoggedIn = false;
@@ -45,6 +52,21 @@ abstract class _UserStore with Store {
     if (val == false) {
       user = null;
     }
+  }
+
+  @action
+  void setNewPassword(String val) {
+    newPassword = val;
+  }
+
+  @action
+  void setConfirmPassword(String val) {
+    confirmPassword = val;
+  }
+
+  @action
+  void setOldPassword(String val) {
+    oldPassword = val;
   }
 
   // actions:-------------------------------------------------------------------
@@ -72,4 +94,13 @@ abstract class _UserStore with Store {
       return false;
     });
   }
+
+  Future<bool> changePassword(ChangePassword passwords) async {
+    return _repository.Changepassword(passwords).then((result) {
+      return true;
+    }).catchError((error) {
+      return false;
+    });
+  }
 }
+/////
