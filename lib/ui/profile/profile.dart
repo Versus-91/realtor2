@@ -11,6 +11,7 @@ import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/profile/pages/aboute.dart';
 import 'package:boilerplate/ui/profile/pages/account_info.dart';
 import 'package:boilerplate/ui/profile/constants/colors.dart';
+import 'package:boilerplate/ui/profile/pages/changenumber.dart';
 import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
 import 'package:boilerplate/ui/profile/constants/opaque_image.dart';
 import 'package:boilerplate/ui/profile/profile_info_big_card.dart';
@@ -289,7 +290,7 @@ class _ProfilePageState extends State<ProfilePage>
                                   : () {},
                               child: ProfileInfoBigCard(
                                 secondText: AppLocalizations.of(context)
-                                        .translate('my_posts'),
+                                    .translate('my_posts'),
                                 icon: Image.asset(
                                   "assets/icons/checklist.png",
                                   width: 25,
@@ -301,9 +302,49 @@ class _ProfilePageState extends State<ProfilePage>
                         ),
                         TableRow(
                           children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ChangeNumber(),
+                                  ),
+                                );
+                              },
+                              child: ProfileInfoBigCard(
+                                secondText: AppLocalizations.of(context)
+                                    .translate('change_number'),
+                                icon: Icon(
+                                  Icons.vpn_key,
+                                  size: 25,
+                                  color: blueColor,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              // onTap: () {
+                              //   Navigator.of(context).push(
+                              //     MaterialPageRoute(
+                              //       builder: (context) => ChangeNumber(),
+                              //     ),
+                              //   );
+                              // },
+                              child: ProfileInfoBigCard(
+                                secondText: AppLocalizations.of(context)
+                                    .translate('change_password'),
+                                icon: Icon(
+                                  Icons.mobile_friendly,
+                                  size: 25,
+                                  color: blueColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
                             ProfileInfoBigCard(
                               secondText: AppLocalizations.of(context)
-                                        .translate('plants'),
+                                  .translate('plants'),
                               icon: Icon(
                                 Icons.remove_red_eye,
                                 size: 25,
@@ -319,8 +360,8 @@ class _ProfilePageState extends State<ProfilePage>
                                 );
                               },
                               child: ProfileInfoBigCard(
-                                secondText:AppLocalizations.of(context)
-                                        .translate('about_us'),
+                                secondText: AppLocalizations.of(context)
+                                    .translate('about_us'),
                                 icon: Icon(
                                   Icons.help_outline,
                                   size: 25,
