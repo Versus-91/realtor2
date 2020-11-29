@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/models/user/changepassword.dart';
 import 'package:boilerplate/plugin/cropper.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -12,6 +13,7 @@ import 'package:boilerplate/ui/profile/pages/aboute.dart';
 import 'package:boilerplate/ui/profile/pages/account_info.dart';
 import 'package:boilerplate/ui/profile/constants/colors.dart';
 import 'package:boilerplate/ui/profile/pages/changenumber.dart';
+import 'package:boilerplate/ui/profile/pages/changepassword.dart';
 import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
 import 'package:boilerplate/ui/profile/constants/opaque_image.dart';
 import 'package:boilerplate/ui/profile/profile_info_big_card.dart';
@@ -321,13 +323,13 @@ class _ProfilePageState extends State<ProfilePage>
                               ),
                             ),
                             GestureDetector(
-                              // onTap: () {
-                              //   Navigator.of(context).push(
-                              //     MaterialPageRoute(
-                              //       builder: (context) => ChangeNumber(),
-                              //     ),
-                              //   );
-                              // },
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ChangePasswordScreen(),
+                                  ),
+                                );
+                              },
                               child: ProfileInfoBigCard(
                                 secondText: AppLocalizations.of(context)
                                     .translate('change_password'),

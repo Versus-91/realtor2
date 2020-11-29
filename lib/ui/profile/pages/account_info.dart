@@ -158,7 +158,7 @@ class _AcountInfoScreenState extends State<AcountInfoScreen>
             ]),
           );
         } else {
-         Container();
+          Container();
         }
       },
     );

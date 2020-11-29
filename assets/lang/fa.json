@@ -78,7 +78,9 @@
   "plants": "طرح های موجود",
   "about_us": "درباره ما",
   "logout": "خروج",
-
+  "old_password": "رمز قبلی",
+  "new_password": "رمز جدید",
+  "confirm_password": "تکرار رمز جدید",
   "rent_scope": "محدوده اجاره",
   "rahn_scope": "محدوده رهن",
   "price_scope": "محدوده قیمت",
