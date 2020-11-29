@@ -23,62 +23,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
         // backgroundColor: Colors.orange,
         sections: [
           SettingsSection(
-            title: 'Common',
-            // titleTextStyle: TextStyle(fontSize: 30),
+            title: 'اطلاعات حساب',
             tiles: [
-              SettingsTile(
-                trailing: Icon(Icons.keyboard_arrow_left),
-                title: 'Language',
-                subtitle: 'فارسی',
-                leading: Icon(Icons.language),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => LanguagesScreen()));
-                },
-              ),
-              SettingsTile(
-                title: 'Environment',
-                subtitle: 'Production',
-                leading: Icon(Icons.cloud_queue),
-                onTap: () => print('e'),
-              ),
+              SettingsTile(title: 'نام', leading: Icon(Icons.email)),
+              SettingsTile(title: ' شماره', leading: Icon(Icons.phone)),
+              SettingsTile(title: 'ایمیل', leading: Icon(Icons.email)),
             ],
           ),
           SettingsSection(
-            title: 'Account',
-            tiles: [
-              SettingsTile(title: 'Phone number', leading: Icon(Icons.phone)),
-              SettingsTile(title: 'Email', leading: Icon(Icons.email)),
-              SettingsTile(title: 'Sign out', leading: Icon(Icons.exit_to_app)),
-            ],
-          ),
-          SettingsSection(
-            title: 'Security',
+            title: 'امنیت',
             tiles: [
               SettingsTile.switchTile(
-                title: 'Lock app in background',
-                leading: Icon(Icons.phonelink_lock),
-                switchValue: lockInBackground,
-                onToggle: (bool value) {
-                  setState(() {
-                    lockInBackground = value;
-                    notificationsEnabled = value;
-                  });
-                },
-              ),
-              SettingsTile.switchTile(
-                  title: 'Use fingerprint',
-                  leading: Icon(Icons.fingerprint),
-                  onToggle: (bool value) {},
-                  switchValue: false),
-              SettingsTile.switchTile(
-                title: 'Change password',
+                title: 'تغییر رمز',
                 leading: Icon(Icons.lock),
                 switchValue: true,
                 onToggle: (bool value) {},
               ),
               SettingsTile.switchTile(
-                title: 'Enable Notifications',
+                title: 'فعالسازی اعلان ها',
                 enabled: notificationsEnabled,
                 leading: Icon(Icons.notifications_active),
                 switchValue: true,
@@ -87,13 +49,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ],
           ),
           SettingsSection(
-            title: 'Misc',
+            title: 'مدیریت آگهی',
             tiles: [
               SettingsTile(
-                  title: 'Terms of Service', leading: Icon(Icons.description)),
+                  title: 'آگهی های من', leading: Icon(Icons.description)),
               SettingsTile(
-                  title: 'Open source licenses',
+                  title: 'طرح های موجود',
                   leading: Icon(Icons.collections_bookmark)),
+              SettingsTile(title: 'درباره ما', leading: Icon(Icons.info)),
+              SettingsTile(title: 'خروج', leading: Icon(Icons.exit_to_app)),
             ],
           ),
           CustomSection(

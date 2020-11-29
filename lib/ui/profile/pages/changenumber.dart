@@ -90,7 +90,7 @@ class _ChangeNumberState extends State<ChangeNumber>
                 onPressed: () async {
                   appComponent
                       .getRepository()
-                      .addPhoneNumber(_newnumberController.text)
+                      .addPhoneNumber("+" + _newnumberController.text)
                       .then((value) async {
                     String res = await Navigator.of(context).pushNamed(
                         Routes.verificationcodephone,

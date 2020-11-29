@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:boilerplate/data/network/constants/endpoints.dart';
@@ -208,10 +209,12 @@ class PostApi {
     }
   }
 
-  Future addPhoneNumber(String phonenumber) async {
+  Future addPhoneNumber(String phoneNumber) async {
     try {
-      final res = await _dioClient
-          .post(Endpoints.addphonenumber, data: {'phoneNumber': phonenumber});
+      var request = new Map();
+      request["phoneNumber"] = phoneNumber;
+      final res = await _dioClient.post(Endpoints.addphonenumber,
+          data: {"phoneNumber": "+989363619414"});
       return res;
     } catch (e) {
       throw e;
