@@ -14,6 +14,7 @@ import 'package:boilerplate/ui/profile/pages/account_info.dart';
 import 'package:boilerplate/ui/profile/constants/colors.dart';
 import 'package:boilerplate/ui/profile/pages/changenumber.dart';
 import 'package:boilerplate/ui/profile/pages/changepassword.dart';
+import 'package:boilerplate/ui/profile/pages/info.dart';
 import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
 import 'package:boilerplate/ui/profile/constants/opaque_image.dart';
 import 'package:boilerplate/ui/profile/profile_info_big_card.dart';
@@ -326,7 +327,8 @@ class _ProfilePageState extends State<ProfilePage>
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => ChangePasswordScreen(),
+                                    builder: (context) =>
+                                        ChangePasswordScreen(),
                                   ),
                                 );
                               },
@@ -371,6 +373,28 @@ class _ProfilePageState extends State<ProfilePage>
                                 ),
                               ),
                             ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => SettingsScreen(),
+                                  ),
+                                );
+                              },
+                              child: ProfileInfoBigCard(
+                                secondText: "پروفایل",
+                                icon: Icon(
+                                  Icons.remove_red_eye,
+                                  size: 25,
+                                  color: blueColor,
+                                ),
+                              ),
+                            ),
+                            SizedBox.shrink()
                           ],
                         ),
                       ],
