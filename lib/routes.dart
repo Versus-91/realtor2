@@ -1,5 +1,6 @@
 // import 'package:boilerplate/ui/firstPage/firstpage.dart';
 import 'package:boilerplate/ui/authorization/login/login.dart';
+import 'package:boilerplate/ui/authorization/signup/phone_verification.dart';
 import 'package:boilerplate/ui/authorization/signup/register.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
 import 'package:boilerplate/ui/map/map.dart';
@@ -26,6 +27,7 @@ class Routes {
   static const String post = '/post';
   static const String map = '/map';
   static const String crop = '/crop';
+  static const String verificationcodephone = '/phoneverification';
 
   static const String createpost = '/createpost';
 
@@ -43,5 +45,6 @@ class Routes {
     favarite: (BuildContext context) => FavoritesScreen(),
     profile: (BuildContext context) => ProfilePage(),
     crop: (BuildContext context) => ImageCropScreen(),
+    verificationcodephone: (BuildContext context) => Otp(),
   };
 }

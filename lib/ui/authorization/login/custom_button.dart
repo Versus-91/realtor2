@@ -11,17 +11,13 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const CustomButton({
-    
-    @required this.icon,
-    @required this.color,
-    @required this.textColor,
-    @required this.text,
-    @required this.onPressed,
+    this.icon,
+    this.color,
+    this.textColor,
+    this.text,
+    this.onPressed,
     this.image,
-  })  : assert(color != null),
-        assert(textColor != null),
-        assert(text != null),
-        assert(onPressed != null);
+  });
 
   @override
   Widget build(BuildContext context) {

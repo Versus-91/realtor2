@@ -15,16 +15,16 @@ class _SplashScreenState extends State<MySplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return new SplashScreen(
-      title: new Text(
+    return SplashScreen(
+      title: Text(
         'خوش آمدید.',
-        style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
       ),
       seconds: 5,
       navigateAfterSeconds: HomeScreen(),
-      image: new Image.asset('assets/icons/splash.png'),
+      image: Image.asset('assets/icons/splash.png'),
       backgroundColor: Colors.white,
-      styleTextUnderTheLoader: new TextStyle(),
+      styleTextUnderTheLoader: TextStyle(),
       photoSize: 150.0,
       loaderColor: Colors.redAccent,
     );

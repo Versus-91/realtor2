@@ -32,6 +32,7 @@ class Endpoints {
   static const String getTypes = baseUrl + "/api/services/app/type/GetAll";
   static const String uploadImages = baseUrl + "/upload";
   static const String uploadAvatarImage = baseUrl + "/upload/avatar";
-    static const String changepassword = baseUrl + "/upload/avatar";
-
+  static const String changepassword =
+      baseUrl + "/api/services/app/account/changePassword";
+  static const String addphonenumber = baseUrl + "/api/account/addphonenumber";
 }

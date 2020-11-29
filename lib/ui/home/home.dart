@@ -12,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../data/sharedpref/constants/preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -66,28 +65,28 @@ class _HomeScreenState extends State<HomeScreen> {
           navIcon: Icon(
             Icons.home,
           ),
-          title:   AppLocalizations.of(context).translate('home'),
+          title: AppLocalizations.of(context).translate('home'),
         ),
         BottomNav(
           screen: SearchTabScreen(),
           navIcon: Icon(
             Icons.search,
           ),
-          title:   AppLocalizations.of(context).translate('search'),
+          title: AppLocalizations.of(context).translate('search'),
         ),
         BottomNav(
           screen: FavoritesScreen(),
           navIcon: Icon(
             Icons.favorite,
           ),
-          title:  AppLocalizations.of(context).translate('favarits'),
+          title: AppLocalizations.of(context).translate('favarits'),
         ),
         BottomNav(
           screen: ProfilePage(),
           navIcon: Icon(
             Icons.person,
           ),
-          title:   AppLocalizations.of(context).translate('profile'),
+          title: AppLocalizations.of(context).translate('profile'),
         )
       ];
     return Scaffold(
@@ -102,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
-        tooltip:   AppLocalizations.of(context).translate('send_post'),
+        tooltip: AppLocalizations.of(context).translate('send_post'),
         child: Icon(Icons.add),
         elevation: 2.0,
       ),

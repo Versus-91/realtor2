@@ -110,7 +110,7 @@ class PostApi {
     }
   }
 
-  Future Changepassword(ChangePassword changepassword) async {
+  Future changepassword(ChangePassword changepassword) async {
     try {
       final res = await _dioClient.put(Endpoints.changepassword,
           data: changepassword.toMap());
@@ -202,6 +202,16 @@ class PostApi {
     try {
       final res = await _dioClient.post(Endpoints.uploadAvatarImage,
           data: imageFormData);
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future addPhoneNumber(String phonenumber) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.addphonenumber, data: {'phoneNumber': phonenumber});
       return res;
     } catch (e) {
       throw e;

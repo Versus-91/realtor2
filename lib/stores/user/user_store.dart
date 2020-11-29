@@ -96,7 +96,7 @@ abstract class _UserStore with Store {
   }
 
   Future<bool> changePassword(ChangePassword passwords) async {
-    return _repository.Changepassword(passwords).then((result) {
+    return _repository.changepassword(passwords).then((result) {
       return true;
     }).catchError((error) {
       return false;

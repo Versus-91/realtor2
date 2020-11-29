@@ -88,7 +88,8 @@
   "rahn_price": "قیمت رهن",
   "change_password": "تغییر رمز",
   "change_number": "تغییر شماره همراه",
- 
+  "new_number": "شماره همراه جدید",
+
   "search_in_district": "جست و جوی محله",
   "insert_district": "نام محل را وارد کنید",
   "no_result": "نتیجه ای یافت نشد!",

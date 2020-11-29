@@ -238,9 +238,14 @@ class Repository {
     return _postApi.uploadAvatarImage(avatarImage);
   }
 
- Future<void> Changepassword(ChangePassword passwords) {
-    return _postApi.Changepassword(passwords);
+  Future<void> changepassword(ChangePassword passwords) {
+    return _postApi.changepassword(passwords);
   }
 
+  Future<void> addPhoneNumber(String phonenumber) {
+    return _postApi.addPhoneNumber(phonenumber).then((result) {
+      return result;
+    }).catchError((err) => throw err);
+  }
 }
 //////

@@ -12,7 +12,7 @@ class User {
         email: json["emailAddress"],
         name: json["name"],
         surname: json["surname"],
-        phonenumber: json["phonenumber"],
+        phonenumber: json["phoneNumber"],
           avatar: json["avatar"],
       );
   Map<String, dynamic> toMap() => {
@@ -21,7 +21,7 @@ class User {
         "userName": email,
         "surname": surname,
         "password": password,
-        "phonenumber": phonenumber,
+        "phoneNumber": phonenumber,
         "avatar": avatar,
       };
 }

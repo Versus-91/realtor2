@@ -1,10 +1,12 @@
 import 'package:boilerplate/main.dart';
+import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
@@ -25,10 +27,10 @@ class _ChangeNumberState extends State<ChangeNumber>
   void initState() {
     super.initState();
   }
-
   //text controllers:-----------------------------------------------------------
 
   TextEditingController _numberController = TextEditingController();
+  TextEditingController _newnumberController = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -56,40 +58,55 @@ class _ChangeNumberState extends State<ChangeNumber>
 
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
-    return Observer(
-      builder: (context) {
+    return Observer(builder: (context) {
+      if (_userStore.user != null) {
+        _numberController.text = _userStore.user.phonenumber;
+
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(children: [
             Divider(),
             TextField(
-              controller: _numberController,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
+              keyboardType: TextInputType.number,
+              textDirection: TextDirection.ltr,
+              controller: _newnumberController,
               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.edit),
                 border: OutlineInputBorder(),
-                labelText:
-                    AppLocalizations.of(context).translate('user_Number'),
+                labelText: AppLocalizations.of(context).translate('new_number'),
               ),
-              onChanged: (value) {
-                _formStore.setNumber(value.toString());
-              },
             ),
             Container(
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(vertical: 15),
               alignment: Alignment.center,
               child: CustomButton(
-                color: Colors.red,
                 textColor: Colors.white,
-                text: AppLocalizations.of(context).translate('register_info'),
+                color: Colors.red,
+                text: AppLocalizations.of(context).translate('change_number'),
                 onPressed: () async {
-                  _formStore.updeteUser();
+                  appComponent
+                      .getRepository()
+                      .addPhoneNumber(_newnumberController.text)
+                      .then((value) async {
+                    String res = await Navigator.of(context).pushNamed(
+                        Routes.verificationcodephone,
+                        arguments: {'phone': _newnumberController.text});
+                  }).catchError((err) {
+                    print(err.toString());
+                  });
                 },
               ),
             ),
           ]),
         );
-      },
-    );
+      } else {
+        return SizedBox.shrink();
+      }
+    });
   }
 
   @override

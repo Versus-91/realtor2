@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -10,9 +9,7 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
 import 'package:provider/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MyPostsScreen extends StatefulWidget {
   @override
@@ -44,6 +41,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           "آگهی های من",
@@ -76,7 +74,10 @@ class _MyPostsScreenState extends State<MyPostsScreen>
       builder: (context) {
         return _postStore.loading
             ? CustomProgressIndicatorWidget()
-            : Material(child: _buildListView());
+            : Material(
+                child: _buildListView(),
+                color: Colors.white,
+              );
       },
     );
   }
@@ -116,6 +117,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
           );
         },
         child: Card(
+          color: Colors.white,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           shadowColor: Colors.black,
           elevation: 3,
@@ -126,6 +128,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                 children: <Widget>[
                   Expanded(
                     child: ListTile(
+                      selectedTileColor: Colors.red[100],
                       dense: false,
                       contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       title: Text(
