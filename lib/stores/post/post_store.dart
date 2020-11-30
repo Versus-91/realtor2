@@ -50,18 +50,14 @@ abstract class _PostStore with Store {
   // actions:-------------------------------------------------------------------
   @action
   Future getPosts({PostRequest request}) async {
-    request.page = page;
-    request.pageSize = pageSize;
+    // request.page = page;
+    // request.pageSize = pageSize;
 
     final future = _repository.getPosts(request: request);
     fetchPostsFuture = ObservableFuture(future);
 
     future.then((postList) {
-      if (page > 1) {
-        this.postList.posts.addAll(postList.posts);
-      } else {
-        this.postList = postList;
-      }
+      this.postList = postList;
     }).catchError((error) {
       print(error);
       errorStore.errorMessage = DioErrorUtil.handleError(error);

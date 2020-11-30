@@ -25,8 +25,8 @@ class PostRequest {
   int bedCount;
   PostRequest(
       {this.id,
-      this.page,
-      this.pageSize,
+      this.page = 1,
+      this.pageSize = 10,
       this.districtName,
       this.categoryName,
       this.cityName,
@@ -58,6 +58,7 @@ class PostRequest {
     result.addAll({"category": category.toString()});
     result.addAll({"maxResultCount": pageSize.toString()});
     result.addAll({"skipCount": ((page - 1) * pageSize).toString()});
+
     if (district != null) {
       result.addAll({"district": district.toString()});
     }
