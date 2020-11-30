@@ -215,9 +215,9 @@ class PostApi {
       if (phoneNumber[0] != plusSign) {
         phoneNumber = plusSign + phoneNumber;
       }
-      final res = await _dioClient
-          .post(Endpoints.addphonenumber, data: {"phoneNumber": phoneNumber});
-      return res;
+      // final res = await _dioClient
+      //     .post(Endpoints.addphonenumber, data: {"phoneNumber": phoneNumber});
+      // return Furure;
     } catch (e) {
       throw e;
     }
