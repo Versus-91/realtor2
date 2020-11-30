@@ -98,11 +98,12 @@ class _ChangeNumberState extends State<ChangeNumber>
                   });
                   appComponent
                       .getRepository()
-                      .addPhoneNumber('+' + _newNumberController.text)
+                      .addPhoneNumber(_newNumberController.text)
                       .then((value) async {
+                    print('object');
                     var result = await Navigator.of(context).pushNamed(
                         Routes.verificationcodephone,
-                        arguments: {'phone': '+' + _newNumberController.text});
+                        arguments: {'phone': _newNumberController.text});
                     setState(() {
                       loading = false;
                     });
@@ -111,7 +112,7 @@ class _ChangeNumberState extends State<ChangeNumber>
                     _showErrorMessage(
                       "خطا در تغییر شماره همراه",
                     );
-                   
+
                     setState(() {
                       loading = false;
                     });

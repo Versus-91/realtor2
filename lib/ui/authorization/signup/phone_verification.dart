@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:boilerplate/main.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
   // Variables
+  bool loading;
   Size _screenSize;
   int _currentDigit;
   int _firstDigit;
@@ -300,11 +303,13 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
     return new Scaffold(
       appBar: _getAppbar,
       backgroundColor: Colors.white,
-      body: new Container(
-        width: _screenSize.width,
+      body: loading == true
+          ? Center(child: CircularProgressIndicator())
+          : Container(
+              width: _screenSize.width,
 //        padding: new EdgeInsets.only(bottom: 16.0),
-        child: _getInputPart,
-      ),
+              child: _getInputPart,
+            ),
     );
   }
 
@@ -406,8 +411,23 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
             .getRepository()
             .verificationCodePhone(args["phone"], otp)
             .then((value) async {
+          setState(() {
+            loading = true;
+          });
           Navigator.of(context).pop(true);
-        }).catchError((err) => print('error'));
+          setState(() {
+            loading = false;
+          });
+        }).catchError((err) {
+          _showErrorMessage(
+            "خطا در تغییر شماره همراه",
+          );
+
+          setState(() {
+            loading = false;
+          });
+          print(loading);
+        });
       }
     });
   }
@@ -427,6 +447,20 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
     _secondDigit = null;
     _firstDigit = null;
     setState(() {});
+  }
+
+  _showErrorMessage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createError(
+          message: message,
+          title: AppLocalizations.of(context).translate('home_tv_error'),
+          duration: Duration(seconds: 3),
+        )..show(context);
+      }
+    });
+
+    return SizedBox.shrink();
   }
 }
 
