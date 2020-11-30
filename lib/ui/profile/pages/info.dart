@@ -1,8 +1,8 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/ui/profile/constants/radial_progress.dart';
 import 'package:boilerplate/ui/profile/constants/rounded_image.dart';
-import 'package:boilerplate/ui/profile/constants/text_style.dart';
+import 'package:boilerplate/ui/profile/pages/aboute.dart';
 import 'package:boilerplate/ui/profile/pages/changenumber.dart';
+import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -89,23 +89,74 @@ class _SettingsScreenState extends State<SettingsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-        AppLocalizations.of(context).translate('settings'),
-      )),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Observer(
+              builder: (context) {
+                return _userStore.user != null
+                    ? InkWell(
+                        onTap: () async {
+                          getImage(ImageSource.gallery);
+                        },
+                        child: _userStore?.user.avatar == null
+                            ? CircleAvatar(
+                                backgroundImage: AssetImage(
+                                  "assets/images/no-profile.jpg",
+                                ),
+                              )
+                            : CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                Endpoints.baseUrl +
+                                    "/" +
+                                    _userStore.user.avatar,
+                              )),
+                      )
+                    : CircleAvatar(
+                        backgroundImage:
+                            AssetImage("assets/images/no-profile.jpg"));
+              },
+            ),
+          ),
+        ],
+        title: Text(
+          AppLocalizations.of(context).translate('settings'),
+        ),
+      ),
       body: SettingsList(
         // backgroundColor: Colors.orange,
         sections: [
           SettingsSection(
             title: AppLocalizations.of(context).translate("profile"),
             tiles: [
+              // SettingsTile(
+              //   title: "",
+              //   leading: Observer(
+              //     builder: (context) {
+              //       return _userStore.user != null
+              //           ? _userStore?.user.avatar == null
+              //               ? CircleAvatar(
+              //                   backgroundImage:
+              //                       AssetImage("assets/images/no-profile.jpg"))
+              //               : CircleAvatar(
+              //                   backgroundImage: NetworkImage(
+              //                   Endpoints.baseUrl +
+              //                       "/" +
+              //                       _userStore.user.avatar,
+              //                 ))
+              //           : CircleAvatar(
+              //               backgroundImage:
+              //                   AssetImage("assets/images/no-profile.jpg"));
+              //     },
+              //   ),
+              // ),
               SettingsTile(
                 title: AppLocalizations.of(context).translate("my_details"),
                 leading: Icon(Icons.person),
                 trailing: IconButton(
                   icon: Icon(Icons.keyboard_arrow_left),
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => ChangeNumber()));
+                    Navigator.of(context).pushNamed(Routes.changeNumber);
                   },
                 ),
               )
@@ -132,12 +183,28 @@ class _SettingsScreenState extends State<SettingsScreen>
             title: 'مدیریت آگهی',
             tiles: [
               SettingsTile(
+                  onTap: loggedIn == true
+                      ? () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => MyPostsScreen(),
+                            ),
+                          );
+                        }
+                      : () {},
                   title: AppLocalizations.of(context).translate("my_posts"),
                   leading: Icon(Icons.description)),
               SettingsTile(
                   title: AppLocalizations.of(context).translate("plants"),
                   leading: Icon(Icons.collections_bookmark)),
               SettingsTile(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AboutScreen(),
+                      ),
+                    );
+                  },
                   title: AppLocalizations.of(context).translate("about_us"),
                   leading: Icon(Icons.info)),
               SettingsTile(

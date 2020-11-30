@@ -29,7 +29,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
   // Variables
-  bool loading;
+  bool loading = false;
   Size _screenSize;
   int _currentDigit;
   int _firstDigit;
@@ -415,14 +415,10 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
             loading = true;
           });
           Navigator.of(context).pop(true);
-          setState(() {
-            loading = false;
-          });
         }).catchError((err) {
           _showErrorMessage(
             "خطا در تغییر شماره همراه",
           );
-
           setState(() {
             loading = false;
           });

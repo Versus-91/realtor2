@@ -105,23 +105,9 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                   ],
                                 ),
                                 Positioned(
-                                  top: MediaQuery.of(context).size.height / 3,
-                                  right:
-                                      MediaQuery.of(context).size.width / 2.8,
-                                  child:
-                                      //  FloatingActionButton(
-                                      //   backgroundColor: Colors.grey,
-                                      //   child: Icon(
-                                      //     Icons.search,
-                                      //   ),
-                                      //   onPressed: () {
-                                      //     // if (request != null) {
-                                      //     //   await _searchDataSource.insert(request);
-                                      //     // }
-                                      //   },
-                                      // ),
-
-                                      RaisedButton.icon(
+                                  top: MediaQuery.of(context).size.height / 5,
+                                  right: MediaQuery.of(context).size.width / 3,
+                                  child: RaisedButton.icon(
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10.0),

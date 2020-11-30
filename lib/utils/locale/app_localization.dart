@@ -8,8 +8,8 @@ import 'package:intl/intl.dart';
 class AppLocalizations {
   // localization variables
   final Locale locale;
-  final _numberformat = NumberFormat.compact(locale: "fa_IR");
-  final _currencyformat = NumberFormat.currency(locale: "fa_IR", symbol: "؋");
+  final _numberformat = NumberFormat.compact(locale: "fa");
+  final _currencyformat = NumberFormat.currency(locale: "fa", symbol:"دالر");
 
   Map<String, String> localizedStrings;
 

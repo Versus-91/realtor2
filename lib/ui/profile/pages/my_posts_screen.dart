@@ -152,7 +152,12 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                               ? Column(
                                   children: [
                                     Text(
-                                      'رهن: ${_postStore.userPostList.posts[position].deopsit}\$ ',
+                                      'رهن:' +
+                                          AppLocalizations.of(context)
+                                              .transformCurrency(_postStore
+                                                  .userPostList
+                                                  .posts[position]
+                                                  .deopsit),
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -161,7 +166,12 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                                       softWrap: false,
                                     ),
                                     Text(
-                                      'اجاره: ${_postStore.userPostList.posts[position].rent}\$',
+                                      'اجاره:' +
+                                          AppLocalizations.of(context)
+                                              .transformCurrency(_postStore
+                                                  .userPostList
+                                                  .posts[position]
+                                                  .rent),
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -172,7 +182,12 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                                   ],
                                 )
                               : Text(
-                                  'قیمت: ${_postStore.userPostList.posts[position].price}\$',
+                                  'قیمت:' +
+                                      AppLocalizations.of(context)
+                                          .transformCurrency(_postStore
+                                              .userPostList
+                                              .posts[position]
+                                              .rent),
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 17),
@@ -237,12 +252,16 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                       ),
                       Column(
                         children: [
-                          Text("متراژ"),
                           Text(
-                            '${_postStore.userPostList.posts[position].area}',
+                            "متراژ",
+                            style: TextStyle(color: Colors.grey.withOpacity(1)),
+                          ),
+                          Text(
+                            AppLocalizations.of(context).transformNumbers(
+                                _postStore.userPostList.posts[position].area),
                             style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.withOpacity(1)),
+                              fontSize: 14,
+                            ),
                           )
                         ],
                       ),
@@ -253,12 +272,17 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                       ),
                       Column(
                         children: [
-                          Text("اتاق خواب"),
                           Text(
-                            '${_postStore.userPostList.posts[position].bedroom}',
+                            "اتاق خواب",
+                            style: TextStyle(color: Colors.grey.withOpacity(1)),
+                          ),
+                          Text(
+                            AppLocalizations.of(context).transformNumbers(
+                                _postStore
+                                    .userPostList.posts[position].bedroom),
                             style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.withOpacity(1)),
+                              fontSize: 14,
+                            ),
                           ),
                         ],
                       ),
@@ -269,12 +293,16 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                       ),
                       Column(
                         children: [
-                          Text("شناسه آگهی"),
                           Text(
-                            '${_postStore.userPostList.posts[position].id}',
+                            "شناسه آگهی",
+                            style: TextStyle(color: Colors.grey.withOpacity(1)),
+                          ),
+                          Text(
+                            AppLocalizations.of(context).transformNumbers(
+                                _postStore.userPostList.posts[position].id),
                             style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.withOpacity(1)),
+                              fontSize: 14,
+                            ),
                           )
                         ],
                       ),

@@ -7,6 +7,7 @@ import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
+import 'package:boilerplate/ui/profile/pages/changenumber.dart';
 import 'package:boilerplate/widgets/image_crop_screen.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,8 @@ class Routes {
   static const String post = '/post';
   static const String map = '/map';
   static const String crop = '/crop';
-  static const String verificationcodephone = '/phoneverification';
+  static const String changeNumber = '/changeNumber';
+  static const String phoneNumberVerificationCode = '/phoneverification';
 
   static const String createpost = '/createpost';
 
@@ -45,6 +47,7 @@ class Routes {
     favarite: (BuildContext context) => FavoritesScreen(),
     profile: (BuildContext context) => ProfilePage(),
     crop: (BuildContext context) => ImageCropScreen(),
-    verificationcodephone: (BuildContext context) => Otp(),
+    phoneNumberVerificationCode: (BuildContext context) => Otp(),
+    changeNumber: (BuildContext context) => ChangeNumber(),
   };
 }

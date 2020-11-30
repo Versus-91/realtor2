@@ -168,54 +168,19 @@ class _ProfilePageState extends State<ProfilePage>
                             Observer(
                               builder: (context) {
                                 return _userStore.user != null
-                                    ? Expanded(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            RadialProgress(
-                                                width: 4,
-                                                goalCompleted: 0.9,
-                                                child: _userStore
-                                                            ?.user.avatar ==
-                                                        null
-                                                    ? Image.asset(
-                                                        "assets/images/no-profile.jpg",
-                                                        fit: BoxFit.cover,
-                                                        width: 140,
-                                                        height: 140,
-                                                      )
-                                                    : RoundedImage(
-                                                        path:
-                                                            Endpoints.baseUrl +
-                                                                "/" +
-                                                                _userStore.user
-                                                                    .avatar,
-                                                        size: Size.fromWidth(
-                                                            120.0),
-                                                      )),
-                                            Divider(),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Text(
-                                                  _userStore.user.email,
-                                                  style: whiteNameTextStyle,
-                                                ),
-                                                Text(
-                                                  _userStore.user.name,
-                                                  style:
-                                                      whiteSubHeadingTextStyle,
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 3,
-                                            ),
-                                          ],
-                                        ),
-                                      )
+                                    ? _userStore?.user.avatar == null
+                                        ? Image.asset(
+                                            "assets/images/no-profile.jpg",
+                                            fit: BoxFit.cover,
+                                            width: 40,
+                                            height: 40,
+                                          )
+                                        : RoundedImage(
+                                            path: Endpoints.baseUrl +
+                                                "/" +
+                                                _userStore.user.avatar,
+                                            size: Size.fromWidth(40.0),
+                                          )
                                     : Image.asset(
                                         "assets/images/no-profile.jpg",
                                         fit: BoxFit.cover,

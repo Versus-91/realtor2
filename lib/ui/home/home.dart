@@ -5,6 +5,7 @@ import 'package:boilerplate/ui/home/tabs/user_screen.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
+import 'package:boilerplate/ui/profile/pages/info.dart';
 import 'package:boilerplate/ui/profile/profile.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
@@ -75,14 +76,14 @@ class _HomeScreenState extends State<HomeScreen> {
           title: AppLocalizations.of(context).translate('search'),
         ),
         BottomNav(
-          screen: FavoritesScreen(),
+          screen: ProfilePage(),
           navIcon: Icon(
             Icons.favorite,
           ),
           title: AppLocalizations.of(context).translate('favarits'),
         ),
         BottomNav(
-          screen: ProfilePage(),
+          screen: SettingsScreen(),
           navIcon: Icon(
             Icons.person,
           ),

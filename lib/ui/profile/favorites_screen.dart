@@ -258,13 +258,16 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                       ),
                       Column(
                         children: [
-                          Text(AppLocalizations.of(context).translate('area')),
+                          Text(
+                            AppLocalizations.of(context).translate('area'),
+                            style: TextStyle(color: Colors.grey.withOpacity(1)),
+                          ),
                           Text(
                             AppLocalizations.of(context)
                                 .transformNumbers(snapshot.data[position].area),
                             style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey.withOpacity(1)),
+                              fontSize: 16,
+                            ),
                           )
                         ],
                       ),
@@ -275,13 +278,16 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                       ),
                       Column(
                         children: [
-                          Text(AppLocalizations.of(context).translate('bed')),
                           Text(
-                             AppLocalizations.of(context)
-                                .transformNumbers(snapshot.data[position].bedroom),
+                            AppLocalizations.of(context).translate('bed'),
+                            style: TextStyle(color: Colors.grey.withOpacity(1)),
+                          ),
+                          Text(
+                            AppLocalizations.of(context).transformNumbers(
+                                snapshot.data[position].bedroom),
                             style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey.withOpacity(1)),
+                              fontSize: 16,
+                            ),
                           ),
                         ],
                       ),
@@ -292,13 +298,15 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                       ),
                       Column(
                         children: [
-                          Text(AppLocalizations.of(context)
-                              .translate('post_id')),
+                          Text(
+                            AppLocalizations.of(context).translate('post_id'),
+                            style: TextStyle(color: Colors.grey.withOpacity(1)),
+                          ),
                           Text(
                             '${snapshot.data[position].id}',
                             style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey.withOpacity(1)),
+                              fontSize: 16,
+                            ),
                           )
                         ],
                       ),

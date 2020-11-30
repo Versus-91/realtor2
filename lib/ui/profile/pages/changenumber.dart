@@ -39,7 +39,7 @@ class _ChangeNumberState extends State<ChangeNumber>
     super.didChangeDependencies();
     _userStore = Provider.of<UserStore>(context);
 
-    if (!_userStore.loading && _userStore.user != null) _userStore.getUser();
+    if (!_userStore.loading && _userStore.user == null) _userStore.getUser();
   }
 
   @override
@@ -100,15 +100,14 @@ class _ChangeNumberState extends State<ChangeNumber>
                       .getRepository()
                       .addPhoneNumber(_newNumberController.text)
                       .then((value) async {
-                    // print('object');
-                    // var result = await Navigator.of(context).pushNamed(
-                    //     Routes.verificationcodephone,
-                    //     arguments: {'phone': _newNumberController.text});
+                    var result = await Navigator.of(context).pushNamed(
+                        Routes.phoneNumberVerificationCode,
+                        arguments: {'phone': _newNumberController.text});
                     setState(() {
                       loading = false;
                     });
                     // _newNumberController.text = result;
-                  }).catchError((err) {
+                  }).catchError((error) {
                     _showErrorMessage(
                       "خطا در تغییر شماره همراه",
                     );
@@ -116,7 +115,7 @@ class _ChangeNumberState extends State<ChangeNumber>
                     setState(() {
                       loading = false;
                     });
-                    print(loading);
+                    print(error);
                   });
                 },
               ),

@@ -217,7 +217,7 @@ class PostApi {
       }
       // final res = await _dioClient
       //     .post(Endpoints.addphonenumber, data: {"phoneNumber": phoneNumber});
-      // return Furure;
+      return Future.delayed(Duration(seconds: 5));
     } catch (e) {
       throw e;
     }
