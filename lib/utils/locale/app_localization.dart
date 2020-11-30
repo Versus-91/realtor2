@@ -3,10 +3,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class AppLocalizations {
   // localization variables
   final Locale locale;
+  final _numberformat = NumberFormat.compact(locale: "fa_IR");
+  final _currencyformat = NumberFormat.currency(locale: "fa_IR", symbol: "؋");
+
   Map<String, String> localizedStrings;
 
   // Static member to have a simple access to the delegate from the MaterialApp
@@ -41,6 +45,14 @@ class AppLocalizations {
   // This method will be called from every widget which needs a localized text
   String translate(String key) {
     return localizedStrings[key];
+  }
+
+  String transformCurrency(double number) {
+    return _currencyformat.format(number);
+  }
+
+  String transformNumbers(int number) {
+    return _numberformat.format(number);
   }
 }
 

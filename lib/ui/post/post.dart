@@ -192,7 +192,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                   widget.post.category.name.contains(
                           AppLocalizations.of(context).translate('sell'))
                       ? Text(
-                          '${widget.post.price}',
+                          AppLocalizations.of(context)
+                              .transformCurrency(widget.post.price),
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.normal,
@@ -242,7 +243,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                     Column(
                       children: [
                         Text(AppLocalizations.of(context).translate('post_id')),
-                        Text('${widget.post.id}')
+                        Text(AppLocalizations.of(context)
+                            .transformNumbers(widget.post.id))
                       ],
                     ),
                     Padding(
@@ -256,7 +258,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                     Column(
                       children: [
                         Text(AppLocalizations.of(context).translate('bed')),
-                        Text('${widget.post.bedroom}')
+                        Text( AppLocalizations.of(context)
+                                .transformNumbers(widget.post.bedroom))
                       ],
                     ),
                     Padding(
@@ -270,7 +273,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                     Column(
                       children: [
                         Text(AppLocalizations.of(context).translate('area')),
-                        Text('${widget.post.area}')
+                        Text( AppLocalizations.of(context)
+                                .transformNumbers(widget.post.area))
                       ],
                     ),
                     Padding(

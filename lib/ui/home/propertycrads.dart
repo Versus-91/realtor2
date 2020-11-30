@@ -127,8 +127,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                             softWrap: false,
                           ),
                           posts[position].category.name.contains(
-                                    AppLocalizations.of(context)
-                                        .translate('rahn'),
+                                    "رهن",
                                   )
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -137,7 +136,9 @@ class _PropertyCradsState extends State<PropertyCrads>
                                       AppLocalizations.of(context)
                                               .translate('rahn') +
                                           ":" +
-                                          '${posts[position].deopsit}',
+                                          AppLocalizations.of(context)
+                                              .transformCurrency(
+                                                  posts[position].deopsit),
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -147,8 +148,11 @@ class _PropertyCradsState extends State<PropertyCrads>
                                     ),
                                     Text(
                                       AppLocalizations.of(context)
-                                              .translate('not_found') +
-                                          ' : ${posts[position].rent}',
+                                              .translate('rent') +
+                                          ":" +
+                                          AppLocalizations.of(context)
+                                              .transformCurrency(
+                                                  posts[position].rent),
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -167,7 +171,10 @@ class _PropertyCradsState extends State<PropertyCrads>
                                     Text(
                                       AppLocalizations.of(context)
                                               .translate('price') +
-                                          ': ${posts[position].price}\$',
+                                          ":" +
+                                          AppLocalizations.of(context)
+                                              .transformCurrency(
+                                                  posts[position].price),
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 16),
@@ -239,9 +246,12 @@ class _PropertyCradsState extends State<PropertyCrads>
                       ),
                       Column(
                         children: [
-                          Text(  AppLocalizations.of(context).translate('area'),),
                           Text(
-                            '${posts[position].area}',
+                            AppLocalizations.of(context).translate('area'),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)
+                                .transformNumbers(posts[position].area),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -255,9 +265,12 @@ class _PropertyCradsState extends State<PropertyCrads>
                       ),
                       Column(
                         children: [
-                          Text(  AppLocalizations.of(context).translate('bed'),),
                           Text(
-                            '${posts[position].bedroom}',
+                            AppLocalizations.of(context).translate('bed'),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)
+                                .transformNumbers(posts[position].bedroom),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -271,9 +284,12 @@ class _PropertyCradsState extends State<PropertyCrads>
                       ),
                       Column(
                         children: [
-                          Text(  AppLocalizations.of(context).translate('post_id'),),
                           Text(
-                            '${posts[position].id}',
+                            AppLocalizations.of(context).translate('post_id'),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)
+                                .transformNumbers(posts[position].id),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),

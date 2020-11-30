@@ -184,7 +184,9 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                                       AppLocalizations.of(context)
                                               .translate('price') +
                                           ":" +
-                                          '${snapshot.data[position].price}',
+                                          AppLocalizations.of(context)
+                                              .transformCurrency(snapshot
+                                                  .data[position].price),
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 16),
@@ -258,9 +260,10 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                         children: [
                           Text(AppLocalizations.of(context).translate('area')),
                           Text(
-                            '${snapshot.data[position].area}',
+                            AppLocalizations.of(context)
+                                .transformNumbers(snapshot.data[position].area),
                             style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 16,
                                 color: Colors.grey.withOpacity(1)),
                           )
                         ],
@@ -274,9 +277,10 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                         children: [
                           Text(AppLocalizations.of(context).translate('bed')),
                           Text(
-                            '${snapshot.data[position].bedroom}',
+                             AppLocalizations.of(context)
+                                .transformNumbers(snapshot.data[position].bedroom),
                             style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 16,
                                 color: Colors.grey.withOpacity(1)),
                           ),
                         ],
@@ -293,7 +297,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                           Text(
                             '${snapshot.data[position].id}',
                             style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 16,
                                 color: Colors.grey.withOpacity(1)),
                           )
                         ],

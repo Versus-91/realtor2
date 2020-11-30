@@ -214,10 +214,11 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                             child: Text(
                               AppLocalizations.of(context)
                                       .translate('count_post') +
-                                  '${_postStore.postList.posts?.length}',
+                                  AppLocalizations.of(context).transformNumbers(
+                                      _postStore.postList.posts?.length),
                               style: TextStyle(
                                 fontWeight: FontWeight.w200,
-                                fontSize: 16,
+                                fontSize: 18,
                               ),
                             ),
                           )
