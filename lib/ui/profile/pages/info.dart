@@ -1,7 +1,5 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/ui/profile/constants/rounded_image.dart';
 import 'package:boilerplate/ui/profile/pages/aboute.dart';
-import 'package:boilerplate/ui/profile/pages/changenumber.dart';
 import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
@@ -45,8 +43,9 @@ class _SettingsScreenState extends State<SettingsScreen>
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) return;
 
-    File result = await Navigator.of(context)
+    dynamic result = await Navigator.of(context)
         .pushNamed(Routes.crop, arguments: {'image': image});
+
     var multiPartAvatarImage = await MultipartFile.fromFile(result.path);
 
     _userStore
@@ -124,7 +123,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         ),
       ),
       body: SettingsList(
-        // backgroundColor: Colors.orange,
+        backgroundColor: Colors.white,
         sections: [
           SettingsSection(
             title: AppLocalizations.of(context).translate("profile"),
@@ -208,6 +207,18 @@ class _SettingsScreenState extends State<SettingsScreen>
                   title: AppLocalizations.of(context).translate("about_us"),
                   leading: Icon(Icons.info)),
               SettingsTile(
+                  onTap: () {
+                    {
+                      SharedPreferences.getInstance().then((preference) async {
+                        preference.setBool(Preferences.is_logged_in, false);
+                        preference.remove(Preferences.auth_token);
+                        _userStore.setLoginState(false);
+                        await _rippleAnimationController.forward();
+                        Navigator.of(context)
+                            .pushReplacementNamed(Routes.login);
+                      });
+                    }
+                  },
                   title: AppLocalizations.of(context).translate("logout"),
                   leading: Icon(Icons.exit_to_app)),
             ],

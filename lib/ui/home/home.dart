@@ -1,4 +1,5 @@
 import 'package:boilerplate/models/Nvigation/bottom_nav.dart';
+import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/tabs/user_screen.dart';
@@ -76,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title: AppLocalizations.of(context).translate('search'),
         ),
         BottomNav(
-          screen: ProfilePage(),
+          screen: FavoritesScreen(),
           navIcon: Icon(
             Icons.favorite,
           ),
