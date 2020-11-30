@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:boilerplate/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,8 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   int _secondDigit;
   int _thirdDigit;
   int _fourthDigit;
+  int _fifthDigit;
+  int _sixthDigit;
 
   Timer timer;
   int totalTimeInSeconds;
@@ -85,6 +88,8 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
     return new Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
+        _otpTextField(_sixthDigit),
+        _otpTextField(_fifthDigit),
         _otpTextField(_fourthDigit),
         _otpTextField(_thirdDigit),
         _otpTextField(_secondDigit),
@@ -242,7 +247,11 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
                       ),
                       onPressed: () {
                         setState(() {
-                          if (_fourthDigit != null) {
+                          if (_sixthDigit != null) {
+                            _sixthDigit = null;
+                          } else if (_fifthDigit != null) {
+                            _fifthDigit = null;
+                          } else if (_fourthDigit != null) {
                             _fourthDigit = null;
                           } else if (_thirdDigit != null) {
                             _thirdDigit = null;
@@ -287,7 +296,6 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final Map args = ModalRoute.of(context).settings.arguments;
     _screenSize = MediaQuery.of(context).size;
     return new Scaffold(
       appBar: _getAppbar,
@@ -381,12 +389,25 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
       } else if (_fourthDigit == null) {
         _fourthDigit = _currentDigit;
 
+        // Verify your otp by here. API call
+      } else if (_fifthDigit == null) {
+        _fifthDigit = _currentDigit;
+      } else if (_sixthDigit == null) {
+        _sixthDigit = _currentDigit;
+
         var otp = _firstDigit.toString() +
             _secondDigit.toString() +
             _thirdDigit.toString() +
-            _fourthDigit.toString();
-
-        // Verify your otp by here. API call
+            _fourthDigit.toString() +
+            _fifthDigit.toString() +
+            _sixthDigit.toString();
+        Map args = ModalRoute.of(context).settings.arguments;
+        appComponent
+            .getRepository()
+            .verificationCodePhone(args["phone"], otp)
+            .then((value) async {
+          Navigator.of(context).pop(true);
+        }).catchError((err) => print('error'));
       }
     });
   }

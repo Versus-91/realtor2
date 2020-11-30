@@ -4,6 +4,8 @@ import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +22,7 @@ class _ChangeNumberState extends State<ChangeNumber>
   //stores:---------------------------------------------------------------------
   UserStore _userStore;
   String label;
+  bool loading = false;
   var initialIndex = 0;
   final _formStore = FormStore(appComponent.getRepository());
 
@@ -29,8 +32,7 @@ class _ChangeNumberState extends State<ChangeNumber>
   }
   //text controllers:-----------------------------------------------------------
 
-  TextEditingController _numberController = TextEditingController();
-  TextEditingController _newnumberController = TextEditingController();
+  TextEditingController _newNumberController = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -50,7 +52,9 @@ class _ChangeNumberState extends State<ChangeNumber>
         ),
         backgroundColor: Colors.red,
       ),
-      body: _buildBody(),
+      body: loading == true
+          ? Center(child: CircularProgressIndicator())
+          : _buildBody(),
     );
   }
 
@@ -60,7 +64,7 @@ class _ChangeNumberState extends State<ChangeNumber>
   Widget _buildBody() {
     return Observer(builder: (context) {
       if (_userStore.user != null) {
-        _numberController.text = _userStore.user.phonenumber;
+        _newNumberController.text = _userStore.user.phonenumber;
 
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -72,11 +76,12 @@ class _ChangeNumberState extends State<ChangeNumber>
               ],
               keyboardType: TextInputType.number,
               textDirection: TextDirection.ltr,
-              controller: _newnumberController,
+              controller: _newNumberController,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.edit),
                 border: OutlineInputBorder(),
-                labelText: AppLocalizations.of(context).translate('new_number'),
+                labelText:
+                    AppLocalizations.of(context).translate('user_Number'),
               ),
             ),
             Container(
@@ -88,15 +93,29 @@ class _ChangeNumberState extends State<ChangeNumber>
                 color: Colors.red,
                 text: AppLocalizations.of(context).translate('change_number'),
                 onPressed: () async {
+                  setState(() {
+                    loading = true;
+                  });
                   appComponent
                       .getRepository()
-                      .addPhoneNumber('+' + _newnumberController.text)
+                      .addPhoneNumber('+' + _newNumberController.text)
                       .then((value) async {
-                    String res = await Navigator.of(context).pushNamed(
+                    var result = await Navigator.of(context).pushNamed(
                         Routes.verificationcodephone,
-                        arguments: {'phone': '+' + _newnumberController.text});
+                        arguments: {'phone': '+' + _newNumberController.text});
+                    setState(() {
+                      loading = false;
+                    });
+                    _newNumberController.text = result;
                   }).catchError((err) {
-                    print(err.toString());
+                    _showErrorMessage(
+                      "خطا در تغییر شماره همراه",
+                    );
+                   
+                    setState(() {
+                      loading = false;
+                    });
+                    print(loading);
                   });
                 },
               ),
@@ -107,6 +126,20 @@ class _ChangeNumberState extends State<ChangeNumber>
         return SizedBox.shrink();
       }
     });
+  }
+
+  _showErrorMessage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createError(
+          message: message,
+          title: AppLocalizations.of(context).translate('home_tv_error'),
+          duration: Duration(seconds: 3),
+        )..show(context);
+      }
+    });
+
+    return SizedBox.shrink();
   }
 
   @override

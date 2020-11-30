@@ -15,7 +15,8 @@
   "Register": "ثبت نام",
   "register_info": "ثبت ",
   "skip": "رد شدن",
-  "my_details": "مشخصات من ",
+  "my_details": "اطلاعات حساب ",
+  "notifications": "فعالسازی اعلان ها",
   "back": "بازگشت",
   "Amlak_Name":"رهنمای املاک",
   "Register_Id":"شماره ثبت  املاک",
@@ -89,6 +90,7 @@
   "change_password": "تغییر رمز",
   "change_number": "تغییر شماره همراه",
   "new_number": "شماره همراه جدید",
+  "settings": "تنظیمات",
 
   "search_in_district": "جست و جوی محله",
   "insert_district": "نام محل را وارد کنید",

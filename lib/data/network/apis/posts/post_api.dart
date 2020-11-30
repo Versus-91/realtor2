@@ -18,6 +18,7 @@ import 'package:boilerplate/models/user/changepassword.dart';
 
 import 'package:boilerplate/models/user/user.dart';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 
 class PostApi {
   // dio instance
@@ -25,7 +26,7 @@ class PostApi {
   static const String baseUrl = 'hmahmudi-001-site2.gtempurl.com';
   // rest-client instance
   final RestClient _restClient;
-
+  var plusSign = '+';
   // injecting dio instance
   PostApi(this._dioClient, this._restClient);
 
@@ -211,10 +212,24 @@ class PostApi {
 
   Future addPhoneNumber(String phoneNumber) async {
     try {
-      var request = new Map();
-      request["phoneNumber"] = phoneNumber;
-      final res = await _dioClient.post(Endpoints.addphonenumber,
-          data: {"phoneNumber": "+989363619414"});
+      if (phoneNumber[0] != plusSign) {
+        phoneNumber = plusSign + phoneNumber;
+      }
+      final res = await _dioClient
+          .post(Endpoints.addphonenumber, data: {"phoneNumber": phoneNumber});
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future verificationCodePhone(String phoneNumber, String code) async {
+    try {
+      if (phoneNumber[0] != plusSign) {
+        phoneNumber = plusSign + phoneNumber;
+      }
+      final res = await _dioClient.post(Endpoints.verifyphonenumber,
+          data: {"phoneNumber": phoneNumber, "code": code});
       return res;
     } catch (e) {
       throw e;

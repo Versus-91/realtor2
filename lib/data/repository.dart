@@ -247,5 +247,11 @@ class Repository {
       return result;
     }).catchError((err) => throw err);
   }
+
+  Future<void> verificationCodePhone(String phonenumber,String code) {
+    return _postApi.verificationCodePhone(phonenumber,code).then((result) {
+      return result;
+    }).catchError((err) => throw err);
+  }
 }
 //////

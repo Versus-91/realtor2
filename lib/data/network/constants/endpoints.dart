@@ -35,4 +35,6 @@ class Endpoints {
   static const String changepassword =
       baseUrl + "/api/services/app/account/changePassword";
   static const String addphonenumber = baseUrl + "/api/account/addphonenumber";
+    static const String verifyphonenumber = baseUrl + "/api/account/verifyphonenumber";
+
 }
