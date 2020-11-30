@@ -243,15 +243,11 @@ class Repository {
   }
 
   Future<void> addPhoneNumber(String phonenumber) {
-    return _postApi.addPhoneNumber(phonenumber).then((result) {
-      return result;
-    }).catchError((err) => throw err);
+    return _postApi.addPhoneNumber(phonenumber);
   }
 
-  Future<void> verificationCodePhone(String phonenumber,String code) {
-    return _postApi.verificationCodePhone(phonenumber,code).then((result) {
-      return result;
-    }).catchError((err) => throw err);
+  Future verificationCodePhone(String phonenumber, String code) {
+    return _postApi.verificationCodePhone(phonenumber, code);
   }
 }
 //////
