@@ -65,70 +65,74 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: _buildScreens.elementAt(_selectedIndex),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(color: Colors.white, boxShadow: [
-          BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1))
-        ]),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-            child: GNav(
-                gap: 4,
-                activeColor: Colors.white,
-                iconSize: 24,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                duration: Duration(milliseconds: 500),
-                tabBackgroundColor: Colors.grey[800],
-                tabs: [
-                  GButton(
-                    iconActiveColor: Colors.purple,
-                    iconColor: Colors.black,
-                    textColor: Colors.purple,
-                    backgroundColor: Colors.purple.withOpacity(.2),
-                    icon: Icons.home,
-                    text: 'خانه',
-                  ),
-                  GButton(
-                    iconActiveColor: Colors.pink,
-                    iconColor: Colors.black,
-                    textColor: Colors.pink,
-                    backgroundColor: Colors.pink.withOpacity(.2),
-                    icon: Icons.favorite,
-                    text: 'Likes',
-                  ),
-                  GButton(
-                    iconActiveColor: Colors.amber[600],
-                    iconColor: Colors.black,
-                    textColor: Colors.amber[600],
-                    backgroundColor: Colors.amber[600].withOpacity(.2),
-                    icon: Icons.place,
-                    text: 'add',
-                  ),
-                  GButton(
-                    iconActiveColor: Colors.teal,
-                    iconColor: Colors.black,
-                    textColor: Colors.teal,
-                    backgroundColor: Colors.teal.withOpacity(.2),
-                    iconSize: 24,
-                    icon: Icons.search,
-                    text: 'Search',
-                  ),
-                  GButton(
-                    iconActiveColor: Colors.teal,
-                    iconColor: Colors.black,
-                    textColor: Colors.teal,
-                    backgroundColor: Colors.teal.withOpacity(.2),
-                    iconSize: 24,
-                    icon: Icons.settings,
-                    text: 'Profile',
-                  ),
-                ],
-                selectedIndex: _selectedIndex,
-                onTabChange: (index) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                }),
+      bottomNavigationBar: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Container(
+          decoration: BoxDecoration(color: Colors.white, boxShadow: [
+            BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1))
+          ]),
+          child: SafeArea(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+              child: GNav(
+                  gap: 1,
+                  activeColor: Colors.white,
+                  iconSize: 24,
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  duration: Duration(milliseconds: 500),
+                  tabBackgroundColor: Colors.grey[800],
+                  tabs: [
+                    GButton(
+                      iconActiveColor: Colors.purple,
+                      iconColor: Colors.black,
+                      textColor: Colors.purple,
+                      backgroundColor: Colors.purple.withOpacity(.2),
+                      icon: Icons.home,
+                      text: 'خانه',
+                    ),
+                    GButton(
+                      iconActiveColor: Colors.pink,
+                      iconColor: Colors.black,
+                      textColor: Colors.pink,
+                      backgroundColor: Colors.pink.withOpacity(.2),
+                      icon: Icons.favorite,
+                      text: 'Likes',
+                    ),
+                    GButton(
+                      iconActiveColor: Colors.amber[600],
+                      iconColor: Colors.black,
+                      textColor: Colors.amber[600],
+                      backgroundColor: Colors.amber[600].withOpacity(.2),
+                      icon: Icons.place,
+                      text: 'add',
+                    ),
+                    GButton(
+                      iconActiveColor: Colors.teal,
+                      iconColor: Colors.black,
+                      textColor: Colors.teal,
+                      backgroundColor: Colors.teal.withOpacity(.2),
+                      iconSize: 24,
+                      icon: Icons.search,
+                      text: 'Search',
+                    ),
+                    GButton(
+                      iconActiveColor: Colors.teal,
+                      iconColor: Colors.black,
+                      textColor: Colors.teal,
+                      backgroundColor: Colors.teal.withOpacity(.2),
+                      iconSize: 24,
+                      icon: Icons.settings,
+                      text: 'Profile',
+                    ),
+                  ],
+                  selectedIndex: _selectedIndex,
+                  onTabChange: (index) {
+                    setState(() {
+                      _selectedIndex = index;
+                    });
+                  }),
+            ),
           ),
         ),
       ),
