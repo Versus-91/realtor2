@@ -4,12 +4,14 @@ import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/tabs/user_screen.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
+import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/info.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/sharedpref/constants/preferences.dart';
@@ -20,6 +22,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  PersistentTabController _controller;
+  bool _hideNavBar;
+
   GlobalKey globalKey = new GlobalKey(debugLabel: 'btm_nav_bar');
   //stores:---------------------------------------------------------------------
   UserStore _userStore;
@@ -36,10 +41,59 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.home),
+        title: "Home",
+        activeColor: Colors.blue,
+        inactiveColor: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.search),
+        title: ("Search"),
+        activeColor: Colors.teal,
+        inactiveColor: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.add),
+        title: ("Add"),
+        activeColor: Colors.deepOrange,
+        inactiveColor: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.favorite),
+        title: ("Likes"),
+        activeColor: Colors.deepOrange,
+        inactiveColor: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.settings),
+        title: ("Settings"),
+        activeColor: Colors.indigo,
+        inactiveColor: Colors.grey,
+      ),
+    ];
+  }
+
+  List<Widget> _buildScreens() {
+    return [
+      UserScreen(
+        userStore: _userStore,
+        postStore: _postStore,
+      ),
+      SearchTabScreen(),
+      CreatePostScreen(),
+      FavoritesScreen(),
+      SettingsScreen(),
+    ];
+  }
+
   @override
   void initState() {
     super.initState();
-
+    _controller = PersistentTabController(initialIndex: 0);
+    _hideNavBar = false;
     getSharedPrefs();
   }
 
@@ -55,74 +109,49 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (navItems == null)
-      navItems = [
-        BottomNav(
-          screen: UserScreen(
-            userStore: _userStore,
-            postStore: _postStore,
-          ),
-          navIcon: Icon(
-            Icons.home,
-          ),
-          title: AppLocalizations.of(context).translate('home'),
-        ),
-        BottomNav(
-          screen: SearchTabScreen(),
-          navIcon: Icon(
-            Icons.search,
-          ),
-          title: AppLocalizations.of(context).translate('search'),
-        ),
-        BottomNav(
-          screen: FavoritesScreen(),
-          navIcon: Icon(
-            Icons.favorite,
-          ),
-          title: AppLocalizations.of(context).translate('favarits'),
-        ),
-        BottomNav(
-          screen: SettingsScreen(),
-          navIcon: Icon(
-            Icons.person,
-          ),
-          title: AppLocalizations.of(context).translate('profile'),
-        )
-      ];
     return Scaffold(
-      appBar: EmptyAppBar(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => CreatePostScreen(),
-            ),
-          );
+      body: PersistentTabView(
+        controller: _controller,
+        screens: _buildScreens(),
+        confineInSafeArea: true,
+        itemCount: 5,
+        backgroundColor: Colors.white,
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset: true,
+        stateManagement: true,
+        hideNavigationBarWhenKeyboardShows: true,
+        hideNavigationBar: _hideNavBar,
+        decoration: NavBarDecoration(
+          colorBehindNavBar: Colors.indigo,
+        ),
+        popAllScreensOnTapOfSelectedTab: true,
+        itemAnimationProperties: ItemAnimationProperties(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.ease,
+        ),
+        screenTransitionAnimation: ScreenTransitionAnimation(
+          animateTabTransition: true,
+          curve: Curves.ease,
+          duration: Duration(milliseconds: 200),
+        ),
+        // customWidget: BottomNavStyle1(
+        //   items: _navBarsItems(),
+        //   onItemSelected: (index) {
+        //     setState(() {
+        //       _controller.index = index; // THIS IS CRITICAL!! Don't miss it!
+        //     });
+        //   },
+        //   selectedIndex: _controller.index,
+        // ),
+        items: _navBarsItems(),
+        onItemSelected: (index) {
+          setState(() {
+            _controller.index = index; // THIS IS CRITICAL!! Don't miss it!
+          });
         },
-        tooltip: AppLocalizations.of(context).translate('send_post'),
-        child: Icon(Icons.add),
-        elevation: 2.0,
-      ),
-      body: navItems[_screenNumber].screen,
-      bottomNavigationBar: BottomNavigationBar(
-        key: globalKey,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _screenNumber,
-        onTap: (i) => setState(() {
-          _screenNumber = i;
-        }), // this will be set when a new tab is tapped
-        items: navItems
-            .map((navItem) => BottomNavigationBarItem(
-                  icon: navItem.navIcon,
-                  label: navItem.title,
-                ))
-            .toList(),
+
+        navBarStyle:
+            NavBarStyle.style1, // Choose the nav bar style with this property
       ),
     );
   }
