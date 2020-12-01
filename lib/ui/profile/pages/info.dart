@@ -87,11 +87,6 @@ class _SettingsScreenState extends State<SettingsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context).translate('settings'),
-        ),
-      ),
       body: SettingsList(
         backgroundColor: Colors.white,
         sections: [
@@ -173,7 +168,9 @@ class _SettingsScreenState extends State<SettingsScreen>
                 enabled: true,
                 leading: Icon(Icons.notifications_active),
                 switchValue: true,
-                onToggle: (value) {},
+                onToggle: (value) {
+                  print('object');
+                },
               ),
             ],
           ),
