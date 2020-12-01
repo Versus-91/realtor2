@@ -29,12 +29,14 @@ class _ImageCropScreenState extends State<ImageCropScreen> {
           elevation: 0,
           title: Text(
             'برش/زوم',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.normal),
           ),
           backgroundColor: Colors.white,
-          leading:  IconButton(
-            icon:
-                 Icon(Icons.navigate_before, color: Colors.black, size: 40),
+          leading: IconButton(
+            icon: Icon(Icons.navigate_before, color: Colors.black, size: 40),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
@@ -54,8 +56,8 @@ class _ImageCropScreenState extends State<ImageCropScreen> {
           onPressed: () async {
             final crop = cropKey.currentState;
             final croppedFile =
-                await crop.cropCompleted(args['image'], preferredSize:1000);
-                
+                await crop.cropCompleted(args['image'], preferredSize: 1000);
+
             showImage(context, croppedFile);
           },
           tooltip: 'تایید',

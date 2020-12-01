@@ -107,7 +107,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                               child: _userStore?.user.avatar == null
                                   ? CircleAvatar(
                                       radius: 50,
-                                      backgroundColor: Colors.red,
+                                      backgroundColor: Colors.indigo,
                                       child: CircleAvatar(
                                         radius: 48,
                                         backgroundImage: AssetImage(
@@ -117,7 +117,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                                     )
                                   : CircleAvatar(
                                       radius: 50,
-                                      backgroundColor: Colors.red,
+                                      backgroundColor: Colors.indigo,
                                       child: CircleAvatar(
                                           radius: 48,
                                           backgroundImage: NetworkImage(
@@ -129,7 +129,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                             )
                           : CircleAvatar(
                               radius: 50,
-                              backgroundColor: Colors.red,
+                              backgroundColor: Colors.indigo,
                               child: CircleAvatar(
                                 radius: 48,
                                 backgroundImage: AssetImage(

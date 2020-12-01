@@ -207,6 +207,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return AppBar(
       title: Text(
         AppLocalizations.of(context).translate('send_post'),
+        style: TextStyle(
+            fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
       ),
     );
   }

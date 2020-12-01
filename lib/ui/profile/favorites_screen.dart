@@ -36,7 +36,8 @@ class _FavoritesScreenState extends State<FavoritesScreen>
         automaticallyImplyLeading: false,
         title: Text(
           AppLocalizations.of(context).translate('favarite_posts'),
-          style: TextStyle(fontSize: 20, color: Colors.black),
+          style: TextStyle(
+              fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
         ),
         backgroundColor: Colors.red,
         elevation: 0.0,
