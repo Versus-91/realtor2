@@ -1,9 +1,11 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/ui/authorization/login/login.dart';
 import 'package:boilerplate/ui/profile/pages/aboute.dart';
 import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'dart:async';
 import 'dart:io';
@@ -203,16 +205,32 @@ class _SettingsScreenState extends State<SettingsScreen>
                   title: AppLocalizations.of(context).translate("about_us"),
                   leading: Icon(Icons.info)),
               SettingsTile(
-                  onTap: () {
+                  onTap: () async {
                     {
-                      SharedPreferences.getInstance().then((preference) async {
-                        preference.setBool(Preferences.is_logged_in, false);
-                        preference.remove(Preferences.auth_token);
-                        _userStore.setLoginState(false);
+                      if (loggedIn == true) {
+                        SharedPreferences.getInstance()
+                            .then((preference) async {
+                          preference.setBool(Preferences.is_logged_in, false);
+                          preference.remove(Preferences.auth_token);
+                          _userStore.setLoginState(false);
+                          await _rippleAnimationController.forward();
+                          pushNewScreenWithRouteSettings(
+                            context,
+                            screen: LoginPage(),
+                            withNavBar: false,
+                            settings: null,
+                          );
+                        });
+                      } else {
                         await _rippleAnimationController.forward();
-                        Navigator.of(context)
-                            .pushReplacementNamed(Routes.login);
-                      });
+
+                        pushNewScreenWithRouteSettings(
+                          context,
+                          screen: LoginPage(),
+                          withNavBar: false,
+                          settings: null,
+                        );
+                      }
                     }
                   },
                   title: AppLocalizations.of(context).translate("logout"),

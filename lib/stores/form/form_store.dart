@@ -230,14 +230,11 @@ abstract class _FormStore with Store {
       return false;
     });
   }
+
   @action
   Future updeteUser() async {
     var user = User(
-        email: userEmail,
-        name: name,
-       
-        surname: family,
-        phonenumber: number);
+        email: userEmail, name: name, surname: family, phonenumber: number);
     loading = true;
     return _repository.updateUser(user).then((result) {
       loading = false;
@@ -250,6 +247,7 @@ abstract class _FormStore with Store {
       return false;
     });
   }
+
   @action
   Future login() async {
     loading = true;
@@ -270,8 +268,7 @@ abstract class _FormStore with Store {
           errorStore.errorMessage =
               "نام کاربری و رمز خود را چک کنید خطا در ورود";
       } else {
-        errorStore.errorMessage =
-            "اتصال اینترنت برقرار نیست مجددا تلاش کنید";
+        errorStore.errorMessage = "اتصال اینترنت برقرار نیست مجددا تلاش کنید";
       }
       return false;
     });
@@ -285,7 +282,7 @@ abstract class _FormStore with Store {
   @action
   Future logout() async {
     loading = true;
-    _repository.logOut().then((value) => loading = false);
+    return _repository.logOut().then((value) => loading = false);
   }
 
   // general methods:-----------------------------------------------------------

@@ -136,7 +136,7 @@ class Repository {
   }
 
   Future logOut() async {
-    await _sharedPrefsHelper.removeAuthToken();
+    return await _sharedPrefsHelper.removeAuthToken();
   }
 
   Future addFavorite(Post post) async {
