@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/ui/authorization/signup/phone_verification.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

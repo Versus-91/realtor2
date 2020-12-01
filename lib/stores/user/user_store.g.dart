@@ -61,6 +61,51 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  final _$newPasswordAtom = Atom(name: '_UserStore.newPassword');
+
+  @override
+  String get newPassword {
+    _$newPasswordAtom.reportRead();
+    return super.newPassword;
+  }
+
+  @override
+  set newPassword(String value) {
+    _$newPasswordAtom.reportWrite(value, super.newPassword, () {
+      super.newPassword = value;
+    });
+  }
+
+  final _$confirmPasswordAtom = Atom(name: '_UserStore.confirmPassword');
+
+  @override
+  String get confirmPassword {
+    _$confirmPasswordAtom.reportRead();
+    return super.confirmPassword;
+  }
+
+  @override
+  set confirmPassword(String value) {
+    _$confirmPasswordAtom.reportWrite(value, super.confirmPassword, () {
+      super.confirmPassword = value;
+    });
+  }
+
+  final _$oldPasswordAtom = Atom(name: '_UserStore.oldPassword');
+
+  @override
+  String get oldPassword {
+    _$oldPasswordAtom.reportRead();
+    return super.oldPassword;
+  }
+
+  @override
+  set oldPassword(String value) {
+    _$oldPasswordAtom.reportWrite(value, super.oldPassword, () {
+      super.oldPassword = value;
+    });
+  }
+
   final _$avatarloadingAtom = Atom(name: '_UserStore.avatarloading');
 
   @override
@@ -121,11 +166,47 @@ mixin _$UserStore on _UserStore, Store {
   }
 
   @override
+  void setNewPassword(String val) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.setNewPassword');
+    try {
+      return super.setNewPassword(val);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setConfirmPassword(String val) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.setConfirmPassword');
+    try {
+      return super.setConfirmPassword(val);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setOldPassword(String val) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.setOldPassword');
+    try {
+      return super.setOldPassword(val);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchUserFuture: ${fetchUserFuture},
 user: ${user},
 success: ${success},
+newPassword: ${newPassword},
+confirmPassword: ${confirmPassword},
+oldPassword: ${oldPassword},
 avatarloading: ${avatarloading},
 isLoggedIn: ${isLoggedIn},
 loading: ${loading}

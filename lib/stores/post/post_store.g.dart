@@ -31,6 +31,23 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$fetchNextPostsFutureAtom =
+      Atom(name: '_PostStore.fetchNextPostsFuture');
+
+  @override
+  ObservableFuture<PostList> get fetchNextPostsFuture {
+    _$fetchNextPostsFutureAtom.reportRead();
+    return super.fetchNextPostsFuture;
+  }
+
+  @override
+  set fetchNextPostsFuture(ObservableFuture<PostList> value) {
+    _$fetchNextPostsFutureAtom.reportWrite(value, super.fetchNextPostsFuture,
+        () {
+      super.fetchNextPostsFuture = value;
+    });
+  }
+
   final _$postListAtom = Atom(name: '_PostStore.postList');
 
   @override
@@ -132,11 +149,11 @@ mixin _$PostStore on _PostStore, Store {
   final _$_PostStoreActionController = ActionController(name: '_PostStore');
 
   @override
-  void loadNextPage() {
+  Future<dynamic> loadNextPage({PostRequest request}) {
     final _$actionInfo = _$_PostStoreActionController.startAction(
         name: '_PostStore.loadNextPage');
     try {
-      return super.loadNextPage();
+      return super.loadNextPage(request: request);
     } finally {
       _$_PostStoreActionController.endAction(_$actionInfo);
     }
@@ -146,6 +163,7 @@ mixin _$PostStore on _PostStore, Store {
   String toString() {
     return '''
 fetchPostsFuture: ${fetchPostsFuture},
+fetchNextPostsFuture: ${fetchNextPostsFuture},
 postList: ${postList},
 userPostList: ${userPostList},
 success: ${success},

@@ -26,7 +26,9 @@ abstract class _PostStore with Store {
   @observable
   ObservableFuture<PostList> fetchPostsFuture =
       ObservableFuture<PostList>(emptyPostResponse);
-
+  @observable
+  ObservableFuture<PostList> fetchNextPostsFuture =
+      ObservableFuture<PostList>(emptyPostResponse);
   @observable
   PostList postList;
   @observable
@@ -38,8 +40,13 @@ abstract class _PostStore with Store {
   @observable
   int pageSize = 3;
   @action
-  void loadNextPage() {
-    page = page + 1;
+  Future loadNextPage({PostRequest request}) async {
+    var hasNextPage = (postList.totalCount / pageSize) > page ? true : false;
+    if (fetchNextPostsFuture.status != FutureStatus.pending && hasNextPage) {
+      page = page + 1;
+    }
+    final future = _repository.getPosts(request: request);
+    fetchNextPostsFuture = ObservableFuture(future);
   }
 
   @computed

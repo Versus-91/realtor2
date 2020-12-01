@@ -20,7 +20,6 @@ class SearchTabScreen extends StatefulWidget {
 class _SearchTabScreenState extends State<SearchTabScreen> {
   final ScrollController _scrollController = ScrollController();
   PostStore _postStore;
-  SearchDataSource _searchDataSource;
   FilterFormStore _filterForm = FilterFormStore();
   @override
   void initState() {
