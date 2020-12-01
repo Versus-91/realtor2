@@ -149,28 +149,28 @@ abstract class _FilterFormStore with Store {
           }
         }).toList(),
         amenities: amenities);
-    if (paginate) {
-      return request;
-    }
-    if (prevRequest == request) {
-      request = null;
-    } else {
-      prevRequest = PostRequest(
-          age: request.age,
-          amenities: request.amenities.toList(),
-          types: request.types.toList(),
-          category: request.category,
-          city: request.city,
-          maxArea: request.maxArea,
-          minArea: request.minArea,
-          maxPrice: request.maxPrice,
-          minPrice: request.minPrice,
-          maxRentPrice: request.maxRentPrice,
-          minRentPrice: request.minRentPrice,
-          maxDepositPrice: request.maxDepositPrice,
-          minDepositPrice: request.minDepositPrice,
-          district: request.district);
-    }
+    // if (paginate) {
+    //   return request;
+    // }
+    // if (prevRequest == request) {
+    //   request = null;
+    // } else {
+    //   prevRequest = PostRequest(
+    //       age: request.age,
+    //       amenities: request.amenities.toList(),
+    //       types: request.types.toList(),
+    //       category: request.category,
+    //       city: request.city,
+    //       maxArea: request.maxArea,
+    //       minArea: request.minArea,
+    //       maxPrice: request.maxPrice,
+    //       minPrice: request.minPrice,
+    //       maxRentPrice: request.maxRentPrice,
+    //       minRentPrice: request.minRentPrice,
+    //       maxDepositPrice: request.maxDepositPrice,
+    //       minDepositPrice: request.minDepositPrice,
+    //       district: request.district);
+    // }
     return request;
   }
 

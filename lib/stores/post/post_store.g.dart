@@ -15,6 +15,13 @@ mixin _$PostStore on _PostStore, Store {
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_PostStore.loading'))
       .value;
+  Computed<bool> _$loadingNextPageComputed;
+
+  @override
+  bool get loadingNextPage =>
+      (_$loadingNextPageComputed ??= Computed<bool>(() => super.loadingNextPage,
+              name: '_PostStore.loadingNextPage'))
+          .value;
 
   final _$fetchPostsFutureAtom = Atom(name: '_PostStore.fetchPostsFuture');
 
@@ -123,11 +130,20 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$loadNextPageAsyncAction = AsyncAction('_PostStore.loadNextPage');
+
+  @override
+  Future<dynamic> loadNextPage({PostRequest request}) {
+    return _$loadNextPageAsyncAction
+        .run(() => super.loadNextPage(request: request));
+  }
+
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
 
   @override
-  Future<dynamic> getPosts({PostRequest request}) {
-    return _$getPostsAsyncAction.run(() => super.getPosts(request: request));
+  Future<dynamic> getPosts({PostRequest request, bool paging = false}) {
+    return _$getPostsAsyncAction
+        .run(() => super.getPosts(request: request, paging: paging));
   }
 
   final _$removeUserPostsAsyncAction =
@@ -146,19 +162,6 @@ mixin _$PostStore on _PostStore, Store {
         .run(() => super.getUserPosts(request: request));
   }
 
-  final _$_PostStoreActionController = ActionController(name: '_PostStore');
-
-  @override
-  Future<dynamic> loadNextPage({PostRequest request}) {
-    final _$actionInfo = _$_PostStoreActionController.startAction(
-        name: '_PostStore.loadNextPage');
-    try {
-      return super.loadNextPage(request: request);
-    } finally {
-      _$_PostStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
   @override
   String toString() {
     return '''
@@ -169,7 +172,8 @@ userPostList: ${userPostList},
 success: ${success},
 page: ${page},
 pageSize: ${pageSize},
-loading: ${loading}
+loading: ${loading},
+loadingNextPage: ${loadingNextPage}
     ''';
   }
 }

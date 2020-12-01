@@ -39,14 +39,26 @@ abstract class _PostStore with Store {
   int page = 1;
   @observable
   int pageSize = 3;
+  @computed
+  bool get hasNextPage {
+    return postList.posts.length < postList.totalCount;
+  }
+
   @action
   Future loadNextPage({PostRequest request}) async {
-    var hasNextPage = (postList.totalCount / pageSize) > page ? true : false;
-    if (fetchNextPostsFuture.status != FutureStatus.pending && hasNextPage) {
-      page = page + 1;
+    if (!loadingNextPage && hasNextPage) {
+      request.page = page + 1;
+      request.pageSize = pageSize;
+      final future = _repository.getPosts(request: request);
+      fetchNextPostsFuture = ObservableFuture(future);
+      return future.then((postList) {
+        this.postList.posts.addAll(postList.posts);
+        page = page + 1;
+      }).catchError((error) {
+        print(error);
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+      });
     }
-    final future = _repository.getPosts(request: request);
-    fetchNextPostsFuture = ObservableFuture(future);
   }
 
   @computed
@@ -54,12 +66,17 @@ abstract class _PostStore with Store {
     return fetchPostsFuture.status == FutureStatus.pending;
   }
 
+  @computed
+  bool get loadingNextPage {
+    return fetchPostsFuture.status == FutureStatus.pending;
+  }
+
   // actions:-------------------------------------------------------------------
   @action
-  Future getPosts({PostRequest request}) async {
+  Future getPosts({PostRequest request, bool paging = false}) async {
     // request.page = page;
     // request.pageSize = pageSize;
-
+    if (page != 1) page = 1;
     final future = _repository.getPosts(request: request);
     fetchPostsFuture = ObservableFuture(future);
 

@@ -8,6 +8,7 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:incrementally_loading_listview/incrementally_loading_listview.dart';
 import 'package:provider/provider.dart';
 
 import '../propertycrads.dart';
@@ -71,26 +72,43 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                           );
                         } else {
                           if (_postStore.postList != null) {
-                            return NotificationListener<ScrollNotification>(
-                                onNotification:
-                                    (ScrollNotification scrollInfo) {
-                                  if (scrollInfo.metrics.pixels ==
-                                      scrollInfo.metrics.maxScrollExtent) {
-                                    if (_postStore.postList.totalCount >
-                                        _postStore.page * _postStore.pageSize) {
-                                      _postStore.loadNextPage();
-                                      var request = _filterForm.applyFilters(
-                                          paginate: true);
-                                      _postStore.getPosts(request: request);
-                                    } else {
-                                      print('already at final page');
-                                    }
-                                  }
-                                  return true;
+                            return RefreshIndicator(
+                              child: IncrementallyLoadingListView(
+                                loadMore: () async {
+                                  var request =
+                                      _filterForm.applyFilters(paginate: true);
+                                  await _postStore.loadNextPage(
+                                      request: request);
                                 },
-                                child: PropertyCrads(
-                                  postsList: _postStore.postList,
-                                ));
+                                hasMore: () =>
+                                    _postStore.postList.posts.length <
+                                    _postStore.postList.totalCount,
+                                itemCount: () =>
+                                    _postStore.postList.posts.length,
+                                itemBuilder: (context, index) {
+                                  if (index ==
+                                          _postStore.postList.posts.length -
+                                              1 &&
+                                      !_postStore.loadingNextPage) {
+                                    return Column(
+                                      children: [
+                                        PropertyCrads(
+                                            post: _postStore
+                                                .postList.posts[index]),
+                                        // CircularProgressIndicator();
+                                      ],
+                                    );
+                                  }
+                                  return PropertyCrads(
+                                      post: _postStore.postList.posts[index]);
+                                },
+                              ),
+                              onRefresh: () async {
+                                print('refresh');
+                                await _postStore.getPosts(
+                                    request: _filterForm.applyFilters());
+                              },
+                            );
                           } else {
                             return Stack(
                               children: [
@@ -200,7 +218,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                               AppLocalizations.of(context)
                                       .translate('count_post') +
                                   AppLocalizations.of(context).transformNumbers(
-                                      _postStore.postList.posts?.length),
+                                      _postStore.postList.totalCount),
                               style: TextStyle(
                                 fontWeight: FontWeight.w200,
                                 fontSize: 18,

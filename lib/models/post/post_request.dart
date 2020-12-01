@@ -26,7 +26,7 @@ class PostRequest {
   PostRequest(
       {this.id,
       this.page = 1,
-      this.pageSize = 10,
+      this.pageSize = 3,
       this.districtName,
       this.categoryName,
       this.cityName,

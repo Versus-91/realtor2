@@ -9,8 +9,8 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 
 class PropertyCrads extends StatefulWidget {
-  PropertyCrads({this.postsList});
-  final PostList postsList;
+  PropertyCrads({this.post});
+  final Post post;
   @override
   _PropertyCradsState createState() => _PropertyCradsState();
 }
@@ -32,9 +32,7 @@ class _PropertyCradsState extends State<PropertyCrads>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(),
-    );
+    return _buildBody();
   }
 
   // app bar methods:-----------------------------------------------------------
@@ -47,7 +45,7 @@ class _PropertyCradsState extends State<PropertyCrads>
           padding:
               const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 10),
           child: Material(
-            child: _buildListView(),
+            child: _buildListItem(widget.post),
           ),
         ),
         // _navbarsection(),
@@ -55,14 +53,14 @@ class _PropertyCradsState extends State<PropertyCrads>
     );
   }
 
-  Widget _buildListView() {
-    return ListView.builder(
-      itemCount: widget.postsList.posts.length,
-      itemBuilder: (context, position) {
-        return _buildListItem(widget.postsList.posts, position);
-      },
-    );
-  }
+  // Widget _buildListView() {
+  //   return ListView.builder(
+  //     itemCount: widget.posts.length,
+  //     itemBuilder: (context, position) {
+  //       return _buildListItem(widget.posts, position);
+  //     },
+  //   );
+  // }
 
   // retun (_postStore.postList != null && _postStore.postList.posts.length > 0)
   //     ? ListView.builder(
@@ -78,7 +76,7 @@ class _PropertyCradsState extends State<PropertyCrads>
   //       );
   // }
 
-  Widget _buildListItem(List<Post> posts, int position) {
+  Widget _buildListItem(Post post) {
     return GestureDetector(
       onTap: () {
         Future.delayed(Duration(milliseconds: 0), () {
@@ -92,7 +90,7 @@ class _PropertyCradsState extends State<PropertyCrads>
             context,
             MaterialPageRoute(
                 builder: (context) => PostScreen(
-                      post: widget.postsList.posts[position],
+                      post: post,
                     )),
           );
         },
@@ -111,7 +109,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                       dense: false,
                       contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       title: Text(
-                        '${posts[position].category.name}',
+                        '${post.category.name}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         softWrap: false,
@@ -121,14 +119,14 @@ class _PropertyCradsState extends State<PropertyCrads>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${posts[position].district.city.name},${posts[position].district.name}',
+                            '${post.district.city.name},${post.district.name}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             softWrap: false,
                           ),
-                          posts[position].category.name.contains(
-                                    "رهن",
-                                  )
+                          post.category.name.contains(
+                            "رهن",
+                          )
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -137,8 +135,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                                               .translate('rahn') +
                                           ":" +
                                           AppLocalizations.of(context)
-                                              .transformCurrency(
-                                                  posts[position].deopsit),
+                                              .transformCurrency(post.deopsit),
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -151,8 +148,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                                               .translate('rent') +
                                           ":" +
                                           AppLocalizations.of(context)
-                                              .transformCurrency(
-                                                  posts[position].rent),
+                                              .transformCurrency(post.rent),
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -173,8 +169,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                                               .translate('price') +
                                           ":" +
                                           AppLocalizations.of(context)
-                                              .transformCurrency(
-                                                  posts[position].price),
+                                              .transformCurrency(post.price),
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           fontSize: 16),
@@ -192,11 +187,9 @@ class _PropertyCradsState extends State<PropertyCrads>
                     padding: EdgeInsets.only(top: 2.0, left: 8),
                     width: 130,
                     height: 100,
-                    child: posts[position].images.length > 0
+                    child: post.images.length > 0
                         ? Image.network(
-                            Endpoints.baseUrl +
-                                "/" +
-                                posts[position].images[0]?.path,
+                            Endpoints.baseUrl + "/" + post.images[0]?.path,
                             fit: BoxFit.cover,
                           )
                         : Image.asset("assets/images/a.png", fit: BoxFit.cover),
@@ -220,7 +213,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                               onTap: () async {
                                 await appComponent
                                     .getRepository()
-                                    .removeFavorite(posts[position]);
+                                    .removeFavorite(post);
                                 setState(() {
                                   appComponent
                                       .getRepository()
@@ -251,7 +244,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                           ),
                           Text(
                             AppLocalizations.of(context)
-                                .transformNumbers(posts[position].area),
+                                .transformNumbers(post.area),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -270,7 +263,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                           ),
                           Text(
                             AppLocalizations.of(context)
-                                .transformNumbers(posts[position].bedroom),
+                                .transformNumbers(post.bedroom),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -289,7 +282,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                           ),
                           Text(
                             AppLocalizations.of(context)
-                                .transformNumbers(posts[position].id),
+                                .transformNumbers(post.id),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -331,7 +324,7 @@ class _PropertyCradsState extends State<PropertyCrads>
 // {
 //   @override
 //   Widget build(BuildContext context) {
-//     if (widget.postsList.posts.length == 0) {
+//     if (widget.posts.posts.length == 0) {
 //       return Column(
 //         mainAxisAlignment: MainAxisAlignment.center,
 //         children: [
@@ -342,16 +335,16 @@ class _PropertyCradsState extends State<PropertyCrads>
 //       return SingleChildScrollView(
 //         child: Column(
 //             children:
-//                 List<Widget>.generate(widget.postsList.posts.length, (index) {
+//                 List<Widget>.generate(widget.posts.posts.length, (index) {
 //           var url = 'assets/images/a.png';
-//           if (widget.postsList.posts[index].images.length > 0) {
+//           if (widget.posts.posts[index].images.length > 0) {
 //             url = Endpoints.baseUrl +
 //                 "/" +
-//                 widget.postsList.posts[index].images[0]?.path;
+//                 widget.posts.posts[index].images[0]?.path;
 //           }
 
 //           return houseWidget(
-//             widget.postsList.posts[index],
+//             widget.posts.posts[index],
 //             url,
 //           );
 //         })),
