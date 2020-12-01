@@ -9,7 +9,7 @@ class AppLocalizations {
   // localization variables
   final Locale locale;
   final _numberformat = NumberFormat.compact(locale: "fa");
-  final _currencyformat = NumberFormat.currency(locale: "fa", symbol:"دالر");
+  final _currencyformat = NumberFormat.currency(locale: "fa", symbol: "\$");
 
   Map<String, String> localizedStrings;
 
