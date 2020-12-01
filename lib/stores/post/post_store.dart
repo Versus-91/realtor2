@@ -38,7 +38,7 @@ abstract class _PostStore with Store {
   @observable
   int page = 1;
   @observable
-  int pageSize = 3;
+  int pageSize = 15;
   @computed
   bool get hasNextPage {
     return postList.posts.length < postList.totalCount;
