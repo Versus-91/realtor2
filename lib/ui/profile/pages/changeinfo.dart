@@ -51,7 +51,8 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).translate('edite_info'),
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(
+              fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
         ),
         backgroundColor: Colors.red,
       ),

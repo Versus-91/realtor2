@@ -72,7 +72,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
           backgroundColor: Colors.transparent,
           title: Text(
             ' ${widget.post.district.city.name} - ${widget.post.district.name} ',
-            // style: TextStyle(color: Colors.white),
+             style: TextStyle(
+              fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
           ),
         ),
         body: ListView(

@@ -875,9 +875,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Text(
                   AppLocalizations.of(context).translate('filter'),
                   style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 22,
-                  ),
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal),
                 ),
               ),
             ),

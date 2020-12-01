@@ -44,7 +44,9 @@ class _MyPostsScreenState extends State<MyPostsScreen>
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          "آگهی های من",
+          AppLocalizations.of(context).translate('my_posts'),
+          style: TextStyle(
+              fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
         ),
         backgroundColor: Colors.red,
       ),

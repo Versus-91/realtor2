@@ -1,4 +1,3 @@
-
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +8,8 @@ class AboutScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).translate('about_us'),
-          style: TextStyle(color: Colors.white, fontSize: 20),
+          style: TextStyle(
+              fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
         ),
         backgroundColor: Colors.red,
         elevation: 0.0,

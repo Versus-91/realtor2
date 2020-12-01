@@ -77,7 +77,11 @@ class _UserMapScreenState extends State<UserMapScreen> {
 
   Widget _buildAppBar() {
     return AppBar(
-      title: Text(AppLocalizations.of(context).translate('map')),
+      title: Text(
+        AppLocalizations.of(context).translate('map'),
+        style: TextStyle(
+            fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
+      ),
     );
   }
 

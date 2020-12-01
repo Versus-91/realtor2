@@ -59,7 +59,8 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
         automaticallyImplyLeading: false,
         title: Text(
           AppLocalizations.of(context).translate('home'),
-          style: TextStyle(fontSize: 20, color: Colors.black),
+          style: TextStyle(
+              fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
         ),
         backgroundColor: Colors.red,
       ),
