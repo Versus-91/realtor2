@@ -5,7 +5,6 @@ import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'dart:async';
 import 'dart:io';
@@ -214,22 +213,18 @@ class _SettingsScreenState extends State<SettingsScreen>
                           preference.remove(Preferences.auth_token);
                           _userStore.setLoginState(false);
                           await _rippleAnimationController.forward();
-                          pushNewScreenWithRouteSettings(
-                            context,
-                            screen: LoginPage(),
-                            withNavBar: false,
-                            settings: null,
-                          );
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              Routes.login, (Route<dynamic> route) => false);
                         });
                       } else {
                         await _rippleAnimationController.forward();
-
-                        pushNewScreenWithRouteSettings(
-                          context,
-                          screen: LoginPage(),
-                          withNavBar: false,
-                          settings: null,
-                        );
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            Routes.login, (Route<dynamic> route) => false);
+                        //   context,
+                        //   screen: LoginPage(),
+                        //   withNavBar: false,
+                        //   settings: null,
+                        // );
                       }
                     }
                   },
