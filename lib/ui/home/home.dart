@@ -4,11 +4,9 @@ import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/tabs/user_screen.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
-import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/info.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/widgets/empty_app_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -45,31 +43,31 @@ class _HomeScreenState extends State<HomeScreen> {
     return [
       PersistentBottomNavBarItem(
         icon: Icon(Icons.home),
-        title: "Home",
+        title: AppLocalizations.of(context).translate('home'),
         activeColor: Colors.blue,
         inactiveColor: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.search),
-        title: ("Search"),
-        activeColor: Colors.teal,
+        title: AppLocalizations.of(context).translate('search'),
+        activeColor: Colors.orange,
         inactiveColor: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.add),
-        title: ("Add"),
-        activeColor: Colors.deepOrange,
+        title: AppLocalizations.of(context).translate('add_post'),
+        activeColor: Colors.teal,
         inactiveColor: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.favorite),
-        title: ("Likes"),
+        title: AppLocalizations.of(context).translate('favarits'),
         activeColor: Colors.deepOrange,
         inactiveColor: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.settings),
-        title: ("Settings"),
+        title: AppLocalizations.of(context).translate('settings'),
         activeColor: Colors.indigo,
         inactiveColor: Colors.grey,
       ),
