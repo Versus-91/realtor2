@@ -88,36 +88,6 @@ class _SettingsScreenState extends State<SettingsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(left: 12),
-            child: Observer(
-              builder: (context) {
-                return _userStore.user != null
-                    ? InkWell(
-                        onTap: () async {
-                          getImage(ImageSource.gallery);
-                        },
-                        child: _userStore?.user.avatar == null
-                            ? CircleAvatar(
-                                backgroundImage: AssetImage(
-                                  "assets/images/no-profile.jpg",
-                                ),
-                              )
-                            : CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                Endpoints.baseUrl +
-                                    "/" +
-                                    _userStore.user.avatar,
-                              )),
-                      )
-                    : CircleAvatar(
-                        backgroundImage:
-                            AssetImage("assets/images/no-profile.jpg"));
-              },
-            ),
-          ),
-        ],
         title: Text(
           AppLocalizations.of(context).translate('settings'),
         ),
@@ -126,49 +96,68 @@ class _SettingsScreenState extends State<SettingsScreen>
         backgroundColor: Colors.white,
         sections: [
           SettingsSection(
-            title: AppLocalizations.of(context).translate("profile"),
             tiles: [
-              // SettingsTile(
-              //   title: "",
-              //   leading: Observer(
-              //     builder: (context) {
-              //       return _userStore.user != null
-              //           ? _userStore?.user.avatar == null
-              //               ? CircleAvatar(
-              //                   backgroundImage:
-              //                       AssetImage("assets/images/no-profile.jpg"))
-              //               : CircleAvatar(
-              //                   backgroundImage: NetworkImage(
-              //                   Endpoints.baseUrl +
-              //                       "/" +
-              //                       _userStore.user.avatar,
-              //                 ))
-              //           : CircleAvatar(
-              //               backgroundImage:
-              //                   AssetImage("assets/images/no-profile.jpg"));
-              //     },
-              //   ),
-              // ),
               SettingsTile(
-                title: AppLocalizations.of(context).translate("my_details"),
-                leading: Icon(Icons.person),
-                trailing: IconButton(
-                  icon: Icon(Icons.keyboard_arrow_left),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.changeNumber);
+                title: _userStore.user != null
+                    ? "سلام" + _userStore.user.name
+                    : "سلام",
+                leading: Observer(
+                  builder: (context) {
+                    return _userStore.user != null
+                        ? InkWell(
+                            onTap: () async {
+                              getImage(ImageSource.gallery);
+                            },
+                            child: _userStore?.user.avatar == null
+                                ? CircleAvatar(
+                                    radius: 25,
+                                    backgroundColor: Colors.red,
+                                    child: CircleAvatar(
+                                      radius: 24,
+                                      backgroundImage: AssetImage(
+                                        "assets/images/no-profile.jpg",
+                                      ),
+                                    ),
+                                  )
+                                : CircleAvatar(
+                                    radius: 25,
+                                    backgroundImage: NetworkImage(
+                                      Endpoints.baseUrl +
+                                          "/" +
+                                          _userStore.user.avatar,
+                                    )),
+                          )
+                        : CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Colors.red,
+                            child: CircleAvatar(
+                              radius: 24,
+                              backgroundImage: AssetImage(
+                                "assets/images/no-profile.jpg",
+                              ),
+                            ),
+                          );
                   },
                 ),
               )
             ],
           ),
           SettingsSection(
-            title: 'امنیت',
             tiles: [
               SettingsTile(
-                title: AppLocalizations.of(context)
-                    .translate("chang_user_password"),
-                leading: Icon(Icons.lock),
-              ),
+                onTap: () {
+                  Navigator.of(context).pushNamed(Routes.changeInfo);
+                },
+                title: AppLocalizations.of(context).translate("my_details"),
+                leading: Icon(Icons.person),
+                trailing: IconButton(
+                  icon: Icon(Icons.keyboard_arrow_left),
+                ),
+              )
+            ],
+          ),
+          SettingsSection(
+            tiles: [
               SettingsTile.switchTile(
                 title: AppLocalizations.of(context).translate("notifications"),
                 enabled: true,
@@ -222,25 +211,6 @@ class _SettingsScreenState extends State<SettingsScreen>
                   title: AppLocalizations.of(context).translate("logout"),
                   leading: Icon(Icons.exit_to_app)),
             ],
-          ),
-          CustomSection(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 22, bottom: 8),
-                  child: Image.asset(
-                    'assets/icons/settings.png',
-                    height: 50,
-                    width: 50,
-                    color: Color(0xFF777777),
-                  ),
-                ),
-                Text(
-                  'Version: 2.4.0 (287)',
-                  style: TextStyle(color: Color(0xFF777777)),
-                ),
-              ],
-            ),
           ),
         ],
       ),
