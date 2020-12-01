@@ -95,52 +95,62 @@ class _SettingsScreenState extends State<SettingsScreen>
       body: SettingsList(
         backgroundColor: Colors.white,
         sections: [
-          SettingsSection(
-            tiles: [
-              SettingsTile(
-                title: _userStore.user != null
-                    ? "سلام" + _userStore.user.name
-                    : "سلام",
-                leading: Observer(
-                  builder: (context) {
-                    return _userStore.user != null
-                        ? InkWell(
-                            onTap: () async {
-                              getImage(ImageSource.gallery);
-                            },
-                            child: _userStore?.user.avatar == null
-                                ? CircleAvatar(
-                                    radius: 25,
-                                    backgroundColor: Colors.red,
-                                    child: CircleAvatar(
-                                      radius: 24,
-                                      backgroundImage: AssetImage(
-                                        "assets/images/no-profile.jpg",
+          CustomSection(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 22, bottom: 8),
+                  child: Observer(
+                    builder: (context) {
+                      return _userStore.user != null
+                          ? InkWell(
+                              onTap: () async {
+                                getImage(ImageSource.gallery);
+                              },
+                              child: _userStore?.user.avatar == null
+                                  ? CircleAvatar(
+                                      radius: 50,
+                                      backgroundColor: Colors.red,
+                                      child: CircleAvatar(
+                                        radius: 48,
+                                        backgroundImage: AssetImage(
+                                          "assets/images/no-profile.jpg",
+                                        ),
                                       ),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 50,
+                                      backgroundColor: Colors.red,
+                                      child: CircleAvatar(
+                                          radius: 48,
+                                          backgroundImage: NetworkImage(
+                                            Endpoints.baseUrl +
+                                                "/" +
+                                                _userStore.user.avatar,
+                                          )),
                                     ),
-                                  )
-                                : CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage: NetworkImage(
-                                      Endpoints.baseUrl +
-                                          "/" +
-                                          _userStore.user.avatar,
-                                    )),
-                          )
-                        : CircleAvatar(
-                            radius: 25,
-                            backgroundColor: Colors.red,
-                            child: CircleAvatar(
-                              radius: 24,
-                              backgroundImage: AssetImage(
-                                "assets/images/no-profile.jpg",
+                            )
+                          : CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Colors.red,
+                              child: CircleAvatar(
+                                radius: 48,
+                                backgroundImage: AssetImage(
+                                  "assets/images/no-profile.jpg",
+                                ),
                               ),
-                            ),
-                          );
-                  },
+                            );
+                    },
+                  ),
                 ),
-              )
-            ],
+                Text(
+                  _userStore.user != null
+                      ? "سلام" + _userStore.user.name
+                      : "سلام",
+                  style: TextStyle(color: Color(0xFF777777)),
+                ),
+              ],
+            ),
           ),
           SettingsSection(
             tiles: [
