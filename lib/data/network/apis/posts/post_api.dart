@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
@@ -214,9 +213,9 @@ class PostApi {
       if (phoneNumber[0] != plusSign) {
         phoneNumber = plusSign + phoneNumber;
       }
-      // final res = await _dioClient
-      //     .post(Endpoints.addphonenumber, data: {"phoneNumber": phoneNumber});
-      return Future.delayed(Duration(seconds: 5));
+      final res = await _dioClient
+          .post(Endpoints.addphonenumber, data: {"phoneNumber": phoneNumber});
+      return res;
     } catch (e) {
       throw e;
     }

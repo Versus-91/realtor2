@@ -265,7 +265,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                           ),
                           Text(
                             AppLocalizations.of(context)
-                                .transformNumbers(snapshot.data[position].area),
+                                .transformNumbers(snapshot.data[position].area.toString()),
                             style: TextStyle(
                               fontSize: 16,
                             ),
@@ -285,7 +285,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                           ),
                           Text(
                             AppLocalizations.of(context).transformNumbers(
-                                snapshot.data[position].bedroom),
+                                snapshot.data[position].bedroom.toString()),
                             style: TextStyle(
                               fontSize: 16,
                             ),
@@ -304,7 +304,8 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                             style: TextStyle(color: Colors.grey.withOpacity(1)),
                           ),
                           Text(
-                            '${snapshot.data[position].id}',
+                               AppLocalizations.of(context).transformNumbers(
+                                snapshot.data[position].id.toString()),
                             style: TextStyle(
                               fontSize: 16,
                             ),

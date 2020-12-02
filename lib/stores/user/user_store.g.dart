@@ -16,18 +16,18 @@ mixin _$UserStore on _UserStore, Store {
           Computed<bool>(() => super.loading, name: '_UserStore.loading'))
       .value;
 
-  final _$fetchUserFutureAtom = Atom(name: '_UserStore.fetchUserFuture');
+  final _$fetchFutureAtom = Atom(name: '_UserStore.fetchFuture');
 
   @override
-  ObservableFuture<User> get fetchUserFuture {
-    _$fetchUserFutureAtom.reportRead();
-    return super.fetchUserFuture;
+  ObservableFuture<dynamic> get fetchFuture {
+    _$fetchFutureAtom.reportRead();
+    return super.fetchFuture;
   }
 
   @override
-  set fetchUserFuture(ObservableFuture<User> value) {
-    _$fetchUserFutureAtom.reportWrite(value, super.fetchUserFuture, () {
-      super.fetchUserFuture = value;
+  set fetchFuture(ObservableFuture<dynamic> value) {
+    _$fetchFutureAtom.reportWrite(value, super.fetchFuture, () {
+      super.fetchFuture = value;
     });
   }
 
@@ -143,6 +143,22 @@ mixin _$UserStore on _UserStore, Store {
     return _$getUserAsyncAction.run(() => super.getUser());
   }
 
+  final _$changePhoneNumberAsyncAction =
+      AsyncAction('_UserStore.changePhoneNumber');
+
+  @override
+  Future<dynamic> changePhoneNumber(String phoneNumber) {
+    return _$changePhoneNumberAsyncAction
+        .run(() => super.changePhoneNumber(phoneNumber));
+  }
+
+  final _$changePassAsyncAction = AsyncAction('_UserStore.changePass');
+
+  @override
+  Future<dynamic> changePass(ChangePassword passwords) {
+    return _$changePassAsyncAction.run(() => super.changePass(passwords));
+  }
+
   final _$uploadAvatarImageAsyncAction =
       AsyncAction('_UserStore.uploadAvatarImage');
 
@@ -201,7 +217,7 @@ mixin _$UserStore on _UserStore, Store {
   @override
   String toString() {
     return '''
-fetchUserFuture: ${fetchUserFuture},
+fetchFuture: ${fetchFuture},
 user: ${user},
 success: ${success},
 newPassword: ${newPassword},

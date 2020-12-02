@@ -8,9 +8,7 @@ import 'package:intl/intl.dart';
 class AppLocalizations {
   // localization variables
   final Locale locale;
-  final _numberformat = NumberFormat.compact(locale: "fa");
   final _currencyformat = NumberFormat.currency(locale: "fa", symbol: "\$");
-
   Map<String, String> localizedStrings;
 
   // Static member to have a simple access to the delegate from the MaterialApp
@@ -51,8 +49,14 @@ class AppLocalizations {
     return _currencyformat.format(number);
   }
 
-  String transformNumbers(int number) {
-    return _numberformat.format(number);
+  String transformNumbers(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const farsi = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(english[i], farsi[i]);
+    }
+    return input;
   }
 }
 

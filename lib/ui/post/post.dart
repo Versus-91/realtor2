@@ -245,7 +245,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                       children: [
                         Text(AppLocalizations.of(context).translate('post_id')),
                         Text(AppLocalizations.of(context)
-                            .transformNumbers(widget.post.id))
+                            .transformNumbers(widget.post.id.toString()))
                       ],
                     ),
                     Padding(
@@ -260,7 +260,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                       children: [
                         Text(AppLocalizations.of(context).translate('bed')),
                         Text( AppLocalizations.of(context)
-                                .transformNumbers(widget.post.bedroom))
+                                .transformNumbers(widget.post.bedroom.toString()))
                       ],
                     ),
                     Padding(
@@ -275,7 +275,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                       children: [
                         Text(AppLocalizations.of(context).translate('area')),
                         Text( AppLocalizations.of(context)
-                                .transformNumbers(widget.post.area))
+                                .transformNumbers(widget.post.area.toString()))
                       ],
                     ),
                     Padding(

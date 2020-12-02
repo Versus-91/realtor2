@@ -240,7 +240,7 @@ class Repository {
     return _postApi.changepassword(passwords);
   }
 
-  Future<void> addPhoneNumber(String phonenumber) {
+  Future addPhoneNumber(String phonenumber) {
     return _postApi.addPhoneNumber(phonenumber);
   }
 

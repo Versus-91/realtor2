@@ -20,9 +20,7 @@ class ChangeInfo extends StatefulWidget {
 class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   UserStore _userStore;
-  String label;
-  bool loading = false;
-  var initialIndex = 0;
+
   final _formStore = FormStore(appComponent.getRepository());
 
   TextEditingController _newPasswordController = TextEditingController();
@@ -56,9 +54,13 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
         ),
         backgroundColor: Colors.red,
       ),
-      body: loading == true
-          ? Center(child: CircularProgressIndicator())
-          : _buildBody(),
+      body: Observer(
+        builder: (context) {
+          return _userStore.loading == true
+              ? Center(child: CircularProgressIndicator())
+              : _buildBody();
+        },
+      ),
     );
   }
 
@@ -100,29 +102,19 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 color: Colors.red,
                 text: AppLocalizations.of(context).translate('change_number'),
                 onPressed: () async {
-                  setState(() {
-                    loading = true;
-                  });
-                  appComponent
-                      .getRepository()
-                      .addPhoneNumber(_newNumberController.text)
+                  _userStore
+                      .changePhoneNumber(_newNumberController.text)
                       .then((value) async {
+                    print(value);
                     var result = await Navigator.of(context).pushNamed(
                         Routes.phoneNumberVerificationCode,
                         arguments: {'phone': _newNumberController.text});
-                    setState(() {
-                      loading = false;
-                    });
-                    // _newNumberController.text = result;
+                    _newNumberController.text = result;
                   }).catchError((error) {
+                    print(error);
                     _showErrorMessage(
                       "خطا در تغییر شماره همراه",
                     );
-
-                    setState(() {
-                      loading = false;
-                    });
-                    print(error);
                   });
                 },
               ),
@@ -194,30 +186,18 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 textColor: Colors.white,
                 text: AppLocalizations.of(context).translate('register_info'),
                 onPressed: () async {
-                  setState(() {
-                    loading = true;
-                  });
-                  await appComponent
-                      .getRepository()
-                      .changepassword(ChangePassword(
-                        oldPassword: _oldPasswordController.text,
-                        newPassword: _newPasswordController.text,
-                        confirmPassword: _confirmPasswordController.text,
-                      ))
+                  _userStore
+                      .changePass(ChangePassword(
+                    oldPassword: _oldPasswordController.text,
+                    newPassword: _newPasswordController.text,
+                    confirmPassword: _confirmPasswordController.text,
+                  ))
                       .then((value) async {
-                    setState(() {
-                      loading = false;
-                    });
                     // _newNumberController.text = result;
                   }).catchError((error) {
                     _showErrorMessage(
                       "خطا در تغییر رمز",
                     );
-
-                    setState(() {
-                      loading = false;
-                    });
-                    print(error);
                   });
                 },
               ),

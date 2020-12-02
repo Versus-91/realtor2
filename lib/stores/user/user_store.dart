@@ -22,12 +22,10 @@ abstract class _UserStore with Store {
   _UserStore(Repository repository) : this._repository = repository;
 
   // store variables:-----------------------------------------------------------
-  static ObservableFuture<User> emptyUserResponse =
-      ObservableFuture.value(null);
+  static ObservableFuture emptyResponse = ObservableFuture.value(null);
 
   @observable
-  ObservableFuture<User> fetchUserFuture =
-      ObservableFuture<User>(emptyUserResponse);
+  ObservableFuture fetchFuture = ObservableFuture(emptyResponse);
 
   @observable
   User user;
@@ -45,7 +43,7 @@ abstract class _UserStore with Store {
   @observable
   bool isLoggedIn = false;
   @computed
-  bool get loading => fetchUserFuture.status == FutureStatus.pending;
+  bool get loading => fetchFuture.status == FutureStatus.pending;
   @action
   void setLoginState(bool val) {
     isLoggedIn = val;
@@ -73,13 +71,29 @@ abstract class _UserStore with Store {
   @action
   Future getUser() async {
     final future = _repository.getUser();
-    fetchUserFuture = ObservableFuture(future);
+    fetchFuture = ObservableFuture(future);
 
     future.then((item) {
       this.user = item;
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
+  }
+
+  @action
+  Future changePhoneNumber(String phoneNumber) async {
+    final future = _repository.addPhoneNumber(phoneNumber);
+    fetchFuture = ObservableFuture(future);
+
+    return future;
+  }
+
+  @action
+  Future changePass(ChangePassword passwords) async {
+    final future = _repository.changepassword(passwords);
+    fetchFuture = ObservableFuture(future);
+
+    return future;
   }
 
   @action

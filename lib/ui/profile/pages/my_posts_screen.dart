@@ -260,7 +260,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                           ),
                           Text(
                             AppLocalizations.of(context).transformNumbers(
-                                _postStore.userPostList.posts[position].area),
+                                _postStore.userPostList.posts[position].area.toString()),
                             style: TextStyle(
                               fontSize: 14,
                             ),
@@ -281,7 +281,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                           Text(
                             AppLocalizations.of(context).transformNumbers(
                                 _postStore
-                                    .userPostList.posts[position].bedroom),
+                                    .userPostList.posts[position].bedroom.toString()),
                             style: TextStyle(
                               fontSize: 14,
                             ),
@@ -301,7 +301,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                           ),
                           Text(
                             AppLocalizations.of(context).transformNumbers(
-                                _postStore.userPostList.posts[position].id),
+                                _postStore.userPostList.posts[position].id.toString()),
                             style: TextStyle(
                               fontSize: 14,
                             ),

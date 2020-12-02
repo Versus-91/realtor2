@@ -1,5 +1,5 @@
 {
-  "asset": "asset:boilerplate/lib/ui/profile/profile.dart",
+  "asset": "asset:boilerplate/lib/widgets/google_nav.dart",
   "summary": {
     "injector": [],
     "module": [],

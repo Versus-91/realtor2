@@ -4,7 +4,8 @@ import 'package:boilerplate/ui/home/tabs/user_screen.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
-import 'package:boilerplate/ui/profile/pages/info.dart';
+import 'package:boilerplate/ui/profile/pages/settings.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/google_nav.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -84,12 +85,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   tabBackgroundColor: Colors.grey[800],
                   tabs: [
                     GButton(
-                      iconActiveColor: Colors.purple,
+                      iconActiveColor: Colors.blue,
                       iconColor: Colors.black,
-                      textColor: Colors.purple,
-                      backgroundColor: Colors.purple.withOpacity(.2),
+                      textColor: Colors.blue,
+                      backgroundColor: Colors.blue.withOpacity(.2),
                       icon: Icons.home,
-                      text: 'خانه',
+                      text: AppLocalizations.of(context).translate("home"),
+                    ),
+                    GButton(
+                      iconActiveColor: Colors.amber[600],
+                      iconColor: Colors.black,
+                      textColor: Colors.amber[600],
+                      backgroundColor: Colors.amber[600].withOpacity(.2),
+                      iconSize: 24,
+                      icon: Icons.search,
+                      text: AppLocalizations.of(context).translate("search"),
+                    ),
+                    GButton(
+                      iconActiveColor: Colors.teal,
+                      iconColor: Colors.black,
+                      textColor: Colors.teal,
+                      backgroundColor: Colors.teal.withOpacity(.2),
+                      icon: Icons.add,
+                      text: AppLocalizations.of(context).translate("add_post"),
                     ),
                     GButton(
                       iconActiveColor: Colors.pink,
@@ -97,33 +115,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       textColor: Colors.pink,
                       backgroundColor: Colors.pink.withOpacity(.2),
                       icon: Icons.favorite,
-                      text: 'Likes',
+                      text: AppLocalizations.of(context).translate("favarits"),
                     ),
                     GButton(
-                      iconActiveColor: Colors.amber[600],
+                      iconActiveColor: Colors.purple,
                       iconColor: Colors.black,
-                      textColor: Colors.amber[600],
-                      backgroundColor: Colors.amber[600].withOpacity(.2),
-                      icon: Icons.place,
-                      text: 'add',
-                    ),
-                    GButton(
-                      iconActiveColor: Colors.teal,
-                      iconColor: Colors.black,
-                      textColor: Colors.teal,
-                      backgroundColor: Colors.teal.withOpacity(.2),
-                      iconSize: 24,
-                      icon: Icons.search,
-                      text: 'Search',
-                    ),
-                    GButton(
-                      iconActiveColor: Colors.teal,
-                      iconColor: Colors.black,
-                      textColor: Colors.teal,
-                      backgroundColor: Colors.teal.withOpacity(.2),
+                      textColor: Colors.purple,
+                      backgroundColor: Colors.purple.withOpacity(.2),
                       iconSize: 24,
                       icon: Icons.settings,
-                      text: 'Profile',
+                      text: AppLocalizations.of(context).translate("settings"),
                     ),
                   ],
                   selectedIndex: _selectedIndex,

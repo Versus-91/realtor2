@@ -9,6 +9,13 @@ part of 'post_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$PostStore on _PostStore, Store {
+  Computed<bool> _$hasNextPageComputed;
+
+  @override
+  bool get hasNextPage =>
+      (_$hasNextPageComputed ??= Computed<bool>(() => super.hasNextPage,
+              name: '_PostStore.hasNextPage'))
+          .value;
   Computed<bool> _$loadingComputed;
 
   @override
@@ -172,6 +179,7 @@ userPostList: ${userPostList},
 success: ${success},
 page: ${page},
 pageSize: ${pageSize},
+hasNextPage: ${hasNextPage},
 loading: ${loading},
 loadingNextPage: ${loadingNextPage}
     ''';

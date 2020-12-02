@@ -244,7 +244,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                           ),
                           Text(
                             AppLocalizations.of(context)
-                                .transformNumbers(post.area),
+                                .transformNumbers(post.area.toString()),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -263,7 +263,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                           ),
                           Text(
                             AppLocalizations.of(context)
-                                .transformNumbers(post.bedroom),
+                                .transformNumbers(post.bedroom.toString()),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
@@ -282,7 +282,7 @@ class _PropertyCradsState extends State<PropertyCrads>
                           ),
                           Text(
                             AppLocalizations.of(context)
-                                .transformNumbers(post.id),
+                                .transformNumbers(post.id.toString()),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
