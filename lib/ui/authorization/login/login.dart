@@ -225,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                                       fontSize: 15),
                                 ),
                                 SizedBox(
-                                  height: 5,
+                                  height: 10,
                                 ),
                                 TextField(
                                     controller: _userNameController,
@@ -249,6 +249,9 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15),
+                                ),
+                                SizedBox(
+                                  height: 10,
                                 ),
                                 TextField(
                                     controller: _passwordNameController,
