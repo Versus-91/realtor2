@@ -167,15 +167,15 @@ class _LoginPageState extends State<LoginPage> {
       child: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
-            text: 'M',
+            text: 'ورود',
             style: TextStyle(color: Colors.blue, fontSize: 30),
             children: [
               TextSpan(
-                text: 'y Ho',
+                text: ' به ',
                 style: TextStyle(color: Colors.black, fontSize: 30),
               ),
               TextSpan(
-                text: 'me',
+                text: 'حساب',
                 style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
               ),
             ]),
