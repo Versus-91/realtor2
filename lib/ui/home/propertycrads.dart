@@ -242,13 +242,16 @@ class _PropertyCradState extends State<PropertyCrad>
                         children: [
                           Text(
                             AppLocalizations.of(context).translate('area'),
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.withOpacity(1)),
                           ),
                           Text(
                             AppLocalizations.of(context)
                                 .transformNumbers(post.area.toString()),
                             style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.withOpacity(1)),
+                              fontSize: 14,
+                            ),
                           )
                         ],
                       ),
@@ -261,13 +264,16 @@ class _PropertyCradState extends State<PropertyCrad>
                         children: [
                           Text(
                             AppLocalizations.of(context).translate('bed'),
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.withOpacity(1)),
                           ),
                           Text(
                             AppLocalizations.of(context)
                                 .transformNumbers(post.bedroom.toString()),
                             style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.withOpacity(1)),
+                              fontSize: 14,
+                            ),
                           ),
                         ],
                       ),
@@ -280,13 +286,16 @@ class _PropertyCradState extends State<PropertyCrad>
                         children: [
                           Text(
                             AppLocalizations.of(context).translate('post_id'),
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.withOpacity(1)),
                           ),
                           Text(
                             AppLocalizations.of(context)
                                 .transformNumbers(post.id.toString()),
                             style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.withOpacity(1)),
+                              fontSize: 14,
+                            ),
                           )
                         ],
                       ),

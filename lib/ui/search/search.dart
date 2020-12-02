@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'list_theme.dart';
 import 'model/pop_list.dart';
 import 'package:http/http.dart' as http;
@@ -234,12 +235,31 @@ class _SearchScreenState extends State<SearchScreen> {
                     }
                   ],
                 )
-              : Container(
-                  child: FlatButton(
-                      onPressed: () {
-                        _categoryStore.getCategories();
-                      },
-                      child: Icon(Icons.refresh)),
+              : Opacity(
+                  opacity: 0.8,
+                  child: Shimmer.fromColors(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(18),
+                            child: Text(
+                              "رهن و گروی",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "خرید و فروش",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ]),
+                    baseColor: Colors.black12,
+                    highlightColor: Colors.white,
+                    loop: 3,
+                  ),
                 );
         },
       ),
@@ -479,7 +499,7 @@ class _SearchScreenState extends State<SearchScreen> {
             padding:
                 const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
             child: Text(
-              'مساحت',
+              AppLocalizations.of(context).translate('area'),
               textAlign: TextAlign.left,
               style: TextStyle(
                   color: Colors.red,
