@@ -188,7 +188,8 @@ class _LoginPageState extends State<LoginPage> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false, // set it to false
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Container(
         height: height,
         child: Stack(
@@ -207,9 +208,9 @@ class _LoginPageState extends State<LoginPage> {
                   _title(),
                   SizedBox(height: height * .06),
                   Container(
-                    height: height / 2.4,
+                    height: height / 2,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Observer(builder: (context) {
                           return Container(
@@ -238,25 +239,16 @@ class _LoginPageState extends State<LoginPage> {
                                             .formStore.formErrorStore.userEmail,
                                         border: InputBorder.none,
                                         fillColor: Colors.grey[300],
-                                        filled: true))
-                              ],
-                            ),
-                          );
-                        }),
-                        Observer(builder: (context) {
-                          return Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
+                                        filled: true)),
+                                SizedBox(
+                                  height: 20,
+                                ),
                                 Text(
                                   AppLocalizations.of(context)
                                       .translate('user_password'),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15),
-                                ),
-                                SizedBox(
-                                  height: 5,
                                 ),
                                 TextField(
                                     controller: _passwordNameController,
@@ -270,25 +262,28 @@ class _LoginPageState extends State<LoginPage> {
                                             .formStore.formErrorStore.password,
                                         border: InputBorder.none,
                                         fillColor: Colors.grey[300],
-                                        filled: true))
+                                        filled: true)),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                InkWell(
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('login_btn_forgot_password'),
+                                    style: TextStyle(
+                                        color: Colors.blue, fontSize: 12),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                _submitButton(),
+                                _divider(),
+                                _facebookButton(),
                               ],
                             ),
                           );
                         }),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            FlatButton(
-                              onPressed: () {},
-                              child: Text(
-                                AppLocalizations.of(context)
-                                    .translate('login_btn_forgot_password'),
-                                style:
-                                    TextStyle(color: Colors.blue, fontSize: 10),
-                              ),
-                            ),
-                          ],
-                        ),
                         Observer(
                           builder: (context) {
                             return widget.formStore.success
@@ -300,52 +295,31 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  _submitButton(),
-                  _divider(),
-                  _facebookButton(),
                 ],
               ),
             ),
-            Observer(
-              builder: (context) {
-                return Visibility(
-                  visible: widget.formStore.loading,
-                  child: CustomProgressIndicatorWidget(),
-                );
-              },
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(5),
-        child: Container(
-          height: 50,
-          width: MediaQuery.of(context).size.width,
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              FlatButton.icon(
+            Positioned(
+              bottom: 0,
+              child: FlatButton.icon(
                   onPressed: () {
                     Navigator.of(context).pushNamed(Routes.home);
                   },
                   icon: Icon(Icons.keyboard_arrow_right),
                   label: Text(AppLocalizations.of(context).translate('skip'),
                       style: TextStyle(color: Colors.blue))),
-              Row(
-                children: [
-                  Text(
-                    AppLocalizations.of(context)
-                        .translate('login_btn_Register'),
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: RichText(
+            ),
+            Positioned(
+                bottom: 10,
+                left: 20,
+                child: Row(
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)
+                          .translate('login_btn_Register'),
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                    ),
+                    RichText(
                         text: TextSpan(
                             text: AppLocalizations.of(context)
                                 .translate('Register'),
@@ -361,11 +335,17 @@ class _LoginPageState extends State<LoginPage> {
                                       (Route<dynamic> route) => true);
                                 });
                               })),
-                  ),
-                ],
-              )
-            ],
-          ),
+                  ],
+                )),
+            Observer(
+              builder: (context) {
+                return Visibility(
+                  visible: widget.formStore.loading,
+                  child: CustomProgressIndicatorWidget(),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

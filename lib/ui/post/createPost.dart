@@ -99,11 +99,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     _descriptionFocusNode = FocusNode();
     _hometypeFocusNode = FocusNode();
     _rahnPriceFocusNode = FocusNode();
-
     _rentPriceFocusNode = FocusNode();
-
     _buyPriceFocusNode = FocusNode();
-
     _areaFocusNode = FocusNode();
     _cityFocusNode = FocusNode();
     _districtFocusNode = FocusNode();
@@ -357,7 +354,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       : RaisedButton(
                           color: Color(0xfff3f3f4),
                           child: Image.asset("assets/images/camera.png",
-                              fit: BoxFit.cover),
+                              fit: BoxFit.fitHeight,width: 100,height: 100,),
                           onPressed: () {
                             _openFileExplorer();
                           },
@@ -724,12 +721,25 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ),
                   ],
                 ))
-            : Container(
-                child: FlatButton(
-                    onPressed: () {
-                      _districtStore.getDistricts();
-                    },
-                    child: Icon(Icons.refresh)),
+            : Opacity(
+                opacity: 0.8,
+                child: Shimmer.fromColors(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 15),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            AppLocalizations.of(context).translate('district'),
+                            style: TextStyle(
+                              fontSize: 28.0,
+                            ),
+                          )
+                        ],
+                      )),
+                  baseColor: Colors.black12,
+                  highlightColor: Colors.white,
+                  loop: 3,
+                ),
               );
       },
     );
@@ -778,10 +788,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 opacity: 0.8,
                 child: Shimmer.fromColors(
                   child: Container(
-                    width: 120,
-                    height: 50,
-                    color: Colors.red[50],
-                  ),
+                      padding: EdgeInsets.only(top: 10, bottom: 15),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            AppLocalizations.of(context).translate('city'),
+                            style: TextStyle(
+                              fontSize: 28.0,
+                            ),
+                          )
+                        ],
+                      )),
                   baseColor: Colors.black12,
                   highlightColor: Colors.white,
                   loop: 3,
@@ -905,12 +922,25 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   );
                 }).toList(),
               )
-            : Container(
-                child: FlatButton(
-                    onPressed: () {
-                      _typeStore.getTypes();
-                    },
-                    child: Icon(Icons.refresh)),
+            : Opacity(
+                opacity: 0.8,
+                child: Shimmer.fromColors(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 15),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            AppLocalizations.of(context).translate('type_home'),
+                            style: TextStyle(
+                              fontSize: 28.0,
+                            ),
+                          )
+                        ],
+                      )),
+                  baseColor: Colors.black12,
+                  highlightColor: Colors.white,
+                  loop: 3,
+                ),
               );
       },
     );

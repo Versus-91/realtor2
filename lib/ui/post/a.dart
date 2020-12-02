@@ -181,72 +181,73 @@ class SlideToUnlockPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Slide To Unlock'),
       ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            'assets/images/background.jpg',
-            fit: BoxFit.cover,
-          ),
-          Positioned(
-            top: 48.0,
-            right: 0.0,
-            left: 0.0,
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    '${hour < 10 ? '0$hour' : '$hour'}:${minute < 10 ? '0$minute' : '$minute'}',
-                    style: TextStyle(
-                      fontSize: 60.0,
-                      color: Colors.white,
+      body: Container(color: Colors.amberAccent,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+           
+            Positioned(
+              top: 48.0,
+              right: 0.0,
+              left: 0.0,
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      '${hour < 10 ? '0$hour' : '$hour'}:${minute < 10 ? '0$minute' : '$minute'}',
+                      style: TextStyle(
+                        fontSize: 60.0,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4.0),
-                  ),
-                  Text(
-                    '${days[day - 1]}, ${months[month - 1]} $dayInMonth',
-                    style: TextStyle(fontSize: 24.0, color: Colors.white),
-                  )
-                ],
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 4.0),
+                    ),
+                    Text(
+                      '${days[day - 1]}, ${months[month - 1]} $dayInMonth',
+                      style: TextStyle(fontSize: 24.0, color: Colors.white),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          Positioned(
-              bottom: 24.0,
-              left: 0.0,
-              right: 0.0,
-              child: Center(
-                child: Opacity(
-                  opacity: 0.8,
-                  child: Shimmer.fromColors(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Image.asset(
-                          'assets/images/chevron_right.png',
-                          height: 20.0,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4.0),
-                        ),
-                        const Text(
-                          'Slide to unlock',
-                          style: TextStyle(
-                            fontSize: 28.0,
+            Positioned(
+                bottom: 24.0,
+                left: 0.0,
+                right: 0.0,
+                child: Center(
+                  child: Opacity(
+                    opacity: 0.8,
+                    child: Shimmer.fromColors(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                         
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 4.0),
                           ),
-                        )
-                      ],
+                          const Text(
+                            'Slide to unlock',
+                            style: TextStyle(
+                              fontSize: 28.0,
+                            ),
+                          )
+                        ],
+                      ),
+                      baseColor: Colors.black12,
+                      highlightColor: Colors.white,
+                      loop: 3,
                     ),
-                    baseColor: Colors.black12,
-                    highlightColor: Colors.white,
-                    loop: 3,
                   ),
-                ),
-              ))
-        ],
+                ))
+          ],
+        ),
       ),
     );
   }
 }
+
+
+
+                   
+                    

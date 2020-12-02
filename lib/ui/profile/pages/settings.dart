@@ -228,7 +228,10 @@ class _SettingsScreenState extends State<SettingsScreen>
                       }
                     }
                   },
-                  title: AppLocalizations.of(context).translate("logout"),
+                  title: loggedIn == true
+                      ? AppLocalizations.of(context).translate("logout")
+                      : AppLocalizations.of(context)
+                          .translate("login_btn_sign_in"),
                   leading: Icon(Icons.exit_to_app)),
             ],
           ),
