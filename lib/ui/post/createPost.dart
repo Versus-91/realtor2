@@ -23,6 +23,8 @@ import 'package:provider/provider.dart';
 
 import 'dart:async';
 
+import 'package:shimmer/shimmer.dart';
+
 class CreatePostScreen extends StatefulWidget {
   CreatePostScreen({Key key}) : super(key: key);
   @override
@@ -772,12 +774,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ),
                   ],
                 ))
-            : Container(
-                child: FlatButton(
-                    onPressed: () {
-                      _cityStore.getCities();
-                    },
-                    child: Icon(Icons.refresh)),
+            : Opacity(
+                opacity: 0.8,
+                child: Shimmer.fromColors(
+                  child: Container(
+                    width: 120,
+                    height: 50,
+                    color: Colors.red[50],
+                  ),
+                  baseColor: Colors.black12,
+                  highlightColor: Colors.white,
+                  loop: 3,
+                ),
               );
       },
     );

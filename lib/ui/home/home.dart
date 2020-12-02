@@ -2,6 +2,7 @@ import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/tabs/user_screen.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
+import 'package:boilerplate/ui/post/a.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/settings.dart';
@@ -9,6 +10,7 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/google_nav.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/sharedpref/constants/preferences.dart';
@@ -60,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       SearchTabScreen(),
       CreatePostScreen(),
-      FavoritesScreen(),
+      MyApp(),
       SettingsScreen(),
     ];
 
@@ -85,6 +87,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   tabBackgroundColor: Colors.grey[800],
                   tabs: [
                     GButton(
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                      },
                       iconActiveColor: Colors.blue,
                       iconColor: Colors.black,
                       textColor: Colors.blue,
@@ -93,6 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: AppLocalizations.of(context).translate("home"),
                     ),
                     GButton(
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                      },
                       iconActiveColor: Colors.amber[600],
                       iconColor: Colors.black,
                       textColor: Colors.amber[600],
@@ -102,6 +110,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: AppLocalizations.of(context).translate("search"),
                     ),
                     GButton(
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                      },
                       iconActiveColor: Colors.teal,
                       iconColor: Colors.black,
                       textColor: Colors.teal,
@@ -110,6 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: AppLocalizations.of(context).translate("add_post"),
                     ),
                     GButton(
+                      onPressed: () {
+                        HapticFeedback.lightImpact();
+                      },
                       iconActiveColor: Colors.pink,
                       iconColor: Colors.black,
                       textColor: Colors.pink,

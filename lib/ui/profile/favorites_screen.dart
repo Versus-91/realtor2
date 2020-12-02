@@ -17,7 +17,7 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen>
     with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
-
+  bool loading = true;
   var initialIndex = 0;
   @override
   void initState() {
@@ -65,13 +65,23 @@ class _FavoritesScreenState extends State<FavoritesScreen>
   }
 
   Widget _buildListView() {
+    // if (loading == true) {
+    //   return Center(
+    //     child: CircularProgressIndicator(),
+    //   );
+    // } else {
+    //   if 
+    // }
+   
     return FutureBuilder(
       future: appComponent.getRepository().getFavoritesList(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Column(
+           
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+             
               Center(
                 child: Image.asset("assets/images/404.png"),
               ),
@@ -264,8 +274,8 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                             style: TextStyle(color: Colors.grey.withOpacity(1)),
                           ),
                           Text(
-                            AppLocalizations.of(context)
-                                .transformNumbers(snapshot.data[position].area.toString()),
+                            AppLocalizations.of(context).transformNumbers(
+                                snapshot.data[position].area.toString()),
                             style: TextStyle(
                               fontSize: 16,
                             ),
@@ -304,7 +314,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
                             style: TextStyle(color: Colors.grey.withOpacity(1)),
                           ),
                           Text(
-                               AppLocalizations.of(context).transformNumbers(
+                            AppLocalizations.of(context).transformNumbers(
                                 snapshot.data[position].id.toString()),
                             style: TextStyle(
                               fontSize: 16,
