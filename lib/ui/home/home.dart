@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       SearchTabScreen(),
       CreatePostScreen(),
-      MyApp(),
+      FavoritesScreen(),
       SettingsScreen(),
     ];
 

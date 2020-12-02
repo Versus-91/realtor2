@@ -38,15 +38,15 @@ abstract class _PostStore with Store {
   @observable
   int page = 1;
   @observable
-  int pageSize = 15;
+  int pageSize = 10;
   @computed
   bool get hasNextPage {
-    return postList.posts.length < postList.totalCount;
+    return postList.posts.length != postList.totalCount;
   }
 
   @action
   Future loadNextPage({PostRequest request}) async {
-    if (!loadingNextPage && hasNextPage) {
+    if (!loadingNextPage && postList.posts.length < postList.totalCount) {
       request.page = page + 1;
       request.pageSize = pageSize;
       final future = _repository.getPosts(request: request);
@@ -75,8 +75,9 @@ abstract class _PostStore with Store {
   @action
   Future getPosts({PostRequest request, bool paging = false}) async {
     // request.page = page;
-    // request.pageSize = pageSize;
-    if (page != 1) page = 1;
+    page = 1;
+    request.pageSize = pageSize;
+    request.page = 1;
     final future = _repository.getPosts(request: request);
     fetchPostsFuture = ObservableFuture(future);
 

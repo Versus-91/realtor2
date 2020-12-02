@@ -1,6 +1,7 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/post/post.dart';
+// ignore: unused_import
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/ui/post/post.dart';
@@ -8,14 +9,14 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 
-class PropertyCrads extends StatefulWidget {
-  PropertyCrads({this.post});
+class PropertyCrad extends StatefulWidget {
+  PropertyCrad({this.post});
   final Post post;
   @override
-  _PropertyCradsState createState() => _PropertyCradsState();
+  _PropertyCradState createState() => _PropertyCradState();
 }
 
-class _PropertyCradsState extends State<PropertyCrads>
+class _PropertyCradState extends State<PropertyCrad>
     with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
 

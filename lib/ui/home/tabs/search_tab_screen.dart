@@ -92,14 +92,14 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                       !_postStore.loadingNextPage) {
                                     return Column(
                                       children: [
-                                        PropertyCrads(
+                                        PropertyCrad(
                                             post: _postStore
                                                 .postList.posts[index]),
                                         // CircularProgressIndicator();
                                       ],
                                     );
                                   }
-                                  return PropertyCrads(
+                                  return PropertyCrad(
                                       post: _postStore.postList.posts[index]);
                                 },
                               ),
@@ -218,7 +218,8 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                               AppLocalizations.of(context)
                                       .translate('count_post') +
                                   AppLocalizations.of(context).transformNumbers(
-                                      _postStore.postList.totalCount.toString()),
+                                      _postStore.postList.totalCount
+                                          .toString()),
                               style: TextStyle(
                                 fontWeight: FontWeight.w200,
                                 fontSize: 18,

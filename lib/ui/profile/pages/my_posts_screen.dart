@@ -1,10 +1,7 @@
 import 'dart:ui';
-import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
-import 'package:boilerplate/ui/post/post.dart';
+import 'package:boilerplate/ui/home/propertycrads.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +72,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
     return Observer(
       builder: (context) {
         return _postStore.loading
-            ? CustomProgressIndicatorWidget()
+            ? Center(child: CircularProgressIndicator())
             : Material(
                 child: _buildListView(),
                 color: Colors.white,
@@ -90,7 +87,8 @@ class _MyPostsScreenState extends State<MyPostsScreen>
         ? ListView.builder(
             itemCount: _postStore.userPostList.posts.length,
             itemBuilder: (context, position) {
-              return _buildListItem(position);
+              return PropertyCrad(
+                  post: _postStore.userPostList.posts[position]);
             },
           )
         : Center(
@@ -98,225 +96,6 @@ class _MyPostsScreenState extends State<MyPostsScreen>
               AppLocalizations.of(context).translate('home_tv_no_post_found'),
             ),
           );
-  }
-
-  Widget _buildListItem(int position) {
-    return GestureDetector(
-      onTap: () {
-        Future.delayed(Duration(milliseconds: 0), () {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              Routes.post, (Route<dynamic> route) => false);
-        });
-      },
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PostScreen(
-                      post: _postStore.userPostList.posts[position],
-                    )),
-          );
-        },
-        child: Card(
-          color: Colors.white,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          shadowColor: Colors.black,
-          elevation: 3,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: ListTile(
-                      selectedTileColor: Colors.red[100],
-                      dense: false,
-                      contentPadding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      title: Text(
-                        '${_postStore.userPostList.posts[position].category.name}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${_postStore.userPostList.posts[position].district.city.name},${_postStore.userPostList.posts[position].district.name}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: false,
-                          ),
-                          _postStore.userPostList.posts[position].category.name
-                                  .contains('رهن')
-                              ? Column(
-                                  children: [
-                                    Text(
-                                      'رهن:' +
-                                          AppLocalizations.of(context)
-                                              .transformCurrency(_postStore
-                                                  .userPostList
-                                                  .posts[position]
-                                                  .deopsit),
-                                      maxLines: 1,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 17),
-                                      overflow: TextOverflow.ellipsis,
-                                      softWrap: false,
-                                    ),
-                                    Text(
-                                      'اجاره:' +
-                                          AppLocalizations.of(context)
-                                              .transformCurrency(_postStore
-                                                  .userPostList
-                                                  .posts[position]
-                                                  .rent),
-                                      maxLines: 1,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 17),
-                                      overflow: TextOverflow.ellipsis,
-                                      softWrap: false,
-                                    ),
-                                  ],
-                                )
-                              : Text(
-                                  'قیمت:' +
-                                      AppLocalizations.of(context)
-                                          .transformCurrency(_postStore
-                                              .userPostList
-                                              .posts[position]
-                                              .rent),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 17),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(left: 6),
-                    width: 130,
-                    height: 110,
-                    child:
-                        _postStore.userPostList.posts[position].images.length >
-                                0
-                            ? Image.network(
-                                Endpoints.baseUrl +
-                                    "/" +
-                                    _postStore.userPostList.posts[position]
-                                        .images[0]?.path,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.asset("assets/images/placeholder.png",
-                                fit: BoxFit.cover),
-                  ),
-                ],
-              ),
-              Divider(
-                thickness: 1,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 5.0),
-                child: IntrinsicHeight(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Flexible(
-                        child: Row(
-                          children: [
-                            IconButton(
-                                icon: Icon(Icons.favorite), onPressed: null),
-                            IconButton(
-                                icon: Icon(Icons.share), onPressed: null),
-                            IconButton(
-                                icon: Icon(
-                                  Icons.edit,
-                                  color: Colors.blue,
-                                ),
-                                onPressed: null),
-                          ],
-                        ),
-                      ),
-                      VerticalDivider(
-                        color: Colors.grey,
-                        width: 10,
-                        endIndent: 4,
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "متراژ",
-                            style: TextStyle(color: Colors.grey.withOpacity(1)),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).transformNumbers(
-                                _postStore.userPostList.posts[position].area.toString()),
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          )
-                        ],
-                      ),
-                      VerticalDivider(
-                        color: Colors.grey,
-                        width: 10,
-                        endIndent: 4,
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "اتاق خواب",
-                            style: TextStyle(color: Colors.grey.withOpacity(1)),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).transformNumbers(
-                                _postStore
-                                    .userPostList.posts[position].bedroom.toString()),
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                      VerticalDivider(
-                        color: Colors.grey,
-                        width: 10,
-                        endIndent: 4,
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "شناسه آگهی",
-                            style: TextStyle(color: Colors.grey.withOpacity(1)),
-                          ),
-                          Text(
-                            AppLocalizations.of(context).transformNumbers(
-                                _postStore.userPostList.posts[position].id.toString()),
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _handleErrorMessage() {

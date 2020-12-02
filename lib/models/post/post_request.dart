@@ -26,7 +26,7 @@ class PostRequest {
   PostRequest(
       {this.id,
       this.page = 1,
-      this.pageSize = 3,
+      this.pageSize,
       this.districtName,
       this.categoryName,
       this.cityName,
@@ -56,7 +56,9 @@ class PostRequest {
     result.addAll({"minDepositPrice": minDepositPrice.toString()});
     result.addAll({"maxDepositPrice": maxDepositPrice.toString()});
     result.addAll({"category": category.toString()});
+
     result.addAll({"maxResultCount": pageSize.toString()});
+
     result.addAll({"skipCount": ((page - 1) * pageSize).toString()});
 
     if (district != null) {
