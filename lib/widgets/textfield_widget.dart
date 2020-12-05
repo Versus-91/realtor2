@@ -53,14 +53,16 @@ class TextFieldWidget extends StatelessWidget {
         obscureText: this.isObscure,
         maxLength: 25,
         keyboardType: this.inputType,
-        style: Theme.of(context).textTheme.body1,
+        style: Theme.of(context).textTheme.bodyText2,
         decoration: InputDecoration(
             border: InputBorder.none,
             fillColor: Color(0xfff3f3f4),
             filled: true,
             hintText: this.hint,
-            hintStyle:
-                Theme.of(context).textTheme.body1.copyWith(color: hintColor),
+            hintStyle: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(color: hintColor),
             errorText: errorText,
             counterText: '',
             icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),

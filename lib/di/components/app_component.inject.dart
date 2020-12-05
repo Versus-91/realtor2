@@ -1,19 +1,21 @@
-import 'app_component.dart' as _i1;
-import '../modules/local_module.dart' as _i2;
-import '../modules/preference_module.dart' as _i3;
-import '../../data/sharedpref/shared_preference_helper.dart' as _i4;
+import 'dart:async' as _i14;
+
 import 'package:dio/src/dio.dart' as _i5;
+
+import '../../data/local/datasources/city_datasource.dart' as _i12;
+import '../../data/local/datasources/post/favorite_datasource.dart' as _i10;
+import '../../data/local/datasources/post/post_datasource.dart' as _i9;
+import '../../data/local/datasources/search_datasource.dart' as _i11;
+import '../../data/network/apis/posts/post_api.dart' as _i8;
 import '../../data/network/dio_client.dart' as _i6;
 import '../../data/network/rest_client.dart' as _i7;
-import '../../data/network/apis/posts/post_api.dart' as _i8;
-import '../../data/local/datasources/post/post_datasource.dart' as _i9;
-import '../../data/local/datasources/post/favorite_datasource.dart' as _i10;
-import '../../data/local/datasources/search_datasource.dart' as _i11;
-import '../../data/local/datasources/city_datasource.dart' as _i12;
 import '../../data/repository.dart' as _i13;
-import 'dart:async' as _i14;
-import '../modules/netwok_module.dart' as _i15;
+import '../../data/sharedpref/shared_preference_helper.dart' as _i4;
 import '../../main.dart' as _i16;
+import '../modules/local_module.dart' as _i2;
+import '../modules/netwok_module.dart' as _i15;
+import '../modules/preference_module.dart' as _i3;
+import 'app_component.dart' as _i1;
 
 class AppComponent$Injector implements _i1.AppComponent {
   AppComponent$Injector._(this._localModule, this._preferenceModule);

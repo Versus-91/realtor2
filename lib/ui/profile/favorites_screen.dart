@@ -1,8 +1,8 @@
 import 'dart:ui';
+
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/ui/home/propertycrads.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -73,6 +73,9 @@ class _FavoritesScreenState extends State<FavoritesScreen>
     return FutureBuilder(
       future: appComponent.getRepository().getFavoritesList(),
       builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return Center(child: CircularProgressIndicator());
+        }
         if (!snapshot.hasData) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -92,21 +95,6 @@ class _FavoritesScreenState extends State<FavoritesScreen>
         }
       },
     );
-  }
-
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
   }
 
   @override

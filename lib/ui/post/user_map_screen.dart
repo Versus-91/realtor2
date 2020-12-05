@@ -1,9 +1,9 @@
 import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
-import 'package:flutter_map/flutter_map.dart';
 
 class UserMapScreen extends StatefulWidget {
   UserMapScreen({Key key, this.formState}) : super(key: key);
@@ -70,8 +70,7 @@ class _UserMapScreenState extends State<UserMapScreen> {
   }
 
   Future<Position> _getPosition() async {
-    final Position position =
-        await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    final Position position = await Geolocator.getCurrentPosition();
     return position;
   }
 

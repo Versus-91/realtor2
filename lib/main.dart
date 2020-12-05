@@ -7,7 +7,9 @@ import 'package:boilerplate/di/modules/preference_module.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
+import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
+import 'package:boilerplate/stores/form/filter_form.dart';
 import 'package:boilerplate/stores/language/language_store.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
@@ -21,7 +23,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:inject/inject.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/stores/city/city_store.dart';
 
 // global instance for app component
 AppComponent appComponent;
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
   final ThemeStore _themeStore = ThemeStore(appComponent.getRepository());
   final PostStore _postStore = PostStore(appComponent.getRepository());
   final CityStore _cityStore = CityStore(appComponent.getRepository());
+  final _filterStore = FilterFormStore();
   final AmenityStore _amenityStore = AmenityStore(appComponent.getRepository());
   final DistrictStore _districtStore =
       DistrictStore(appComponent.getRepository());
@@ -72,6 +74,7 @@ class MyApp extends StatelessWidget {
         Provider<ThemeStore>(create: (_) => _themeStore),
         Provider<CityStore>(create: (_) => _cityStore),
         Provider<PostStore>(create: (_) => _postStore),
+        Provider<FilterFormStore>(create: (_) => _filterStore),
         Provider<DistrictStore>(create: (_) => _districtStore),
         Provider<CategoryStore>(create: (_) => _categoryStore),
         Provider<LanguageStore>(create: (_) => _languageStore),

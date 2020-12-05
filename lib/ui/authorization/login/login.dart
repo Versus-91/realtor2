@@ -108,7 +108,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _facebookButton() {
-    double height = MediaQuery.of(context).size.width;
     return Container(
       height: 45,
       decoration: BoxDecoration(

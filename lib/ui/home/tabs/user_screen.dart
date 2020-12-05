@@ -170,13 +170,16 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
   }
 
   Text createLabel(dynamic data) {
-    String text = data.categoryName;
+    String text = "";
+    if (data.categoryName != null) {
+      text += data.categoryName;
+    }
 
-    // if (data.districtName != null) {
-    //   text += "- " + data.districtName;
-    // } else if (data.cityName != null) {
-    //   text += "- " + data.cityName;
-    // }
-    return Text('text');
+    if (data.districtName != null) {
+      text += "- " + data.districtName;
+    } else if (data.cityName != null) {
+      text += "- " + data.cityName;
+    }
+    return Text(text);
   }
 }

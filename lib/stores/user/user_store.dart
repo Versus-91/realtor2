@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/user/changepassword.dart';
 import 'package:boilerplate/models/user/user.dart';
@@ -7,6 +5,7 @@ import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
+
 part 'user_store.g.dart';
 
 class UserStore = _UserStore with _$UserStore;

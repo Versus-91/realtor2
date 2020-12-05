@@ -6,8 +6,8 @@ import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:progressive_image/progressive_image.dart';
 
 class PropertyCrad extends StatefulWidget {
   PropertyCrad({this.post});
@@ -189,9 +189,17 @@ class _PropertyCradState extends State<PropertyCrad>
                     width: 130,
                     height: 100,
                     child: post.images.length > 0
-                        ? Image.network(
-                            Endpoints.baseUrl + "/" + post.images[0]?.path,
+                        ? ProgressiveImage(
+                            image: NetworkImage(
+                              Endpoints.baseUrl + "/" + post.images[0]?.path,
+                            ),
                             fit: BoxFit.cover,
+                            height: 128,
+                            width: 128,
+                            thumbnail: NetworkImage(
+                              Endpoints.baseUrl + "/" + post.images[0]?.path,
+                            ),
+                            placeholder: AssetImage("assets/images/a.png"),
                           )
                         : Image.asset("assets/images/a.png", fit: BoxFit.cover),
                   ),
@@ -308,21 +316,6 @@ class _PropertyCradState extends State<PropertyCrad>
         ),
       ),
     );
-  }
-
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
-          title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
-        )..show(context);
-      }
-    });
-
-    return SizedBox.shrink();
   }
 
   @override

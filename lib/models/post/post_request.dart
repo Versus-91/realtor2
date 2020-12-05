@@ -1,5 +1,5 @@
-import 'package:collection/equality.dart';
-import 'package:uuid/uuid.dart';
+
+import 'package:collection/collection.dart';
 
 class PostRequest {
   int id;

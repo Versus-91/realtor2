@@ -45,10 +45,6 @@ class Repository {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-
-    if (request != null) {
-      await _searchDataSource.insert(request);
-    }
     return await _postApi.getPosts(request: request).then((postsList) {
       postsList.posts.forEach((post) {
         // _postDataSource.insert(post);
@@ -62,7 +58,6 @@ class Repository {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    await _postDataSource.deleteAll();
     return await _postDataSource.count() > 0
         ? _postDataSource.getPostsFromDb().then((postList) {
             return postList;
@@ -153,6 +148,10 @@ class Repository {
 
   Future getSearchesList() async {
     return await _searchDataSource.getSearchesFromDb();
+  }
+
+  Future saveSearch(PostRequest request) async {
+    return await _searchDataSource.insert(request);
   }
 
   Future removeSearch(int id) async {
