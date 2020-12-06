@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/routes.dart';
@@ -8,9 +10,8 @@ import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
 import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
-
-import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/ui/post/user_map_screen.dart';
+import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:dio/dio.dart';
@@ -20,9 +21,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-
-import 'dart:async';
-
 import 'package:shimmer/shimmer.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -30,8 +28,6 @@ class CreatePostScreen extends StatefulWidget {
   @override
   _CreatePostScreenState createState() => _CreatePostScreenState();
 }
-
-// enum SelectTypeHome { Maskoni, Tejari, Sanati }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -164,8 +160,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      resizeToAvoidBottomPadding: false,
       appBar: _buildAppBar(),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(15),
@@ -552,7 +546,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       children: <Widget>[
         Flexible(
           child: TextField(
-            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             controller: _areaController,
             onChanged: (value) {
               var area = int.tryParse(_areaController.text) ?? 0;
@@ -585,9 +579,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             children: <Widget>[
               Flexible(
                 child: TextField(
-                    inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     focusNode: _rahnPriceFocusNode,
                     controller: _rahnPriceController,
                     onSubmitted: (value) {
@@ -625,7 +617,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           children: <Widget>[
             Flexible(
               child: TextField(
-                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   controller: _rentPriceController,
                   focusNode: _rentPriceFocusNode,
                   onSubmitted: (value) {
@@ -663,7 +655,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           children: <Widget>[
             Flexible(
               child: TextField(
-                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   controller: _buyPriceController,
                   focusNode: _buyPriceFocusNode,
                   onSubmitted: (value) {

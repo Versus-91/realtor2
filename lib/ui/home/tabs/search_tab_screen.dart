@@ -1,9 +1,9 @@
-import 'package:boilerplate/data/local/datasources/search_datasource.dart';
+import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/form/filter_form.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
-import 'package:boilerplate/ui/search/search.dart';
-import 'package:boilerplate/ui/search/list_theme.dart';
 import 'package:boilerplate/ui/home/home.dart';
+import 'package:boilerplate/ui/search/list_theme.dart';
+import 'package:boilerplate/ui/search/search.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class SearchTabScreen extends StatefulWidget {
 class _SearchTabScreenState extends State<SearchTabScreen> {
   final ScrollController _scrollController = ScrollController();
   PostStore _postStore;
-  FilterFormStore _filterForm = FilterFormStore();
+  FilterFormStore _filterForm;
   @override
   void initState() {
     super.initState();
@@ -31,6 +31,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _postStore = Provider.of<PostStore>(context);
+    _filterForm = Provider.of<FilterFormStore>(context);
   }
 
   @override
@@ -170,9 +171,15 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                 heroTag: 'saveSearchButton',
                 child: Icon(Icons.save),
                 onPressed: () {
-                  // if (request != null) {
-                  //   await _searchDataSource.insert(request);
-                  // }
+                  var request = _filterForm.applyFilters();
+                  appComponent
+                      .getRepository()
+                      .saveSearch(request)
+                      .then((value) {
+                    FlushbarHelper.createSuccess(message: 'ذخیره شد.');
+                  }).catchError((err) {
+                    FlushbarHelper.createError(message: 'خطا در ذخیره سازی');
+                  });
                 },
               ),
             ),

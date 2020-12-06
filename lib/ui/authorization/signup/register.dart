@@ -1,18 +1,17 @@
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/authorization/login/blaziercontainer.dart';
 import 'package:boilerplate/ui/authorization/login/login.dart';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:flushbar/flushbar_helper.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 
 import '../../../routes.dart';
 
@@ -133,28 +132,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildUserNameField() {
-    return Observer(
-      builder: (context) {
-        return TextFieldWidget(
-          hint: AppLocalizations.of(context).translate('login_et_user_Name'),
-          padding: EdgeInsets.only(top: 16.0),
-          icon: Icons.person,
-          iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-          textController: _userNameController,
-          focusNode: _usernameFocusNode,
-          onFieldSubmitted: (value) {
-            FocusScope.of(context).requestFocus(_emailFocusNode);
-          },
-          onChanged: (value) {
-            _formStore.setUserName(_userNameController.text);
-          },
-          errorText: _formStore.formErrorStore.username,
-        );
-      },
-    );
-  }
-
   Widget _buildEmailField() {
     return Observer(
       builder: (context) {
@@ -265,11 +242,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 }
               });
             } else {
-              _showErrorMessage( AppLocalizations.of(context).translate('error_in_submit'));
+              _showErrorMessage(
+                  AppLocalizations.of(context).translate('error_in_submit'));
             }
           });
         } else {
-          _showErrorMessage( AppLocalizations.of(context).translate('error_in_submit'));
+          _showErrorMessage(
+              AppLocalizations.of(context).translate('error_in_submit'));
         }
       },
       child: Container(
@@ -290,7 +269,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 end: Alignment.centerRight,
                 colors: [Color(0xffF77E78), Color(0xffF5150A)])),
         child: Text(
-           AppLocalizations.of(context).translate('Register'),
+          AppLocalizations.of(context).translate('Register'),
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
       ),
@@ -310,7 +289,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-                 AppLocalizations.of(context).translate('btn_Register'),
+              AppLocalizations.of(context).translate('btn_Register'),
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
             SizedBox(
@@ -335,7 +314,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       text: TextSpan(
           text: 'خو',
           style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.display1,
+            textStyle: Theme.of(context).textTheme.headline4,
             fontSize: 30,
             fontWeight: FontWeight.w700,
             color: Color(0xffe46b10),

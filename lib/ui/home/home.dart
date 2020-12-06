@@ -1,8 +1,7 @@
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
-import 'package:boilerplate/ui/home/tabs/user_screen.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
-import 'package:boilerplate/ui/post/a.dart';
+import 'package:boilerplate/ui/home/tabs/user_screen.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/settings.dart';
@@ -13,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../data/sharedpref/constants/preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _buildScreens = [
+    final List<Widget> _buildScreens = [
       UserScreen(
         userStore: _userStore,
         postStore: _postStore,

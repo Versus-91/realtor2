@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:async';
 
 import 'package:boilerplate/plugin/cropper.dart';
 import 'package:flutter/material.dart';

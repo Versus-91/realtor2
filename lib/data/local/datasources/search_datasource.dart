@@ -3,7 +3,6 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:sembast/sembast.dart';
 
-
 class SearchDataSource {
   // A Store with int keys and Map<String, dynamic> values.
   // This Store acts like a persistent map, values of which are Flogs objects converted to Map
@@ -21,7 +20,6 @@ class SearchDataSource {
 
   // DB functions:--------------------------------------------------------------
   Future<int> insert(PostRequest request) async {
-    await deleteAll();
     try {
       return await _searchesStore.add(await _db, request.toJsonLocalStore());
     } catch (e) {

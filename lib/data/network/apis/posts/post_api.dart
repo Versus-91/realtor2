@@ -13,10 +13,8 @@ import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/models/type/type_list.dart';
 import 'package:boilerplate/models/user/changepassword.dart';
-
 import 'package:boilerplate/models/user/user.dart';
 import 'package:dio/dio.dart';
-import 'package:intl/intl.dart';
 
 class PostApi {
   // dio instance

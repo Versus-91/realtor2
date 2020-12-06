@@ -1,22 +1,22 @@
-import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/ui/authorization/login/login.dart';
-import 'package:boilerplate/ui/profile/pages/aboute.dart';
-import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:settings_ui/settings_ui.dart';
 import 'dart:async';
 import 'dart:io';
+
 import 'package:boilerplate/constants/constants.dart';
+import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/plugin/cropper.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
+import 'package:boilerplate/ui/profile/pages/aboute.dart';
+import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:dio/dio.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -29,6 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   File imageFile;
   bool loggedIn = false;
   UserStore _userStore;
+  final _imagePicker = ImagePicker();
   AnimationController _rippleAnimationController;
   Future<Null> getSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -41,7 +42,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Future getImage(type) async {
     //عکس =جوابیکه از فیوچر میاد
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await _imagePicker.getImage(source: ImageSource.gallery);
     if (image == null) return;
 
     dynamic result = await Navigator.of(context)
@@ -103,7 +104,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                               onTap: () async {
                                 getImage(ImageSource.gallery);
                               },
-                              child: _userStore?.user.avatar == null
+                              child: _userStore?.user?.avatar == null
                                   ? CircleAvatar(
                                       radius: 50,
                                       backgroundColor: Colors.indigo,
@@ -158,6 +159,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 leading: Icon(Icons.person),
                 trailing: IconButton(
                   icon: Icon(Icons.keyboard_arrow_left),
+                  onPressed: () {},
                 ),
               )
             ],
@@ -236,16 +238,14 @@ class _SettingsScreenState extends State<SettingsScreen>
             ],
           ),
           CustomSection(
-              child: Container(
-                  height: MediaQuery.of(context).size.height / 4,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/icons/settings.png',
-                      height: 50,
-                      width: 50,
-                      color: Color(0xFF777777),
-                    ),
-                  ))),
+              child: Center(
+            child: Image.asset(
+              'assets/icons/settings.png',
+              height: 50,
+              width: 50,
+              color: Color(0xFF777777),
+            ),
+          )),
         ],
       ),
     );
