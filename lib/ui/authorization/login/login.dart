@@ -10,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../routes.dart';
 import 'custom_button.dart';
 
@@ -39,8 +40,6 @@ class _LoginPageState extends State<LoginPage> {
             if (value == true) {
               SharedPreferences.getInstance().then((prefs) {
                 prefs.setBool(Preferences.is_logged_in, true);
-                print(
-                    "is logged in ${prefs.getBool(Preferences.is_logged_in)}");
               });
             }
           });

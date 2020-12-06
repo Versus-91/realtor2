@@ -171,9 +171,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 enabled: true,
                 leading: Icon(Icons.notifications_active),
                 switchValue: true,
-                onToggle: (value) {
-                  print('object');
-                },
+                onToggle: (value) {},
               ),
             ],
           ),

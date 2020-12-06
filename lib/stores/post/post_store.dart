@@ -55,7 +55,6 @@ abstract class _PostStore with Store {
         this.postList.posts.addAll(postList.posts);
         page = page + 1;
       }).catchError((error) {
-        print(error);
         errorStore.errorMessage = DioErrorUtil.handleError(error);
       });
     }
@@ -84,7 +83,6 @@ abstract class _PostStore with Store {
     future.then((postList) {
       this.postList = postList;
     }).catchError((error) {
-      print(error);
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }

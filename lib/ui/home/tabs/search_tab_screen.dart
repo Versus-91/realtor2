@@ -105,7 +105,6 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                 },
                               ),
                               onRefresh: () async {
-                                print('refresh');
                                 await _postStore.getPosts(
                                     request: _filterForm.applyFilters());
                               },
