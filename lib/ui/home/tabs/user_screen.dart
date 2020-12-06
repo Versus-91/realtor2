@@ -85,7 +85,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
                     //   image: new AssetImage("assets/images/cloud.png"),
                     //   fit: BoxFit.fill,
                     // )),
-                    height: MediaQuery.of(context).size.height / 4,
+                    height: MediaQuery.of(context).size.height / 2.5,
                     width: MediaQuery.of(context).size.width,
                     alignment: Alignment.topRight,
                     child: _buildListView(),

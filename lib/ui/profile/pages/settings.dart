@@ -95,7 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen>
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 22, bottom: 8),
+                  padding: const EdgeInsets.only(top: 32, bottom: 8),
                   child: Observer(
                     builder: (context) {
                       return _userStore.user != null
@@ -236,13 +236,16 @@ class _SettingsScreenState extends State<SettingsScreen>
             ],
           ),
           CustomSection(
-            child: Center(child: Image.asset(
-                    'assets/icons/settings.png',
-                    height: 50,
-                    width: 50,
-                    color: Color(0xFF777777),
-                  ),)
-          ),
+              child: Container(
+                  height: MediaQuery.of(context).size.height / 4,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/icons/settings.png',
+                      height: 50,
+                      width: 50,
+                      color: Color(0xFF777777),
+                    ),
+                  ))),
         ],
       ),
     );

@@ -93,7 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          hint: AppLocalizations.of(context).translate('user_Name'),
+          hint: AppLocalizations.of(context).translate('user_name'),
           focusNode: _nameFocusNode,
           onFieldSubmitted: (value) {
             FocusScope.of(context).requestFocus(_familyFocusNode);

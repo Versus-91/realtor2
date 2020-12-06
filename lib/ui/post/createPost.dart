@@ -353,8 +353,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         )
                       : RaisedButton(
                           color: Color(0xfff3f3f4),
-                          child: Image.asset("assets/images/camera.png",
-                              fit: BoxFit.fitHeight,width: 100,height: 100,),
+                          child: Image.asset(
+                            "assets/images/camera.png",
+                            fit: BoxFit.fitHeight,
+                            width: 100,
+                            height: 100,
+                          ),
                           onPressed: () {
                             _openFileExplorer();
                           },
@@ -731,14 +735,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           Text(
                             AppLocalizations.of(context).translate('district'),
                             style: TextStyle(
-                              fontSize: 28.0,
+                              fontSize: 20.0,
                             ),
                           )
                         ],
                       )),
                   baseColor: Colors.black12,
                   highlightColor: Colors.white,
-                  loop: 3,
+                  loop: 10,
                 ),
               );
       },
@@ -794,14 +798,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           Text(
                             AppLocalizations.of(context).translate('city'),
                             style: TextStyle(
-                              fontSize: 28.0,
+                              fontSize: 20.0,
                             ),
                           )
                         ],
                       )),
                   baseColor: Colors.black12,
                   highlightColor: Colors.white,
-                  loop: 3,
+                  loop: 10,
                 ),
               );
       },
@@ -886,12 +890,31 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ],
                   ],
                 )
-              : Container(
-                  child: FlatButton(
-                      onPressed: () {
-                        _categoryStore.getCategories();
-                      },
-                      child: Icon(Icons.refresh)),
+              : Opacity(
+                  opacity: 0.8,
+                  child: Shimmer.fromColors(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(18),
+                            child: Text(
+                              "رهن و گروی",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "خرید و فروش",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ]),
+                    baseColor: Colors.black12,
+                    highlightColor: Colors.white,
+                    loop: 10,
+                  ),
                 );
         },
       ),
@@ -923,7 +946,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 }).toList(),
               )
             : Opacity(
-                opacity: 0.8,
+                opacity: 1,
                 child: Shimmer.fromColors(
                   child: Container(
                       padding: EdgeInsets.only(top: 10, bottom: 15),
@@ -932,14 +955,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           Text(
                             AppLocalizations.of(context).translate('type_home'),
                             style: TextStyle(
-                              fontSize: 28.0,
+                              fontSize: 20.0,
                             ),
                           )
                         ],
                       )),
                   baseColor: Colors.black12,
                   highlightColor: Colors.white,
-                  loop: 3,
+                  loop: 10,
                 ),
               );
       },

@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     GButton(
                       onPressed: () {
-                        HapticFeedback.lightImpact();
+                        HapticFeedback.mediumImpact();
                       },
                       iconActiveColor: Colors.teal,
                       iconColor: Colors.black,

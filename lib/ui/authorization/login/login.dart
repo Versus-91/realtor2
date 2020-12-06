@@ -209,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: height * .06),
                   Container(
                     height: height / 2,
-                    child: Column(
+                    child:  Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Observer(builder: (context) {
@@ -296,8 +296,9 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                       ],
-                    ),
-                  ),
+                    ), )
+                  
+                  
                 ],
               ),
             ),
@@ -350,7 +351,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ),
-      ),
+      ), 
+      
     );
   }
 
