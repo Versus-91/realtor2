@@ -367,7 +367,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: height * .2),
+                    SizedBox(height: height * .15),
                     _title(),
                     SizedBox(
                       height: 30,
