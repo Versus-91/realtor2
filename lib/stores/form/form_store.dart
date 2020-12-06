@@ -178,7 +178,7 @@ abstract class _FormStore with Store {
   void validateNumber(String value) {
     String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
     RegExp regExp = new RegExp(patttern);
-    if (value.toString().isEmpty) {
+    if (value == null) {
       formErrorStore.number = 'پرکردن شماره تماس الزامی است';
     } else if (!regExp.hasMatch(value)) {
       formErrorStore.number = ' شماره تماس نامعتبر است';
