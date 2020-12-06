@@ -3,8 +3,9 @@ import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostScreen extends StatefulWidget {
@@ -52,7 +53,9 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 ),
               ),
               FlatButton.icon(
-                onPressed: () {},
+                onPressed: () async {
+                  await Share.share('sdasdas');
+                },
                 label: Text(
                   AppLocalizations.of(context).translate('send'),
                 ),
@@ -72,8 +75,10 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
           backgroundColor: Colors.transparent,
           title: Text(
             ' ${widget.post.district.city.name} - ${widget.post.district.name} ',
-             style: TextStyle(
-              fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.normal),
           ),
         ),
         body: ListView(
@@ -259,8 +264,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                     Column(
                       children: [
                         Text(AppLocalizations.of(context).translate('bed')),
-                        Text( AppLocalizations.of(context)
-                                .transformNumbers(widget.post.bedroom.toString()))
+                        Text(AppLocalizations.of(context)
+                            .transformNumbers(widget.post.bedroom.toString()))
                       ],
                     ),
                     Padding(
@@ -274,8 +279,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                     Column(
                       children: [
                         Text(AppLocalizations.of(context).translate('area')),
-                        Text( AppLocalizations.of(context)
-                                .transformNumbers(widget.post.area.toString()))
+                        Text(AppLocalizations.of(context)
+                            .transformNumbers(widget.post.area.toString()))
                       ],
                     ),
                     Padding(

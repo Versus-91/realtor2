@@ -105,13 +105,11 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                   _userStore
                       .changePhoneNumber(_newNumberController.text)
                       .then((value) async {
-                    print(value);
                     var result = await Navigator.of(context).pushNamed(
                         Routes.phoneNumberVerificationCode,
                         arguments: {'phone': _newNumberController.text});
                     _newNumberController.text = result;
                   }).catchError((error) {
-                    print(error);
                     _showErrorMessage(
                       "خطا در تغییر شماره همراه",
                     );

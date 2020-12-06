@@ -63,7 +63,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   void getUserLogin() async {
     var sharePerf = await SharedPreferences.getInstance();
     setState(() {
-      loggedIn = sharePerf.getBool(Preferences.is_logged_in) || false;
+      loggedIn =
+          sharePerf.getBool(Preferences.is_logged_in) == true ? true : false;
     });
     if (loggedIn == true) {
       if (_userStore.user == null) _userStore.getUser();
@@ -171,9 +172,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 enabled: true,
                 leading: Icon(Icons.notifications_active),
                 switchValue: true,
-                onToggle: (value) {
-                  print('object');
-                },
+                onToggle: (value) {},
               ),
             ],
           ),

@@ -10,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../routes.dart';
 import 'custom_button.dart';
 
@@ -39,8 +40,6 @@ class _LoginPageState extends State<LoginPage> {
             if (value == true) {
               SharedPreferences.getInstance().then((prefs) {
                 prefs.setBool(Preferences.is_logged_in, true);
-                print(
-                    "is logged in ${prefs.getBool(Preferences.is_logged_in)}");
               });
             }
           });
@@ -203,12 +202,11 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: height * .1),
                   _title(),
                   SizedBox(height: height * .06),
                   Container(
-                    height: height / 2,
-                    child:  Column(
+                    height: height / 1.5,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Observer(builder: (context) {
@@ -221,10 +219,10 @@ class _LoginPageState extends State<LoginPage> {
                                       .translate('user_email'),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15),
+                                      fontSize: 14),
                                 ),
                                 SizedBox(
-                                  height: 10,
+                                  height: 5,
                                 ),
                                 TextField(
                                     controller: _userNameController,
@@ -240,17 +238,17 @@ class _LoginPageState extends State<LoginPage> {
                                         fillColor: Colors.grey[300],
                                         filled: true)),
                                 SizedBox(
-                                  height: 20,
+                                  height: 5,
                                 ),
                                 Text(
                                   AppLocalizations.of(context)
                                       .translate('user_password'),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15),
+                                      fontSize: 14),
                                 ),
                                 SizedBox(
-                                  height: 10,
+                                  height: 5,
                                 ),
                                 TextField(
                                     controller: _passwordNameController,
@@ -266,7 +264,7 @@ class _LoginPageState extends State<LoginPage> {
                                         fillColor: Colors.grey[300],
                                         filled: true)),
                                 SizedBox(
-                                  height: 20,
+                                  height: 5,
                                 ),
                                 InkWell(
                                   child: Text(

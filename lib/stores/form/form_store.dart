@@ -1,7 +1,6 @@
 import 'package:boilerplate/data/repository.dart';
-import 'package:boilerplate/models/user/user.dart';
-
 import 'package:boilerplate/models/authenticate/login.dart';
+import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:mobx/mobx.dart';
 
@@ -179,7 +178,7 @@ abstract class _FormStore with Store {
   void validateNumber(String value) {
     String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
     RegExp regExp = new RegExp(patttern);
-    if (value.toString().isEmpty) {
+    if (value == null) {
       formErrorStore.number = 'پرکردن شماره تماس الزامی است';
     } else if (!regExp.hasMatch(value)) {
       formErrorStore.number = ' شماره تماس نامعتبر است';
@@ -199,6 +198,22 @@ abstract class _FormStore with Store {
     }
   }
 
+  @action
+  bool validateRegisterForm() {
+    validateUserEmail(userEmail);
+    validatePassword(password);
+    validateName(name);
+    validateFamily(family);
+    validateNumber(number);
+    return formErrorStore.hasErrorsInRegister ? false : true;
+  }
+
+  @action
+  bool validateLoginForm() {
+    validateUserEmail(userEmail);
+    validatePassword(password);
+    return formErrorStore.hasErrorsInLogin ? false : true;
+  }
   // @action
   // void validateConfirmPassword(String value) {
   //   if (value.isEmpty) {
@@ -212,23 +227,25 @@ abstract class _FormStore with Store {
 
   @action
   Future register() async {
-    var user = User(
-        email: userEmail,
-        name: name,
-        password: password,
-        surname: family,
-        phonenumber: number);
-    loading = true;
-    return _repository.insertUser(user).then((result) {
-      loading = false;
-      success = true;
-      return true;
-    }).catchError((e) {
-      loading = false;
-      success = false;
-      errorStore.errorMessage = e.toString();
-      return false;
-    });
+    if (validateRegisterForm() == true) {
+      var user = User(
+          email: userEmail,
+          name: name,
+          password: password,
+          surname: family,
+          phonenumber: number);
+      loading = true;
+      return _repository.insertUser(user).then((result) {
+        loading = false;
+        success = true;
+        return true;
+      }).catchError((e) {
+        loading = false;
+        success = false;
+        errorStore.errorMessage = e.toString();
+        return false;
+      });
+    }
   }
 
   @action
@@ -250,28 +267,30 @@ abstract class _FormStore with Store {
 
   @action
   Future login() async {
-    loading = true;
-    return _repository
-        .authenticate(Login(
-            password: password,
-            userNameOrEmailAddress: userEmail.trim(),
-            rememberClient: true))
-        .then((result) {
-      loading = false;
-      success = true;
-      return true;
-    }).catchError((e) {
-      loading = false;
-      success = false;
-      if (e != null) {
-        if (e.toString().contains("وود ناموفقیت آمیز است"))
-          errorStore.errorMessage =
-              "نام کاربری و رمز خود را چک کنید خطا در ورود";
-      } else {
-        errorStore.errorMessage = "اتصال اینترنت برقرار نیست مجددا تلاش کنید";
-      }
-      return false;
-    });
+    if (validateLoginForm() == true) {
+      loading = true;
+      return _repository
+          .authenticate(Login(
+              password: password,
+              userNameOrEmailAddress: userEmail.trim(),
+              rememberClient: true))
+          .then((result) {
+        loading = false;
+        success = true;
+        return true;
+      }).catchError((e) {
+        loading = false;
+        success = false;
+        if (e != null) {
+          if (e.toString().contains("وود ناموفقیت آمیز است"))
+            errorStore.errorMessage =
+                "نام کاربری و رمز خود را چک کنید خطا در ورود";
+        } else {
+          errorStore.errorMessage = "اتصال اینترنت برقرار نیست مجددا تلاش کنید";
+        }
+        return false;
+      });
+    }
   }
 
   @action
