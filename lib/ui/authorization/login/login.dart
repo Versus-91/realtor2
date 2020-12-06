@@ -219,10 +219,10 @@ class _LoginPageState extends State<LoginPage> {
                                       .translate('user_email'),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15),
+                                      fontSize: 14),
                                 ),
                                 SizedBox(
-                                  height: 10,
+                                  height: 5,
                                 ),
                                 TextField(
                                     controller: _userNameController,
@@ -238,17 +238,17 @@ class _LoginPageState extends State<LoginPage> {
                                         fillColor: Colors.grey[300],
                                         filled: true)),
                                 SizedBox(
-                                  height: 20,
+                                  height: 5,
                                 ),
                                 Text(
                                   AppLocalizations.of(context)
                                       .translate('user_password'),
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15),
+                                      fontSize: 14),
                                 ),
                                 SizedBox(
-                                  height: 10,
+                                  height: 5,
                                 ),
                                 TextField(
                                     controller: _passwordNameController,
@@ -264,7 +264,7 @@ class _LoginPageState extends State<LoginPage> {
                                         fillColor: Colors.grey[300],
                                         filled: true)),
                                 SizedBox(
-                                  height: 20,
+                                  height: 5,
                                 ),
                                 InkWell(
                                   child: Text(
