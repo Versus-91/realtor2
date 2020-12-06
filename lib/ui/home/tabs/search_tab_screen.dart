@@ -5,6 +5,7 @@ import 'package:boilerplate/ui/home/home.dart';
 import 'package:boilerplate/ui/search/list_theme.dart';
 import 'package:boilerplate/ui/search/search.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/post_placeholder.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -22,6 +23,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
   final ScrollController _scrollController = ScrollController();
   PostStore _postStore;
   FilterFormStore _filterForm;
+  bool _loadingMore;
   @override
   void initState() {
     super.initState();
@@ -81,6 +83,16 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                   await _postStore.loadNextPage(
                                       request: request);
                                 },
+                                onLoadMore: () {
+                                  setState(() {
+                                    _loadingMore = true;
+                                  });
+                                },
+                                onLoadMoreFinished: () {
+                                  setState(() {
+                                    _loadingMore = false;
+                                  });
+                                },
                                 hasMore: () =>
                                     _postStore.postList.posts.length <
                                     _postStore.postList.totalCount,
@@ -90,13 +102,14 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                   if (index ==
                                           _postStore.postList.posts.length -
                                               1 &&
-                                      !_postStore.loadingNextPage) {
+                                      (_loadingMore ?? false)) {
+                                    print('loading...');
                                     return Column(
                                       children: [
                                         PropertyCrad(
                                             post: _postStore
                                                 .postList.posts[index]),
-                                        // CircularProgressIndicator();
+                                        PlaceholderPostCard()
                                       ],
                                     );
                                   }
