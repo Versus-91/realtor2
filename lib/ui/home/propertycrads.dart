@@ -8,6 +8,7 @@ import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:progressive_image/progressive_image.dart';
+import 'package:share/share.dart';
 
 class PropertyCrad extends StatefulWidget {
   PropertyCrad({this.post});
@@ -234,9 +235,14 @@ class _PropertyCradState extends State<PropertyCrad>
                                 color: Colors.red,
                               ),
                             ),
-                            Icon(
-                              Icons.share,
-                              color: Colors.blue[200],
+                            GestureDetector(
+                              child: Icon(
+                                Icons.share,
+                                color: Colors.blue[200],
+                              ),
+                              onTap: () async {
+                                await Share.share("text");
+                              },
                             ),
                           ],
                         ),
