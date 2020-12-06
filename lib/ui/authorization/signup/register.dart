@@ -5,6 +5,7 @@ import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/authorization/login/blaziercontainer.dart';
 import 'package:boilerplate/ui/authorization/login/login.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/widgets/textfield_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
@@ -225,7 +226,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return InkWell(
       onTap: () async {
         if (!_formStore.formErrorStore.hasErrorsInRegister) {
-          await _formStore.register().then((result) {
+          _formStore.register().then((result) {
             if (result == true) {
               _formStore.setUserName(_formStore.username);
               _formStore.setPassword(_formStore.password);
@@ -248,7 +249,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           });
         } else {
           _showErrorMessage(
-              AppLocalizations.of(context).translate('error_in_submit'));
+              AppLocalizations.of(context).translate('error_in_form_inputs'));
         }
       },
       child: Container(
@@ -391,6 +392,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
             Positioned(top: 40, left: 0, child: _backButton()),
+            Observer(
+              builder: (context) {
+                return _formStore.loading == true
+                    ? Center(child: CustomProgressIndicatorWidget())
+                    : SizedBox.shrink();
+              },
+            )
           ],
         ),
       ),
