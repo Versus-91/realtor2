@@ -1,7 +1,7 @@
 import 'package:boilerplate/models/amenity/amenity.dart';
+import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/image/image.dart';
-import 'package:boilerplate/models/category/category.dart';
 
 class Post {
   String title;
@@ -90,11 +90,17 @@ class Post {
       "deopsit": deopsit,
       "rent": rent,
       "price": price,
-      "district": district.toMap(),
-      "category": category.toMap(),
-      "images": images.map((e) => toMapImage(e)).toList(),
-      "amenities":
-          amenities != null ? amenities.map((e) => e.id).toList() : null
+      if (district != null) ...{"district": district.toMap()},
+      if (category != null) ...{
+        "category": category.toMap(),
+      },
+      if (images != null) ...{
+        "images": images.map((e) => toMapImage(e)).toList()
+      },
+      if (amenities != null) ...{ 
+        "amenities":
+            amenities != null ? amenities.map((e) => e.id).toList() : null
+      },
     };
   }
 

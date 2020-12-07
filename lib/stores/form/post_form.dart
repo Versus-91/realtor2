@@ -3,6 +3,7 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
+
 part 'post_form.g.dart';
 
 class PostFormStore = _PostFormStore with _$PostFormStore;
@@ -149,7 +150,19 @@ abstract class _PostFormStore with Store {
   }
 
   @action
+  validateCreatePost() {
+    validateString(title);
+    validateCategoryId(categoryId);
+    validateArea(area);
+    validatePrice(buyPrice);
+    validateRahnPrice(rahnPrice);
+    validateRentPrice(rentPrice);
+    validateDescription(description);
+  }
+
+  @action
   Future insertPost() async {
+    validateCreatePost();
     var post = Post(
       title: this.title,
       longitude: this.latitude,
@@ -169,6 +182,7 @@ abstract class _PostFormStore with Store {
       loading = false;
       postId = result["id"];
     }).catchError((error) {
+      print(error);
       loading = false;
     });
   }
