@@ -38,6 +38,11 @@ class _SearchScreenState extends State<SearchScreen> {
   List<SelectedPropertyTypes> amenityList = [];
   int _value;
   final TextEditingController _typeAheadController = TextEditingController();
+  final TextEditingController _lowPriceController = TextEditingController();
+  final TextEditingController _hightPriceController = TextEditingController();
+  final TextEditingController _lowAreaController = TextEditingController();
+  final TextEditingController _hightAreaController = TextEditingController();
+
   String _selectedCity;
   var data;
   String dataurl =
@@ -820,6 +825,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         widget.filterForm
                             .setMinDepositPrice(double.parse(value));
                       },
+                      controller: _lowPriceController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           border: InputBorder.none,
@@ -836,6 +842,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         // widget.filterForm
                         //     .setMaxdepositPrice(double.parse(value));
                       },
+                      controller: _hightPriceController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           border: InputBorder.none,
