@@ -50,14 +50,15 @@ class _SettingsScreenState extends State<SettingsScreen>
 
     var multiPartAvatarImage = await MultipartFile.fromFile(result.path);
 
-    _userStore
-        .uploadAvatarImage(multiPartAvatarImage)
-        .then((value) async => await _userStore.getUser())
-        .catchError((error) => Flushbar(
-              message:
-                  AppLocalizations.of(context).translate('error_upload_avatar'),
-              title: AppLocalizations.of(context).translate('error_upload'),
-            ));
+    _userStore.uploadAvatarImage(multiPartAvatarImage).then((value) async {
+      Future.delayed(Duration(seconds: 1), () async {
+        await _userStore.getUser();
+      });
+    }).catchError((error) => Flushbar(
+          message:
+              AppLocalizations.of(context).translate('error_upload_avatar'),
+          title: AppLocalizations.of(context).translate('error_upload'),
+        ));
   }
 
   void getUserLogin() async {
@@ -124,7 +125,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                                           backgroundImage: NetworkImage(
                                             Endpoints.baseUrl +
                                                 "/" +
-                                                _userStore.user.avatar.trim(),
+                                                _userStore.user.avatar,
                                           )),
                                     ),
                             )

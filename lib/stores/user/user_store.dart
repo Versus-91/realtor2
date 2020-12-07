@@ -74,6 +74,7 @@ abstract class _UserStore with Store {
 
     future.then((item) {
       this.user = item;
+      // print(item.avatar);
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
