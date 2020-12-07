@@ -45,7 +45,9 @@ abstract class _FilterFormStore with Store {
   double maxDepositPrice = 0;
 
   @observable
-  double area;
+  double minArea;
+  @observable
+  double maxArea;
   @observable
   Category category = Category();
   @observable
@@ -93,8 +95,13 @@ abstract class _FilterFormStore with Store {
   }
 
   @action
-  void setArea(double value) {
-    area = value;
+  void setLowArea(double value) {
+    minArea = value;
+  }
+
+  @action
+  void setHightArea(double value) {
+    maxArea = value;
   }
 
   @action
@@ -134,8 +141,8 @@ abstract class _FilterFormStore with Store {
         minRentPrice: minRentPrice?.floor(),
         maxDepositPrice: maxDepositPrice?.floor(),
         minDepositPrice: minDepositPrice?.floor(),
-        minArea: 0,
-        maxArea: area?.floor(),
+        minArea: minArea?.floor(),
+        maxArea: maxArea?.floor(),
         district: district.id,
         districtName: district.name,
         city: city.id,
@@ -181,7 +188,8 @@ abstract class _FilterFormStore with Store {
     district = null;
     bedCount = null;
     amenities = null;
-    area = null;
+    minArea = null;
+    maxArea = null;
   }
 
   // general methods:-----------------------------------------------------------

@@ -150,6 +150,21 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$fetchFutureAtom = Atom(name: '_FormStore.fetchFuture');
+
+  @override
+  ObservableFuture<dynamic> get fetchFuture {
+    _$fetchFutureAtom.reportRead();
+    return super.fetchFuture;
+  }
+
+  @override
+  set fetchFuture(ObservableFuture<dynamic> value) {
+    _$fetchFutureAtom.reportWrite(value, super.fetchFuture, () {
+      super.fetchFuture = value;
+    });
+  }
+
   final _$confirmPasswordAtom = Atom(name: '_FormStore.confirmPassword');
 
   @override
@@ -208,6 +223,15 @@ mixin _$FormStore on _FormStore, Store {
     _$loadingAtom.reportWrite(value, super.loading, () {
       super.loading = value;
     });
+  }
+
+  final _$changePhoneNumberAsyncAction =
+      AsyncAction('_FormStore.changePhoneNumber');
+
+  @override
+  Future<dynamic> changePhoneNumber(String phoneNumber) {
+    return _$changePhoneNumberAsyncAction
+        .run(() => super.changePhoneNumber(phoneNumber));
   }
 
   final _$registerAsyncAction = AsyncAction('_FormStore.register');
@@ -446,6 +470,28 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
+  bool validateRegisterForm() {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.validateRegisterForm');
+    try {
+      return super.validateRegisterForm();
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool validateLoginForm() {
+    final _$actionInfo = _$_FormStoreActionController.startAction(
+        name: '_FormStore.validateLoginForm');
+    try {
+      return super.validateLoginForm();
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 userEmail: ${userEmail},
@@ -456,6 +502,7 @@ userType: ${userType},
 typehome: ${typehome},
 password: ${password},
 number: ${number},
+fetchFuture: ${fetchFuture},
 confirmPassword: ${confirmPassword},
 location: ${location},
 success: ${success},

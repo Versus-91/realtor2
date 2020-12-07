@@ -448,6 +448,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
   }
 
   @override
+  dynamic validateCreatePost() {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.validateCreatePost');
+    try {
+      return super.validateCreatePost();
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void validateString(String value) {
     final _$actionInfo = _$_PostFormStoreActionController.startAction(
         name: '_PostFormStore.validateString');
