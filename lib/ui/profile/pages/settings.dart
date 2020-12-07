@@ -64,7 +64,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   void getUserLogin() async {
     var sharePerf = await SharedPreferences.getInstance();
     setState(() {
-      loggedIn =
+      loggedIn =  
           sharePerf.getBool(Preferences.is_logged_in) == true ? true : false;
     });
     if (loggedIn == true) {

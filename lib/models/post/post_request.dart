@@ -1,4 +1,3 @@
-
 import 'package:collection/collection.dart';
 
 class PostRequest {
@@ -47,14 +46,18 @@ class PostRequest {
       this.amenities});
   Map<String, dynamic> toJson() {
     Map<String, dynamic> result = new Map();
-    result.addAll({"minPrice": minPrice.toString()});
-    result.addAll({"maxPrice": maxPrice.toString()});
-
-    result.addAll({"minRentPrice": minRentPrice.toString()});
-    result.addAll({"maxRentPrice": maxRentPrice.toString()});
-
-    result.addAll({"minDepositPrice": minDepositPrice.toString()});
-    result.addAll({"maxDepositPrice": maxDepositPrice.toString()});
+    if (minPrice != 0 && maxPrice != null) {
+      result.addAll({"minPrice": minPrice.toString()});
+      result.addAll({"maxPrice": maxPrice.toString()});
+    }
+    if (minRentPrice != 0 && maxRentPrice != null) {
+      result.addAll({"minRent": minRentPrice.toString()});
+      result.addAll({"maxRent": maxRentPrice.toString()});
+    }
+    if (minDepositPrice != 0 && maxDepositPrice != null) {
+      result.addAll({"minDeposit": minDepositPrice.toString()});
+      result.addAll({"maxDeposit": maxDepositPrice.toString()});
+    }
     result.addAll({"category": category.toString()});
 
     result.addAll({"maxResultCount": pageSize.toString()});

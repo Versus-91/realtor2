@@ -1,26 +1,27 @@
 import 'dart:convert';
+
 import 'package:boilerplate/models/location/locations.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
-import 'package:boilerplate/stores/post/post_store.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
 import 'package:boilerplate/stores/form/filter_form.dart';
+import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
-
 import 'package:boilerplate/ui/search/silder.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+
 import 'list_theme.dart';
 import 'model/pop_list.dart';
-import 'package:http/http.dart' as http;
 
 class SearchScreen extends StatefulWidget {
   final FilterFormStore filterForm;
@@ -38,8 +39,12 @@ class _SearchScreenState extends State<SearchScreen> {
   List<SelectedPropertyTypes> amenityList = [];
   int _value;
   final TextEditingController _typeAheadController = TextEditingController();
-  final TextEditingController _lowPriceController = TextEditingController();
-  final TextEditingController _hightPriceController = TextEditingController();
+  final TextEditingController _minPriceController = TextEditingController();
+  final TextEditingController _maxPriceController = TextEditingController();
+  final TextEditingController _minDepositController = TextEditingController();
+  final TextEditingController _maxDepositController = TextEditingController();
+  final TextEditingController _minRentController = TextEditingController();
+  final TextEditingController _maxRentController = TextEditingController();
   final TextEditingController _lowAreaController = TextEditingController();
   final TextEditingController _hightAreaController = TextEditingController();
 
@@ -91,6 +96,12 @@ class _SearchScreenState extends State<SearchScreen> {
     if (widget.filterForm.bedCount != null) {
       isSelected[widget.filterForm.bedCount - 1] = true;
     }
+    _minPriceController.text = widget.filterForm.minPrice.toString();
+    _maxPriceController.text = widget.filterForm.maxPrice.toString();
+    _minDepositController.text = widget.filterForm.minDepositPrice.toString();
+    _maxDepositController.text = widget.filterForm.maxDepositPrice.toString();
+    _minRentController.text = widget.filterForm.minRentPrice.toString();
+    _maxRentController.text = widget.filterForm.maxRentPrice.toString();
   }
 
   @override
@@ -179,7 +190,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               _categoryStore.categoryList.categories[index];
                           _value = widget.filterForm.category.id;
                           if (_value == null &&
-                              !category.name.contains('اجاره')) {
+                              !category.name.contains('گروی')) {
                             _value = category.id;
                             widget.filterForm
                                 .setCategory(category.id, category.name);
@@ -713,6 +724,7 @@ class _SearchScreenState extends State<SearchScreen> {
               children: <Widget>[
                 Flexible(
                   child: TextField(
+                      controller: _minPriceController,
                       onChanged: (value) {
                         widget.filterForm.setMinPrice(double.parse(value));
                       },
@@ -728,6 +740,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 VerticalDivider(),
                 Flexible(
                   child: TextField(
+                      controller: _maxPriceController,
                       onChanged: (value) {
                         widget.filterForm.setMaxPrice(double.parse(value));
                       },
@@ -767,6 +780,7 @@ class _SearchScreenState extends State<SearchScreen> {
               children: <Widget>[
                 Flexible(
                   child: TextField(
+                      controller: _minRentController,
                       onChanged: (value) {
                         widget.filterForm.setMinRentPrice(double.parse(value));
                       },
@@ -782,6 +796,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 VerticalDivider(),
                 Flexible(
                   child: TextField(
+                      controller: _maxRentController,
                       onChanged: (value) {
                         widget.filterForm.setMaxRentPrice(double.parse(value));
                       },
@@ -821,11 +836,11 @@ class _SearchScreenState extends State<SearchScreen> {
               children: <Widget>[
                 Flexible(
                   child: TextField(
+                      controller: _minDepositController,
                       onChanged: (value) {
                         widget.filterForm
                             .setMinDepositPrice(double.parse(value));
                       },
-                      controller: _lowPriceController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           border: InputBorder.none,
@@ -838,11 +853,11 @@ class _SearchScreenState extends State<SearchScreen> {
                 VerticalDivider(),
                 Flexible(
                   child: TextField(
+                      controller: _maxDepositController,
                       onChanged: (value) {
-                        // widget.filterForm
-                        //     .setMaxdepositPrice(double.parse(value));
+                        widget.filterForm
+                            .setMaxDepositPrice(double.parse(value));
                       },
-                      controller: _hightPriceController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           border: InputBorder.none,
