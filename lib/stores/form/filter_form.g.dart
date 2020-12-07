@@ -116,18 +116,33 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
     });
   }
 
-  final _$areaAtom = Atom(name: '_FilterFormStore.area');
+  final _$minAreaAtom = Atom(name: '_FilterFormStore.minArea');
 
   @override
-  double get area {
-    _$areaAtom.reportRead();
-    return super.area;
+  double get minArea {
+    _$minAreaAtom.reportRead();
+    return super.minArea;
   }
 
   @override
-  set area(double value) {
-    _$areaAtom.reportWrite(value, super.area, () {
-      super.area = value;
+  set minArea(double value) {
+    _$minAreaAtom.reportWrite(value, super.minArea, () {
+      super.minArea = value;
+    });
+  }
+
+  final _$maxAreaAtom = Atom(name: '_FilterFormStore.maxArea');
+
+  @override
+  double get maxArea {
+    _$maxAreaAtom.reportRead();
+    return super.maxArea;
+  }
+
+  @override
+  set maxArea(double value) {
+    _$maxAreaAtom.reportWrite(value, super.maxArea, () {
+      super.maxArea = value;
     });
   }
 
@@ -287,11 +302,22 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
-  void setArea(double value) {
+  void setLowArea(double value) {
     final _$actionInfo = _$_FilterFormStoreActionController.startAction(
-        name: '_FilterFormStore.setArea');
+        name: '_FilterFormStore.setLowArea');
     try {
-      return super.setArea(value);
+      return super.setLowArea(value);
+    } finally {
+      _$_FilterFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setHightArea(double value) {
+    final _$actionInfo = _$_FilterFormStoreActionController.startAction(
+        name: '_FilterFormStore.setHightArea');
+    try {
+      return super.setHightArea(value);
     } finally {
       _$_FilterFormStoreActionController.endAction(_$actionInfo);
     }
@@ -384,7 +410,8 @@ selectedPropertyTypes: ${selectedPropertyTypes},
 maxPrice: ${maxPrice},
 maxRentPrice: ${maxRentPrice},
 maxDepositPrice: ${maxDepositPrice},
-area: ${area},
+minArea: ${minArea},
+maxArea: ${maxArea},
 category: ${category},
 bedCount: ${bedCount},
 district: ${district},

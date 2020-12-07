@@ -156,7 +156,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     _buildCategoryField(),
                     popularFilter(),
                     _buildBedroomCountField(),
-                    distanceViewUI(),
+                    distanceViewUI(
+                        AppLocalizations.of(context).translate('area')),
                     allAccommodationUI()
                   ],
                 ),
@@ -505,7 +506,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  Widget distanceViewUI() {
+  Widget distanceViewUI(String label) {
     return Observer(builder: (context) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -523,12 +524,65 @@ class _SearchScreenState extends State<SearchScreen> {
                   fontWeight: FontWeight.normal),
             ),
           ),
-          SliderView(
-            distValue: widget.filterForm.area ?? 100,
-            onChangedistValue: (double value) {
-              widget.filterForm.setArea(value);
-            },
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  label,
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize:
+                          MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                      fontWeight: FontWeight.normal),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(
+                        child: TextField(
+                            onChanged: (value) {
+                              widget.filterForm.setLowArea(double.parse(value));
+                            },
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                fillColor: Color(0xfff3f3f4),
+                                filled: true,
+                                hintText: AppLocalizations.of(context)
+                                    .translate('low_area'),
+                                contentPadding: EdgeInsets.all(10))),
+                      ),
+                      VerticalDivider(),
+                      Flexible(
+                        child: TextField(
+                            onChanged: (value) {
+                              widget.filterForm
+                                  .setHightArea(double.parse(value));
+                            },
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                fillColor: Color(0xfff3f3f4),
+                                filled: true,
+                                hintText: AppLocalizations.of(context)
+                                    .translate('hight_area'),
+                                contentPadding: EdgeInsets.all(10))),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
+          // SliderView(
+          //   distValue: widget.filterForm.area ?? 100,
+          //   onChangedistValue: (double value) {
+          //     widget.filterForm.setArea(value);
+          //   },
+          // ),
           const SizedBox(
             height: 8,
           ),

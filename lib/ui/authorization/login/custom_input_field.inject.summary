@@ -1,8 +1,0 @@
-{
-  "asset": "asset:boilerplate/lib/ui/authorization/login/custom_input_field.dart",
-  "summary": {
-    "injector": [],
-    "module": [],
-    "injectable": []
-  }
-}
