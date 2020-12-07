@@ -203,16 +203,16 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   _title(),
-                  SizedBox(height: height * .06),
+                  SizedBox(height: height * .01),
                   Container(
                     height: height / 1.5,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Observer(builder: (context) {
                           return Container(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Text(
                                   AppLocalizations.of(context)
@@ -293,9 +293,8 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                       ],
-                    ), )
-                  
-                  
+                    ),
+                  )
                 ],
               ),
             ),
@@ -348,8 +347,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ),
-      ), 
-      
+      ),
     );
   }
 

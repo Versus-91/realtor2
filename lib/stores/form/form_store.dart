@@ -52,7 +52,10 @@ abstract class _FormStore with Store {
   String password = '';
   @observable
   String number;
+  static ObservableFuture emptyResponse = ObservableFuture.value(null);
 
+  @observable
+  ObservableFuture fetchFuture = ObservableFuture(emptyResponse);
   @observable
   String confirmPassword = '';
 
@@ -224,6 +227,14 @@ abstract class _FormStore with Store {
   //     formErrorStore.confirmPassword = null;
   //   }
   // }
+
+  @action
+  Future changePhoneNumber(String phoneNumber) async {
+    final future = _repository.addPhoneNumber(phoneNumber);
+    fetchFuture = ObservableFuture(future);
+
+    return future;
+  }
 
   @action
   Future register() async {

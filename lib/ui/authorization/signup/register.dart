@@ -1,5 +1,6 @@
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/main.dart';
+import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/theme/theme_store.dart';
 import 'package:boilerplate/ui/authorization/login/blaziercontainer.dart';
@@ -13,8 +14,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../routes.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key key, this.title}) : super(key: key);
@@ -203,24 +202,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  _showSuccessMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
-          message: message,
-          title: AppLocalizations.of(context).translate('Register'),
-          duration: Duration(seconds: 3),
-        )..show(context).then((value) {
-            Future.delayed(Duration(milliseconds: 0), () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  Routes.home, (Route<dynamic> route) => false);
-            });
-          });
-      }
-    });
+  // _showSuccessMessage(String message) {
+  //   Future.delayed(Duration(milliseconds: 0), () {
+  //     if (message != null && message.isNotEmpty) {
+  //       FlushbarHelper.createSuccess(
+  //         message: message,
+  //         title: AppLocalizations.of(context).translate('Register'),
+  //         duration: Duration(seconds: 3),
+  //       )..show(context).then((value) {
+  //           Future.delayed(Duration(milliseconds: 0), () {
+  //             Navigator.of(context).pushNamedAndRemoveUntil(
+  //                 Routes.home, (Route<dynamic> route) => false);
+  //           });
+  //         });
+  //     }
+  //   });
 
-    return SizedBox.shrink();
-  }
+  //   return SizedBox.shrink();
+  // }
 
   Widget _submitButton() {
     return InkWell(
@@ -235,8 +234,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SharedPreferences.getInstance().then((prefs) {
                     prefs.setBool(Preferences.is_logged_in, true);
                   });
-                  _showSuccessMessage(
-                      AppLocalizations.of(context).translate('succes_signup'));
+
+                  _formStore
+                      .changePhoneNumber(_numberController.text)
+                      .then((value) async {
+                    var result = await Navigator.of(context).pushNamed(
+                        Routes.phoneNumberVerificationCode,
+                        arguments: {'phone': _numberController.text});
+                    if (result != null) {
+                      Future.delayed(Duration(seconds: 1), () {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            Routes.home, (Route<dynamic> route) => false);
+                      });
+                    }
+                  }).catchError((error) {
+                    print(error);
+                    _showErrorMessage(
+                      "خطا در تایید شماره همراه",
+                    );
+                  });
+                  // _showSuccessMessage(
+                  //     AppLocalizations.of(context).translate('succes_signup'));
                 } else {
                   _showErrorMessage(
                       AppLocalizations.of(context).translate('error_in_login'));

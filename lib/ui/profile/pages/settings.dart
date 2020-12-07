@@ -46,13 +46,13 @@ class _SettingsScreenState extends State<SettingsScreen>
     if (image == null) return;
 
     dynamic result = await Navigator.of(context)
-        .pushNamed(Routes.crop, arguments: {'image': image});
+        .pushNamed(Routes.crop, arguments: {'image': File(image.path)});
 
     var multiPartAvatarImage = await MultipartFile.fromFile(result.path);
 
     _userStore
         .uploadAvatarImage(multiPartAvatarImage)
-        .then((value) => _userStore.getUser())
+        .then((value) async => await _userStore.getUser())
         .catchError((error) => Flushbar(
               message:
                   AppLocalizations.of(context).translate('error_upload_avatar'),
@@ -108,7 +108,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                               child: _userStore?.user?.avatar == null
                                   ? CircleAvatar(
                                       radius: 50,
-                                      backgroundColor: Colors.indigo,
+                                      backgroundColor: Colors.purple,
                                       child: CircleAvatar(
                                         radius: 48,
                                         backgroundImage: AssetImage(
@@ -118,19 +118,19 @@ class _SettingsScreenState extends State<SettingsScreen>
                                     )
                                   : CircleAvatar(
                                       radius: 50,
-                                      backgroundColor: Colors.indigo,
+                                      backgroundColor: Colors.purple,
                                       child: CircleAvatar(
                                           radius: 48,
                                           backgroundImage: NetworkImage(
                                             Endpoints.baseUrl +
                                                 "/" +
-                                                _userStore.user.avatar,
+                                                _userStore.user.avatar.trim(),
                                           )),
                                     ),
                             )
                           : CircleAvatar(
                               radius: 50,
-                              backgroundColor: Colors.indigo,
+                              backgroundColor: Colors.purple,
                               child: CircleAvatar(
                                 radius: 48,
                                 backgroundImage: AssetImage(
