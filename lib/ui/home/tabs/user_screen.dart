@@ -115,10 +115,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
       future: appComponent.getRepository().getSearchesList(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
-              child: Text(
-            AppLocalizations.of(context).translate('my_posts'),
-          ));
+          return Center(child: Text(""));
         } else {
           return ListView.builder(
             itemCount: snapshot.data.length,
@@ -171,16 +168,28 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
   }
 
   Text createLabel(dynamic data) {
+    print(data.toJsonLocalStore());
     String text = "";
     if (data.categoryName != null) {
       text += data.categoryName;
-    }
+    } 
 
     if (data.districtName != null) {
       text += "- " + data.districtName;
-    } else if (data.cityName != null) {
-      text += "- " + data.cityName;
+    } else {
+      text += "/ " + "همه محله ها";
     }
+    if (data.cityName != null) {
+      text += "- " + data.cityName;
+    } else {
+      text += "/ " + "همه شهر ها";
+    }
+    if (data.minDepositPrice != null || data.maxDepositPrice != null) {
+      text += "/ " + data.minDepositPrice.toString() + "-" + data.maxDepositPrice.toString();
+    } else {
+      text += "/ " + "همه قیمتها";
+    }
+
     return Text(text);
   }
 }

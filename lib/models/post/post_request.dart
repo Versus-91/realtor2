@@ -61,8 +61,9 @@ class PostRequest {
     result.addAll({"category": category.toString()});
 
     result.addAll({"maxResultCount": pageSize.toString()});
-
-    result.addAll({"skipCount": ((page - 1) * pageSize).toString()});
+    if (pageSize != null) {
+      result.addAll({"skipCount": ((page - 1) * pageSize).toString()});
+    }
 
     if (district != null) {
       result.addAll({"district": district.toString()});
