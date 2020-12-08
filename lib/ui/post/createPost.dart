@@ -59,9 +59,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   //text controllers:-----------------------------------------------------------
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-  MoneyMaskedTextController _rahnPriceController = MoneyMaskedTextController();
-  MoneyMaskedTextController _rentPriceController = MoneyMaskedTextController();
-  MoneyMaskedTextController _buyPriceController = MoneyMaskedTextController();
+  MoneyMaskedTextController _rahnPriceController =
+      MoneyMaskedTextController(precision: 0);
+  MoneyMaskedTextController _rentPriceController =
+      MoneyMaskedTextController(precision: 0);
+  MoneyMaskedTextController _buyPriceController =
+      MoneyMaskedTextController(precision: 0);
   TextEditingController _areaController = TextEditingController();
   TextEditingController _bedroomCountController = TextEditingController();
   //focosnode-------------------------------------------------------------------
