@@ -5,6 +5,7 @@ import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:mobx/mobx.dart';
+
 part 'filter_form.g.dart';
 
 class FilterFormStore = _FilterFormStore with _$FilterFormStore;
@@ -29,20 +30,20 @@ abstract class _FilterFormStore with Store {
 
   // store variables:-----------------------------------------------------------
   @observable
-  double minPrice = 0;
+  double minPrice;
   @observable
-  double minRentPrice = 0;
+  double minRentPrice;
   @observable
-  double minDepositPrice = 0;
+  double minDepositPrice;
   @observable
   List<SelectedPropertyTypes> selectedPropertyTypes =
       new List<SelectedPropertyTypes>();
   @observable
-  double maxPrice = 0;
+  double maxPrice;
   @observable
-  double maxRentPrice = 0;
+  double maxRentPrice;
   @observable
-  double maxDepositPrice = 0;
+  double maxDepositPrice;
 
   @observable
   double minArea;

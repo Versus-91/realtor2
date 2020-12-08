@@ -9,7 +9,6 @@ import 'package:boilerplate/stores/district/district_store.dart';
 import 'package:boilerplate/stores/form/filter_form.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
-import 'package:boilerplate/ui/search/silder.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -96,12 +95,28 @@ class _SearchScreenState extends State<SearchScreen> {
     if (widget.filterForm.bedCount != null) {
       isSelected[widget.filterForm.bedCount - 1] = true;
     }
-    _minPriceController.text = widget.filterForm.minPrice.toString();
-    _maxPriceController.text = widget.filterForm.maxPrice.toString();
-    _minDepositController.text = widget.filterForm.minDepositPrice.toString();
-    _maxDepositController.text = widget.filterForm.maxDepositPrice.toString();
-    _minRentController.text = widget.filterForm.minRentPrice.toString();
-    _maxRentController.text = widget.filterForm.maxRentPrice.toString();
+    if (widget.filterForm.minPrice != null && widget.filterForm.minPrice != 0) {
+      _minPriceController.text = widget.filterForm.minPrice.toString();
+    }
+    if (widget.filterForm.maxPrice != null && widget.filterForm.maxPrice != 0) {
+      _maxPriceController.text = widget.filterForm.maxPrice.toString();
+    }
+    if (widget.filterForm.minDepositPrice != null &&
+        widget.filterForm.minDepositPrice != 0) {
+      _minDepositController.text = widget.filterForm.minDepositPrice.toString();
+    }
+    if (widget.filterForm.maxDepositPrice != null &&
+        widget.filterForm.maxDepositPrice != 0) {
+      _maxDepositController.text = widget.filterForm.maxDepositPrice.toString();
+    }
+    if (widget.filterForm.minRentPrice != null &&
+        widget.filterForm.minRentPrice != 0) {
+      _minRentController.text = widget.filterForm.minRentPrice.toString();
+    }
+    if (widget.filterForm.maxRentPrice != null &&
+        widget.filterForm.maxRentPrice != 0) {
+      _maxRentController.text = widget.filterForm.maxRentPrice.toString();
+    }
   }
 
   @override
