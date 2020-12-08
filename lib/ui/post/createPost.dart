@@ -15,6 +15,7 @@ import 'package:boilerplate/ui/post/user_map_screen.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -161,12 +162,23 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       appBar: _buildAppBar(),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(15),
         child: InkWell(
           onTap: () async {
-            _store.insertPost();
+            _store
+                .insertPost()
+                .then((value) => successPost(
+                      AppLocalizations.of(context).translate('succes_send'),
+                    ))
+                .catchError((error) {
+              _showErrorMessage(
+                "خطا در ایجاد پست",
+              );
+            });
           },
           child: Container(
             height: 45,
@@ -644,7 +656,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           children: <Widget>[
             Flexible(
               child: TextField(
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  inputFormatters: [CurrencyTextInputFormatter()],
                   controller: _rentPriceController,
                   focusNode: _rentPriceFocusNode,
                   onSubmitted: (value) {
