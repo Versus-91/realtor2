@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
+import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
@@ -555,10 +556,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               errorText: _store.formErrorStore.area,
-              hintText: AppLocalizations.of(context).translate('area'),
-              border: InputBorder.none,
+              // hintText: AppLocalizations.of(context).translate('area'),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent)),
               fillColor: Color(0xfff3f3f4),
               filled: true,
+              labelText: AppLocalizations.of(context).translate('area') +
+                  AppLocalizations.of(context).translate('area_range'),
               contentPadding: EdgeInsets.all(10),
             ),
           ),
@@ -573,8 +577,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(AppLocalizations.of(context).translate('rahne_kamel'),
-              style: TextStyle(color: Colors.red[300])),
+          Row(
+            children: [
+              Text(AppLocalizations.of(context).translate('rahne'),
+                  style: TextStyle(color: Colors.red[300])),
+              Text(
+                AppLocalizations.of(context).translate('currency_type'),
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
+                    fontWeight: FontWeight.normal),
+              ),
+            ],
+          ),
           Row(
             children: <Widget>[
               Flexible(
@@ -593,7 +608,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                         errorText: _store.formErrorStore.rahnPrice,
-                        border: InputBorder.none,
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
                         fillColor: Color(0xfff3f3f4),
                         filled: true,
                         hintText: AppLocalizations.of(context)
@@ -611,8 +627,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(AppLocalizations.of(context).translate('rente_kamel'),
-            style: TextStyle(color: Colors.red[300])),
+        Row(
+          children: [
+            Text(AppLocalizations.of(context).translate('rente'),
+                style: TextStyle(color: Colors.red[300])),
+            Text(
+              AppLocalizations.of(context).translate('currency_type'),
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
+                  fontWeight: FontWeight.normal),
+            ),
+          ],
+        ),
         Row(
           children: <Widget>[
             Flexible(
@@ -630,7 +657,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       errorText: _store.formErrorStore.rentPrice,
-                      border: InputBorder.none,
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent)),
                       fillColor: Color(0xfff3f3f4),
                       filled: true,
                       hintText:
@@ -647,9 +675,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          AppLocalizations.of(context).translate('price'),
-          style: TextStyle(color: Colors.red[300]),
+        Row(
+          children: [
+            Text(
+              AppLocalizations.of(context).translate('price'),
+              style: TextStyle(color: Colors.red[300]),
+            ),
+            Text(
+              AppLocalizations.of(context).translate('currency_type'),
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
+                  fontWeight: FontWeight.normal),
+            ),
+          ],
         ),
         Row(
           children: <Widget>[
@@ -668,7 +707,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       errorText: _store.formErrorStore.buyPrice,
-                      border: InputBorder.none,
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent)),
                       fillColor: Color(0xfff3f3f4),
                       filled: true,
                       hintText: AppLocalizations.of(context).translate('price'),
@@ -695,7 +735,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           FocusScope.of(context).requestFocus(_cityFocusNode);
                         },
                         decoration: InputDecoration(
-                          border: InputBorder.none,
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
                           hintText: AppLocalizations.of(context)
@@ -759,7 +801,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               .requestFocus(_districtFocusNode);
                         },
                         decoration: InputDecoration(
-                          border: InputBorder.none,
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
+                          labelText:
+                              AppLocalizations.of(context).translate('city'),
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
                           hintText:
@@ -830,10 +876,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             padding: const EdgeInsets.all(18.0),
                             child: GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  _categoryText = category.name;
-                                  _value = category.id;
-                                });
+                                if (_value != category.id) {
+                                  setState(() {
+                                    _categoryText = category.name;
+                                    _value = category.id;
+                                    resetPrice(category);
+                                  });
+                                }
                                 _categoryText = category.name;
                                 _store.setCategory(category.id);
                               },
@@ -913,6 +962,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
+  void resetPrice(Category category) {
+    if (category.name.contains("گروی")) {
+      _store.resetPrice();
+
+      _buyPriceController.clear();
+    } else {
+      _store.resetPrice();
+
+      _rahnPriceController.clear();
+      _rentPriceController.clear();
+    }
+  }
+
   Widget _buildHomeTypeField() {
     return Observer(
       builder: (context) {
@@ -920,7 +982,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             ? DropdownButtonFormField<int>(
                 focusNode: _hometypeFocusNode,
                 decoration: InputDecoration(
-                  border: InputBorder.none,
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent)),
                   fillColor: Color(0xfff3f3f4),
                   filled: true,
                   hintText: AppLocalizations.of(context).translate('type_home'),
@@ -975,7 +1038,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             scrollDirection: Axis.horizontal,
             child: ToggleButtons(
               children: List.generate(9, (index) {
-                return Text((index + 1).toString());
+                return Text(
+                  AppLocalizations.of(context)
+                      .transformNumbers((index + 1).toString()),
+                );
               }),
               onPressed: (int index) {
                 setState(() {

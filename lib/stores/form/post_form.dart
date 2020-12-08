@@ -159,7 +159,13 @@ abstract class _PostFormStore with Store {
     validateRentPrice(rentPrice);
     validateDescription(description);
   }
-
+ @action
+  void resetPrice() {
+    buyPrice = null;
+    rahnPrice = null;
+   rentPrice = null;
+  
+  }
   @action
   Future insertPost() async {
     validateCreatePost();

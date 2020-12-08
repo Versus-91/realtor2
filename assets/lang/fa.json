@@ -53,14 +53,17 @@
   "low_area": "کمترین مساحت",
 
   "area": "مساحت",
+  "area_range": "(مترمربع)",
+  "currency_type": "(دالر)",
+
 
   "save": "ذخیره",
   "call": "تماس",
   "for": "برای",
   "sell": "فروش",
   "buy": "خرید",
-  "rahne_kamel": "رهن کامل",
-  "rente_kamel": "کرایی کامل",
+  "rahne": "رهن",
+  "rente": "کرایی",
   "count_room": "تعداد اطاق",
   "location_submit": "تایید مکان",
   "map": "نقشه",
