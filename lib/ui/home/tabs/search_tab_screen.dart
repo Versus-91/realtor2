@@ -103,7 +103,6 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                           _postStore.postList.posts.length -
                                               1 &&
                                       (_loadingMore ?? false)) {
-                                    print('loading...');
                                     return Column(
                                       children: [
                                         PropertyCrad(
@@ -117,6 +116,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                       post: _postStore.postList.posts[index]);
                                 },
                               ),
+                            
                               onRefresh: () async {
                                 await _postStore.getPosts(
                                     request: _filterForm.applyFilters());

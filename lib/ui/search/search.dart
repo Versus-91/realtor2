@@ -137,11 +137,11 @@ class _SearchScreenState extends State<SearchScreen> {
                     icon: const Icon(
                       FontAwesomeIcons.search,
                       size: 18,
-                      color: Colors.blueGrey,
+                      color: Colors.white,
                     ),
                     label: Text(
                         AppLocalizations.of(context).translate('search'),
-                        style: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
                     onPressed: () {
                       widget.filterForm
                           .setPropertyTypeList(accomodationListData);
@@ -167,7 +167,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: <Widget>[
                     searchField(),
                     _buildCategoryField(),
-                    popularFilter(),
+                    Visibility(
+                      visible: _amenityStore.amenityList != null &&
+                          _amenityStore.amenityList.amenities.length > 0,
+                      child: popularFilter(),
+                    ),
                     _buildBedroomCountField(),
                     areaViewUI(AppLocalizations.of(context).translate('area')),
                     allAccommodationUI()
@@ -555,13 +559,25 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  label,
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize:
-                          MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                      fontWeight: FontWeight.normal),
+                Row(
+                  children: [
+                    Text(
+                      label,
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontSize:
+                              MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                          fontWeight: FontWeight.normal),
+                    ),
+                    Text(
+                      AppLocalizations.of(context).translate('area_range'),
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontSize:
+                              MediaQuery.of(context).size.width > 360 ? 13 : 13,
+                          fontWeight: FontWeight.normal),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16),
@@ -748,7 +764,7 @@ class _SearchScreenState extends State<SearchScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            AppLocalizations.of(context).translate('count'),
+            AppLocalizations.of(context).translate('count_room'),
             style: TextStyle(
                 color: Colors.red,
                 fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
@@ -759,11 +775,31 @@ class _SearchScreenState extends State<SearchScreen> {
               padding: const EdgeInsets.only(top: 16),
               child: ToggleButtons(
                 children: <Widget>[
-                  Text("+1"),
-                  Text("+2"),
-                  Text("+3"),
-                  Text("+4"),
-                  Text("+5"),
+                  Text(
+                    "+" +
+                        AppLocalizations.of(context)
+                            .transformNumbers(1.toString()),
+                  ),
+                  Text(
+                    "+" +
+                        AppLocalizations.of(context)
+                            .transformNumbers(2.toString()),
+                  ),
+                  Text(
+                    "+" +
+                        AppLocalizations.of(context)
+                            .transformNumbers(3.toString()),
+                  ),
+                  Text(
+                    "+" +
+                        AppLocalizations.of(context)
+                            .transformNumbers(4.toString()),
+                  ),
+                  Text(
+                    "+" +
+                        AppLocalizations.of(context)
+                            .transformNumbers(5.toString()),
+                  ),
                 ],
                 onPressed: (int index) {
                   setState(() {
@@ -799,12 +835,23 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            label,
-            style: TextStyle(
-                color: Colors.red,
-                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                fontWeight: FontWeight.normal),
+          Row(
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                    fontWeight: FontWeight.normal),
+              ),
+              Text(
+                AppLocalizations.of(context).translate('currency_type'),
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
+                    fontWeight: FontWeight.normal),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(top: 16),
@@ -823,6 +870,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   BorderSide(color: Colors.transparent)),
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
+                          labelText: AppLocalizations.of(context)
+                              .translate('lowest_price'),
                           hintText: AppLocalizations.of(context)
                               .translate('lowest_price'),
                           contentPadding: EdgeInsets.all(10))),
@@ -841,6 +890,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   BorderSide(color: Colors.transparent)),
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
+                          labelText: AppLocalizations.of(context)
+                              .translate('highest_price'),
                           hintText: AppLocalizations.of(context)
                               .translate('highest_price'),
                           contentPadding: EdgeInsets.all(10))),
@@ -859,12 +910,23 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            label,
-            style: TextStyle(
-                color: Colors.red,
-                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                fontWeight: FontWeight.normal),
+          Row(
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                    fontWeight: FontWeight.normal),
+              ),
+              Text(
+                AppLocalizations.of(context).translate('currency_type'),
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
+                    fontWeight: FontWeight.normal),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(top: 16),
@@ -881,8 +943,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.transparent)),
-                          fillColor: Color(0xfff3f3f4),labelText: AppLocalizations.of(context)
-                                    .translate('lowest_price'),
+                          fillColor: Color(0xfff3f3f4),
+                          labelText: AppLocalizations.of(context)
+                              .translate('lowest_price'),
                           filled: true,
                           hintText: AppLocalizations.of(context)
                               .translate('lowest_price'),
@@ -902,6 +965,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   BorderSide(color: Colors.transparent)),
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
+                          labelText: AppLocalizations.of(context)
+                              .translate('highest_price'),
                           hintText: AppLocalizations.of(context)
                               .translate('highest_price'),
                           contentPadding: EdgeInsets.all(10))),
@@ -920,12 +985,23 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            label,
-            style: TextStyle(
-                color: Colors.red,
-                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                fontWeight: FontWeight.normal),
+          Row(
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                    fontWeight: FontWeight.normal),
+              ),
+              Text(
+                AppLocalizations.of(context).translate('currency_type'),
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
+                    fontWeight: FontWeight.normal),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(top: 16),
@@ -964,8 +1040,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.transparent)),
-                          fillColor: Color(0xfff3f3f4), labelText: AppLocalizations.of(context)
-                                    .translate('highest_price'),
+                          fillColor: Color(0xfff3f3f4),
+                          labelText: AppLocalizations.of(context)
+                              .translate('highest_price'),
                           filled: true,
                           hintText: AppLocalizations.of(context)
                               .translate('highest_price'),
