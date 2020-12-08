@@ -15,12 +15,12 @@ import 'package:boilerplate/ui/post/user_map_screen.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -59,23 +59,16 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   //text controllers:-----------------------------------------------------------
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _rahnPriceController = TextEditingController();
-  TextEditingController _rentPriceController = TextEditingController();
-  TextEditingController _buyPriceController = TextEditingController();
+  MoneyMaskedTextController _rahnPriceController = MoneyMaskedTextController();
+  MoneyMaskedTextController _rentPriceController = MoneyMaskedTextController();
+  MoneyMaskedTextController _buyPriceController = MoneyMaskedTextController();
   TextEditingController _areaController = TextEditingController();
   TextEditingController _bedroomCountController = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
-  TextEditingController _districtController = TextEditingController();
-  TextEditingController _hometypeController = TextEditingController();
   //focosnode-------------------------------------------------------------------
-  FocusNode _titleFocusNode;
   FocusNode _hometypeFocusNode;
-  FocusNode _descriptionFocusNode;
   FocusNode _rahnPriceFocusNode;
   FocusNode _rentPriceFocusNode;
   FocusNode _buyPriceFocusNode;
-  FocusNode _areaFocusNode;
-  FocusNode _bedroomCountFocusNode;
   FocusNode _cityFocusNode;
   FocusNode _districtFocusNode;
   //stores:---------------------------------------------------------------------
@@ -93,16 +86,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   void initState() {
     super.initState();
     _controller.addListener(() => _extension = _controller.text);
-    _titleFocusNode = FocusNode();
-    _descriptionFocusNode = FocusNode();
+
     _hometypeFocusNode = FocusNode();
     _rahnPriceFocusNode = FocusNode();
     _rentPriceFocusNode = FocusNode();
     _buyPriceFocusNode = FocusNode();
-    _areaFocusNode = FocusNode();
     _cityFocusNode = FocusNode();
     _districtFocusNode = FocusNode();
-    _bedroomCountFocusNode = FocusNode();
   }
 
   void _openFileExplorer() async {
@@ -613,9 +603,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       FocusScope.of(context).requestFocus(_buyPriceFocusNode);
                     },
                     onChanged: (value) {
-                      var price =
-                          double.tryParse(_rahnPriceController.text) ?? 0;
-                      _store.setRahnPrice(price);
+                      _store.setRahnPrice(_rahnPriceController.numberValue);
                     },
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -656,15 +644,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           children: <Widget>[
             Flexible(
               child: TextField(
-                  inputFormatters: [CurrencyTextInputFormatter()],
                   controller: _rentPriceController,
                   focusNode: _rentPriceFocusNode,
                   onSubmitted: (value) {
                     FocusScope.of(context).requestFocus(_cityFocusNode);
                   },
                   onChanged: (value) {
-                    var price = double.tryParse(_rentPriceController.text) ?? 0;
-                    _store.setRentPrice(price);
+                    _store.setRentPrice(_rentPriceController.numberValue);
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -713,8 +699,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     FocusScope.of(context).requestFocus(_districtFocusNode);
                   },
                   onChanged: (valu) {
-                    var price = double.tryParse(_buyPriceController.text) ?? 0;
-                    _store.setBuyPrice(price);
+                    _store.setBuyPrice(_buyPriceController.numberValue);
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -1133,7 +1118,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           duration: Duration(seconds: 3),
         )..show(context);
       }
-    }).then((value) => {navigate(context)});
+    });
   }
 
   // dispose:-------------------------------------------------------------------

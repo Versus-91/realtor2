@@ -132,6 +132,7 @@ abstract class _PostFormStore with Store {
   @action
   void setRentPrice(double value) {
     rentPrice = value;
+    print(rentPrice);
   }
 
   @action
@@ -159,13 +160,14 @@ abstract class _PostFormStore with Store {
     validateRentPrice(rentPrice);
     validateDescription(description);
   }
- @action
+
+  @action
   void resetPrice() {
     buyPrice = null;
     rahnPrice = null;
-   rentPrice = null;
-  
+    rentPrice = null;
   }
+
   @action
   Future insertPost() async {
     validateCreatePost();
@@ -184,13 +186,17 @@ abstract class _PostFormStore with Store {
       districtId: this.selectedDistrict,
     );
     loading = true;
-    _repository.insert(post).then((result) {
-      loading = false;
-      postId = result["id"];
-    }).catchError((error) {
-      print(error);
+    return Future.delayed(Duration(seconds: 1), () {
+      print(post.toMap());
       loading = false;
     });
+    // _repository.insert(post).then((result) {
+    //   loading = false;
+    //   postId = result["id"];
+    // }).catchError((error) {
+    //   print(error);
+    //   loading = false;
+    // });
   }
 
   @action
