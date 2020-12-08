@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/models/location/locations.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
@@ -95,26 +96,23 @@ class _SearchScreenState extends State<SearchScreen> {
     if (widget.filterForm.bedCount != null) {
       isSelected[widget.filterForm.bedCount - 1] = true;
     }
-    if (widget.filterForm.minPrice != null && widget.filterForm.minPrice != 0) {
+    if (widget.filterForm.minPrice != null) {
       _minPriceController.text = widget.filterForm.minPrice.toString();
     }
-    if (widget.filterForm.maxPrice != null && widget.filterForm.maxPrice != 0) {
+    if (widget.filterForm.maxPrice != null) {
       _maxPriceController.text = widget.filterForm.maxPrice.toString();
     }
-    if (widget.filterForm.minDepositPrice != null &&
-        widget.filterForm.minDepositPrice != 0) {
+    if (widget.filterForm.minDepositPrice != null) {
       _minDepositController.text = widget.filterForm.minDepositPrice.toString();
     }
-    if (widget.filterForm.maxDepositPrice != null &&
-        widget.filterForm.maxDepositPrice != 0) {
+    if (widget.filterForm.maxDepositPrice != null) {
+      print("object");
       _maxDepositController.text = widget.filterForm.maxDepositPrice.toString();
     }
-    if (widget.filterForm.minRentPrice != null &&
-        widget.filterForm.minRentPrice != 0) {
+    if (widget.filterForm.minRentPrice != null) {
       _minRentController.text = widget.filterForm.minRentPrice.toString();
     }
-    if (widget.filterForm.maxRentPrice != null &&
-        widget.filterForm.maxRentPrice != 0) {
+    if (widget.filterForm.maxRentPrice != null) {
       _maxRentController.text = widget.filterForm.maxRentPrice.toString();
     }
   }
@@ -171,8 +169,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     _buildCategoryField(),
                     popularFilter(),
                     _buildBedroomCountField(),
-                    distanceViewUI(
-                        AppLocalizations.of(context).translate('area')),
+                    areaViewUI(AppLocalizations.of(context).translate('area')),
                     allAccommodationUI()
                   ],
                 ),
@@ -201,6 +198,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List<Widget>.generate(
                         _categoryStore.categoryList.categories.length,
+                        // برای اینکه یکی از کتگوری ها انتخاب بشه
+
                         (index) {
                           var category =
                               _categoryStore.categoryList.categories[index];
@@ -215,9 +214,12 @@ class _SearchScreenState extends State<SearchScreen> {
                             padding: const EdgeInsets.all(18.0),
                             child: GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  _value = category.id;
-                                });
+                                if (_value != category.id) {
+                                  setState(() {
+                                    _value = category.id;
+                                    resetPrice(category);
+                                  });
+                                }
                                 widget.filterForm
                                     .setCategory(category.id, category.name);
                               },
@@ -249,22 +251,24 @@ class _SearchScreenState extends State<SearchScreen> {
                         },
                       ).toList(),
                     ),
-                    if (widget.filterForm.category.name != null &&
-                        widget.filterForm.category.name.contains(
-                          AppLocalizations.of(context).translate('rent'),
-                        )) ...{
-                      Column(
-                        children: [
-                          depositPriceBarFilter(AppLocalizations.of(context)
-                              .translate('rahn_scope')),
-                          rentPriceBarFilter(AppLocalizations.of(context)
-                              .translate('rent_scope'))
-                        ],
-                      )
-                    } else ...{
-                      priceBarFilter(
-                          AppLocalizations.of(context).translate('price_scope'))
-                    }
+                    Visibility(
+                        visible: widget.filterForm.category.name != null &&
+                            widget.filterForm.category.name.contains(
+                                AppLocalizations.of(context).translate('rent')),
+                        child: Column(
+                          children: [
+                            depositPriceBarFilter(AppLocalizations.of(context)
+                                .translate('rahn_scope')),
+                            rentPriceBarFilter(AppLocalizations.of(context)
+                                .translate('rent_scope'))
+                          ],
+                        )),
+                    Visibility(
+                        visible: widget.filterForm.category.name != null &&
+                            widget.filterForm.category.name.contains(
+                                AppLocalizations.of(context).translate('sell')),
+                        child: priceBarFilter(AppLocalizations.of(context)
+                            .translate('price_scope'))),
                   ],
                 )
               : Opacity(
@@ -298,6 +302,22 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
+  void resetPrice(Category category) {
+    if (category.name.contains("گروی")) {
+      widget.filterForm.resetPrice();
+
+      _minPriceController.clear();
+      _maxPriceController.clear();
+    } else {
+      widget.filterForm.resetPrice();
+
+      _minDepositController.clear();
+      _maxDepositController.clear();
+      _minRentController.clear();
+      _maxRentController.clear();
+    }
+  }
+
   Widget searchField() {
     return Padding(
       padding: const EdgeInsets.only(top: 20, left: 14, right: 14),
@@ -311,7 +331,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     _typeAheadController.clear();
                   },
                   icon: Icon(Icons.clear)),
-              border: InputBorder.none,
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.transparent)),
+              labelText:
+                  AppLocalizations.of(context).translate('search_in_district'),
               fillColor: Color(0xfff3f3f4),
               filled: true,
               hintText:
@@ -521,24 +544,12 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  Widget distanceViewUI(String label) {
+  Widget areaViewUI(String label) {
     return Observer(builder: (context) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-            child: Text(
-              AppLocalizations.of(context).translate('area'),
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                  color: Colors.red,
-                  fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                  fontWeight: FontWeight.normal),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
             child: Column(
@@ -563,7 +574,11 @@ class _SearchScreenState extends State<SearchScreen> {
                             },
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                                border: InputBorder.none,
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent)),
+                                labelText: AppLocalizations.of(context)
+                                    .translate('low_area'),
                                 fillColor: Color(0xfff3f3f4),
                                 filled: true,
                                 hintText: AppLocalizations.of(context)
@@ -579,9 +594,13 @@ class _SearchScreenState extends State<SearchScreen> {
                             },
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                                border: InputBorder.none,
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent)),
                                 fillColor: Color(0xfff3f3f4),
                                 filled: true,
+                                labelText: AppLocalizations.of(context)
+                                    .translate('hight_area'),
                                 hintText: AppLocalizations.of(context)
                                     .translate('hight_area'),
                                 contentPadding: EdgeInsets.all(10))),
@@ -799,7 +818,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          border: InputBorder.none,
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
                           hintText: AppLocalizations.of(context)
@@ -815,7 +836,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          border: InputBorder.none,
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
                           hintText: AppLocalizations.of(context)
@@ -855,8 +878,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          border: InputBorder.none,
-                          fillColor: Color(0xfff3f3f4),
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
+                          fillColor: Color(0xfff3f3f4),labelText: AppLocalizations.of(context)
+                                    .translate('lowest_price'),
                           filled: true,
                           hintText: AppLocalizations.of(context)
                               .translate('lowest_price'),
@@ -871,7 +897,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          border: InputBorder.none,
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
                           hintText: AppLocalizations.of(context)
@@ -912,9 +940,13 @@ class _SearchScreenState extends State<SearchScreen> {
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          border: InputBorder.none,
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
                           fillColor: Color(0xfff3f3f4),
                           filled: true,
+                          labelText: AppLocalizations.of(context)
+                              .translate('lowest_price'),
                           hintText: AppLocalizations.of(context)
                               .translate('lowest_price'),
                           contentPadding: EdgeInsets.all(10))),
@@ -929,8 +961,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          border: InputBorder.none,
-                          fillColor: Color(0xfff3f3f4),
+                          border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
+                          fillColor: Color(0xfff3f3f4), labelText: AppLocalizations.of(context)
+                                    .translate('highest_price'),
                           filled: true,
                           hintText: AppLocalizations.of(context)
                               .translate('highest_price'),

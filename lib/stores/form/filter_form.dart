@@ -193,6 +193,16 @@ abstract class _FilterFormStore with Store {
     maxArea = null;
   }
 
+  @action
+  void resetPrice() {
+    maxPrice = null;
+    minPrice = null;
+    maxRentPrice = null;
+    minRentPrice = null;
+    maxDepositPrice = null;
+    minDepositPrice = null;
+  }
+
   // general methods:-----------------------------------------------------------
   void dispose() {
     for (final d in _disposers) {
