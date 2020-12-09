@@ -775,9 +775,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               .translate('district'),
                           contentPadding: EdgeInsets.all(10),
                         ),
-                        onChanged: (int val) => setState(() => {
-                              _store.setDistrict(val),
-                            }),
+                        onChanged: (int val) {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          _store.setDistrict(val);
+                        },
                         items:
                             _districtStore.districtList.districts.map((item) {
                           return DropdownMenuItem<int>(
@@ -837,9 +838,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                 .translate('age_home'),
                             contentPadding: EdgeInsets.all(10),
                           ),
-                          onChanged: (int val) => setState(() => {
-                                _store.setAge(val),
-                              }),
+                          onChanged: (int val) {
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
+                            _store.setAge(val);
+                          },
                           items: List.generate(5, (index) {
                             if (index != 4) {
                               return DropdownMenuItem<int>(
@@ -907,6 +910,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           contentPadding: EdgeInsets.all(10),
                         ),
                         onChanged: (int val) {
+                          FocusScope.of(context).requestFocus(new FocusNode());
                           _districtStore.getDistrictsByCityid(val);
                         },
                         items: _cityStore.cityList.cities.map((item) {
@@ -1082,9 +1086,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   hintText: AppLocalizations.of(context).translate('type_home'),
                   contentPadding: EdgeInsets.all(10),
                 ),
-                onChanged: (int val) => setState(() => {
-                      _store.setPropertyHomeType(val),
-                    }),
+                onChanged: (int val) {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                  _store.setPropertyHomeType(val);
+                },
                 items: _typeStore.typeList.types.map((item) {
                   return DropdownMenuItem<int>(
                     child: Text(item.name),
