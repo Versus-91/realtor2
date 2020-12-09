@@ -2,6 +2,7 @@ import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 
@@ -17,16 +18,12 @@ class UserMapScreen extends StatefulWidget {
 class _UserMapScreenState extends State<UserMapScreen> {
   //text controllers:-----------------------------------------------------------
   MapController _mapController = MapController();
-  double longitude;
-  double latitude;
+  Marker point = Marker();
   Position position;
 
   @override
   void initState() {
     super.initState();
-    _getPosition().then((value) {
-      position = value;
-    });
   }
 
   @override
@@ -69,9 +66,9 @@ class _UserMapScreenState extends State<UserMapScreen> {
     );
   }
 
-  Future<Position> _getPosition() async {
+  void _getPosition() async {
     final Position position = await Geolocator.getCurrentPosition();
-    return position;
+    _mapController.move(LatLng(position.latitude, position.longitude), 14);
   }
 
   Widget _buildAppBar() {
@@ -86,87 +83,73 @@ class _UserMapScreenState extends State<UserMapScreen> {
 
   Widget _mapSection() {
     return Stack(children: <Widget>[
-      FlutterMap(
-        mapController: _mapController,
-        options: new MapOptions(
-          // center: new LatLng(widget.formState.latitude ?? 0,
-          //     widget.formState.longitude ?? 0),
-          onTap: (point) {
-            setState(() {
-              latitude = point.latitude;
-              longitude = point.longitude;
-              widget.formState.setLongitude(position.longitude);
-              widget.formState.setLatitude(position.latitude);
-            });
-          },
-          zoom: 14,
-          // bounds: LatLngBounds(LatLng(58.8, 6.1), LatLng(59, 6.2)),
-          boundsOptions: FitBoundsOptions(padding: EdgeInsets.all(8.0)),
-        ),
-        layers: [
-          new TileLayerOptions(
-              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-              subdomains: ['a', 'b', 'c']),
-          new MarkerLayerOptions(
-            markers: [
-              widget.formState.latitude != null &&
-                      widget.formState.longitude != null
-                  ? Marker(
-                      width: 80.0,
-                      height: 80.0,
-                      point: LatLng(
-                        widget.formState.latitude,
-                        widget.formState.longitude,
-                      ),
-                      builder: (ctx) => Container(
-                        child: Icon(
-                          Icons.location_on,
-                          color: Colors.green[400],
-                          size: 40,
-                        ),
-                      ),
-                    )
-                  :
-              _generateMarker(),
-            ],
+      Observer(builder: (context) {
+        var center = LatLng(34.52, 69.100);
+        if (widget.formState.latitude != null) {
+          point = Marker(
+              builder: (ctx) => new Container(
+                    child: Icon(
+                      Icons.location_on,
+                      color: Colors.red,
+                      size: 40,
+                    ),
+                  ),
+              width: 80,
+              height: 80,
+              point: LatLng(
+                  widget.formState.latitude, widget.formState.longitude));
+          center =
+              LatLng(widget.formState.latitude, widget.formState.longitude);
+        }
+        return FlutterMap(
+          mapController: _mapController,
+          options: new MapOptions(
+            center: center,
+            onTap: (point) {
+              _generateMarker(point);
+            },
+            zoom: 15,
+            boundsOptions: FitBoundsOptions(padding: EdgeInsets.all(8.0)),
           ),
-        ],
-      ),
+          layers: [
+            new TileLayerOptions(
+                urlTemplate:
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                subdomains: ['a', 'b', 'c']),
+            MarkerLayerOptions(markers: [point])
+          ],
+        );
+      }),
       Align(
           alignment: Alignment.bottomRight,
           child: Padding(
             padding: EdgeInsets.all(20.0),
             child: new FloatingActionButton(
               onPressed: () {
-                setState(() {
-                  latitude = position.latitude;
-                  longitude = position.longitude;
-                });
-                widget.formState.setLatitude(position.latitude);
-                widget.formState.setLongitude(position.longitude);
-                _mapController.move(LatLng(latitude, longitude), 14);
+                _getPosition();
               },
-              child: Icon(Icons.gps_fixed),
+              child: Icon(Icons.gps_fixed,color: Colors.white,),
             ),
           )),
     ]);
   }
 
-  Marker _generateMarker() {
-    return Marker(
-      width: 80.0,
-      height: 80.0,
-      point: LatLng(
-        latitude ?? 0,
-        longitude ?? 0,
-      ),
-      builder: (ctx) => new Container(
-        child: Icon(
-          Icons.location_on,
-          color: Colors.red,
-          size: 40,
+  void _generateMarker(LatLng coordinations) {
+    setState(() {
+      point = Marker(
+        width: 80.0,
+        height: 80.0,
+        point: LatLng(coordinations.latitude, coordinations.longitude),
+        builder: (ctx) => new Container(
+          child: Icon(
+            Icons.location_on,
+            color: Colors.red,
+            size: 40,
+          ),
         ),
-      ),
-    );
+      );
+    });
+    widget.formState.setLatitude(coordinations.latitude);
+    widget.formState.setLongitude(coordinations.longitude);
   }
 }
