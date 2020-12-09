@@ -68,12 +68,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   TextEditingController _areaController = TextEditingController();
   TextEditingController _bedroomCountController = TextEditingController();
   //focosnode-------------------------------------------------------------------
-  FocusNode _hometypeFocusNode;
-  FocusNode _rahnPriceFocusNode;
-  FocusNode _rentPriceFocusNode;
-  FocusNode _buyPriceFocusNode;
-  FocusNode _cityFocusNode;
-  FocusNode _districtFocusNode;
+  // FocusNode _hometypeFocusNode;
+  // FocusNode _rahnPriceFocusNode;
+  // FocusNode _rentPriceFocusNode;
+  // FocusNode _buyPriceFocusNode;
+  // FocusNode _cityFocusNode;
+  // FocusNode _districtFocusNode;
   //stores:---------------------------------------------------------------------
   CityStore _cityStore;
   DistrictStore _districtStore;
@@ -90,12 +90,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     super.initState();
     _controller.addListener(() => _extension = _controller.text);
 
-    _hometypeFocusNode = FocusNode();
-    _rahnPriceFocusNode = FocusNode();
-    _rentPriceFocusNode = FocusNode();
-    _buyPriceFocusNode = FocusNode();
-    _cityFocusNode = FocusNode();
-    _districtFocusNode = FocusNode();
+    // _hometypeFocusNode = FocusNode();
+    // _rahnPriceFocusNode = FocusNode();
+    // _rentPriceFocusNode = FocusNode();
+    // _buyPriceFocusNode = FocusNode();
+    // _cityFocusNode = FocusNode();
+    // _districtFocusNode = FocusNode();
   }
 
   void _openFileExplorer() async {
@@ -225,7 +225,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               },
             )
           : SingleChildScrollView(
-              reverse: true,
+              reverse: false,
               child: Padding(
                 padding: EdgeInsets.only(bottom: bottom),
                 child: Material(
@@ -627,11 +627,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               Flexible(
                 child: TextField(
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    focusNode: _rahnPriceFocusNode,
+                    // focusNode: _rahnPriceFocusNode,
                     controller: _rahnPriceController,
-                    onSubmitted: (value) {
-                      FocusScope.of(context).requestFocus(_buyPriceFocusNode);
-                    },
+                    // onSubmitted: (value) {
+                    //   FocusScope.of(context).requestFocus(_buyPriceFocusNode);
+                    // },
                     onChanged: (value) {
                       _store.setRahnPrice(_rahnPriceController.numberValue);
                     },
@@ -675,10 +675,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             Flexible(
               child: TextField(
                   controller: _rentPriceController,
-                  focusNode: _rentPriceFocusNode,
-                  onSubmitted: (value) {
-                    FocusScope.of(context).requestFocus(_cityFocusNode);
-                  },
+                  // focusNode: _rentPriceFocusNode,
+                  // onSubmitted: (value) {
+                  //   FocusScope.of(context).requestFocus(_cityFocusNode);
+                  // },
                   onChanged: (value) {
                     _store.setRentPrice(_rentPriceController.numberValue);
                   },
@@ -724,10 +724,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               child: TextField(
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   controller: _buyPriceController,
-                  focusNode: _buyPriceFocusNode,
-                  onSubmitted: (value) {
-                    FocusScope.of(context).requestFocus(_districtFocusNode);
-                  },
+                  // focusNode: _buyPriceFocusNode,
+                  // onSubmitted: (value) {
+                  //   FocusScope.of(context).requestFocus(_districtFocusNode);
+                  // },
                   onChanged: (valu) {
                     _store.setBuyPrice(_buyPriceController.numberValue);
                   },
@@ -757,10 +757,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   children: <Widget>[
                     Flexible(
                       child: DropdownButtonFormField<int>(
-                        focusNode: _districtFocusNode,
-                        onSaved: (value) {
-                          FocusScope.of(context).requestFocus(_cityFocusNode);
-                        },
+                        // focusNode: _districtFocusNode,
+                        // onSaved: (value) {
+                        //   FocusScope.of(context).requestFocus(_cityFocusNode);
+                        // },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide:
@@ -772,7 +772,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           contentPadding: EdgeInsets.all(10),
                         ),
                         onChanged: (int val) => setState(() => {
-                              selectedItem = val,
                               _store.setDistrict(val),
                             }),
                         items:
@@ -835,7 +834,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             contentPadding: EdgeInsets.all(10),
                           ),
                           onChanged: (int val) => setState(() => {
-                                selectedItem = val,
                                 _store.setAge(val),
                               }),
                           items: List.generate(5, (index) {
@@ -887,11 +885,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   children: <Widget>[
                     Flexible(
                       child: DropdownButtonFormField<int>(
-                        focusNode: _cityFocusNode,
-                        onSaved: (value) {
-                          FocusScope.of(context)
-                              .requestFocus(_districtFocusNode);
-                        },
+                        // focusNode: _cityFocusNode,
+                        // onSaved: (value) {
+                        //   FocusScope.of(context)
+                        //       .requestFocus(_districtFocusNode);
+                        // },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide:
@@ -905,9 +903,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           contentPadding: EdgeInsets.all(10),
                         ),
                         onChanged: (int val) {
-                          setState(() => {
-                                selectedItem = val,
-                              });
                           _districtStore.getDistrictsByCityid(val);
                         },
                         items: _cityStore.cityList.cities.map((item) {
@@ -1074,7 +1069,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       builder: (context) {
         return _typeStore.typeList != null
             ? DropdownButtonFormField<int>(
-                focusNode: _hometypeFocusNode,
+                // focusNode: _hometypeFocusNode,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.transparent)),
@@ -1084,7 +1079,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   contentPadding: EdgeInsets.all(10),
                 ),
                 onChanged: (int val) => setState(() => {
-                      selectedItem = val,
                       _store.setPropertyHomeType(val),
                     }),
                 items: _typeStore.typeList.types.map((item) {

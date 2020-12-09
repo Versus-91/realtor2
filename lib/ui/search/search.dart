@@ -162,7 +162,7 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          reverse: true,
+          reverse: false,
           child: Padding(
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
