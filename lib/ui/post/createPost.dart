@@ -122,18 +122,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     });
   }
 
-  void _clearCachedFiles() {
-    FilePicker.platform.clearTemporaryFiles().then((result) {
-      _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          backgroundColor: result ? Colors.green : Colors.red,
-          content: Text((result
-              ? 'Temporary files removed with success.'
-              : 'Failed to clean temporary files')),
-        ),
-      );
-    });
-  }
+  // void _clearCachedFiles() {
+  //   FilePicker.platform.clearTemporaryFiles().then((result) {
+  //     _scaffoldKey.currentState.showSnackBar(
+  //       SnackBar(
+  //         backgroundColor: result ? Colors.green : Colors.red,
+  //         content: Text((result
+  //             ? 'Temporary files removed with success.'
+  //             : 'Failed to clean temporary files')),
+  //       ),
+  //     );
+  //   });
+  // }
 
   @override
   void didChangeDependencies() {
@@ -308,6 +308,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 15),
+              child: _buildAgeField(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildBedroomCountField(),
             ),
             Padding(
@@ -340,12 +344,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               return GridTile(
                                 child: Card(
                                     color: Colors.white,
-                                    child: Center(
-                                      child: Image.file(
-                                        File(_paths[index].path),
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                      ),
+                                    child: Stack(
+                                      children: [
+                                        Image.file(
+                                          File(_paths[index].path),
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                        ),
+                                        Positioned(
+                                          left: 0,
+                                          top: 0,
+                                          child: IconButton(
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color: Colors.redAccent,
+                                              ),
+                                              onPressed: null),
+                                        ),
+                                      ],
                                     )),
                               );
                             })
@@ -783,6 +799,71 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
 
     //
+  }
+
+  Widget _buildAgeField() {
+    return Observer(
+      builder: (context) {
+        return _cityStore.cityList != null
+            ? Container(
+                padding: EdgeInsets.only(top: 5, bottom: 15),
+                child: Row(
+                  children: <Widget>[
+                    Flexible(
+                      child: DropdownButtonFormField<int>(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent)),
+                            labelText: AppLocalizations.of(context)
+                                .translate('age_home'),
+                            fillColor: Color(0xfff3f3f4),
+                            filled: true,
+                            hintText: AppLocalizations.of(context)
+                                .translate('age_home'),
+                            contentPadding: EdgeInsets.all(10),
+                          ),
+                          onChanged: (int val) => setState(() => {
+                                selectedItem = val,
+                                _store.setAge(val),
+                              }),
+                          items: List.generate(5, (index) {
+                            if (index != 4) {
+                              return DropdownMenuItem<int>(
+                                child: Text((index + 1).toString() + " سال"),
+                                value: index,
+                              );
+                            }
+                            return DropdownMenuItem<int>(
+                              child: Text("بیش از 5 سال"),
+                              value: index,
+                            );
+                          })),
+                    ),
+                  ],
+                ))
+            : Opacity(
+                opacity: 0.8,
+                child: Shimmer.fromColors(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 15),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            AppLocalizations.of(context).translate('city'),
+                            style: TextStyle(
+                              fontSize: 20.0,
+                            ),
+                          )
+                        ],
+                      )),
+                  baseColor: Colors.black12,
+                  highlightColor: Colors.white,
+                  loop: 10,
+                ),
+              );
+      },
+    );
   }
 
   Widget _buildCitylistField() {

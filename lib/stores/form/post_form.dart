@@ -41,6 +41,8 @@ abstract class _PostFormStore with Store {
   String title = '';
   @observable
   bool success = false;
+  @observable
+  int ageHome = 0;
 
   @observable
   bool loading = false;
@@ -133,6 +135,11 @@ abstract class _PostFormStore with Store {
   void setRentPrice(double value) {
     rentPrice = value;
     print(rentPrice);
+  }
+
+  @action
+  void setAge(int value) {
+    ageHome = value;
   }
 
   @action
