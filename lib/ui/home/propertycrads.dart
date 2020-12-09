@@ -11,8 +11,9 @@ import 'package:progressive_image/progressive_image.dart';
 import 'package:share/share.dart';
 
 class PropertyCrad extends StatefulWidget {
-  PropertyCrad({this.post});
+  PropertyCrad({this.post, this.isEdditing = false});
   final Post post;
+  final bool isEdditing;
   @override
   _PropertyCradState createState() => _PropertyCradState();
 }
@@ -244,6 +245,20 @@ class _PropertyCradState extends State<PropertyCrad>
                                 await Share.share("text");
                               },
                             ),
+                            widget.isEdditing == true
+                                ? GestureDetector(
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Colors.purple[200],
+                                    ),
+                                    onTap: () async {
+                                      await Share.share("text");
+                                    },
+                                  )
+                                : Container(
+                                    width: 0,
+                                    height: 0,
+                                  ),
                           ],
                         ),
                       ),

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
@@ -64,7 +63,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   void getUserLogin() async {
     var sharePerf = await SharedPreferences.getInstance();
     setState(() {
-      loggedIn =  
+      loggedIn =
           sharePerf.getBool(Preferences.is_logged_in) == true ? true : false;
     });
     if (loggedIn == true) {
@@ -94,54 +93,49 @@ class _SettingsScreenState extends State<SettingsScreen>
       body: SettingsList(
         backgroundColor: Colors.white,
         sections: [
-          CustomSection(
-            child: Column(
+          CustomSection(child: Observer(builder: (context) {
+            return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 32, bottom: 8),
-                  child: Observer(
-                    builder: (context) {
-                      return _userStore.user != null
-                          ? InkWell(
-                              onTap: () async {
-                                getImage(ImageSource.gallery);
-                              },
-                              child: _userStore?.user?.avatar == null
-                                  ? CircleAvatar(
-                                      radius: 50,
-                                      backgroundColor: Colors.purple,
-                                      child: CircleAvatar(
-                                        radius: 48,
-                                        backgroundImage: AssetImage(
-                                          "assets/images/no-profile.jpg",
-                                        ),
+                    padding: const EdgeInsets.only(top: 32, bottom: 8),
+                    child: _userStore.user != null
+                        ? InkWell(
+                            onTap: () async {
+                              getImage(ImageSource.gallery);
+                            },
+                            child: _userStore?.user?.avatar == null
+                                ? CircleAvatar(
+                                    radius: 50,
+                                    backgroundColor: Colors.purple,
+                                    child: CircleAvatar(
+                                      radius: 48,
+                                      backgroundImage: AssetImage(
+                                        "assets/images/no-profile.jpg",
                                       ),
-                                    )
-                                  : CircleAvatar(
-                                      radius: 50,
-                                      backgroundColor: Colors.purple,
-                                      child: CircleAvatar(
-                                          radius: 48,
-                                          backgroundImage: NetworkImage(
-                                            Endpoints.baseUrl +
-                                                "/" +
-                                                _userStore.user.avatar,
-                                          )),
                                     ),
-                            )
-                          : CircleAvatar(
-                              radius: 50,
-                              backgroundColor: Colors.purple,
-                              child: CircleAvatar(
-                                radius: 48,
-                                backgroundImage: AssetImage(
-                                  "assets/images/no-profile.jpg",
-                                ),
+                                  )
+                                : CircleAvatar(
+                                    radius: 50,
+                                    backgroundColor: Colors.purple,
+                                    child: CircleAvatar(
+                                        radius: 48,
+                                        backgroundImage: NetworkImage(
+                                          Endpoints.baseUrl +
+                                              "/" +
+                                              _userStore.user.avatar,
+                                        )),
+                                  ),
+                          )
+                        : CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.purple,
+                            child: CircleAvatar(
+                              radius: 48,
+                              backgroundImage: AssetImage(
+                                "assets/images/no-profile.jpg",
                               ),
-                            );
-                    },
-                  ),
-                ),
+                            ),
+                          )),
                 Text(
                   _userStore.user != null
                       ? "سلام" + _userStore.user.name
@@ -149,8 +143,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                   style: TextStyle(color: Color(0xFF777777)),
                 ),
               ],
-            ),
-          ),
+            );
+          })),
           SettingsSection(
             tiles: [
               SettingsTile(
@@ -192,9 +186,9 @@ class _SettingsScreenState extends State<SettingsScreen>
                       : () {},
                   title: AppLocalizations.of(context).translate("my_posts"),
                   leading: Icon(Icons.description)),
-              SettingsTile(
-                  title: AppLocalizations.of(context).translate("plants"),
-                  leading: Icon(Icons.collections_bookmark)),
+              // SettingsTile(
+              //     title: AppLocalizations.of(context).translate("plants"),
+              //     leading: Icon(Icons.collections_bookmark)),
               SettingsTile(
                   onTap: () {
                     Navigator.of(context).push(
@@ -241,7 +235,7 @@ class _SettingsScreenState extends State<SettingsScreen>
               child: Center(
             child: Image.asset(
               'assets/icons/settings.png',
-              height: 50,
+              height: 200,
               width: 50,
               color: Color(0xFF777777),
             ),

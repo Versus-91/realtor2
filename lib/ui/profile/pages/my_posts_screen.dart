@@ -88,7 +88,9 @@ class _MyPostsScreenState extends State<MyPostsScreen>
             itemCount: _postStore.userPostList.posts.length,
             itemBuilder: (context, position) {
               return PropertyCrad(
-                  post: _postStore.userPostList.posts[position]);
+                post: _postStore.userPostList.posts[position],
+                isEdditing: true,
+              );
             },
           )
         : Center(
