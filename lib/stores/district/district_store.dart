@@ -3,6 +3,7 @@ import 'package:boilerplate/models/district/district_list.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
+
 part 'district_store.g.dart';
 
 class DistrictStore = _DistrictStore with _$DistrictStore;
@@ -38,6 +39,18 @@ abstract class _DistrictStore with Store {
   @action
   Future getDistricts() async {
     final future = _repository.getDistricts();
+    fetchDistrictFuture = ObservableFuture(future);
+
+    future.then((item) {
+      this.districtList = item;
+    }).catchError((error) {
+      errorStore.errorMessage = DioErrorUtil.handleError(error);
+    });
+  }
+
+  @action
+  Future getDistrictsByCityid(int id) async {
+    final future = _repository.getDistrictsByCityId(id);
     fetchDistrictFuture = ObservableFuture(future);
 
     future.then((item) {
