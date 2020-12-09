@@ -47,7 +47,10 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
             children: <Widget>[
               FlatButton.icon(
                 onPressed: () {},
-                icon: Icon(Icons.save),
+                icon: Icon(
+                  Icons.save,
+                  color: Colors.grey,
+                ),
                 label: Text(
                   AppLocalizations.of(context).translate('save'),
                 ),
@@ -59,26 +62,22 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 label: Text(
                   AppLocalizations.of(context).translate('send'),
                 ),
-                icon: Icon(Icons.share),
+                icon: Icon(
+                  Icons.share,
+                  color: Colors.blue,
+                ),
               ),
               FlatButton.icon(
                 onPressed: () => launch("tel://21213123123"),
                 label: Text(
                   AppLocalizations.of(context).translate('call'),
                 ),
-                icon: Icon(Icons.call),
+                icon: Icon(
+                  Icons.call,
+                  color: Colors.greenAccent,
+                ),
               ),
             ],
-          ),
-        ),
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Text(
-            ' ${widget.post.district.city.name} - ${widget.post.district.name} ',
-            style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-                fontWeight: FontWeight.normal),
           ),
         ),
         body: ListView(
@@ -106,7 +105,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                             dotSpacing: 15.0,
                             autoplay: false,
                             dotColor: Colors.white,
-                            indicatorBgPadding: 50.0,
+                            indicatorBgPadding: 10.0,
                             dotBgColor: Colors.transparent,
                             borderRadius: false,
                             moveIndicatorFromBottom: 200.0,
@@ -119,6 +118,33 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                         ],
                       ],
                     )),
+                Positioned(
+                  top: 0,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    color: Colors.transparent,
+                    child: Row(
+                      children: [
+                        IconButton(
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                        Text(
+                          ' ${widget.post.district.city.name} - ${widget.post.district.name} ',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
             Container(
