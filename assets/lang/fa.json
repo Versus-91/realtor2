@@ -5,6 +5,7 @@
   "Name":"نام ",
   "family":"نام خانوادگی ",
   "user_password": "رمز",
+  "currency_type": "(دالر)",
   "chang_user_password": "تغییر رمز",
   "user_Number": "شماره همراه",
   "login_btn_forgot_password": "رمز خود را فراموش کرده اید?",
@@ -55,7 +56,7 @@
 
   "area": "مساحت",
   "area_range": "(مترمربع)",
-  "currency_type": "(دالر)",
+  
 
 
   "save": "ذخیره",

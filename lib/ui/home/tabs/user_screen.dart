@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/post_request.dart';
@@ -185,7 +185,8 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
       text += "/ " + "همه شهر ها";
     }
     if (data.minDepositPrice != null || data.maxDepositPrice != null) {
-      text += "/ " + data.minDepositPrice.toString() + "-" + data.maxDepositPrice.toString();
+      text += "/ " + data.minDepositPrice.toString() + "-" + data.maxDepositPrice.toString()+ 
+      AppLocalizations.of(context).translate('currency_type');
     } else {
       text += "/ " + "همه قیمتها";
     }

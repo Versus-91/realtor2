@@ -359,7 +359,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                                 Icons.delete,
                                                 color: Colors.redAccent,
                                               ),
-                                              onPressed: null),
+                                              onPressed: () {
+                                                setState(() {
+                                                  _paths.removeWhere((item) =>
+                                                      item.path ==
+                                                      _paths[index].path);
+                                                });
+                                              }),
                                         ),
                                       ],
                                     )),
