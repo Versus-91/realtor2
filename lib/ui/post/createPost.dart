@@ -20,6 +20,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -58,23 +59,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   //text controllers:-----------------------------------------------------------
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _rahnPriceController = TextEditingController();
-  TextEditingController _rentPriceController = TextEditingController();
-  TextEditingController _buyPriceController = TextEditingController();
+  MoneyMaskedTextController _rahnPriceController =
+      MoneyMaskedTextController(precision: 0);
+  MoneyMaskedTextController _rentPriceController =
+      MoneyMaskedTextController(precision: 0);
+  MoneyMaskedTextController _buyPriceController =
+      MoneyMaskedTextController(precision: 0);
   TextEditingController _areaController = TextEditingController();
   TextEditingController _bedroomCountController = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
-  TextEditingController _districtController = TextEditingController();
-  TextEditingController _hometypeController = TextEditingController();
   //focosnode-------------------------------------------------------------------
-  FocusNode _titleFocusNode;
   FocusNode _hometypeFocusNode;
-  FocusNode _descriptionFocusNode;
   FocusNode _rahnPriceFocusNode;
   FocusNode _rentPriceFocusNode;
   FocusNode _buyPriceFocusNode;
-  FocusNode _areaFocusNode;
-  FocusNode _bedroomCountFocusNode;
   FocusNode _cityFocusNode;
   FocusNode _districtFocusNode;
   //stores:---------------------------------------------------------------------
@@ -92,16 +89,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   void initState() {
     super.initState();
     _controller.addListener(() => _extension = _controller.text);
-    _titleFocusNode = FocusNode();
-    _descriptionFocusNode = FocusNode();
+
     _hometypeFocusNode = FocusNode();
     _rahnPriceFocusNode = FocusNode();
     _rentPriceFocusNode = FocusNode();
     _buyPriceFocusNode = FocusNode();
-    _areaFocusNode = FocusNode();
     _cityFocusNode = FocusNode();
     _districtFocusNode = FocusNode();
-    _bedroomCountFocusNode = FocusNode();
   }
 
   void _openFileExplorer() async {
@@ -128,18 +122,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     });
   }
 
-  void _clearCachedFiles() {
-    FilePicker.platform.clearTemporaryFiles().then((result) {
-      _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          backgroundColor: result ? Colors.green : Colors.red,
-          content: Text((result
-              ? 'Temporary files removed with success.'
-              : 'Failed to clean temporary files')),
-        ),
-      );
-    });
-  }
+  // void _clearCachedFiles() {
+  //   FilePicker.platform.clearTemporaryFiles().then((result) {
+  //     _scaffoldKey.currentState.showSnackBar(
+  //       SnackBar(
+  //         backgroundColor: result ? Colors.green : Colors.red,
+  //         content: Text((result
+  //             ? 'Temporary files removed with success.'
+  //             : 'Failed to clean temporary files')),
+  //       ),
+  //     );
+  //   });
+  // }
 
   @override
   void didChangeDependencies() {
@@ -161,12 +155,23 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       appBar: _buildAppBar(),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(15),
         child: InkWell(
           onTap: () async {
-            _store.insertPost();
+            _store
+                .insertPost()
+                .then((value) => successPost(
+                      AppLocalizations.of(context).translate('succes_send'),
+                    ))
+                .catchError((error) {
+              _showErrorMessage(
+                "خطا در ایجاد پست",
+              );
+            });
           },
           child: Container(
             height: 45,
@@ -303,6 +308,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 15),
+              child: _buildAgeField(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildBedroomCountField(),
             ),
             Padding(
@@ -335,12 +344,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               return GridTile(
                                 child: Card(
                                     color: Colors.white,
-                                    child: Center(
-                                      child: Image.file(
-                                        File(_paths[index].path),
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                      ),
+                                    child: Stack(
+                                      children: [
+                                        Image.file(
+                                          File(_paths[index].path),
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                        ),
+                                        Positioned(
+                                          left: 0,
+                                          top: 0,
+                                          child: IconButton(
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color: Colors.redAccent,
+                                              ),
+                                              onPressed: null),
+                                        ),
+                                      ],
                                     )),
                               );
                             })
@@ -601,9 +622,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       FocusScope.of(context).requestFocus(_buyPriceFocusNode);
                     },
                     onChanged: (value) {
-                      var price =
-                          double.tryParse(_rahnPriceController.text) ?? 0;
-                      _store.setRahnPrice(price);
+                      _store.setRahnPrice(_rahnPriceController.numberValue);
                     },
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -644,15 +663,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           children: <Widget>[
             Flexible(
               child: TextField(
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   controller: _rentPriceController,
                   focusNode: _rentPriceFocusNode,
                   onSubmitted: (value) {
                     FocusScope.of(context).requestFocus(_cityFocusNode);
                   },
                   onChanged: (value) {
-                    var price = double.tryParse(_rentPriceController.text) ?? 0;
-                    _store.setRentPrice(price);
+                    _store.setRentPrice(_rentPriceController.numberValue);
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -701,8 +718,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     FocusScope.of(context).requestFocus(_districtFocusNode);
                   },
                   onChanged: (valu) {
-                    var price = double.tryParse(_buyPriceController.text) ?? 0;
-                    _store.setBuyPrice(price);
+                    _store.setBuyPrice(_buyPriceController.numberValue);
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -783,6 +799,71 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
 
     //
+  }
+
+  Widget _buildAgeField() {
+    return Observer(
+      builder: (context) {
+        return _cityStore.cityList != null
+            ? Container(
+                padding: EdgeInsets.only(top: 5, bottom: 15),
+                child: Row(
+                  children: <Widget>[
+                    Flexible(
+                      child: DropdownButtonFormField<int>(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent)),
+                            labelText: AppLocalizations.of(context)
+                                .translate('age_home'),
+                            fillColor: Color(0xfff3f3f4),
+                            filled: true,
+                            hintText: AppLocalizations.of(context)
+                                .translate('age_home'),
+                            contentPadding: EdgeInsets.all(10),
+                          ),
+                          onChanged: (int val) => setState(() => {
+                                selectedItem = val,
+                                _store.setAge(val),
+                              }),
+                          items: List.generate(5, (index) {
+                            if (index != 4) {
+                              return DropdownMenuItem<int>(
+                                child: Text((index + 1).toString() + " سال"),
+                                value: index,
+                              );
+                            }
+                            return DropdownMenuItem<int>(
+                              child: Text("بیش از 5 سال"),
+                              value: index,
+                            );
+                          })),
+                    ),
+                  ],
+                ))
+            : Opacity(
+                opacity: 0.8,
+                child: Shimmer.fromColors(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 15),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            AppLocalizations.of(context).translate('city'),
+                            style: TextStyle(
+                              fontSize: 20.0,
+                            ),
+                          )
+                        ],
+                      )),
+                  baseColor: Colors.black12,
+                  highlightColor: Colors.white,
+                  loop: 10,
+                ),
+              );
+      },
+    );
   }
 
   Widget _buildCitylistField() {
@@ -1121,7 +1202,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           duration: Duration(seconds: 3),
         )..show(context);
       }
-    }).then((value) => {navigate(context)});
+    });
   }
 
   // dispose:-------------------------------------------------------------------

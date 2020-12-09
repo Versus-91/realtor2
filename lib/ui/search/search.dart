@@ -122,6 +122,8 @@ class _SearchScreenState extends State<SearchScreen> {
     return Container(
       color: HotelAppTheme.buildLightTheme().backgroundColor,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
         bottomNavigationBar: Padding(
             padding:
                 const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
@@ -158,31 +160,28 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             )),
         backgroundColor: Colors.transparent,
-        body: Column(
-          children: <Widget>[
-            getAppBarUI(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    searchField(),
-                    _buildCategoryField(),
-                    Visibility(
-                      visible: _amenityStore.amenityList != null &&
-                          _amenityStore.amenityList.amenities.length > 0,
-                      child: popularFilter(),
-                    ),
-                    _buildBedroomCountField(),
-                    areaViewUI(AppLocalizations.of(context).translate('area')),
-                    allAccommodationUI()
-                  ],
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          reverse: true,
+          child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              children: <Widget>[
+                getAppBarUI(),
+                searchField(),
+                _buildCategoryField(),
+                Visibility(
+                  visible: _amenityStore.amenityList != null &&
+                      _amenityStore.amenityList.amenities.length > 0,
+                  child: popularFilter(),
                 ),
-              ),
+                _buildBedroomCountField(),
+                areaViewUI(AppLocalizations.of(context).translate('area')),
+                allAccommodationUI()
+              ],
             ),
-            const Divider(
-              height: 1,
-            ),
-          ],
+          ),
         ),
       ),
     );
