@@ -395,6 +395,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               children: [
                 const SizedBox(height: 10),
                 FloatingActionButton.extended(
+                  backgroundColor: Colors.purple,
                   icon: _store.latitude == null && _store.longitude == null
                       ? const Icon(Icons.add)
                       : Icon(
