@@ -79,6 +79,16 @@ class PostApi {
     }
   }
 
+  Future<DistrictList> getDistrictsByCityId(int id) async {
+    try {
+      final res = await _dioClient
+          .get(Endpoints.getDistrictsById + "?id=" + id.toString());
+      return DistrictList.fromJson(res["result"]);
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<User> getUser() async {
     try {
       final res = await _dioClient.get(Endpoints.getuser);

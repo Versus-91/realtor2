@@ -20,10 +20,13 @@ class Endpoints {
   //district endpoints
   static const String getDistricts =
       baseUrl + "/api/services/app/District/GetAll";
+  static const String getDistrictsById =
+      baseUrl + "/api/services/app/District/GetByCityId";
   static const String authenticate = baseUrl + "/api/TokenAuth/Authenticate";
   //Category endpoints
   static const String getCategories =
       baseUrl + "/api/services/app/category/GetAll";
+
   static const String getuser = baseUrl + "/api/services/app/account/user";
   static const String createUser =
       baseUrl + "/api/services/app/account/register";
@@ -35,6 +38,6 @@ class Endpoints {
   static const String changepassword =
       baseUrl + "/api/services/app/account/changePassword";
   static const String addphonenumber = baseUrl + "/api/account/addphonenumber";
-    static const String verifyphonenumber = baseUrl + "/api/account/verifyphonenumber";
-
+  static const String verifyphonenumber =
+      baseUrl + "/api/account/verifyphonenumber";
 }

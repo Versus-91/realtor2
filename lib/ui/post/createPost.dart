@@ -146,7 +146,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     _amenityStore = Provider.of<AmenityStore>(context);
     //start api request if it's not started
     if (!_cityStore.loading) _cityStore.getCities();
-    if (!_districtStore.loading) _districtStore.getDistricts();
     if (!_categoryStore.loading) _categoryStore.getCategories();
     if (!_typeStore.loading) _typeStore.getTypes();
     if (!_amenityStore.loading) _amenityStore.getAmenities();
@@ -904,10 +903,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               AppLocalizations.of(context).translate('city'),
                           contentPadding: EdgeInsets.all(10),
                         ),
-                        onChanged: (int val) => setState(() => {
-                              selectedItem = val,
-                              _store.setCity(val),
-                            }),
+                        onChanged: (int val) {
+                          setState(() => {
+                                selectedItem = val,
+                              });
+                          _districtStore.getDistrictsByCityid(val);
+                        },
                         items: _cityStore.cityList.cities.map((item) {
                           return DropdownMenuItem<int>(
                             child: Text(item.name),
