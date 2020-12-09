@@ -293,11 +293,17 @@ class PostFormErrorStore = _PostFormErrorStore with _$PostFormErrorStore;
 abstract class _PostFormErrorStore with Store {
   @observable
   String titel;
+  @observable
   String category;
+  @observable
   String area;
+  @observable
   String buyPrice;
+  @observable
   String rentPrice;
+  @observable
   String rahnPrice;
+  @observable
   String description;
   @computed
   bool get hasErrorInForgotPassword => titel != null;

@@ -532,34 +532,38 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Widget _buildDescriptionField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          AppLocalizations.of(context).translate('description'),
-          style: TextStyle(color: Colors.red[300]),
-        ),
-        TextField(
-          decoration: InputDecoration(
-            errorText: _store.formErrorStore.description,
+    return Observer(
+      builder: (context) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              AppLocalizations.of(context).translate('description'),
+              style: TextStyle(color: Colors.red[300]),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                errorText: _store.formErrorStore.description,
 
-            border: InputBorder.none,
-            fillColor: Color(0xfff3f3f4),
-            filled: true,
-            // when user presses enter it will adapt to it
-          ),
-          keyboardType: TextInputType.multiline,
-          minLines: 3, //Normal textInputField will be displayed
-          maxLines: 5,
-          controller: _descriptionController,
+                border: InputBorder.none,
+                fillColor: Color(0xfff3f3f4),
+                filled: true,
+                // when user presses enter it will adapt to it
+              ),
+              keyboardType: TextInputType.multiline,
+              minLines: 3, //Normal textInputField will be displayed
+              maxLines: 5,
+              controller: _descriptionController,
 
-          onChanged: (value) {
-            _store.setDescription(_descriptionController.text);
-          },
-          textAlign: TextAlign.right,
-          textDirection: TextDirection.rtl,
-        )
-      ],
+              onChanged: (value) {
+                _store.setDescription(_descriptionController.text);
+              },
+              textAlign: TextAlign.right,
+              textDirection: TextDirection.rtl,
+            )
+          ],
+        );
+      },
     );
   }
 
