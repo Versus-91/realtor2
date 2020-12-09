@@ -389,7 +389,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               children: [
                 const SizedBox(height: 10),
                 FloatingActionButton.extended(
-                  icon: const Icon(Icons.add),
+                  icon: _store.latitude == null && _store.longitude == null
+                      ? const Icon(Icons.add)
+                      : Icon(
+                          Icons.done,
+                          color: Colors.green[400],
+                        ),
                   label: Text("نقشه"),
                   onPressed: () {
                     Navigator.push(

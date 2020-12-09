@@ -17,8 +17,8 @@ class UserMapScreen extends StatefulWidget {
 class _UserMapScreenState extends State<UserMapScreen> {
   //text controllers:-----------------------------------------------------------
   MapController _mapController = MapController();
-  double longitude = 0;
-  double latitude = 0;
+  double longitude;
+  double latitude;
   Position position;
 
   @override
@@ -95,9 +95,9 @@ class _UserMapScreenState extends State<UserMapScreen> {
             setState(() {
               latitude = point.latitude;
               longitude = point.longitude;
+              widget.formState.setLongitude(position.longitude);
+              widget.formState.setLatitude(position.latitude);
             });
-            widget.formState.setLatitude(position.latitude);
-            widget.formState.setLongitude(position.longitude);
           },
           zoom: 14,
           // bounds: LatLngBounds(LatLng(58.8, 6.1), LatLng(59, 6.2)),
@@ -109,22 +109,25 @@ class _UserMapScreenState extends State<UserMapScreen> {
               subdomains: ['a', 'b', 'c']),
           new MarkerLayerOptions(
             markers: [
+              widget.formState.latitude != null &&
+                      widget.formState.longitude != null
+                  ? Marker(
+                      width: 80.0,
+                      height: 80.0,
+                      point: LatLng(
+                        widget.formState.latitude,
+                        widget.formState.longitude,
+                      ),
+                      builder: (ctx) => Container(
+                        child: Icon(
+                          Icons.location_on,
+                          color: Colors.green[400],
+                          size: 40,
+                        ),
+                      ),
+                    )
+                  :
               _generateMarker(),
-              // new Marker(
-              //   width: 80.0,
-              //   height: 80.0,
-              //   point: LatLng(
-              //     widget.formState.latitude,
-              //     widget.formState.longitude,
-              //   ),
-              //   builder: (ctx) => new Container(
-              //     child: Icon(
-              //       Icons.location_on,
-              //       color: Colors.red,
-              //       size: 40,
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ],
