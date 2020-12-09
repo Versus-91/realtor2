@@ -36,32 +36,7 @@ class _UserMapScreenState extends State<UserMapScreen> {
     // final dynamic args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       primary: true,
-      appBar: _buildAppBar(),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(5.0),
-        child: Container(
-          height: 47,
-          child: RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            color: Colors.red,
-            textColor: Colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  AppLocalizations.of(context).translate('location_submit'),
-                ),
-                Icon(Icons.send),
-              ],
-            ),
-          ),
-        ),
-      ),
+      // appBar: _buildAppBar(),
       body: _mapSection(),
     );
   }
@@ -72,13 +47,7 @@ class _UserMapScreenState extends State<UserMapScreen> {
   }
 
   Widget _buildAppBar() {
-    return AppBar(
-      title: Text(
-        AppLocalizations.of(context).translate('map'),
-        style: TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
-      ),
-    );
+    return AppBar();
   }
 
   Widget _mapSection() {
@@ -120,17 +89,50 @@ class _UserMapScreenState extends State<UserMapScreen> {
           ],
         );
       }),
-      Align(
-          alignment: Alignment.bottomRight,
+      Positioned(
+          right: 0,
+          bottom: 55,
           child: Padding(
             padding: EdgeInsets.all(20.0),
             child: new FloatingActionButton(
+              backgroundColor: Colors.white,
               onPressed: () {
                 _getPosition();
               },
-              child: Icon(Icons.gps_fixed,color: Colors.white,),
+              child: Icon(
+                Icons.gps_fixed,
+                color: Colors.black,
+              ),
             ),
           )),
+      Positioned(
+        bottom: 13,
+        right: 10,
+        left: 10,
+        child: Container(
+          height: 47,
+          width: MediaQuery.of(context).size.width - 20,
+          child: RaisedButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            color: Colors.green,
+            textColor: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  AppLocalizations.of(context).translate('location_submit'),
+                ),
+                Icon(Icons.check),
+              ],
+            ),
+          ),
+        ),
+      )
     ]);
   }
 
