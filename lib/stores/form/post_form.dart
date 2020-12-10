@@ -178,32 +178,37 @@ abstract class _PostFormStore with Store {
   @action
   Future insertPost() async {
     validateCreatePost();
-    var post = Post(
-      title: this.title,
-      longitude: this.latitude,
-      latitude: this.latitude,
-      description: this.description,
-      typeId: this.propertyHomeTypeId,
-      rent: this.rentPrice,
-      deopsit: this.rahnPrice,
-      price: this.buyPrice,
-      area: this.area,
-      bedroom: this.countbedroom,
-      categoryId: this.categoryId,
-      districtId: this.selectedDistrict,
-    );
-    loading = true;
-    return Future.delayed(Duration(seconds: 1), () {
-      print(post.toMap());
-      loading = false;
-    });
-    // _repository.insert(post).then((result) {
-    //   loading = false;
-    //   postId = result["id"];
-    // }).catchError((error) {
-    //   print(error);
-    //   loading = false;
-    // });
+
+    if (formErrorStore.isValid == true) {
+      var post = Post(
+        title: this.title,
+        longitude: this.latitude,
+        latitude: this.latitude,
+        description: this.description,
+        typeId: this.propertyHomeTypeId,
+        rent: this.rentPrice,
+        deopsit: this.rahnPrice,
+        price: this.buyPrice,
+        area: this.area,
+        bedroom: this.countbedroom,
+        categoryId: this.categoryId,
+        districtId: this.selectedDistrict,
+      );
+      loading = true;
+      return Future.delayed(Duration(seconds: 1), () {
+        print(post.toMap());
+        loading = false;
+      });
+      // _repository.insert(post).then((result) {
+      //   loading = false;
+      //   postId = result["id"];
+      // }).catchError((error) {
+      //   print(error);
+      //   loading = false;
+      // });
+    } else {
+      throw Exception();
+    }
   }
 
   @action
@@ -238,7 +243,7 @@ abstract class _PostFormStore with Store {
   @action
   void validateArea(int value) {
     if (value < 0 && value != null) {
-      formErrorStore.area = "فیلد را وارد کنید";
+      formErrorStore.area = "مساحت را وارد کنید";
     } else {
       formErrorStore.area = null;
     }
@@ -247,7 +252,7 @@ abstract class _PostFormStore with Store {
   @action
   void validatePrice(double value) {
     if (value < 0 && value != null) {
-      formErrorStore.buyPrice = "فیلد قیمت را وارد کنید";
+      formErrorStore.buyPrice = "قیمت را وارد کنید";
     } else {
       formErrorStore.buyPrice = null;
     }
@@ -280,6 +285,15 @@ abstract class _PostFormStore with Store {
     }
   }
 
+  @action
+  void validateDistrict(String value) {
+    if (value.isEmpty) {
+      formErrorStore.district = "منطقه انتخاب نشده است";
+    } else {
+      formErrorStore.description = null;
+    }
+  }
+
   // general methods:-----------------------------------------------------------
   void dispose() {
     for (final d in _disposers) {
@@ -304,16 +318,19 @@ abstract class _PostFormErrorStore with Store {
   @observable
   String rahnPrice;
   @observable
+  String district;
+  @observable
   String description;
   @computed
   bool get hasErrorInForgotPassword => titel != null;
   @computed
   bool get isValid =>
-      titel == null ||
-      category == null ||
-      area == null ||
-      buyPrice == null ||
-      rentPrice == null ||
-      rahnPrice == null ||
+      titel == null &&
+      district == null &&
+      category == null &&
+      area == null &&
+      buyPrice == null &&
+      rentPrice == null &&
+      rahnPrice == null &&
       description == null;
 }

@@ -39,6 +39,21 @@ mixin _$PostFormStore on _PostFormStore, Store {
     });
   }
 
+  final _$ageHomeAtom = Atom(name: '_PostFormStore.ageHome');
+
+  @override
+  int get ageHome {
+    _$ageHomeAtom.reportRead();
+    return super.ageHome;
+  }
+
+  @override
+  set ageHome(int value) {
+    _$ageHomeAtom.reportWrite(value, super.ageHome, () {
+      super.ageHome = value;
+    });
+  }
+
   final _$loadingAtom = Atom(name: '_PostFormStore.loading');
 
   @override
@@ -415,6 +430,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
   }
 
   @override
+  void setAge(int value) {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.setAge');
+    try {
+      return super.setAge(value);
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setBuyPrice(double value) {
     final _$actionInfo = _$_PostFormStoreActionController.startAction(
         name: '_PostFormStore.setBuyPrice');
@@ -453,6 +479,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
         name: '_PostFormStore.validateCreatePost');
     try {
       return super.validateCreatePost();
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetPrice() {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.resetPrice');
+    try {
+      return super.resetPrice();
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
@@ -540,6 +577,7 @@ mixin _$PostFormStore on _PostFormStore, Store {
     return '''
 title: ${title},
 success: ${success},
+ageHome: ${ageHome},
 loading: ${loading},
 categoryId: ${categoryId},
 postId: ${postId},
@@ -589,10 +627,106 @@ mixin _$PostFormErrorStore on _PostFormErrorStore, Store {
     });
   }
 
+  final _$categoryAtom = Atom(name: '_PostFormErrorStore.category');
+
+  @override
+  String get category {
+    _$categoryAtom.reportRead();
+    return super.category;
+  }
+
+  @override
+  set category(String value) {
+    _$categoryAtom.reportWrite(value, super.category, () {
+      super.category = value;
+    });
+  }
+
+  final _$areaAtom = Atom(name: '_PostFormErrorStore.area');
+
+  @override
+  String get area {
+    _$areaAtom.reportRead();
+    return super.area;
+  }
+
+  @override
+  set area(String value) {
+    _$areaAtom.reportWrite(value, super.area, () {
+      super.area = value;
+    });
+  }
+
+  final _$buyPriceAtom = Atom(name: '_PostFormErrorStore.buyPrice');
+
+  @override
+  String get buyPrice {
+    _$buyPriceAtom.reportRead();
+    return super.buyPrice;
+  }
+
+  @override
+  set buyPrice(String value) {
+    _$buyPriceAtom.reportWrite(value, super.buyPrice, () {
+      super.buyPrice = value;
+    });
+  }
+
+  final _$rentPriceAtom = Atom(name: '_PostFormErrorStore.rentPrice');
+
+  @override
+  String get rentPrice {
+    _$rentPriceAtom.reportRead();
+    return super.rentPrice;
+  }
+
+  @override
+  set rentPrice(String value) {
+    _$rentPriceAtom.reportWrite(value, super.rentPrice, () {
+      super.rentPrice = value;
+    });
+  }
+
+  final _$rahnPriceAtom = Atom(name: '_PostFormErrorStore.rahnPrice');
+
+  @override
+  String get rahnPrice {
+    _$rahnPriceAtom.reportRead();
+    return super.rahnPrice;
+  }
+
+  @override
+  set rahnPrice(String value) {
+    _$rahnPriceAtom.reportWrite(value, super.rahnPrice, () {
+      super.rahnPrice = value;
+    });
+  }
+
+  final _$descriptionAtom = Atom(name: '_PostFormErrorStore.description');
+
+  @override
+  String get description {
+    _$descriptionAtom.reportRead();
+    return super.description;
+  }
+
+  @override
+  set description(String value) {
+    _$descriptionAtom.reportWrite(value, super.description, () {
+      super.description = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 titel: ${titel},
+category: ${category},
+area: ${area},
+buyPrice: ${buyPrice},
+rentPrice: ${rentPrice},
+rahnPrice: ${rahnPrice},
+description: ${description},
 hasErrorInForgotPassword: ${hasErrorInForgotPassword},
 isValid: ${isValid}
     ''';

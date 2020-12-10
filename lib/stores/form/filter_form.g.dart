@@ -401,6 +401,17 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
+  void resetPrice() {
+    final _$actionInfo = _$_FilterFormStoreActionController.startAction(
+        name: '_FilterFormStore.resetPrice');
+    try {
+      return super.resetPrice();
+    } finally {
+      _$_FilterFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 minPrice: ${minPrice},

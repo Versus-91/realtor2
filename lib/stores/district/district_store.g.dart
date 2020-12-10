@@ -69,6 +69,15 @@ mixin _$DistrictStore on _DistrictStore, Store {
     return _$getDistrictsAsyncAction.run(() => super.getDistricts());
   }
 
+  final _$getDistrictsByCityidAsyncAction =
+      AsyncAction('_DistrictStore.getDistrictsByCityid');
+
+  @override
+  Future<dynamic> getDistrictsByCityid(int id) {
+    return _$getDistrictsByCityidAsyncAction
+        .run(() => super.getDistrictsByCityid(id));
+  }
+
   @override
   String toString() {
     return '''

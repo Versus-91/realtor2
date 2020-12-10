@@ -532,38 +532,36 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Widget _buildDescriptionField() {
-    return Observer(
-      builder: (context) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              AppLocalizations.of(context).translate('description'),
-              style: TextStyle(color: Colors.red[300]),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          AppLocalizations.of(context).translate('description'),
+          style: TextStyle(color: Colors.red[300]),
+        ),
+        Observer(builder: (context) {
+          return TextField(
+            decoration: InputDecoration(
+              errorText: _store.formErrorStore.description,
+
+              border: InputBorder.none,
+              fillColor: Color(0xfff3f3f4),
+              filled: true,
+              // when user presses enter it will adapt to it
             ),
-            TextField(
-              decoration: InputDecoration(
-                errorText: _store.formErrorStore.description,
+            keyboardType: TextInputType.multiline,
+            minLines: 3, //Normal textInputField will be displayed
+            maxLines: 5,
+            controller: _descriptionController,
 
-                border: InputBorder.none,
-                fillColor: Color(0xfff3f3f4),
-                filled: true,
-                // when user presses enter it will adapt to it
-              ),
-              keyboardType: TextInputType.multiline,
-              minLines: 3, //Normal textInputField will be displayed
-              maxLines: 5,
-              controller: _descriptionController,
-
-              onChanged: (value) {
-                _store.setDescription(_descriptionController.text);
-              },
-              textAlign: TextAlign.right,
-              textDirection: TextDirection.rtl,
-            )
-          ],
-        );
-      },
+            onChanged: (value) {
+              _store.setDescription(_descriptionController.text);
+            },
+            textAlign: TextAlign.right,
+            textDirection: TextDirection.rtl,
+          );
+        })
+      ],
     );
   }
 
@@ -581,28 +579,52 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Widget _buildRangeAreaField() {
     return Row(
       children: <Widget>[
-        Flexible(
-          child: TextField(
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            controller: _areaController,
-            onChanged: (value) {
-              var area = int.tryParse(_areaController.text) ?? 0;
-              _store.setArea(area);
-            },
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              errorText: _store.formErrorStore.area,
-              // hintText: AppLocalizations.of(context).translate('area'),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent)),
-              fillColor: Color(0xfff3f3f4),
-              filled: true,
-              labelText: AppLocalizations.of(context).translate('area') +
-                  AppLocalizations.of(context).translate('area_range'),
-              contentPadding: EdgeInsets.all(10),
-            ),
-          ),
-        ),
+        _typeStore.typeList != null
+            ? Flexible(
+                child: Observer(builder: (context) {
+                  return TextField(
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    controller: _areaController,
+                    onChanged: (value) {
+                      var area = int.tryParse(_areaController.text) ?? 0;
+                      _store.setArea(area);
+                    },
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      errorText: _store.formErrorStore.area,
+                      // hintText: AppLocalizations.of(context).translate('area'),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent)),
+                      fillColor: Color(0xfff3f3f4),
+                      filled: true,
+                      labelText: AppLocalizations.of(context)
+                              .translate('area') +
+                          AppLocalizations.of(context).translate('area_range'),
+                      contentPadding: EdgeInsets.all(10),
+                    ),
+                  );
+                }),
+              )
+            : Opacity(
+                opacity: 1,
+                child: Shimmer.fromColors(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 15),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            AppLocalizations.of(context).translate('area'),
+                            style: TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          )
+                        ],
+                      )),
+                  baseColor: Colors.black12,
+                  highlightColor: Colors.white,
+                  loop: 30,
+                ),
+              ),
       ],
     );
   }
@@ -760,33 +782,38 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 child: Row(
                   children: <Widget>[
                     Flexible(
-                      child: DropdownButtonFormField<int>(
-                        // focusNode: _districtFocusNode,
-                        // onSaved: (value) {
-                        //   FocusScope.of(context).requestFocus(_cityFocusNode);
-                        // },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          fillColor: Color(0xfff3f3f4),
-                          filled: true,
-                          hintText: AppLocalizations.of(context)
-                              .translate('district'),
-                          contentPadding: EdgeInsets.all(10),
-                        ),
-                        onChanged: (int val) {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          _store.setDistrict(val);
-                        },
-                        items:
-                            _districtStore.districtList.districts.map((item) {
-                          return DropdownMenuItem<int>(
-                            child: Text(item.name),
-                            value: item.id,
-                          );
-                        }).toList(),
-                      ),
+                      child: _districtStore.loading == true
+                          ? LinearProgressIndicator()
+                          : DropdownButtonFormField<int>(
+                              decoration: InputDecoration(
+                                errorText: _store.formErrorStore.district,
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent)),
+                                fillColor: Color(0xfff3f3f4),
+                                filled: true,
+                                hintText: AppLocalizations.of(context)
+                                    .translate('district'),
+                                contentPadding: EdgeInsets.all(10),
+                              ),
+                              onChanged: (int val) => setState(() => {
+                                    _store.setDistrict(val),
+                                  }),
+                              items: _districtStore.districtList.districts
+                                  .map((item) {
+                                return DropdownMenuItem<int>(
+                                  child: _districtStore
+                                              .districtList.districts.length >
+                                          0
+                                      ? Text(item.name)
+                                      : Text(
+                                          AppLocalizations.of(context)
+                                              .translate('notfound_district'),
+                                        ),
+                                  value: item.id,
+                                );
+                              }).toList(),
+                            ),
                     ),
                   ],
                 ))
@@ -807,7 +834,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       )),
                   baseColor: Colors.black12,
                   highlightColor: Colors.white,
-                  loop: 10,
+                  loop: 30,
                 ),
               );
       },
@@ -838,11 +865,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                 .translate('age_home'),
                             contentPadding: EdgeInsets.all(10),
                           ),
-                          onChanged: (int val) {
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
-                            _store.setAge(val);
-                          },
+                          onChanged: (int val) => setState(() => {
+                                _store.setAge(val),
+                              }),
                           items: List.generate(5, (index) {
                             if (index != 4) {
                               return DropdownMenuItem<int>(
@@ -875,7 +900,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       )),
                   baseColor: Colors.black12,
                   highlightColor: Colors.white,
-                  loop: 10,
+                  loop: 30,
                 ),
               );
       },
@@ -910,7 +935,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           contentPadding: EdgeInsets.all(10),
                         ),
                         onChanged: (int val) {
-                          FocusScope.of(context).requestFocus(new FocusNode());
                           _districtStore.getDistrictsByCityid(val);
                         },
                         items: _cityStore.cityList.cities.map((item) {
@@ -940,7 +964,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       )),
                   baseColor: Colors.black12,
                   highlightColor: Colors.white,
-                  loop: 10,
+                  loop: 30,
                 ),
               );
       },
@@ -1051,7 +1075,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         ]),
                     baseColor: Colors.black12,
                     highlightColor: Colors.white,
-                    loop: 10,
+                    loop: 30,
                   ),
                 );
         },
@@ -1086,10 +1110,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   hintText: AppLocalizations.of(context).translate('type_home'),
                   contentPadding: EdgeInsets.all(10),
                 ),
-                onChanged: (int val) {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                  _store.setPropertyHomeType(val);
-                },
+                onChanged: (int val) => setState(() => {
+                      _store.setPropertyHomeType(val),
+                    }),
                 items: _typeStore.typeList.types.map((item) {
                   return DropdownMenuItem<int>(
                     child: Text(item.name),
@@ -1107,14 +1130,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           Text(
                             AppLocalizations.of(context).translate('type_home'),
                             style: TextStyle(
-                              fontSize: 20.0,
+                              fontSize: 18.0,
                             ),
                           )
                         ],
                       )),
                   baseColor: Colors.black12,
                   highlightColor: Colors.white,
-                  loop: 10,
+                  loop: 30,
                 ),
               );
       },
