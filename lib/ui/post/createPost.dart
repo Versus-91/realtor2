@@ -66,13 +66,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       MoneyMaskedTextController(precision: 0);
   TextEditingController _areaController = TextEditingController();
   TextEditingController _bedroomCountController = TextEditingController();
-  //focosnode-------------------------------------------------------------------
-  // FocusNode _hometypeFocusNode;
-  // FocusNode _rahnPriceFocusNode;
-  // FocusNode _rentPriceFocusNode;
-  // FocusNode _buyPriceFocusNode;
-  // FocusNode _cityFocusNode;
-  // FocusNode _districtFocusNode;
+
   //stores:---------------------------------------------------------------------
   CityStore _cityStore;
   DistrictStore _districtStore;
@@ -88,13 +82,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   void initState() {
     super.initState();
     _controller.addListener(() => _extension = _controller.text);
-
-    // _hometypeFocusNode = FocusNode();
-    // _rahnPriceFocusNode = FocusNode();
-    // _rentPriceFocusNode = FocusNode();
-    // _buyPriceFocusNode = FocusNode();
-    // _cityFocusNode = FocusNode();
-    // _districtFocusNode = FocusNode();
   }
 
   void _openFileExplorer() async {
@@ -271,9 +258,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisSize: MainAxisSize.max,
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _buildCategoryField(),
             Row(
@@ -286,19 +273,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 Flexible(child: _buildDistrictlistField()),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: Row(
-                children: [
-                  Flexible(
-                      child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                    child: _buildHomeTypeField(),
-                  )),
-                  Flexible(child: _buildRangeAreaField()),
-                ],
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _buildHomeTypeField(),
+                _buildRangeAreaField(),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 15),
@@ -561,7 +541,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           return TextField(
             decoration: InputDecoration(
               errorText: _store.formErrorStore.description,
-
               border: InputBorder.none,
               fillColor: Color(0xfff3f3f4),
               filled: true,
@@ -595,56 +574,51 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Widget _buildRangeAreaField() {
-    return Row(
-      children: <Widget>[
-        _typeStore.typeList != null
-            ? Flexible(
-                child: Observer(builder: (context) {
-                  return TextField(
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    controller: _areaController,
-                    onChanged: (value) {
-                      var area = int.tryParse(_areaController.text);
-                      _store.setArea(area);
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      errorText: _store.formErrorStore.area,
-                      // hintText: AppLocalizations.of(context).translate('area'),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent)),
-                      fillColor: Color(0xfff3f3f4),
-                      filled: true,
-                      labelText: AppLocalizations.of(context)
-                              .translate('area') +
-                          AppLocalizations.of(context).translate('area_range'),
-                      contentPadding: EdgeInsets.all(10),
-                    ),
-                  );
-                }),
-              )
-            : Opacity(
-                opacity: 1,
-                child: Shimmer.fromColors(
-                  child: Container(
-                      padding: EdgeInsets.only(top: 10, bottom: 15),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            AppLocalizations.of(context).translate('area'),
-                            style: TextStyle(
-                              fontSize: 18.0,
-                            ),
-                          )
-                        ],
-                      )),
-                  baseColor: Colors.black12,
-                  highlightColor: Colors.white,
-                  loop: 30,
+    return _typeStore.typeList != null
+        ? Expanded(
+            child: Observer(builder: (context) {
+              return TextField(
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                controller: _areaController,
+                onChanged: (value) {
+                  var area = int.tryParse(_areaController.text);
+                  _store.setArea(area);
+                },
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  errorText: _store.formErrorStore.area,
+                  // hintText: AppLocalizations.of(context).translate('area'),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent)),
+                  fillColor: Color(0xfff3f3f4),
+                  filled: true,
+                  labelText: AppLocalizations.of(context).translate('area') +
+                      AppLocalizations.of(context).translate('area_range'),
+                  contentPadding: EdgeInsets.all(10),
                 ),
-              ),
-      ],
-    );
+              );
+            }),
+          )
+        : Opacity(
+            opacity: 1,
+            child: Shimmer.fromColors(
+              child: Container(
+                  padding: EdgeInsets.only(top: 10, bottom: 15),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        AppLocalizations.of(context).translate('area'),
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                      )
+                    ],
+                  )),
+              baseColor: Colors.black12,
+              highlightColor: Colors.white,
+              loop: 30,
+            ),
+          );
   }
 
   Widget _buildRentPriceField() {
@@ -671,11 +645,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               Flexible(
                 child: TextField(
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    // focusNode: _rahnPriceFocusNode,
                     controller: _rahnPriceController,
-                    // onSubmitted: (value) {
-                    //   FocusScope.of(context).requestFocus(_buyPriceFocusNode);
-                    // },
                     onChanged: (value) {
                       _store.setRahnPrice(_rahnPriceController.numberValue);
                     },
@@ -719,10 +689,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             Flexible(
               child: TextField(
                   controller: _rentPriceController,
-                  // focusNode: _rentPriceFocusNode,
-                  // onSubmitted: (value) {
-                  //   FocusScope.of(context).requestFocus(_cityFocusNode);
-                  // },
                   onChanged: (value) {
                     _store.setRentPrice(_rentPriceController.numberValue);
                   },
@@ -768,10 +734,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               child: TextField(
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   controller: _buyPriceController,
-                  // focusNode: _buyPriceFocusNode,
-                  // onSubmitted: (value) {
-                  //   FocusScope.of(context).requestFocus(_districtFocusNode);
-                  // },
                   onChanged: (valu) {
                     _store.setBuyPrice(_buyPriceController.numberValue);
                   },
@@ -815,9 +777,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       .translate('district'),
                                   contentPadding: EdgeInsets.all(10),
                                 ),
-                                onChanged: (int val) => setState(() => {
-                                      _store.setDistrict(val),
-                                    }),
+                                onChanged: (int val) {
+                                  FocusScope.of(context)
+                                      .requestFocus(new FocusNode());
+                                  _store.setDistrict(val);
+                                },
                                 items: _districtStore.districtList.districts
                                     .map((item) {
                                   return DropdownMenuItem<int>(
@@ -881,9 +845,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                 .translate('age_home'),
                             contentPadding: EdgeInsets.all(10),
                           ),
-                          onChanged: (int val) => setState(() => {
-                                _store.setAge(val),
-                              }),
+                          onChanged: (int val) {
+                            _store.setAge(val);
+                          },
                           items: List.generate(5, (index) {
                             if (index != 4) {
                               return DropdownMenuItem<int>(
@@ -947,6 +911,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           contentPadding: EdgeInsets.all(10),
                         ),
                         onChanged: (int val) {
+                          FocusScope.of(context).requestFocus(new FocusNode());
                           if (val != cityDropdownValue) {
                             setState(() {
                               cityDropdownValue = val;
@@ -1117,25 +1082,28 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return Observer(
       builder: (context) {
         return _typeStore.typeList != null
-            ? DropdownButtonFormField<int>(
-                // focusNode: _hometypeFocusNode,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.transparent)),
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true,
-                  hintText: AppLocalizations.of(context).translate('type_home'),
-                  contentPadding: EdgeInsets.all(10),
+            ? Expanded(
+                child: DropdownButtonFormField<int>(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent)),
+                      fillColor: Color(0xfff3f3f4),
+                      filled: true,
+                      hintText:
+                          AppLocalizations.of(context).translate('type_home'),
+                      contentPadding: EdgeInsets.all(10),
+                      errorText: _store.formErrorStore.typeHome),
+                  onChanged: (int val) {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    _store.setPropertyHomeType(val);
+                  },
+                  items: _typeStore.typeList.types.map((item) {
+                    return DropdownMenuItem<int>(
+                      child: Text(item.name),
+                      value: item.id,
+                    );
+                  }).toList(),
                 ),
-                onChanged: (int val) => setState(() => {
-                      _store.setPropertyHomeType(val),
-                    }),
-                items: _typeStore.typeList.types.map((item) {
-                  return DropdownMenuItem<int>(
-                    child: Text(item.name),
-                    value: item.id,
-                  );
-                }).toList(),
               )
             : Opacity(
                 opacity: 1,

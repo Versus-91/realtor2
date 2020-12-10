@@ -26,12 +26,12 @@ abstract class _PostFormStore with Store {
 
   void _setupValidations() {
     _disposers = [
-      reaction((_) => categoryId, validateCategoryId),
       reaction((_) => area, validateArea),
       reaction((_) => buyPrice, validatePrice),
       reaction((_) => rahnPrice, validateRahnPrice),
       reaction((_) => rentPrice, validateRentPrice),
       reaction((_) => description, validateDescription),
+      reaction((_) => propertyHomeTypeId, validateTypeHome),
     ];
   }
 
@@ -158,12 +158,12 @@ abstract class _PostFormStore with Store {
 
   @action
   validateCreatePost() {
-    validateCategoryId(categoryId);
     validateArea(area);
     validatePrice(buyPrice);
     validateRahnPrice(rahnPrice);
     validateRentPrice(rentPrice);
     validateDescription(description);
+    validateTypeHome(propertyHomeTypeId);
   }
 
   @action
@@ -221,21 +221,22 @@ abstract class _PostFormStore with Store {
   }
 
   @action
-  void validateCategoryId(int value) {
-    if (value == null) {
-      formErrorStore.category = "یک گزینه را انتخاب کنید";
-    } else {
-      formErrorStore.category = null;
-    }
-  }
-
-  @action
   void validateArea(int value) {
     if (value == null || value <= 0) {
       formErrorStore.area = "مساحت را وارد کنید";
       print(formErrorStore.area);
     } else {
       formErrorStore.area = null;
+    }
+  }
+
+  @action
+  void validateTypeHome(int value) {
+    if (value == null) {
+      formErrorStore.typeHome = "نوع ملک مشخص نشده است";
+      print(formErrorStore.typeHome);
+    } else {
+      formErrorStore.typeHome = null;
     }
   }
 
@@ -297,8 +298,7 @@ class PostFormErrorStore = _PostFormErrorStore with _$PostFormErrorStore;
 abstract class _PostFormErrorStore with Store {
   @observable
   String titel;
-  @observable
-  String category;
+
   @observable
   String area;
   @observable
@@ -311,13 +311,15 @@ abstract class _PostFormErrorStore with Store {
   String district;
   @observable
   String description;
+  @observable
+  String typeHome;
   @computed
   bool get hasErrorInForgotPassword => titel != null;
   @computed
   bool get isValid =>
       titel == null &&
       district == null &&
-      category == null &&
+      typeHome == null &&
       area == null &&
       buyPrice == null &&
       rentPrice == null &&

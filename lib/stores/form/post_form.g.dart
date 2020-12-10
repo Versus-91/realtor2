@@ -496,22 +496,22 @@ mixin _$PostFormStore on _PostFormStore, Store {
   }
 
   @override
-  void validateCategoryId(int value) {
+  void validateArea(int value) {
     final _$actionInfo = _$_PostFormStoreActionController.startAction(
-        name: '_PostFormStore.validateCategoryId');
+        name: '_PostFormStore.validateArea');
     try {
-      return super.validateCategoryId(value);
+      return super.validateArea(value);
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void validateArea(int value) {
+  void validateTypeHome(int value) {
     final _$actionInfo = _$_PostFormStoreActionController.startAction(
-        name: '_PostFormStore.validateArea');
+        name: '_PostFormStore.validateTypeHome');
     try {
-      return super.validateArea(value);
+      return super.validateTypeHome(value);
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
@@ -627,21 +627,6 @@ mixin _$PostFormErrorStore on _PostFormErrorStore, Store {
     });
   }
 
-  final _$categoryAtom = Atom(name: '_PostFormErrorStore.category');
-
-  @override
-  String get category {
-    _$categoryAtom.reportRead();
-    return super.category;
-  }
-
-  @override
-  set category(String value) {
-    _$categoryAtom.reportWrite(value, super.category, () {
-      super.category = value;
-    });
-  }
-
   final _$areaAtom = Atom(name: '_PostFormErrorStore.area');
 
   @override
@@ -732,17 +717,32 @@ mixin _$PostFormErrorStore on _PostFormErrorStore, Store {
     });
   }
 
+  final _$typeHomeAtom = Atom(name: '_PostFormErrorStore.typeHome');
+
+  @override
+  String get typeHome {
+    _$typeHomeAtom.reportRead();
+    return super.typeHome;
+  }
+
+  @override
+  set typeHome(String value) {
+    _$typeHomeAtom.reportWrite(value, super.typeHome, () {
+      super.typeHome = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 titel: ${titel},
-category: ${category},
 area: ${area},
 buyPrice: ${buyPrice},
 rentPrice: ${rentPrice},
 rahnPrice: ${rahnPrice},
 district: ${district},
 description: ${description},
+typeHome: ${typeHome},
 hasErrorInForgotPassword: ${hasErrorInForgotPassword},
 isValid: ${isValid}
     ''';
