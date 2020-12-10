@@ -496,17 +496,6 @@ mixin _$PostFormStore on _PostFormStore, Store {
   }
 
   @override
-  void validateString(String value) {
-    final _$actionInfo = _$_PostFormStoreActionController.startAction(
-        name: '_PostFormStore.validateString');
-    try {
-      return super.validateString(value);
-    } finally {
-      _$_PostFormStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void validateCategoryId(int value) {
     final _$actionInfo = _$_PostFormStoreActionController.startAction(
         name: '_PostFormStore.validateCategoryId');
@@ -567,6 +556,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
         name: '_PostFormStore.validateDescription');
     try {
       return super.validateDescription(value);
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void validateDistrict(String value) {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.validateDistrict');
+    try {
+      return super.validateDistrict(value);
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
@@ -702,6 +702,21 @@ mixin _$PostFormErrorStore on _PostFormErrorStore, Store {
     });
   }
 
+  final _$districtAtom = Atom(name: '_PostFormErrorStore.district');
+
+  @override
+  String get district {
+    _$districtAtom.reportRead();
+    return super.district;
+  }
+
+  @override
+  set district(String value) {
+    _$districtAtom.reportWrite(value, super.district, () {
+      super.district = value;
+    });
+  }
+
   final _$descriptionAtom = Atom(name: '_PostFormErrorStore.description');
 
   @override
@@ -726,6 +741,7 @@ area: ${area},
 buyPrice: ${buyPrice},
 rentPrice: ${rentPrice},
 rahnPrice: ${rahnPrice},
+district: ${district},
 description: ${description},
 hasErrorInForgotPassword: ${hasErrorInForgotPassword},
 isValid: ${isValid}

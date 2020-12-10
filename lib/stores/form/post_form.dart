@@ -26,7 +26,6 @@ abstract class _PostFormStore with Store {
 
   void _setupValidations() {
     _disposers = [
-      reaction((_) => title, validateString),
       reaction((_) => categoryId, validateCategoryId),
       reaction((_) => area, validateArea),
       reaction((_) => buyPrice, validatePrice),
@@ -42,37 +41,37 @@ abstract class _PostFormStore with Store {
   @observable
   bool success = false;
   @observable
-  int ageHome = 0;
+  int ageHome;
 
   @observable
   bool loading = false;
 
   @observable
-  int categoryId = 0;
+  int categoryId;
   @observable
   int postId;
   @observable
-  int propertyHomeTypeId = 0;
+  int propertyHomeTypeId;
   @observable
   double latitude;
   @observable
   double longitude;
   @observable
-  int selectedCity = 0;
+  int selectedCity;
   @observable
-  int selectedDistrict = 0;
+  int selectedDistrict;
   @observable
   String description = "";
   @observable
-  int area = 0;
+  int area;
   @observable
-  double rahnPrice = 0;
+  double rahnPrice;
   @observable
-  double rentPrice = 0;
+  double rentPrice;
   @observable
-  double buyPrice = 0;
+  double buyPrice;
   @observable
-  int countbedroom = 0;
+  int countbedroom;
   @observable
   List<int> amenities = new List<int>();
   // actions:-------------------------------------------------------------------
@@ -159,7 +158,6 @@ abstract class _PostFormStore with Store {
 
   @action
   validateCreatePost() {
-    validateString(title);
     validateCategoryId(categoryId);
     validateArea(area);
     validatePrice(buyPrice);
@@ -178,7 +176,6 @@ abstract class _PostFormStore with Store {
   @action
   Future insertPost() async {
     validateCreatePost();
-
     if (formErrorStore.isValid == true) {
       var post = Post(
         title: this.title,
@@ -199,16 +196,17 @@ abstract class _PostFormStore with Store {
         print(post.toMap());
         loading = false;
       });
-      // _repository.insert(post).then((result) {
-      //   loading = false;
-      //   postId = result["id"];
-      // }).catchError((error) {
-      //   print(error);
-      //   loading = false;
-      // });
     } else {
       throw Exception();
     }
+
+    // _repository.insert(post).then((result) {
+    //   loading = false;
+    //   postId = result["id"];
+    // }).catchError((error) {
+    //   print(error);
+    //   loading = false;
+    // });
   }
 
   @action
@@ -223,17 +221,8 @@ abstract class _PostFormStore with Store {
   }
 
   @action
-  void validateString(String value) {
-    if (value.isEmpty) {
-      formErrorStore.titel = "فیلد را وارد کنید";
-    } else {
-      formErrorStore.titel = null;
-    }
-  }
-
-  @action
   void validateCategoryId(int value) {
-    if (value != null) {
+    if (value == null) {
       formErrorStore.category = "یک گزینه را انتخاب کنید";
     } else {
       formErrorStore.category = null;
@@ -242,8 +231,9 @@ abstract class _PostFormStore with Store {
 
   @action
   void validateArea(int value) {
-    if (value < 0 && value != null) {
+    if (value == null || value <= 0) {
       formErrorStore.area = "مساحت را وارد کنید";
+      print(formErrorStore.area);
     } else {
       formErrorStore.area = null;
     }
@@ -251,7 +241,7 @@ abstract class _PostFormStore with Store {
 
   @action
   void validatePrice(double value) {
-    if (value < 0 && value != null) {
+    if (value == null) {
       formErrorStore.buyPrice = "قیمت را وارد کنید";
     } else {
       formErrorStore.buyPrice = null;
@@ -260,7 +250,7 @@ abstract class _PostFormStore with Store {
 
   @action
   void validateRentPrice(double value) {
-    if (value < 0 && value != null) {
+    if (value == null) {
       formErrorStore.rentPrice = "فیلد را وارد کنید";
     } else {
       formErrorStore.rentPrice = null;
@@ -269,7 +259,7 @@ abstract class _PostFormStore with Store {
 
   @action
   void validateRahnPrice(double value) {
-    if (value < 0 && value != null) {
+    if (value == null || value <= 0) {
       formErrorStore.rahnPrice = "فیلد را وارد کنید";
     } else {
       formErrorStore.rahnPrice = null;
@@ -278,7 +268,7 @@ abstract class _PostFormStore with Store {
 
   @action
   void validateDescription(String value) {
-    if (value.isEmpty) {
+    if (value == null || value.isEmpty) {
       formErrorStore.description = "فیلد را وارد کنید";
     } else {
       formErrorStore.description = null;

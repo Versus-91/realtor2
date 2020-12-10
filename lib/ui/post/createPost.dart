@@ -32,9 +32,8 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   int selectedItem;
+  int cityDropdownValue;
   int _value;
   String _categoryText = '';
   String _fileName;
@@ -527,7 +526,26 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 ),
               ],
             )
-          : SizedBox.shrink();
+          : Opacity(
+              opacity: 1,
+              child: Shimmer.fromColors(
+                child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 15),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('amenities'),
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        )
+                      ],
+                    )),
+                baseColor: Colors.black12,
+                highlightColor: Colors.white,
+                loop: 30,
+              ),
+            );
     });
   }
 
@@ -586,7 +604,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     controller: _areaController,
                     onChanged: (value) {
-                      var area = int.tryParse(_areaController.text) ?? 0;
+                      var area = int.tryParse(_areaController.text);
                       _store.setArea(area);
                     },
                     keyboardType: TextInputType.number,
@@ -776,67 +794,65 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Widget _buildDistrictlistField() {
     return Observer(
       builder: (context) {
-        return _districtStore.districtList != null
-            ? Container(
-                padding: EdgeInsets.only(top: 10, bottom: 15),
-                child: Row(
-                  children: <Widget>[
-                    Flexible(
-                      child: _districtStore.loading == true
-                          ? LinearProgressIndicator()
-                          : DropdownButtonFormField<int>(
-                              decoration: InputDecoration(
-                                errorText: _store.formErrorStore.district,
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent)),
-                                fillColor: Color(0xfff3f3f4),
-                                filled: true,
-                                hintText: AppLocalizations.of(context)
-                                    .translate('district'),
-                                contentPadding: EdgeInsets.all(10),
-                              ),
-                              onChanged: (int val) => setState(() => {
-                                    _store.setDistrict(val),
-                                  }),
-                              items: _districtStore.districtList.districts
-                                  .map((item) {
-                                return DropdownMenuItem<int>(
-                                  child: _districtStore
-                                              .districtList.districts.length >
-                                          0
-                                      ? Text(item.name)
-                                      : Text(
-                                          AppLocalizations.of(context)
-                                              .translate('notfound_district'),
-                                        ),
-                                  value: item.id,
-                                );
-                              }).toList(),
-                            ),
-                    ),
-                  ],
-                ))
-            : Opacity(
-                opacity: 0.8,
-                child: Shimmer.fromColors(
-                  child: Container(
-                      padding: EdgeInsets.only(top: 10, bottom: 15),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            AppLocalizations.of(context).translate('district'),
-                            style: TextStyle(
-                              fontSize: 20.0,
-                            ),
-                          )
-                        ],
-                      )),
-                  baseColor: Colors.black12,
-                  highlightColor: Colors.white,
-                  loop: 30,
-                ),
-              );
+        if (_districtStore.districtList != null) {
+          return Container(
+              padding: EdgeInsets.only(top: 10, bottom: 15),
+              child: Row(
+                children: <Widget>[
+                  Flexible(
+                    child: _districtStore.loading == true
+                        ? LinearProgressIndicator()
+                        : (_districtStore.districtList.districts.length > 0
+                            ? DropdownButtonFormField<int>(
+                                decoration: InputDecoration(
+                                  errorText: _store.formErrorStore.district,
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.transparent)),
+                                  fillColor: Color(0xfff3f3f4),
+                                  filled: true,
+                                  hintText: AppLocalizations.of(context)
+                                      .translate('district'),
+                                  contentPadding: EdgeInsets.all(10),
+                                ),
+                                onChanged: (int val) => setState(() => {
+                                      _store.setDistrict(val),
+                                    }),
+                                items: _districtStore.districtList.districts
+                                    .map((item) {
+                                  return DropdownMenuItem<int>(
+                                    child: Text(item.name),
+                                    value: item.id,
+                                  );
+                                }).toList(),
+                              )
+                            : Text(AppLocalizations.of(context)
+                                .translate('notfound_district'))),
+                  ),
+                ],
+              ));
+        } else {
+          return Opacity(
+            opacity: 0.8,
+            child: Shimmer.fromColors(
+              child: Container(
+                  padding: EdgeInsets.only(top: 10, bottom: 15),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        AppLocalizations.of(context).translate('district'),
+                        style: TextStyle(
+                          fontSize: 20.0,
+                        ),
+                      )
+                    ],
+                  )),
+              baseColor: Colors.black12,
+              highlightColor: Colors.white,
+              loop: 30,
+            ),
+          );
+        }
       },
     );
 
@@ -891,7 +907,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       child: Row(
                         children: <Widget>[
                           Text(
-                            AppLocalizations.of(context).translate('city'),
+                            AppLocalizations.of(context).translate('age_home'),
                             style: TextStyle(
                               fontSize: 20.0,
                             ),
@@ -917,11 +933,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   children: <Widget>[
                     Flexible(
                       child: DropdownButtonFormField<int>(
-                        // focusNode: _cityFocusNode,
-                        // onSaved: (value) {
-                        //   FocusScope.of(context)
-                        //       .requestFocus(_districtFocusNode);
-                        // },
+                        value: cityDropdownValue,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide:
@@ -935,7 +947,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           contentPadding: EdgeInsets.all(10),
                         ),
                         onChanged: (int val) {
-                          _districtStore.getDistrictsByCityid(val);
+                          if (val != cityDropdownValue) {
+                            setState(() {
+                              cityDropdownValue = val;
+                            });
+                            _districtStore.getDistrictsByCityid(val);
+                          }
                         },
                         items: _cityStore.cityList.cities.map((item) {
                           return DropdownMenuItem<int>(
