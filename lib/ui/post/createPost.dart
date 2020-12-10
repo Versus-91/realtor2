@@ -285,6 +285,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildBedroomCountField(),
             ),
+               _mapFeild(),
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildDescriptionField(),
@@ -293,7 +294,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             SizedBox(
               height: 10,
             ),
-            _mapFeild(),
+         
           ],
         ),
       ),
