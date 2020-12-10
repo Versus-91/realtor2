@@ -85,11 +85,16 @@ class Post {
       "typeId": typeId,
       "latitude": latitude,
       "longitude": longitude,
-      "creationTime": creationTime,
       "id": id,
-      "deopsit": deopsit,
-      "rent": rent,
-      "price": price,
+      if (deopsit != null) ...{
+        "deopsit": deopsit,
+      },
+      if (price != null) ...{
+        "price": price,
+      },
+      if (rent != null) ...{
+        "rent": rent,
+      },
       if (district != null) ...{"district": district.toMap()},
       if (category != null) ...{
         "category": category.toMap(),
@@ -97,7 +102,7 @@ class Post {
       if (images != null) ...{
         "images": images.map((e) => toMapImage(e)).toList()
       },
-      if (amenities != null) ...{ 
+      if (amenities != null) ...{
         "amenities":
             amenities != null ? amenities.map((e) => e.id).toList() : null
       },

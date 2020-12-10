@@ -20,7 +20,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -58,12 +57,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   //text controllers:-----------------------------------------------------------
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-  MoneyMaskedTextController _rahnPriceController =
-      MoneyMaskedTextController(precision: 0);
-  MoneyMaskedTextController _rentPriceController =
-      MoneyMaskedTextController(precision: 0);
-  MoneyMaskedTextController _buyPriceController =
-      MoneyMaskedTextController(precision: 0);
+  TextEditingController _rahnPriceController = TextEditingController();
+  TextEditingController _rentPriceController = TextEditingController();
+  TextEditingController _buyPriceController = TextEditingController();
   TextEditingController _areaController = TextEditingController();
   TextEditingController _bedroomCountController = TextEditingController();
 
@@ -263,12 +259,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             Row(
               children: [
                 _buildCitylistField(),
+                Padding(padding: EdgeInsets.only(left: 10)),
                 _buildDistrictlistField(),
               ],
+            ),
+            SizedBox(
+              height: 10,
             ),
             Row(
               children: [
                 _buildHomeTypeField(),
+                Padding(padding: EdgeInsets.only(left: 10)),
                 _buildRangeAreaField(),
               ],
             ),
@@ -288,105 +289,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildDescriptionField(),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: Container(
-                color: Color(0xfff3f3f4),
-                height: MediaQuery.of(context).size.height * 0.23,
-                child: Scrollbar(
-                  child: _paths != null
-                      ? GridView.count(
-                          crossAxisCount: 4,
-                          children: [
-                            GridTile(
-                              child: InkWell(
-                                onTap: () {
-                                  _openFileExplorer();
-                                },
-                                child: Card(
-                                    color: Colors.white,
-                                    child: Center(
-                                      child: Icon(Icons.camera_alt_rounded),
-                                    )),
-                              ),
-                            ),
-                            ...List<Widget>.generate(_paths.length, (index) {
-                              return GridTile(
-                                child: Card(
-                                    color: Colors.white,
-                                    child: Stack(
-                                      children: [
-                                        Image.file(
-                                          File(_paths[index].path),
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                        ),
-                                        Positioned(
-                                          left: 0,
-                                          top: 0,
-                                          child: IconButton(
-                                              icon: Icon(
-                                                Icons.delete,
-                                                color: Colors.redAccent,
-                                              ),
-                                              onPressed: () {
-                                                setState(() {
-                                                  _paths.removeWhere((item) =>
-                                                      item.path ==
-                                                      _paths[index].path);
-                                                });
-                                              }),
-                                        ),
-                                      ],
-                                    )),
-                              );
-                            })
-                          ],
-                        )
-                      : RaisedButton(
-                          color: Color(0xfff3f3f4),
-                          child: Image.asset(
-                            "assets/images/camera.png",
-                            fit: BoxFit.fitHeight,
-                            width: 100,
-                            height: 100,
-                          ),
-                          onPressed: () {
-                            _openFileExplorer();
-                          },
-                        ),
-                ),
-              ),
+            _imageFeild(),
+            SizedBox(
+              height: 10,
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 10),
-                FloatingActionButton.extended(
-                  backgroundColor: Colors.purple,
-                  icon: _store.latitude == null && _store.longitude == null
-                      ? const Icon(Icons.add)
-                      : Icon(
-                          Icons.done,
-                          color: Colors.green[400],
-                        ),
-                  label: Text("نقشه"),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => UserMapScreen(
-                                formState: _store,
-                                // latitude: store.latitude,
-                                // longitude: store.longitude,
-                              )),
-                    );
-                  },
-                ),
-              ],
-            ),
+            _mapFeild(),
           ],
         ),
       ),
@@ -458,6 +365,105 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       ));
     }
     return noList;
+  }
+
+  Widget _mapFeild() {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: FloatingActionButton.extended(
+        backgroundColor: Colors.purple,
+        icon: _store.latitude == null && _store.longitude == null
+            ? const Icon(Icons.add)
+            : Icon(
+                Icons.done,
+                color: Colors.green[400],
+              ),
+        label: Text("نقشه"),
+        onPressed: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UserMapScreen(
+                      formState: _store,
+                    )),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _imageFeild() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 5),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        color: Color(0xfff3f3f4),
+        height: MediaQuery.of(context).size.height * 0.23,
+        child: Scrollbar(
+          child: _paths != null
+              ? GridView.count(
+                  crossAxisCount: 4,
+                  children: [
+                    GridTile(
+                      child: InkWell(
+                        onTap: () {
+                          _openFileExplorer();
+                        },
+                        child: Card(
+                            color: Colors.white,
+                            child: Center(
+                              child: Icon(Icons.camera_alt_rounded),
+                            )),
+                      ),
+                    ),
+                    ...List<Widget>.generate(_paths.length, (index) {
+                      return GridTile(
+                        child: Card(
+                            color: Colors.white,
+                            child: Stack(
+                              children: [
+                                Image.file(
+                                  File(_paths[index].path),
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                ),
+                                Positioned(
+                                  left: 0,
+                                  top: 0,
+                                  child: IconButton(
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Colors.redAccent,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _paths.removeWhere((item) =>
+                                              item.path == _paths[index].path);
+                                        });
+                                      }),
+                                ),
+                              ],
+                            )),
+                      );
+                    })
+                  ],
+                )
+              : RaisedButton(
+                  color: Color(0xfff3f3f4),
+                  child: Image.asset(
+                    "assets/images/camera.png",
+                    fit: BoxFit.fitHeight,
+                    width: 100,
+                    height: 100,
+                  ),
+                  onPressed: () {
+                    _openFileExplorer();
+                  },
+                ),
+        ),
+      ),
+    );
   }
 
   Widget _popularFilter() {
@@ -642,7 +648,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     controller: _rahnPriceController,
                     onChanged: (value) {
-                      _store.setRahnPrice(_rahnPriceController.numberValue);
+                      _store.setRahnPrice(
+                          double.tryParse(_rahnPriceController.text));
                     },
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -685,7 +692,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               child: TextField(
                   controller: _rentPriceController,
                   onChanged: (value) {
-                    _store.setRentPrice(_rentPriceController.numberValue);
+                    _store.setRentPrice(
+                        double.tryParse(_rentPriceController.text));
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -730,7 +738,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   controller: _buyPriceController,
                   onChanged: (valu) {
-                    _store.setBuyPrice(_buyPriceController.numberValue);
+                    _store
+                        .setBuyPrice(double.tryParse(_buyPriceController.text));
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -837,6 +846,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             contentPadding: EdgeInsets.all(10),
                           ),
                           onChanged: (int val) {
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
+
                             _store.setAge(val);
                           },
                           items: List.generate(5, (index) {
@@ -883,7 +895,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       builder: (context) {
         return _cityStore.cityList != null
             ? Container(
-                width: MediaQuery.of(context).size.width / 2.3,
+                width: MediaQuery.of(context).size.width / 2.4,
                 child: DropdownButtonFormField<int>(
                   value: cityDropdownValue,
                   decoration: InputDecoration(
@@ -1067,7 +1079,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return Observer(
       builder: (context) {
         return _typeStore.typeList != null
-            ? Expanded(
+            ? Container(
+                width: MediaQuery.of(context).size.width / 2.4,
                 child: DropdownButtonFormField<int>(
                   decoration: InputDecoration(
                       helperText: '',
@@ -1091,24 +1104,27 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   }).toList(),
                 ),
               )
-            : Opacity(
-                opacity: 1,
-                child: Shimmer.fromColors(
-                  child: Container(
-                      padding: EdgeInsets.only(top: 10, bottom: 15),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            AppLocalizations.of(context).translate('type_home'),
-                            style: TextStyle(
-                              fontSize: 18.0,
-                            ),
-                          )
-                        ],
-                      )),
-                  baseColor: Colors.black12,
-                  highlightColor: Colors.white,
-                  loop: 30,
+            : Flexible(
+                child: Opacity(
+                  opacity: 1,
+                  child: Shimmer.fromColors(
+                    child: Container(
+                        padding: EdgeInsets.only(top: 10, bottom: 15),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('type_home'),
+                              style: TextStyle(
+                                fontSize: 18.0,
+                              ),
+                            )
+                          ],
+                        )),
+                    baseColor: Colors.black12,
+                    highlightColor: Colors.white,
+                    loop: 30,
+                  ),
                 ),
               );
       },
@@ -1203,8 +1219,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
-  dynamic successPost(String message) async {
-    return Future.delayed(Duration(milliseconds: 0), () {
+  Widget successPost(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
       if (message != null && message.isNotEmpty) {
         FlushbarHelper.createSuccess(
           message: message,
@@ -1213,6 +1229,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         )..show(context);
       }
     });
+    return SizedBox.shrink();
   }
 
   // dispose:-------------------------------------------------------------------

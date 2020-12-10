@@ -1,7 +1,9 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/main.dart';
+import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/ui/map/map.dart';
+import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   AnimationController animationController;
   Animation animation;
   int currentState = 0;
-
+  List<SelectedPropertyTypes> amenityList = [];
   @override
   void initState() {
     super.initState();
@@ -349,33 +351,83 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 )),
               ),
               widget.post.amenities.length > 0
-                  ? DataTable(
-                      columns: const <DataColumn>[
-                        DataColumn(
-                          label: Text(
-                            'امکانات',
-                            style: TextStyle(fontStyle: FontStyle.normal),
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('amenities'),
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: Colors.red[300],
+                              fontSize: MediaQuery.of(context).size.width > 360
+                                  ? 18
+                                  : 16,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16, left: 16),
+                          child: Column(
+                            children: getAmeniotiesList(widget.post.amenities),
                           ),
                         ),
-                        DataColumn(
-                          label: Text('وضعیت'),
-                        ),
-                      ],
-                      rows: <DataRow>[
-                        DataRow(
-                            cells: List.generate(widget.post.amenities.length,
-                                (index) {
-                          return DataCell(Text('19'));
-                        })),
                       ],
                     )
-                  : Container(
-                      height: 0,
-                      width: 0,
-                    ),
+                  : Text("no amenities fined"),
             ],
           ],
         ));
+  }
+
+  List<Widget> getAmeniotiesList(List<Amenity> amenities) {
+    final List<Widget> noList = <Widget>[];
+    int count = 0;
+    const int columnCount = 2;
+    for (int i = 0; i < widget.post.amenities.length / columnCount; i++) {
+      final List<Widget> listUI = <Widget>[];
+      for (int i = 0; i < columnCount; i++) {
+        try {
+          final SelectedPropertyTypes amenity = amenityList[count];
+          listUI.add(Expanded(
+            child: Row(
+              children: <Widget>[
+                Material(
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.check_circle_outline, color: Colors.green),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          amenity.titleTxt,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ));
+          if (count < widget.post.amenities.length - 1) {
+            count += 1;
+          } else {
+            break;
+          }
+        } catch (e) {
+          throw (e);
+        }
+      }
+      noList.add(Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: listUI,
+      ));
+    }
+    return noList;
   }
 
   Future isSelected(int id) async {

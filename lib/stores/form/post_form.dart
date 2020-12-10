@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
+import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:dio/dio.dart';
@@ -27,9 +28,9 @@ abstract class _PostFormStore with Store {
   void _setupValidations() {
     _disposers = [
       reaction((_) => area, validateArea),
-      reaction((_) => buyPrice, validatePrice),
-      reaction((_) => rahnPrice, validateRahnPrice),
-      reaction((_) => rentPrice, validateRentPrice),
+      // reaction((_) => buyPrice, validatePrice),
+      // reaction((_) => rahnPrice, validateRahnPrice),
+      // reaction((_) => rentPrice, validateRentPrice),
       reaction((_) => description, validateDescription),
       reaction((_) => propertyHomeTypeId, validateTypeHome),
     ];
@@ -159,9 +160,9 @@ abstract class _PostFormStore with Store {
   @action
   validateCreatePost() {
     validateArea(area);
-    validatePrice(buyPrice);
-    validateRahnPrice(rahnPrice);
-    validateRentPrice(rentPrice);
+    // validatePrice(buyPrice);
+    // validateRahnPrice(rahnPrice);
+    // validateRentPrice(rentPrice);
     validateDescription(description);
     validateTypeHome(propertyHomeTypeId);
   }
@@ -187,26 +188,28 @@ abstract class _PostFormStore with Store {
         deopsit: this.rahnPrice,
         price: this.buyPrice,
         area: this.area,
+        age: this.ageHome,
         bedroom: this.countbedroom,
         categoryId: this.categoryId,
         districtId: this.selectedDistrict,
+        amenities: amenities.map((e) => Amenity(id: e)).toList(),
       );
-      loading = true;
-      return Future.delayed(Duration(seconds: 1), () {
-        print(post.toMap());
+
+      return _repository.insert(post).then((result) {
         loading = false;
+        postId = result["id"];
+        return true;
+      }).catchError((error) {
+        loading = false;
+        throw error;
       });
+      // return Future.delayed(Duration(seconds: 1), () {
+      //   print(post.toMap());
+      //   loading = false;
+      // });
     } else {
       throw Exception();
     }
-
-    // _repository.insert(post).then((result) {
-    //   loading = false;
-    //   postId = result["id"];
-    // }).catchError((error) {
-    //   print(error);
-    //   loading = false;
-    // });
   }
 
   @action
@@ -233,7 +236,7 @@ abstract class _PostFormStore with Store {
   @action
   void validateTypeHome(int value) {
     if (value == null) {
-      formErrorStore.typeHome = "نوع ملک مشخص نشده است";
+      formErrorStore.typeHome = "نوع ملک را مشخص کنید";
       print(formErrorStore.typeHome);
     } else {
       formErrorStore.typeHome = null;
