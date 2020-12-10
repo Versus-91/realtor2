@@ -592,24 +592,26 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               );
             }),
           )
-        : Opacity(
-            opacity: 1,
-            child: Shimmer.fromColors(
-              child: Container(
-                  padding: EdgeInsets.only(top: 10, bottom: 15),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        AppLocalizations.of(context).translate('area'),
-                        style: TextStyle(
-                          fontSize: 18.0,
-                        ),
-                      )
-                    ],
-                  )),
-              baseColor: Colors.black12,
-              highlightColor: Colors.white,
-              loop: 30,
+        : Flexible(
+            child: Opacity(
+              opacity: 1,
+              child: Shimmer.fromColors(
+                child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 15),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('area'),
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        )
+                      ],
+                    )),
+                baseColor: Colors.black12,
+                highlightColor: Colors.white,
+                loop: 30,
+              ),
             ),
           );
   }
@@ -783,24 +785,26 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         .translate('notfound_district'))),
           );
         } else {
-          return Opacity(
-            opacity: 0.8,
-            child: Shimmer.fromColors(
-              child: Container(
-                  padding: EdgeInsets.only(top: 10, bottom: 15),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        AppLocalizations.of(context).translate('district'),
-                        style: TextStyle(
-                          fontSize: 20.0,
-                        ),
-                      )
-                    ],
-                  )),
-              baseColor: Colors.black12,
-              highlightColor: Colors.white,
-              loop: 30,
+          return Flexible(
+            child: Opacity(
+              opacity: 0.8,
+              child: Shimmer.fromColors(
+                child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 15),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('district'),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
+                        )
+                      ],
+                    )),
+                baseColor: Colors.black12,
+                highlightColor: Colors.white,
+                loop: 30,
+              ),
             ),
           );
         }
@@ -908,24 +912,26 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   }).toList(),
                 ),
               )
-            : Opacity(
-                opacity: 0.8,
-                child: Shimmer.fromColors(
-                  child: Container(
-                      padding: EdgeInsets.only(top: 10, bottom: 15),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            AppLocalizations.of(context).translate('city'),
-                            style: TextStyle(
-                              fontSize: 20.0,
-                            ),
-                          )
-                        ],
-                      )),
-                  baseColor: Colors.black12,
-                  highlightColor: Colors.white,
-                  loop: 30,
+            : Flexible(
+                child: Opacity(
+                  opacity: 0.8,
+                  child: Shimmer.fromColors(
+                    child: Container(
+                        padding: EdgeInsets.only(top: 10, bottom: 15),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              AppLocalizations.of(context).translate('city'),
+                              style: TextStyle(
+                                fontSize: 20.0,
+                              ),
+                            )
+                          ],
+                        )),
+                    baseColor: Colors.black12,
+                    highlightColor: Colors.white,
+                    loop: 30,
+                  ),
                 ),
               );
       },
