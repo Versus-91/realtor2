@@ -217,14 +217,14 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         AppLocalizations.of(context).translate('for') +
                             " ${widget.post.category.name}",
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 25,
                           fontWeight: FontWeight.normal,
                         ),
                       ),
@@ -234,7 +234,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                               AppLocalizations.of(context)
                                   .transformCurrency(widget.post.price),
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 17,
                                 fontWeight: FontWeight.normal,
                               ),
                             )
@@ -247,7 +247,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                                           .transformCurrency(
                                               widget.post.deposit),
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.normal,
                                   ),
                                 ),
@@ -260,7 +260,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                                       AppLocalizations.of(context)
                                           .transformCurrency(widget.post.rent),
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.normal,
                                   ),
                                 ),
@@ -270,13 +270,13 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                   ),
                   Divider(
                     endIndent: MediaQuery.of(context).size.width / 1.5,
-                    color: Colors.black54,
+                    color: Colors.blue,
+                    thickness: 1,
                   ),
                   IntrinsicHeight(
                     child: Padding(
                       padding: const EdgeInsets.only(
                         top: 20,
-                        right: 14,
                       ),
                       child: Row(
                         children: [
@@ -334,14 +334,17 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text(
                     AppLocalizations.of(context).translate('description'),
                     style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'ConcertOne-Regular'),
                   ),
-                  aboutHotel('${widget.post.description}'),
+                  descriptionFeild('${widget.post.description}'),
                   if (widget.post.latitude == null) ...[
                     SizedBox.shrink()
                   ] else ...[
@@ -351,12 +354,15 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
+                              SizedBox(
+                                height: 20,
+                              ),
                               Text(
                                 AppLocalizations.of(context)
                                     .translate('amenities'),
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 25,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'ConcertOne-Regular'),
                               ),
@@ -551,19 +557,17 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget aboutHotel(
+  Widget descriptionFeild(
     String description,
   ) {
-    return Padding(
-        padding: EdgeInsets.only(left: 14, right: 14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              description,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
-            ),
-          ],
-        ));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          description,
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.normal),
+        ),
+      ],
+    );
   }
 }
