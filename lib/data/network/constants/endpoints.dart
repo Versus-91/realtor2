@@ -44,4 +44,6 @@ class Endpoints {
       baseUrl + "/api/services/app/account/checkUsername";
   static const String checkPhoneNumber =
       baseUrl + "/api/services/app/account/checkPhoneNumber";
+        static const String checkEmail =
+      baseUrl + "/api/services/app/account/checkEmail";
 }

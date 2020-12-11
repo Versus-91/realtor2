@@ -16,6 +16,13 @@ mixin _$FormStore on _FormStore, Store {
           Computed<bool>(() => super.isUserCheckPending,
               name: '_FormStore.isUserCheckPending'))
       .value;
+  Computed<bool> _$isEmailPendingComputed;
+
+  @override
+  bool get isEmailPending =>
+      (_$isEmailPendingComputed ??= Computed<bool>(() => super.isEmailPending,
+              name: '_FormStore.isEmailPending'))
+          .value;
   Computed<bool> _$isNumberPendingComputed;
 
   @override
@@ -194,6 +201,21 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$_emailCheckAtom = Atom(name: '_FormStore._emailCheck');
+
+  @override
+  ObservableFuture<bool> get _emailCheck {
+    _$_emailCheckAtom.reportRead();
+    return super._emailCheck;
+  }
+
+  @override
+  set _emailCheck(ObservableFuture<bool> value) {
+    _$_emailCheckAtom.reportWrite(value, super._emailCheck, () {
+      super._emailCheck = value;
+    });
+  }
+
   final _$_numberCheckAtom = Atom(name: '_FormStore._numberCheck');
 
   @override
@@ -276,6 +298,13 @@ mixin _$FormStore on _FormStore, Store {
   Future<dynamic> validateUserName(String username) {
     return _$validateUserNameAsyncAction
         .run(() => super.validateUserName(username));
+  }
+
+  final _$validateEmailAsyncAction = AsyncAction('_FormStore.validateEmail');
+
+  @override
+  Future<dynamic> validateEmail(String email) {
+    return _$validateEmailAsyncAction.run(() => super.validateEmail(email));
   }
 
   final _$validateNumberAsyncAction = AsyncAction('_FormStore.validateNumber');
@@ -486,17 +515,6 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
-  void validateEmail(String value) {
-    final _$actionInfo = _$_FormStoreActionController.startAction(
-        name: '_FormStore.validateEmail');
-    try {
-      return super.validateEmail(value);
-    } finally {
-      _$_FormStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void validatePassword(String value) {
     final _$actionInfo = _$_FormStoreActionController.startAction(
         name: '_FormStore.validatePassword');
@@ -557,6 +575,7 @@ location: ${location},
 success: ${success},
 loading: ${loading},
 isUserCheckPending: ${isUserCheckPending},
+isEmailPending: ${isEmailPending},
 isNumberPending: ${isNumberPending},
 canLogin: ${canLogin},
 canRegister: ${canRegister},

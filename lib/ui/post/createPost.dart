@@ -259,7 +259,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             Row(
               children: [
                 _buildCitylistField(),
-                Padding(padding: EdgeInsets.only(left: 10)),
+                VerticalDivider(),
                 _buildDistrictlistField(),
               ],
             ),
@@ -269,7 +269,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             Row(
               children: [
                 _buildHomeTypeField(),
-                Padding(padding: EdgeInsets.only(left: 10)),
+                VerticalDivider(),
                 _buildRangeAreaField(),
               ],
             ),
@@ -285,7 +285,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildBedroomCountField(),
             ),
-               _mapFeild(),
+            _mapFeild(),
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildDescriptionField(),
@@ -294,7 +294,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             SizedBox(
               height: 10,
             ),
-         
           ],
         ),
       ),
@@ -574,7 +573,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Widget _buildRangeAreaField() {
     return _typeStore.typeList != null
-        ? Expanded(
+        ? Flexible(
             child: Observer(builder: (context) {
               return TextFormField(
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -624,49 +623,46 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Widget _buildRentPriceField() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: [
-              Text(AppLocalizations.of(context).translate('rahne'),
-                  style: TextStyle(color: Colors.red[300])),
-              Text(
-                AppLocalizations.of(context).translate('currency_type'),
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
-                    fontWeight: FontWeight.normal),
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: TextField(
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    controller: _rahnPriceController,
-                    onChanged: (value) {
-                      _store.setRahnPrice(
-                          double.tryParse(_rahnPriceController.text));
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        errorText: _store.formErrorStore.rahnPrice,
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent)),
-                        fillColor: Color(0xfff3f3f4),
-                        filled: true,
-                        hintText: AppLocalizations.of(context)
-                            .translate('rahn_price'),
-                        contentPadding: EdgeInsets.all(10))),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: [
+            Text(AppLocalizations.of(context).translate('rahne'),
+                style: TextStyle(color: Colors.red[300])),
+            Text(
+              AppLocalizations.of(context).translate('currency_type'),
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
+                  fontWeight: FontWeight.normal),
+            ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            Flexible(
+              child: TextField(
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  controller: _rahnPriceController,
+                  onChanged: (value) {
+                    _store.setRahnPrice(
+                        double.tryParse(_rahnPriceController.text));
+                  },
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      errorText: _store.formErrorStore.rahnPrice,
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent)),
+                      fillColor: Color(0xfff3f3f4),
+                      filled: true,
+                      hintText:
+                          AppLocalizations.of(context).translate('rahn_price'),
+                      contentPadding: EdgeInsets.all(10))),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -762,8 +758,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return Observer(
       builder: (context) {
         if (_districtStore.districtList != null) {
-          return Container(
-            width: MediaQuery.of(context).size.width / 2.3,
+          return Flexible(
             child: _districtStore.loading == true
                 ? LinearProgressIndicator()
                 : (_districtStore.districtList.districts.length > 0
@@ -895,8 +890,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return Observer(
       builder: (context) {
         return _cityStore.cityList != null
-            ? Container(
-                width: MediaQuery.of(context).size.width / 2.4,
+            ? Flexible(
                 child: DropdownButtonFormField<int>(
                   value: cityDropdownValue,
                   decoration: InputDecoration(
@@ -1023,6 +1017,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           Flexible(
                             child: _buildRentPriceField(),
                           ),
+                          VerticalDivider(),
                           Flexible(child: _buildEjarePriceField()),
                         ],
                       ),
@@ -1080,8 +1075,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return Observer(
       builder: (context) {
         return _typeStore.typeList != null
-            ? Container(
-                width: MediaQuery.of(context).size.width / 2.4,
+            ? Flexible(
+                // width: MediaQuery.of(context).size.width / 2.4,
                 child: DropdownButtonFormField<int>(
                   decoration: InputDecoration(
                       helperText: '',

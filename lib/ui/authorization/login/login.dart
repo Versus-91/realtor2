@@ -48,39 +48,39 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _divider() {
-    return Container(
-      height: 20,
-      margin: EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        children: <Widget>[
-          SizedBox(
-            width: 10,
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Divider(
-                thickness: 1,
-              ),
-            ),
-          ),
-          Text('یا'),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Divider(
-                thickness: 1,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _divider() {
+  //   return Container(
+  //     height: 20,
+  //     margin: EdgeInsets.symmetric(vertical: 5),
+  //     child: Row(
+  //       children: <Widget>[
+  //         SizedBox(
+  //           width: 10,
+  //         ),
+  //         Expanded(
+  //           child: Padding(
+  //             padding: EdgeInsets.symmetric(horizontal: 10),
+  //             child: Divider(
+  //               thickness: 1,
+  //             ),
+  //           ),
+  //         ),
+  //         Text('یا'),
+  //         Expanded(
+  //           child: Padding(
+  //             padding: EdgeInsets.symmetric(horizontal: 10),
+  //             child: Divider(
+  //               thickness: 1,
+  //             ),
+  //           ),
+  //         ),
+  //         SizedBox(
+  //           width: 10,
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget navigate(BuildContext context) {
     Future.delayed(Duration(milliseconds: 0), () {
@@ -278,8 +278,8 @@ class _LoginPageState extends State<LoginPage> {
                                   height: 20,
                                 ),
                                 _submitButton(),
-                                _divider(),
-                                _facebookButton(),
+                                // _divider(),
+                                // _facebookButton(),
                               ],
                             ),
                           );

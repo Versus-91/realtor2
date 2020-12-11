@@ -136,7 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          hint: AppLocalizations.of(context).translate('name'),
+          hint: AppLocalizations.of(context).translate('Name'),
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.account_box,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -245,7 +245,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (!_formStore.formErrorStore.hasErrorsInRegister) {
           _formStore.register().then((result) {
             if (result == true) {
-              _formStore.setUserName(_formStore.userName);
+              _formStore.setUsernameOrEmail(_formStore.userName);
               _formStore.setPassword(_formStore.password);
               _formStore.login().then((value) {
                 if (value == true) {
@@ -420,6 +420,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _buildNameField(),
                         _buildFamilyField(),
                         _buildEmailField(),
+                        Observer(
+                            builder: (_) => AnimatedOpacity(
+                                child: const LinearProgressIndicator(),
+                                duration: const Duration(milliseconds: 300),
+                                opacity: _formStore.isEmailPending ? 1 : 0)),
                         _buildNumberField(),
                         Observer(
                             builder: (_) => AnimatedOpacity(

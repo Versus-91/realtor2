@@ -62,9 +62,14 @@ abstract class _FormStore with Store {
   ObservableFuture<bool> _usernameCheck = ObservableFuture.value(true);
   @computed
   bool get isUserCheckPending => _usernameCheck.status == FutureStatus.pending;
+
+  @observable
+  ObservableFuture<bool> _emailCheck = ObservableFuture.value(true);
+  @computed
+  bool get isEmailPending => _emailCheck.status == FutureStatus.pending;
+
   @observable
   ObservableFuture<bool> _numberCheck = ObservableFuture.value(true);
-
   @computed
   bool get isNumberPending => _numberCheck.status == FutureStatus.pending;
   @observable
@@ -174,18 +179,12 @@ abstract class _FormStore with Store {
   }
 
   @action
-  void validateEmail(String value) {
-    if (value.isEmpty) {
-      formErrorStore.email = "ایمیل را وارد کنید";
-    } else {
-      formErrorStore.email = null;
-    }
-  }
-
-  @action
   Future validateUserName(String username) async {
-    if (isNull(username) || username.isEmpty || username.length < 5) {
+    if (isNull(username) || username.isEmpty) {
       formErrorStore.username = 'نام کاربری را وارد کنید';
+      return;
+    } else if (username.length < 4) {
+      formErrorStore.username = 'نام کاربری باید بیشتر از 4 کاراکتر باشد';
       return;
     }
     _usernameCheck = ObservableFuture(_repository.checkUsername(username));
@@ -196,6 +195,27 @@ abstract class _FormStore with Store {
         return;
       }
       formErrorStore.username = 'حسابی با این نام موجود است.';
+    });
+  }
+
+  @action
+  Future validateEmail(String email) async {
+    if (isNull(email) || email.isEmpty || email.length < 6) {
+      formErrorStore.email = ' ایمیل را وارد کنید';
+      return;
+    }
+    if (!isEmail(email)) {
+      formErrorStore.email = 'ایمیل وارد شده صحیح نمی باشد';
+      return;
+    }
+    _emailCheck = ObservableFuture(_repository.checkEmail(email));
+    _emailCheck.then((result) {
+      print(result);
+      if (result == true) {
+        formErrorStore.email = null;
+        return;
+      }
+      formErrorStore.email = 'حسابی با این ایمیل موجود است.';
     });
   }
 
@@ -238,8 +258,11 @@ abstract class _FormStore with Store {
 
   @action
   void validateUsernameOrEmail(String value) {
-    if (value.isEmpty) {
+    if (value == null) {
       formErrorStore.usernameOrEmail = "نام کاربری یا ایمیل اشتباه است";
+    } else if (value.length < 4) {
+      formErrorStore.usernameOrEmail =
+          "نام کاربری یا ایمیل کمتر از 4 کاراکتر نباشد";
     } else {
       formErrorStore.usernameOrEmail = null;
     }
@@ -247,12 +270,10 @@ abstract class _FormStore with Store {
 
   @action
   bool validateRegisterForm() {
-    validateUserName(userName);
     validatePassword(password);
     validateName(name);
     validateFamily(family);
-    validateNumber(number);
-    validateEmail(email);
+
     return formErrorStore.hasErrorsInRegister ? false : true;
   }
 
@@ -277,6 +298,7 @@ abstract class _FormStore with Store {
       var user = User(
           email: email,
           name: name,
+          username: userName,
           password: password,
           surname: family,
           phonenumber: number);
