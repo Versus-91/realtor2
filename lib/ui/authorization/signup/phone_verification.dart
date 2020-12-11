@@ -422,7 +422,6 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
           setState(() {
             loading = false;
           });
-          print(loading);
         });
       }
     });

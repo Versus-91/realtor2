@@ -106,7 +106,6 @@ class _SearchScreenState extends State<SearchScreen> {
       _minDepositController.text = widget.filterForm.minDepositPrice.toString();
     }
     if (widget.filterForm.maxDepositPrice != null) {
-      print("object");
       _maxDepositController.text = widget.filterForm.maxDepositPrice.toString();
     }
     if (widget.filterForm.minRentPrice != null) {

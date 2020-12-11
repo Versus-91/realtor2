@@ -104,7 +104,6 @@ abstract class _FormStore with Store {
 
   @action
   void setEmail(String value) {
-    print(value);
     email = value;
   }
 
@@ -198,7 +197,6 @@ abstract class _FormStore with Store {
     }
     _emailCheck = ObservableFuture(_repository.checkUsername(email));
     _emailCheck.then((result) {
-      print(result);
       if (result == true) {
         formErrorStore.email = null;
         return;

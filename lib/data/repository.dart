@@ -58,17 +58,13 @@ class Repository {
     // check to see if posts are present in database, then fetch from database
     // else make a network call to get all posts, store them into database for
     // later use
-    return await _postDataSource.count() > 0
-        ? _postDataSource.getPostsFromDb().then((postList) {
-            return postList;
-          }).catchError((err) => throw err)
-        : _postApi.getUserPosts(request: request).then((postsList) {
-            postsList.posts.forEach((post) {
-              _postDataSource.insert(post);
-            });
+    return _postApi.getUserPosts(request: request).then((postsList) {
+      postsList.posts.forEach((post) {
+        _postDataSource.insert(post);
+      });
 
-            return postsList;
-          }).catchError((error) => throw error);
+      return postsList;
+    }).catchError((error) => throw error);
   }
 
   // city: ---------------------------------------------------------------------

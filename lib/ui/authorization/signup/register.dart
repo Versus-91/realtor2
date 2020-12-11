@@ -248,7 +248,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       });
                     }
                   }).catchError((error) {
-                    print(error);
                     _showErrorMessage(
                       "خطا در تایید شماره همراه",
                     );

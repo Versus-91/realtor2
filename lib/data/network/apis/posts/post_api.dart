@@ -55,7 +55,7 @@ class PostApi {
         uri = Uri(
             scheme: 'http',
             host: baseUrl,
-            path: '/api/services/app/Post/GetAll',
+            path: '/api/services/app/Post/GetUserPosts',
             queryParameters: request.toJson());
       } else {
         uri = Uri.http(baseUrl, '/api/services/app/Post/GetUserPosts');

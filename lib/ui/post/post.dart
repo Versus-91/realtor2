@@ -349,7 +349,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                   ),
                 )),
               ),
-              widget.post.amenities.length > 0
+              widget.post.amenities != null && widget.post.amenities.length > 0
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
