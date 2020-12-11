@@ -9,6 +9,13 @@ part of 'form_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$FormStore on _FormStore, Store {
+  Computed<bool> _$isUserCheckPendingComputed;
+
+  @override
+  bool get isUserCheckPending => (_$isUserCheckPendingComputed ??=
+          Computed<bool>(() => super.isUserCheckPending,
+              name: '_FormStore.isUserCheckPending'))
+      .value;
   Computed<bool> _$canLoginComputed;
 
   @override
@@ -42,6 +49,21 @@ mixin _$FormStore on _FormStore, Store {
   set userEmail(String value) {
     _$userEmailAtom.reportWrite(value, super.userEmail, () {
       super.userEmail = value;
+    });
+  }
+
+  final _$emailAtom = Atom(name: '_FormStore.email');
+
+  @override
+  String get email {
+    _$emailAtom.reportRead();
+    return super.email;
+  }
+
+  @override
+  set email(String value) {
+    _$emailAtom.reportWrite(value, super.email, () {
+      super.email = value;
     });
   }
 
@@ -150,6 +172,21 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$_emailCheckAtom = Atom(name: '_FormStore._emailCheck');
+
+  @override
+  ObservableFuture<bool> get _emailCheck {
+    _$_emailCheckAtom.reportRead();
+    return super._emailCheck;
+  }
+
+  @override
+  set _emailCheck(ObservableFuture<bool> value) {
+    _$_emailCheckAtom.reportWrite(value, super._emailCheck, () {
+      super._emailCheck = value;
+    });
+  }
+
   final _$fetchFutureAtom = Atom(name: '_FormStore.fetchFuture');
 
   @override
@@ -225,6 +262,13 @@ mixin _$FormStore on _FormStore, Store {
     });
   }
 
+  final _$validateEmailAsyncAction = AsyncAction('_FormStore.validateEmail');
+
+  @override
+  Future<dynamic> validateEmail(String email) {
+    return _$validateEmailAsyncAction.run(() => super.validateEmail(email));
+  }
+
   final _$changePhoneNumberAsyncAction =
       AsyncAction('_FormStore.changePhoneNumber');
 
@@ -288,6 +332,17 @@ mixin _$FormStore on _FormStore, Store {
         name: '_FormStore.setPassword');
     try {
       return super.setPassword(value);
+    } finally {
+      _$_FormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setEmail(String value) {
+    final _$actionInfo =
+        _$_FormStoreActionController.startAction(name: '_FormStore.setEmail');
+    try {
+      return super.setEmail(value);
     } finally {
       _$_FormStoreActionController.endAction(_$actionInfo);
     }
@@ -495,6 +550,7 @@ mixin _$FormStore on _FormStore, Store {
   String toString() {
     return '''
 userEmail: ${userEmail},
+email: ${email},
 name: ${name},
 family: ${family},
 username: ${username},
@@ -507,6 +563,7 @@ confirmPassword: ${confirmPassword},
 location: ${location},
 success: ${success},
 loading: ${loading},
+isUserCheckPending: ${isUserCheckPending},
 canLogin: ${canLogin},
 canRegister: ${canRegister},
 canForgetPassword: ${canForgetPassword}
@@ -549,6 +606,21 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
   set userEmail(String value) {
     _$userEmailAtom.reportWrite(value, super.userEmail, () {
       super.userEmail = value;
+    });
+  }
+
+  final _$emailAtom = Atom(name: '_FormErrorStore.email');
+
+  @override
+  String get email {
+    _$emailAtom.reportRead();
+    return super.email;
+  }
+
+  @override
+  set email(String value) {
+    _$emailAtom.reportWrite(value, super.email, () {
+      super.email = value;
     });
   }
 
@@ -646,6 +718,7 @@ mixin _$FormErrorStore on _FormErrorStore, Store {
   String toString() {
     return '''
 userEmail: ${userEmail},
+email: ${email},
 name: ${name},
 family: ${family},
 number: ${number},

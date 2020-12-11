@@ -145,12 +145,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           inputAction: TextInputAction.next,
           focusNode: _emailFocusNode,
           onChanged: (value) {
-            _formStore.setUserLogin(_userEmailController.text);
+            _formStore.setEmail(_userEmailController.text);
           },
           onFieldSubmitted: (value) {
             FocusScope.of(context).requestFocus(_numberFocusNode);
           },
-          errorText: _formStore.formErrorStore.userEmail,
+          errorText: _formStore.formErrorStore.email,
         );
       },
     );
@@ -395,6 +395,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         _buildNameField(),
                         _buildFamilyField(),
                         _buildEmailField(),
+                        Observer(
+                            builder: (_) => AnimatedOpacity(
+                                child: const LinearProgressIndicator(),
+                                duration: const Duration(milliseconds: 300),
+                                opacity:
+                                    _formStore.isUserCheckPending ? 1 : 0)),
                         _buildNumberField(),
                         _buildPasswordField(),
                       ],

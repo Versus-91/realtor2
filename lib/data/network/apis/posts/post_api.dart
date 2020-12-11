@@ -242,6 +242,26 @@ class PostApi {
     }
   }
 
+  Future checkPhoneNumber(String phonenumber) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.checkPhoneNumber, data: {"phoneNumber": phonenumber});
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future checkUsername(String username) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.checkUsername, data: {"username": username});
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
+
   /// sample api call with default rest client
 //  Future<PostsList> getPosts() {
 //

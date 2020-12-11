@@ -3,6 +3,7 @@ import 'package:boilerplate/models/authenticate/login.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:mobx/mobx.dart';
+import 'package:validators/validators.dart';
 
 part 'form_store.g.dart';
 
@@ -27,6 +28,7 @@ abstract class _FormStore with Store {
   void _setupValidations() {
     _disposers = [
       reaction((_) => userEmail, validateUserEmail),
+      reaction((_) => email, validateEmail),
       reaction((_) => password, validatePassword),
       reaction((_) => name, validateName),
       reaction((_) => family, validateFamily),
@@ -38,6 +40,8 @@ abstract class _FormStore with Store {
   // store variables:-----------------------------------------------------------
   @observable
   String userEmail = '';
+  @observable
+  String email;
   @observable
   String name = '';
   @observable
@@ -55,7 +59,8 @@ abstract class _FormStore with Store {
   static ObservableFuture emptyResponse = ObservableFuture.value(null);
   @observable
   ObservableFuture<bool> _emailCheck = ObservableFuture.value(true);
-
+  @computed
+  bool get isUserCheckPending => _emailCheck.status == FutureStatus.pending;
   @observable
   ObservableFuture fetchFuture = ObservableFuture(emptyResponse);
   @observable
@@ -95,6 +100,12 @@ abstract class _FormStore with Store {
   @action
   void setPassword(String value) {
     password = value;
+  }
+
+  @action
+  void setEmail(String value) {
+    print(value);
+    email = value;
   }
 
   @action
@@ -180,28 +191,20 @@ abstract class _FormStore with Store {
   }
 
   @action
-  Future validateEmail(String value) async {
-    if (value == null || value.isEmpty) {
+  Future validateEmail(String email) async {
+    if (isNull(email) || email.isEmpty || email.length < 5) {
       formErrorStore.email = 'Cannot be blank';
       return;
     }
-
-    try {
-      // Wrap the future to track the status of the call with an ObservableFuture
-      // _emailCheck = ObservableFuture(checkValidEmail(value));
-
-      formErrorStore.email = null;
-
-      final isValid = await _emailCheck;
-      if (!isValid) {
-        formErrorStore.email = 'email cannot be "admin"';
+    _emailCheck = ObservableFuture(_repository.checkUsername(email));
+    _emailCheck.then((result) {
+      print(result);
+      if (result == true) {
+        formErrorStore.email = null;
         return;
       }
-    } on Object catch (_) {
-      formErrorStore.email = null;
-    }
-
-    formErrorStore.email = null;
+      formErrorStore.email = 'حسابی با این ایمیل موجود است.';
+    });
   }
 
   @action
@@ -267,7 +270,7 @@ abstract class _FormStore with Store {
   Future register() async {
     if (validateRegisterForm() == true) {
       var user = User(
-          email: userEmail,
+          email: email,
           name: name,
           password: password,
           surname: family,

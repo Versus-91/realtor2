@@ -255,5 +255,18 @@ class Repository {
   Future verificationCodePhone(String phonenumber, String code) {
     return _postApi.verificationCodePhone(phonenumber, code);
   }
+
+  Future checkPhoneNumber(String phonenumber) {
+    return _postApi.checkPhoneNumber(phonenumber);
+  }
+
+  Future checkUsername(String email) {
+    return _postApi.checkUsername(email).then((result) {
+      if (result == "available") {
+        return true;
+      }
+      return false;
+    }).catchError((err) => throw err);
+  }
 }
 //////

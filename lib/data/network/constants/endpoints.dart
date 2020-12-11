@@ -40,4 +40,8 @@ class Endpoints {
   static const String addphonenumber = baseUrl + "/api/account/addphonenumber";
   static const String verifyphonenumber =
       baseUrl + "/api/account/verifyphonenumber";
+  static const String checkUsername =
+      baseUrl + "/api/services/app/account/checkUsername";
+  static const String checkPhoneNumber =
+      baseUrl + "/api/services/app/account/checkPhoneNumber";
 }
