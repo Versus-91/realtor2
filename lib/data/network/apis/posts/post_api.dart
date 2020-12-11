@@ -61,7 +61,7 @@ class PostApi {
         uri = Uri.http(baseUrl, '/api/services/app/Post/GetUserPosts');
       }
       final res = await _dioClient.get(uri.toString());
-
+      // print(res);
       return PostList.fromJson(
           res["result"]["items"], res["result"]["totalCount"]);
     } catch (e) {

@@ -180,7 +180,7 @@ abstract class _PostFormStore with Store {
     if (formErrorStore.isValid == true) {
       var post = Post(
         title: this.title,
-        longitude: this.latitude,
+        longitude: this.longitude,
         latitude: this.latitude,
         description: this.description,
         typeId: this.propertyHomeTypeId,

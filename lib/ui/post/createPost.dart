@@ -546,7 +546,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               // when user presses enter it will adapt to it
             ),
             keyboardType: TextInputType.multiline,
-            minLines: 3, //Normal textInputField will be displayed
+            minLines: 2, //Normal textInputField will be displayed
             maxLines: 5,
             controller: _descriptionController,
 

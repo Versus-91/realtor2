@@ -46,10 +46,6 @@ class _UserMapScreenState extends State<UserMapScreen> {
     _mapController.move(LatLng(position.latitude, position.longitude), 14);
   }
 
-  Widget _buildAppBar() {
-    return AppBar();
-  }
-
   Widget _mapSection() {
     return Stack(children: <Widget>[
       Observer(builder: (context) {
@@ -151,6 +147,7 @@ class _UserMapScreenState extends State<UserMapScreen> {
         ),
       );
     });
+    
     widget.formState.setLatitude(coordinations.latitude);
     widget.formState.setLongitude(coordinations.longitude);
   }

@@ -24,6 +24,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    print(widget.post.toMap());
     animationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     animation = Tween(begin: 0, end: 60).animate(animationController)
@@ -158,6 +159,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 )),
+            //  padding: EdgeInsets.only(top: 20, right: 14, left: 0),
             Container(
               alignment: Alignment.topLeft,
               child: FlatButton(
@@ -211,169 +213,176 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
             Padding(
               padding: const EdgeInsets.only(right: 14),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    AppLocalizations.of(context).translate('for') +
-                        " ${widget.post.category.name}",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        AppLocalizations.of(context).translate('for') +
+                            " ${widget.post.category.name}",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      widget.post.category.name.contains(
+                              AppLocalizations.of(context).translate('sell'))
+                          ? Text(
+                              AppLocalizations.of(context)
+                                  .transformCurrency(widget.post.price),
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            )
+                          : Row(
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)
+                                          .translate('rahn') +
+                                      AppLocalizations.of(context)
+                                          .transformCurrency(
+                                              widget.post.deposit),
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)
+                                          .translate('rent') +
+                                      AppLocalizations.of(context)
+                                          .transformCurrency(widget.post.rent),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ],
+                  ),
+                  Divider(
+                    endIndent: MediaQuery.of(context).size.width / 1.5,
+                    color: Colors.black54,
+                  ),
+                  IntrinsicHeight(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 20,
+                        right: 14,
+                      ),
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              Text(AppLocalizations.of(context)
+                                  .translate('post_id')),
+                              Text(AppLocalizations.of(context)
+                                  .transformNumbers(widget.post.id.toString()))
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: VerticalDivider(
+                              color: Colors.grey,
+                              width: 10,
+                              endIndent: 4,
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Text(AppLocalizations.of(context)
+                                  .translate('bed')),
+                              Text(AppLocalizations.of(context)
+                                  .transformNumbers(
+                                      widget.post.bedroom.toString()))
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: VerticalDivider(
+                              color: Colors.grey,
+                              width: 10,
+                              endIndent: 4,
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Text(AppLocalizations.of(context)
+                                  .translate('area')),
+                              Text(AppLocalizations.of(context)
+                                  .transformNumbers(
+                                      widget.post.area.toString()))
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: VerticalDivider(
+                              color: Colors.grey,
+                              width: 10,
+                              endIndent: 4,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  widget.post.category.name.contains(
-                          AppLocalizations.of(context).translate('sell'))
-                      ? Text(
-                          AppLocalizations.of(context)
-                              .transformCurrency(widget.post.price),
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        )
-                      : Row(
-                          children: [
-                            Text(
-                              AppLocalizations.of(context).translate('rahn') +
-                                  '${widget.post.deposit}',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal,
+                  Text(
+                    AppLocalizations.of(context).translate('description'),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'ConcertOne-Regular'),
+                  ),
+                  aboutHotel('${widget.post.description}'),
+                  if (widget.post.latitude == null) ...[
+                    SizedBox.shrink()
+                  ] else ...[
+                    widget.post.amenities != null &&
+                            widget.post.amenities.length > 0
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('amenities'),
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'ConcertOne-Regular'),
                               ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              AppLocalizations.of(context).translate('rent') +
-                                  '${widget.post.rent}',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal,
+                              Column(
+                                children:
+                                    getAmeniotiesList(widget.post.amenities),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          )
+                        : SizedBox.shrink(),
+                  ],
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 14),
-              child: Divider(
-                endIndent: MediaQuery.of(context).size.width / 1.5,
-                color: Colors.black54,
-              ),
-            ),
-            IntrinsicHeight(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 20,
-                  right: 14,
+              padding: EdgeInsets.only(top: 20, bottom: 5, left: 5, right: 5),
+              child: Center(
+                  child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 250,
+                child: MapScreen(
+                  latitude: widget.post.latitude,
+                  longitude: widget.post.longitude,
                 ),
-                child: Row(
-                  children: [
-                    Column(
-                      children: [
-                        Text(AppLocalizations.of(context).translate('post_id')),
-                        Text(AppLocalizations.of(context)
-                            .transformNumbers(widget.post.id.toString()))
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: VerticalDivider(
-                        color: Colors.grey,
-                        width: 10,
-                        endIndent: 4,
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Text(AppLocalizations.of(context).translate('bed')),
-                        Text(AppLocalizations.of(context)
-                            .transformNumbers(widget.post.bedroom.toString()))
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: VerticalDivider(
-                        color: Colors.grey,
-                        width: 10,
-                        endIndent: 4,
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Text(AppLocalizations.of(context).translate('area')),
-                        Text(AppLocalizations.of(context)
-                            .transformNumbers(widget.post.area.toString()))
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: VerticalDivider(
-                        color: Colors.grey,
-                        width: 10,
-                        endIndent: 4,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              )),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 20, right: 14, left: 14),
-              child: Text(
-                AppLocalizations.of(context).translate('description'),
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'ConcertOne-Regular'),
-              ),
-            ),
-            aboutHotel('${widget.post.description}'),
-            if (widget.post.latitude == null) ...[
-              SizedBox.shrink()
-            ] else ...[
-              Padding(
-                padding:
-                    EdgeInsets.only(top: 50, bottom: 50, left: 0, right: 0),
-                child: Center(
-                    child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 250,
-                  child: MapScreen(
-                    latitude: widget.post.latitude,
-                    longitude: widget.post.longitude,
-                  ),
-                )),
-              ),
-              widget.post.amenities != null && widget.post.amenities.length > 0
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          AppLocalizations.of(context).translate('amenities'),
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Colors.red[300],
-                              fontSize: MediaQuery.of(context).size.width > 360
-                                  ? 18
-                                  : 16,
-                              fontWeight: FontWeight.normal),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16, left: 16),
-                          child: Column(
-                            children: getAmeniotiesList(widget.post.amenities),
-                          ),
-                        ),
-                      ],
-                    )
-                  : SizedBox.shrink(),
-            ],
           ],
         ));
   }
