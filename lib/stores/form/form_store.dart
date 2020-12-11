@@ -53,6 +53,8 @@ abstract class _FormStore with Store {
   @observable
   String number;
   static ObservableFuture emptyResponse = ObservableFuture.value(null);
+  @observable
+  ObservableFuture<bool> _emailCheck = ObservableFuture.value(true);
 
   @observable
   ObservableFuture fetchFuture = ObservableFuture(emptyResponse);
@@ -175,6 +177,31 @@ abstract class _FormStore with Store {
     } else {
       formErrorStore.userEmail = null;
     }
+  }
+
+  @action
+  Future validateEmail(String value) async {
+    if (value == null || value.isEmpty) {
+      formErrorStore.email = 'Cannot be blank';
+      return;
+    }
+
+    try {
+      // Wrap the future to track the status of the call with an ObservableFuture
+      // _emailCheck = ObservableFuture(checkValidEmail(value));
+
+      formErrorStore.email = null;
+
+      final isValid = await _emailCheck;
+      if (!isValid) {
+        formErrorStore.email = 'email cannot be "admin"';
+        return;
+      }
+    } on Object catch (_) {
+      formErrorStore.email = null;
+    }
+
+    formErrorStore.email = null;
   }
 
   @action
@@ -334,6 +361,8 @@ abstract class _FormErrorStore with Store {
   @observable
   String userEmail;
   @observable
+  String email;
+  @observable
   String name;
   @observable
   String family;
@@ -352,6 +381,7 @@ abstract class _FormErrorStore with Store {
   @computed
   bool get hasErrorsInRegister =>
       userEmail != null ||
+      email != null ||
       password != null ||
       name != null ||
       username != null ||

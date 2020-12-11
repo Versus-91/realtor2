@@ -212,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                         Observer(builder: (context) {
                           return Container(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
                                   AppLocalizations.of(context)

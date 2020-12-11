@@ -96,6 +96,8 @@ abstract class _UserStore with Store {
     return future;
   }
 
+
+
   @action
   Future uploadAvatarImage(MultipartFile imageAvatar) async {
     avatarloading = true;
