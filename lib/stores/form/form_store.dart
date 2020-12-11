@@ -27,7 +27,8 @@ abstract class _FormStore with Store {
 
   void _setupValidations() {
     _disposers = [
-      reaction((_) => userEmail, validateUserEmail),
+      reaction((_) => userName, validateUserName),
+      reaction((_) => usernameOrEmail, validateUsernameOrEmail),
       reaction((_) => email, validateEmail),
       reaction((_) => password, validatePassword),
       reaction((_) => name, validateName),
@@ -39,7 +40,7 @@ abstract class _FormStore with Store {
 
   // store variables:-----------------------------------------------------------
   @observable
-  String userEmail = '';
+  String userName = '';
   @observable
   String email;
   @observable
@@ -47,7 +48,7 @@ abstract class _FormStore with Store {
   @observable
   String family = '';
   @observable
-  String username = '';
+  String usernameOrEmail;
   @observable
   int userType = 0;
   @observable
@@ -58,13 +59,21 @@ abstract class _FormStore with Store {
   String number;
   static ObservableFuture emptyResponse = ObservableFuture.value(null);
   @observable
+  ObservableFuture<bool> _usernameCheck = ObservableFuture.value(true);
+  @computed
+  bool get isUserCheckPending => _usernameCheck.status == FutureStatus.pending;
+
+  @observable
   ObservableFuture<bool> _emailCheck = ObservableFuture.value(true);
   @computed
-  bool get isUserCheckPending => _emailCheck.status == FutureStatus.pending;
+  bool get isEmailPending => _emailCheck.status == FutureStatus.pending;
+
+  @observable
+  ObservableFuture<bool> _numberCheck = ObservableFuture.value(true);
+  @computed
+  bool get isNumberPending => _numberCheck.status == FutureStatus.pending;
   @observable
   ObservableFuture fetchFuture = ObservableFuture(emptyResponse);
-  @observable
-  String confirmPassword = '';
 
   @observable
   String location = '';
@@ -77,24 +86,22 @@ abstract class _FormStore with Store {
   @computed
   bool get canLogin =>
       !formErrorStore.hasErrorsInLogin &&
-      userEmail.isNotEmpty &&
+      userName.isNotEmpty &&
       password.isNotEmpty;
 
   @computed
   bool get canRegister =>
       !formErrorStore.hasErrorsInRegister &&
-      userEmail.isNotEmpty &&
-      password.isNotEmpty &&
-      confirmPassword.isNotEmpty;
-
+      userName.isNotEmpty &&
+      password.isNotEmpty;
   @computed
   bool get canForgetPassword =>
-      !formErrorStore.hasErrorInForgotPassword && userEmail.isNotEmpty;
+      !formErrorStore.hasErrorInForgotPassword && userName.isNotEmpty;
 
   // actions:-------------------------------------------------------------------
   @action
-  void setUserLogin(String value) {
-    userEmail = value;
+  void setUserName(String value) {
+    userName = value;
   }
 
   @action
@@ -108,23 +115,18 @@ abstract class _FormStore with Store {
   }
 
   @action
-  void setConfrimPassword(String value) {
-    confirmPassword = value;
-  }
-
-  @action
   void setName(String value) {
     name = value;
   }
 
   @action
-  void setFamily(String value) {
-    family = value;
+  void setUsernameOrEmail(String input) {
+    usernameOrEmail = input;
   }
 
   @action
-  void setUserName(String value) {
-    username = value;
+  void setFamily(String value) {
+    family = value;
   }
 
   @action
@@ -140,11 +142,6 @@ abstract class _FormStore with Store {
   @action
   void setRegisterId(String value) {
     name = value;
-  }
-
-  @action
-  void setConfirmPassword(String value) {
-    confirmPassword = value;
   }
 
   @action
@@ -181,21 +178,36 @@ abstract class _FormStore with Store {
   }
 
   @action
-  void validateUserEmail(String value) {
-    if (value.isEmpty) {
-      formErrorStore.userEmail = "ایمیل  یا نام کاربری را وارد کنید";
-    } else {
-      formErrorStore.userEmail = null;
+  Future validateUserName(String username) async {
+    if (isNull(username) || username.isEmpty) {
+      formErrorStore.username = 'نام کاربری را وارد کنید';
+      return;
+    } else if (username.length < 4) {
+      formErrorStore.username = 'نام کاربری باید بیشتر از 4 کاراکتر باشد';
+      return;
     }
+    _usernameCheck = ObservableFuture(_repository.checkUsername(username));
+    _usernameCheck.then((result) {
+      print(result);
+      if (result == true) {
+        formErrorStore.username = null;
+        return;
+      }
+      formErrorStore.username = 'حسابی با این نام موجود است.';
+    });
   }
 
   @action
   Future validateEmail(String email) async {
-    if (isNull(email) || email.isEmpty || email.length < 5) {
-      formErrorStore.email = 'Cannot be blank';
+    if (isNull(email) || email.isEmpty || email.length < 6) {
+      formErrorStore.email = ' ایمیل را وارد کنید';
       return;
     }
-    _emailCheck = ObservableFuture(_repository.checkUsername(email));
+    if (!isEmail(email)) {
+      formErrorStore.email = 'ایمیل وارد شده صحیح نمی باشد';
+      return;
+    }
+    _emailCheck = ObservableFuture(_repository.checkEmail(email));
     _emailCheck.then((result) {
       if (result == true) {
         formErrorStore.email = null;
@@ -206,16 +218,29 @@ abstract class _FormStore with Store {
   }
 
   @action
-  void validateNumber(String value) {
+  Future validateNumber(String number) async {
     String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
     RegExp regExp = new RegExp(patttern);
-    if (value == null) {
+    if (number == null) {
       formErrorStore.number = 'پرکردن شماره تماس الزامی است';
-    } else if (!regExp.hasMatch(value)) {
+    } else if (!regExp.hasMatch(number)) {
       formErrorStore.number = ' شماره تماس نامعتبر است';
     } else {
       formErrorStore.number = null;
     }
+    if (isNull(number) || number.isEmpty || number.length < 10) {
+      formErrorStore.number = ' شماره همراه را وارد کنید';
+      return;
+    }
+    _numberCheck = ObservableFuture(_repository.checkPhoneNumber(number));
+    _numberCheck.then((result) {
+      print(result);
+      if (result == true) {
+        formErrorStore.number = null;
+        return;
+      }
+      formErrorStore.number = 'حسابی با این شماره موجود است.';
+    });
   }
 
   @action
@@ -230,31 +255,32 @@ abstract class _FormStore with Store {
   }
 
   @action
+  void validateUsernameOrEmail(String value) {
+    if (value == null) {
+      formErrorStore.usernameOrEmail = "نام کاربری یا ایمیل اشتباه است";
+    } else if (value.length < 4) {
+      formErrorStore.usernameOrEmail =
+          "نام کاربری یا ایمیل کمتر از 4 کاراکتر نباشد";
+    } else {
+      formErrorStore.usernameOrEmail = null;
+    }
+  }
+
+  @action
   bool validateRegisterForm() {
-    validateUserEmail(userEmail);
     validatePassword(password);
     validateName(name);
     validateFamily(family);
-    validateNumber(number);
+
     return formErrorStore.hasErrorsInRegister ? false : true;
   }
 
   @action
   bool validateLoginForm() {
-    validateUserEmail(userEmail);
+    validateUsernameOrEmail(usernameOrEmail);
     validatePassword(password);
     return formErrorStore.hasErrorsInLogin ? false : true;
   }
-  // @action
-  // void validateConfirmPassword(String value) {
-  //   if (value.isEmpty) {
-  //     formErrorStore.confirmPassword = "این گزینه باید پر شود";
-  //   } else if (value != password) {
-  //     formErrorStore.confirmPassword = "پسورد مطابقت ندارد";
-  //   } else {
-  //     formErrorStore.confirmPassword = null;
-  //   }
-  // }
 
   @action
   Future changePhoneNumber(String phoneNumber) async {
@@ -270,6 +296,7 @@ abstract class _FormStore with Store {
       var user = User(
           email: email,
           name: name,
+          username: userName,
           password: password,
           surname: family,
           phonenumber: number);
@@ -290,7 +317,7 @@ abstract class _FormStore with Store {
   @action
   Future updeteUser() async {
     var user = User(
-        email: userEmail, name: name, surname: family, phonenumber: number);
+        email: email, name: userName, surname: family, phonenumber: number);
     loading = true;
     return _repository.updateUser(user).then((result) {
       loading = false;
@@ -311,7 +338,7 @@ abstract class _FormStore with Store {
       return _repository
           .authenticate(Login(
               password: password,
-              userNameOrEmailAddress: userEmail.trim(),
+              userNameOrEmailAddress: userName.trim(),
               rememberClient: true))
           .then((result) {
         loading = false;
@@ -321,7 +348,7 @@ abstract class _FormStore with Store {
         loading = false;
         success = false;
         if (e != null) {
-          if (e.toString().contains("وود ناموفقیت آمیز است"))
+          if (e.toString().contains("ورود ناموفقیت آمیز است"))
             errorStore.errorMessage =
                 "نام کاربری و رمز خود را چک کنید خطا در ورود";
         } else {
@@ -349,18 +376,11 @@ abstract class _FormStore with Store {
       d();
     }
   }
-
-  void validateAll() {
-    validatePassword(password);
-    validateUserEmail(userEmail);
-  }
 }
 
 class FormErrorStore = _FormErrorStore with _$FormErrorStore;
 
 abstract class _FormErrorStore with Store {
-  @observable
-  String userEmail;
   @observable
   String email;
   @observable
@@ -372,24 +392,23 @@ abstract class _FormErrorStore with Store {
   @observable
   String password;
   @observable
-  String username;
+  String usernameOrEmail;
+
   @observable
-  String confirmPassword;
+  String username;
 
   @computed
-  bool get hasErrorsInLogin => userEmail != null || password != null;
+  bool get hasErrorsInLogin => usernameOrEmail != null || password != null;
 
   @computed
   bool get hasErrorsInRegister =>
-      userEmail != null ||
       email != null ||
       password != null ||
       name != null ||
       username != null ||
       family != null ||
-      number != null ||
-      confirmPassword != null;
+      number != null;
 
   @computed
-  bool get hasErrorInForgotPassword => userEmail != null;
+  bool get hasErrorInForgotPassword => username != null;
 }

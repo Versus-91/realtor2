@@ -251,7 +251,15 @@ class PostApi {
       throw e;
     }
   }
-
+ Future checkEmail(String email) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.checkEmail, data: {"emailAddress": email});
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
   Future checkUsername(String username) async {
     try {
       final res = await _dioClient

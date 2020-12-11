@@ -1,4 +1,6 @@
 class User {
+  String username;
+
   String name;
   String surname;
   String password;
@@ -10,19 +12,20 @@ class User {
       this.surname,
       this.password,
       this.email,
+      this.username,
       this.phonenumber,
       this.avatar});
   factory User.fromJson(Map<String, dynamic> json) => User(
-        email: json["emailAddress"],
-        name: json["name"],
-        surname: json["surname"],
-        phonenumber: json["phoneNumber"],
-        avatar: json["avatar"],
-      );
+      email: json["emailAddress"],
+      name: json["name"],
+      surname: json["surname"],
+      phonenumber: json["phoneNumber"],
+      avatar: json["avatar"],
+      username: json["userName"]);
   Map<String, dynamic> toMap() => {
         "emailAddress": email,
         "name": name,
-        "userName": email,
+        "userName": username,
         "surname": surname,
         "password": password,
         "phoneNumber": phonenumber,

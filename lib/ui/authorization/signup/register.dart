@@ -88,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildNameField() {
+  Widget _buildUserNameField() {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
@@ -100,11 +100,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.account_circle,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-          textController: _nameController,
+          textController: _userNameController,
           onChanged: (value) {
-            _formStore.setName(_nameController.text);
+            _formStore.setUserName(_userNameController.text);
           },
-          errorText: _formStore.formErrorStore.name,
+          errorText: _formStore.formErrorStore.username,
         );
       },
     );
@@ -124,9 +124,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
           textController: _familyController,
           onChanged: (value) {
-            _formStore.setFamily(_familyController.text);
+            _formStore.setName(_nameController.text);
           },
           errorText: _formStore.formErrorStore.family,
+        );
+      },
+    );
+  }
+
+  Widget _buildNameField() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          hint: AppLocalizations.of(context).translate('Name'),
+          padding: EdgeInsets.only(top: 16.0),
+          icon: Icons.account_box,
+          iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
+          textController: _nameController,
+          onChanged: (value) {
+            _formStore.setFamily(_nameController.text);
+          },
+          errorText: _formStore.formErrorStore.name,
         );
       },
     );
@@ -227,7 +245,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (!_formStore.formErrorStore.hasErrorsInRegister) {
           _formStore.register().then((result) {
             if (result == true) {
-              _formStore.setUserName(_formStore.username);
+              _formStore.setUsernameOrEmail(_formStore.userName);
               _formStore.setPassword(_formStore.password);
               _formStore.login().then((value) {
                 if (value == true) {
@@ -391,6 +409,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     Column(
                       children: <Widget>[
+                        _buildUserNameField(),
+                        Observer(
+                            builder: (_) => AnimatedOpacity(
+                                child: const LinearProgressIndicator(),
+                                duration: const Duration(milliseconds: 300),
+                                opacity:
+                                    _formStore.isUserCheckPending ? 1 : 0)),
                         _buildNameField(),
                         _buildFamilyField(),
                         _buildEmailField(),
@@ -398,9 +423,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             builder: (_) => AnimatedOpacity(
                                 child: const LinearProgressIndicator(),
                                 duration: const Duration(milliseconds: 300),
-                                opacity:
-                                    _formStore.isUserCheckPending ? 1 : 0)),
+                                opacity: _formStore.isEmailPending ? 1 : 0)),
                         _buildNumberField(),
+                        Observer(
+                            builder: (_) => AnimatedOpacity(
+                                child: const LinearProgressIndicator(),
+                                duration: const Duration(milliseconds: 300),
+                                opacity: _formStore.isNumberPending ? 1 : 0)),
                         _buildPasswordField(),
                       ],
                     ),
