@@ -257,11 +257,17 @@ class Repository {
   }
 
   Future checkPhoneNumber(String phonenumber) {
-    return _postApi.checkPhoneNumber(phonenumber);
+    return _postApi.checkPhoneNumber(phonenumber).then((result) {
+      if (result == "available") {
+        return true;
+      }
+      return false;
+    }).catchError((err) => throw err);
+    ;
   }
 
-  Future checkUsername(String email) {
-    return _postApi.checkUsername(email).then((result) {
+  Future checkUsername(String username) {
+    return _postApi.checkUsername(username).then((result) {
       if (result == "available") {
         return true;
       }

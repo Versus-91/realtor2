@@ -227,13 +227,13 @@ class _LoginPageState extends State<LoginPage> {
                                 TextField(
                                     controller: _userNameController,
                                     onChanged: (value) {
-                                      widget.formStore.setUserLogin(
+                                      widget.formStore.setUsernameOrEmail(
                                           _userNameController.text);
                                     },
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                        errorText: widget
-                                            .formStore.formErrorStore.userEmail,
+                                        errorText: widget.formStore
+                                            .formErrorStore.usernameOrEmail,
                                         border: InputBorder.none,
                                         fillColor: Colors.grey[300],
                                         filled: true)),

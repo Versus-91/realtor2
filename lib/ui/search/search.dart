@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/models/location/locations.dart';
 import 'package:boilerplate/models/post/post_request.dart';
@@ -43,11 +43,11 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _maxPriceController = TextEditingController();
   final TextEditingController _minDepositController = TextEditingController();
   final TextEditingController _maxDepositController = TextEditingController();
-  final TextEditingController _minRentController = TextEditingController();
+  // final TextEditingController _minRentController = TextEditingController();
   final TextEditingController _maxRentController = TextEditingController();
   final TextEditingController _lowAreaController = TextEditingController();
   final TextEditingController _hightAreaController = TextEditingController();
-
+final _minRentController = MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
   String _selectedCity;
   var data;
   String dataurl =
@@ -858,7 +858,7 @@ class _SearchScreenState extends State<SearchScreen> {
               children: <Widget>[
                 Flexible(
                   child: TextField(
-                      controller: _minPriceController,
+                      controller: _minPriceController,  
                       onChanged: (value) {
                         widget.filterForm.setMinPrice(double.parse(value));
                       },
