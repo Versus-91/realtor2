@@ -21,7 +21,6 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   AnimationController animationController;
   Animation animation;
   int currentState = 0;
-  List<SelectedPropertyTypes> amenityList = [];
   @override
   void initState() {
     super.initState();
@@ -373,7 +372,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                         ),
                       ],
                     )
-                  : Text("no amenities fined"),
+                  : SizedBox.shrink(),
             ],
           ],
         ));
@@ -383,35 +382,47 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
     final List<Widget> noList = <Widget>[];
     int count = 0;
     const int columnCount = 2;
-    for (int i = 0; i < widget.post.amenities.length / columnCount; i++) {
+    for (int i = 0; i < amenities.length / columnCount; i++) {
       final List<Widget> listUI = <Widget>[];
       for (int i = 0; i < columnCount; i++) {
         try {
-          final SelectedPropertyTypes amenity = amenityList[count];
+          var item = amenities[count];
+          final SelectedPropertyTypes amenity = SelectedPropertyTypes(
+              icon: item.icon, titleTxt: item.name, isSelected: true);
           listUI.add(Expanded(
             child: Row(
               children: <Widget>[
                 Material(
                   color: Colors.transparent,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.check_circle_outline, color: Colors.green),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          amenity.titleTxt,
-                        ),
-                      ],
+                  child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(100)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            amenity.isSelected
+                                ? Icons.check_circle_outline
+                                : Icons.radio_button_off_sharp,
+                            color: amenity.isSelected
+                                ? Colors.green
+                                : Colors.grey.withOpacity(0.5),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            amenity.titleTxt,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
           ));
-          if (count < widget.post.amenities.length - 1) {
+          if (count < amenities.length - 1) {
             count += 1;
           } else {
             break;
