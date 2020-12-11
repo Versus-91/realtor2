@@ -138,7 +138,7 @@ class _PropertyCradState extends State<PropertyCrad>
                                               .translate('rahn') +
                                           ":" +
                                           AppLocalizations.of(context)
-                                              .transformCurrency(post.deopsit),
+                                              .transformCurrency(post.deposit ?? 0),
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,

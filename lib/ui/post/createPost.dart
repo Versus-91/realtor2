@@ -139,45 +139,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
       appBar: _buildAppBar(),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(15),
-        child: InkWell(
-          onTap: () async {
-            _store
-                .insertPost()
-                .then((value) => successPost(
-                      AppLocalizations.of(context).translate('succes_send'),
-                    ))
-                .catchError((error) {
-              _showErrorMessage(
-                "خطا در ایجاد پست",
-              );
-            });
-          },
-          child: Container(
-            height: 45,
-            width: MediaQuery.of(context).size.width,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Colors.grey.shade200,
-                      offset: Offset(2, 4),
-                      blurRadius: 5,
-                      spreadRadius: 2)
-                ],
-                gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Color(0xffF77E78), Color(0xffF5150A)])),
-            child: Text(
-              AppLocalizations.of(context).translate('send'),
-              style: TextStyle(fontSize: 20, color: Colors.white),
-            ),
-          ),
-        ),
-      ),
       body: _buildBody(),
     );
   }
@@ -294,6 +255,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             SizedBox(
               height: 10,
             ),
+            _submitbotton()
           ],
         ),
       ),
@@ -365,6 +327,45 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       ));
     }
     return noList;
+  }
+
+  Widget _submitbotton() {
+    return InkWell(
+      onTap: () async {
+        _store
+            .insertPost()
+            .then((value) => successPost(
+                  AppLocalizations.of(context).translate('succes_send'),
+                ))
+            .catchError((error) {
+          _showErrorMessage(
+            "خطا در ایجاد پست",
+          );
+        });
+      },
+      child: Container(
+        height: 45,
+        width: MediaQuery.of(context).size.width,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.grey.shade200,
+                  offset: Offset(2, 4),
+                  blurRadius: 5,
+                  spreadRadius: 2)
+            ],
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xffF77E78), Color(0xffF5150A)])),
+        child: Text(
+          AppLocalizations.of(context).translate('send'),
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+      ),
+    );
   }
 
   Widget _mapFeild() {

@@ -59,10 +59,6 @@ class Repository {
     // else make a network call to get all posts, store them into database for
     // later use
     return _postApi.getUserPosts(request: request).then((postsList) {
-      postsList.posts.forEach((post) {
-        _postDataSource.insert(post);
-      });
-
       return postsList;
     }).catchError((error) => throw error);
   }

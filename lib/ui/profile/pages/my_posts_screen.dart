@@ -30,7 +30,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
 
     _postStore = Provider.of(context);
     // check to see if already called api
-    if (!_postStore.loading && _postStore.userPostList == null) {
+    if (!_postStore.loading) {
       _postStore.getUserPosts();
     }
   }

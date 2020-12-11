@@ -179,6 +179,7 @@ class PostApi {
 
   Future createPost(Post post) async {
     try {
+      print(post.toMap());
       final res =
           await _dioClient.post(Endpoints.createPosts, data: post.toMap());
       return res["result"];
@@ -251,7 +252,8 @@ class PostApi {
       throw e;
     }
   }
- Future checkEmail(String email) async {
+
+  Future checkEmail(String email) async {
     try {
       final res = await _dioClient
           .post(Endpoints.checkEmail, data: {"emailAddress": email});
@@ -260,6 +262,7 @@ class PostApi {
       throw e;
     }
   }
+
   Future checkUsername(String username) async {
     try {
       final res = await _dioClient

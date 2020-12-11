@@ -185,7 +185,7 @@ abstract class _PostFormStore with Store {
         description: this.description,
         typeId: this.propertyHomeTypeId,
         rent: this.rentPrice,
-        deopsit: this.rahnPrice,
+        deposit: this.rahnPrice,
         price: this.buyPrice,
         area: this.area,
         age: this.ageHome,

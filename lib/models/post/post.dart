@@ -18,7 +18,7 @@ class Post {
   double longitude;
   String creationTime;
   int id;
-  double deopsit;
+  double deposit;
   double rent;
   double price;
   District district;
@@ -40,7 +40,7 @@ class Post {
       this.longitude,
       this.creationTime,
       this.id,
-      this.deopsit,
+      this.deposit,
       this.rent,
       this.price,
       this.district,
@@ -66,7 +66,7 @@ class Post {
           longitude: json["longitude"],
           creationTime: json["creationTime"],
           id: json["id"],
-          deopsit: json["deopsit"],
+          deposit: json["deposit"],
           rent: json["rent"],
           price: json["price"],
           district: District.fromMap(json["district"]),
@@ -92,8 +92,8 @@ class Post {
       "latitude": latitude,
       "longitude": longitude,
       "id": id,
-      if (deopsit != null) ...{
-        "deopsit": deopsit,
+      if (deposit != null) ...{
+        "deposit": deposit,
       },
       if (price != null) ...{
         "price": price,

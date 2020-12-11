@@ -236,7 +236,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                           children: [
                             Text(
                               AppLocalizations.of(context).translate('rahn') +
-                                  '${widget.post.deopsit}',
+                                  '${widget.post.deposit}',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.normal,
