@@ -49,28 +49,34 @@ class Post {
       this.isVerified,
       this.amenities});
 
-  factory Post.fromMap(Map<String, dynamic> json) => Post(
-      title: json["title"],
-      age: json["age"],
-      categoryId: json["categoryId"],
-      description: json["description"],
-      isFeatured: json["isFeatured"],
-      isVerified: json["isVerified"],
-      area: json["area"],
-      bedroom: json["bedroom"],
-      districtId: json["districtId"],
-      typeId: json["typeId"],
-      latitude: json["latitude"],
-      longitude: json["longitude"],
-      creationTime: json["creationTime"],
-      id: json["id"],
-      deopsit: json["deopsit"],
-      rent: json["rent"],
-      price: json["price"],
-      district: District.fromMap(json["district"]),
-      category: Category.fromMap(json["category"]),
-      amenities: Amenity.listFromJson(json["amenities"]),
-      images: Image.listFromJson(json["images"]));
+  factory Post.fromMap(Map<String, dynamic> json) {
+    try {
+      return Post(
+          title: json["title"],
+          age: json["age"],
+          categoryId: json["categoryId"],
+          description: json["description"],
+          isFeatured: json["isFeatured"],
+          isVerified: json["isVerified"],
+          area: json["area"],
+          bedroom: json["bedroom"],
+          districtId: json["districtId"],
+          typeId: json["typeId"],
+          latitude: json["latitude"],
+          longitude: json["longitude"],
+          creationTime: json["creationTime"],
+          id: json["id"],
+          deopsit: json["deopsit"],
+          rent: json["rent"],
+          price: json["price"],
+          district: District.fromMap(json["district"]),
+          category: Category.fromMap(json["category"]),
+          amenities: Amenity.listFromJson(json["amenities"]),
+          images: Image.listFromJson(json["images"]));
+    } catch (e) {
+      throw e;
+    }
+  }
 
   Map<String, dynamic> toMap() {
     return {

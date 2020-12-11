@@ -128,7 +128,7 @@ class _PropertyCradState extends State<PropertyCrad>
                             softWrap: false,
                           ),
                           post.category.name.contains(
-                            "رهن",
+                            "کرای",
                           )
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
