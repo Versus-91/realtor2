@@ -170,7 +170,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                     if (!snapshot.hasData) {
                       return Icon(
                         Icons.favorite,
-                        color: Colors.white,
+                        color: Colors.black,
                       );
                     } else {
                       if (snapshot.data == true) {
