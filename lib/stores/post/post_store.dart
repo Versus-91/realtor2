@@ -26,6 +26,10 @@ abstract class _PostStore with Store {
   @observable
   ObservableFuture<PostList> fetchPostsFuture =
       ObservableFuture<PostList>(emptyPostResponse);
+
+  @observable
+  ObservableFuture<PostList> fetchUserPostsFuture =
+      ObservableFuture<PostList>(emptyPostResponse);
   @observable
   ObservableFuture<PostList> fetchNextPostsFuture =
       ObservableFuture<PostList>(emptyPostResponse);
@@ -66,6 +70,11 @@ abstract class _PostStore with Store {
   }
 
   @computed
+  bool get loadingUserPosts {
+    return fetchUserPostsFuture.status == FutureStatus.pending;
+  }
+
+  @computed
   bool get loadingNextPage {
     return fetchPostsFuture.status == FutureStatus.pending;
   }
@@ -95,7 +104,7 @@ abstract class _PostStore with Store {
   @action
   Future getUserPosts({PostRequest request}) async {
     final future = _repository.getUserPosts(request: request);
-    fetchPostsFuture = ObservableFuture(future);
+    fetchUserPostsFuture = ObservableFuture(future);
 
     future.then((postList) {
       this.userPostList = postList;

@@ -8,14 +8,12 @@ import 'package:boilerplate/plugin/cropper.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/profile/pages/aboute.dart';
-import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:dio/dio.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -180,8 +178,10 @@ class _SettingsScreenState extends State<SettingsScreen>
               SettingsTile(
                   onTap: loggedIn == true
                       ? () {
-                          pushNewScreen(context,
-                              screen: MyPostsScreen(), withNavBar: false);
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).pushNamed(Routes.userPosts);
                         }
                       : () {},
                   title: AppLocalizations.of(context).translate("my_posts"),

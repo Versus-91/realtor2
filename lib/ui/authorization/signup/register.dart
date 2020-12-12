@@ -343,8 +343,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         arguments: {'phone': _numberController.text});
                     if (result != null) {
                       Future.delayed(Duration(seconds: 1), () {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            Routes.home, (Route<dynamic> route) => false);
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamedAndRemoveUntil(
+                                Routes.home, (Route<dynamic> route) => false);
                       });
                     }
                   }).catchError((error) {

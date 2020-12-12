@@ -8,8 +8,10 @@ import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/changeinfo.dart';
+import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
 import 'package:boilerplate/widgets/image_crop_screen.dart';
 import 'package:flutter/material.dart';
+
 import 'ui/home/home.dart';
 import 'ui/splash/splash.dart';
 
@@ -29,7 +31,7 @@ class Routes {
   static const String crop = '/crop';
   static const String changeInfo = '/changeInfo';
   static const String phoneNumberVerificationCode = '/phoneverification';
-
+  static const String userPosts = '/userPosts';
   static const String createpost = '/createpost';
 
   // static const String firsapp = '/firsapp';
@@ -47,5 +49,6 @@ class Routes {
     crop: (BuildContext context) => ImageCropScreen(),
     phoneNumberVerificationCode: (BuildContext context) => Otp(),
     changeInfo: (BuildContext context) => ChangeInfo(),
+    userPosts: (BuildContext context) => MyPostsScreen(),
   };
 }

@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/ui/home/propertycrads.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -30,7 +31,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
 
     _postStore = Provider.of(context);
     // check to see if already called api
-    if (!_postStore.loading) {
+    if (!_postStore.loadingUserPosts) {
       _postStore.getUserPosts();
     }
   }
@@ -90,7 +91,6 @@ class _MyPostsScreenState extends State<MyPostsScreen>
               return PropertyCrad(
                 post: _postStore.userPostList.posts[position],
                 isEdditing: true,
-                showlike: false,
               );
             },
           )
