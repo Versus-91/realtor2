@@ -74,14 +74,14 @@ class Repository {
       // });
 
       return citiesList;
-    }).catchError((error) => error);
+    }).catchError((error) => throw error);
   }
 
   // amenity: ---------------------------------------------------------------------
   Future<AmenityList> getAmenities() async {
     return await _postApi.getAmenities().then((amenitiesList) {
       return amenitiesList;
-    }).catchError((error) => error);
+    }).catchError((error) => throw error);
   }
 
   Future<User> getUser() async {
@@ -90,7 +90,7 @@ class Repository {
     // later use
     return await _postApi.getUser().then((user) {
       return user;
-    }).catchError((error) => error);
+    }).catchError((error) => throw error);
   }
 
 //category------------------------------------------------------------------------
@@ -100,7 +100,7 @@ class Repository {
     // later use
     return await _postApi.getCategories().then((categoryList) {
       return categoryList;
-    }).catchError((error) => error);
+    }).catchError((error) => throw error);
   }
 
   Future<TypeList> getTypes() async {
@@ -109,7 +109,7 @@ class Repository {
     // later use
     return await _postApi.getTypes().then((typesList) {
       return typesList;
-    }).catchError((error) => error);
+    }).catchError((error) => throw error);
   }
 
   // submit login request: ---------------------------------------------------------------------

@@ -7,15 +7,12 @@ import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/sharedpref/constants/preferences.dart';
 import '../../routes.dart';
-
-BuildContext testContext;
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -126,6 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
         hideNavigationBarWhenKeyboardShows: true,
         margin: EdgeInsets.only(top: 10.0),
         popActionScreens: PopActionScreensType.once,
+
         bottomScreenMargin: 0.0,
         routeAndNavigatorSettings: RouteAndNavigatorSettings(
           initialRoute: '/',
@@ -140,22 +138,19 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 50.0,
               color: Colors.white,
               child: RaisedButton(
-                child: Text("Close"),
+                child: Text("خروج "),
                 onPressed: () {
-                  SystemNavigator.pop();
+                  Navigator.of(context).pop();
                 },
               ),
             ),
           );
           return false;
         },
-        selectedTabScreenContext: (context) {
-          testContext = context;
-        },
         hideNavigationBar: _hideNavBar,
         decoration: NavBarDecoration(
             colorBehindNavBar: Colors.indigo,
-            borderRadius: BorderRadius.circular(20.0)),
+            borderRadius: BorderRadius.horizontal()),
         popAllScreensOnTapOfSelectedTab: true,
         itemAnimationProperties: ItemAnimationProperties(
           duration: Duration(milliseconds: 400),

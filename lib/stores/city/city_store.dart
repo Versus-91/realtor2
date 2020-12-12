@@ -42,8 +42,11 @@ abstract class _CityStore with Store {
     fetchCitiesFuture = ObservableFuture(future);
 
     future.then((item) {
+      errorStore.errorMessage = '';
+      success = true;
       this.cityList = item;
     }).catchError((error) {
+      success = false;
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }

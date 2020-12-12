@@ -18,6 +18,7 @@ import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flushbar/flushbar_helper.dart';
+import 'package:flushbar/flushbar_route.dart' as route;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -39,6 +40,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   List<PlatformFile> _paths;
   String _extension;
   bool _multiPick = true;
+  bool hasErrorInloading = false;
   FileType _pickingType = FileType.image;
   List<SelectedPropertyTypes> amenityList = [];
   TextEditingController _controller = TextEditingController();
@@ -78,6 +80,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   void initState() {
     super.initState();
     _controller.addListener(() => _extension = _controller.text);
+    print('object');
   }
 
   void _openFileExplorer() async {
@@ -127,6 +130,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
     //start api request if it's not started
+    realodDieldsData();
+  }
+
+  void realodDieldsData() {
     if (!_cityStore.loading) _cityStore.getCities();
     if (!_categoryStore.loading) _categoryStore.getCategories();
     if (!_typeStore.loading) _typeStore.getTypes();
@@ -157,55 +164,68 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
+
     return Observer(builder: (context) {
-      return _store.loading == true
-          ? Observer(
-              builder: (context) {
-                return Visibility(
-                  visible: _store.loading,
-                  child: CustomProgressIndicatorWidget(),
-                );
-              },
-            )
-          : SingleChildScrollView(
-              reverse: false,
-              child: Padding(
-                padding: EdgeInsets.only(bottom: bottom),
-                child: Material(
-                  child: Stack(
-                    children: <Widget>[
-                      _handleErrorMessage(),
-                      Column(
-                        children: <Widget>[
-                          _buildRightSide(),
-                        ],
-                      ),
-                      Observer(
-                        builder: (context) {
-                          return _store.success
-                              ? successPost(
-                                  AppLocalizations.of(context)
-                                      .translate('succes_send'),
-                                )
-                              : _showErrorMessage(
-                                  _store.errorStore.errorMessage);
-                        },
-                      ),
-                      Observer(
-                        builder: (context) {
-                          if (_store.postId != null) {
-                            upload(_store.postId);
-                            return Text('data');
-                          }
-                          return _showErrorMessage(
-                              _store.errorStore.errorMessage);
-                        },
-                      ),
-                    ],
-                  ),
+      if (_store.loading == true) {
+        return Observer(
+          builder: (context) {
+            return Visibility(
+              visible: _store.loading,
+              child: CustomProgressIndicatorWidget(),
+            );
+          },
+        );
+      } else {
+        if (_cityStore.success == true) {
+          return SingleChildScrollView(
+            reverse: false,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: bottom),
+              child: Material(
+                child: Stack(
+                  children: <Widget>[
+                    _handleErrorMessage(),
+                    Column(
+                      children: <Widget>[
+                        _buildRightSide(),
+                      ],
+                    ),
+                    Observer(
+                      builder: (context) {
+                        return _store.success
+                            ? successPost(
+                                AppLocalizations.of(context)
+                                    .translate('succes_send'),
+                              )
+                            : _showErrorMessage(_store.errorStore.errorMessage);
+                      },
+                    ),
+                    Observer(
+                      builder: (context) {
+                        if (_store.postId != null) {
+                          upload(_store.postId);
+                          return Text('data');
+                        }
+                        return _showErrorMessage(
+                            _store.errorStore.errorMessage);
+                      },
+                    ),
+                  ],
                 ),
               ),
-            );
+            ),
+          );
+        } else {
+          return Center(
+            child: RaisedButton.icon(
+                onPressed: () {
+                  realodDieldsData();
+                },
+                icon: Icon(Icons.refresh),
+                label: Text("تلاش مجدد")),
+          );
+        }
+      }
     });
   }
 
@@ -1180,13 +1200,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   // General Methods:-----------------------------------------------------------
   _showErrorMessage(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
+    Future.delayed(Duration(milliseconds: 0), () async {
       if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
+        var flushBar = FlushbarHelper.createError(
           message: message,
           title: AppLocalizations.of(context).translate('home_tv_error'),
           duration: Duration(seconds: 3),
-        )..show(context);
+        );
+        var _flushbarRoute = route.showFlushbar(
+          context: context,
+          flushbar: flushBar,
+        );
+
+        await Navigator.of(context, rootNavigator: true).push(_flushbarRoute);
       }
     });
 
@@ -1217,13 +1243,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Widget successPost(String message) {
-    Future.delayed(Duration(milliseconds: 0), () {
+    Future.delayed(Duration(milliseconds: 0), () async {
       if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createSuccess(
+        var flushBar = FlushbarHelper.createSuccess(
           message: message,
           title: AppLocalizations.of(context).translate('succes_send'),
           duration: Duration(seconds: 3),
         )..show(context);
+        var _flushbarRoute = route.showFlushbar(
+          context: context,
+          flushbar: flushBar,
+        );
+
+        await Navigator.of(context, rootNavigator: true).push(_flushbarRoute);
       }
     });
     return SizedBox.shrink();
