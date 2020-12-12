@@ -32,6 +32,7 @@ dependencies:
   file_picker: ^2.0.9+1
   share: ^0.6.5+4
   progressive_image: ^1.0.1
+  persistent_bottom_nav_bar: ^3.1.0
   shimmer: ^1.1.2
   animations: ^1.1.2
   flutter_map: ^0.10.1+1

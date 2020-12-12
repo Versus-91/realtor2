@@ -120,8 +120,8 @@ abstract class _FormStore with Store {
   }
 
   @action
-  void setUsernameOrEmail(String input) {
-    usernameOrEmail = input;
+  void setUsernameOrEmail(String value) {
+    usernameOrEmail = value;
   }
 
   @action
@@ -338,7 +338,7 @@ abstract class _FormStore with Store {
       return _repository
           .authenticate(Login(
               password: password,
-              userNameOrEmailAddress: userName.trim(),
+              userNameOrEmailAddress: usernameOrEmail.trim(),
               rememberClient: true))
           .then((result) {
         loading = false;

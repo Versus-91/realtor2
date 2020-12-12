@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
@@ -14,6 +15,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -177,11 +179,8 @@ class _SettingsScreenState extends State<SettingsScreen>
               SettingsTile(
                   onTap: loggedIn == true
                       ? () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => MyPostsScreen(),
-                            ),
-                          );
+                          pushNewScreen(context,
+                              screen: MyPostsScreen(), withNavBar: false);
                         }
                       : () {},
                   title: AppLocalizations.of(context).translate("my_posts"),
@@ -214,8 +213,9 @@ class _SettingsScreenState extends State<SettingsScreen>
                         });
                       } else {
                         await _rippleAnimationController.forward();
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            Routes.login, (Route<dynamic> route) => false);
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamedAndRemoveUntil(
+                                Routes.login, (Route<dynamic> route) => false);
                         //   context,
                         //   screen: LoginPage(),
                         //   withNavBar: false,

@@ -5,15 +5,17 @@ import 'package:boilerplate/ui/home/tabs/user_screen.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/settings.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:boilerplate/widgets/google_nav.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/sharedpref/constants/preferences.dart';
+import '../../routes.dart';
+
+BuildContext testContext;
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -24,10 +26,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  bool _hideNavBar;
 
   //stores:---------------------------------------------------------------------
   UserStore _userStore;
   PostStore _postStore;
+  PersistentTabController _controller;
 
   bool loggedIn = false;
   Future<Null> getSharedPrefs() async {
@@ -40,6 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _hideNavBar = false;
+    _controller = PersistentTabController(initialIndex: 0);
     getSharedPrefs();
   }
 
@@ -51,6 +57,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _userStore = Provider.of<UserStore>(context);
     _postStore = Provider.of<PostStore>(context);
+  }
+
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.home),
+        title: "Home",
+        activeColor: Colors.blue,
+        inactiveColor: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.search),
+        title: ("Search"),
+        activeColor: Colors.teal,
+        inactiveColor: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.add),
+        title: ("Add"),
+        activeColor: Colors.blueAccent,
+        inactiveColor: Colors.grey,
+        activeColorAlternate: Colors.white,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.add),
+        title: ("Fav"),
+        activeColor: Colors.blueAccent,
+        inactiveColor: Colors.grey,
+        activeColorAlternate: Colors.white,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.settings),
+        title: ("Settings"),
+        activeColor: Colors.indigo,
+        inactiveColor: Colors.grey,
+      ),
+    ];
   }
 
   @override
@@ -67,89 +110,64 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      body: _buildScreens.elementAt(_selectedIndex),
-      bottomNavigationBar: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Container(
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1))
-          ]),
-          child: SafeArea(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-              child: GNav(
-                  gap: 1,
-                  activeColor: Colors.white,
-                  iconSize: 24,
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  duration: Duration(milliseconds: 500),
-                  tabBackgroundColor: Colors.grey[800],
-                  tabs: [
-                    GButton(
-                      onPressed: () {
-                        HapticFeedback.lightImpact();
-                      },
-                      iconActiveColor: Colors.blue,
-                      iconColor: Colors.black,
-                      textColor: Colors.blue,
-                      backgroundColor: Colors.blue.withOpacity(.2),
-                      icon: Icons.home,
-                      text: AppLocalizations.of(context).translate("home"),
-                    ),
-                    GButton(
-                      onPressed: () {
-                        HapticFeedback.lightImpact();
-                      },
-                      iconActiveColor: Colors.amber[600],
-                      iconColor: Colors.black,
-                      textColor: Colors.amber[600],
-                      backgroundColor: Colors.amber[600].withOpacity(.2),
-                      iconSize: 24,
-                      icon: Icons.search,
-                      text: AppLocalizations.of(context).translate("search"),
-                    ),
-                    GButton(
-                      onPressed: () {
-                        HapticFeedback.mediumImpact();
-                      },
-                      iconActiveColor: Colors.teal,
-                      iconColor: Colors.black,
-                      textColor: Colors.teal,
-                      backgroundColor: Colors.teal.withOpacity(.2),
-                      icon: Icons.add,
-                      text: AppLocalizations.of(context).translate("add_post"),
-                    ),
-                    GButton(
-                      onPressed: () {
-                        HapticFeedback.lightImpact();
-                      },
-                      iconActiveColor: Colors.pink,
-                      iconColor: Colors.black,
-                      textColor: Colors.pink,
-                      backgroundColor: Colors.pink.withOpacity(.2),
-                      icon: Icons.favorite,
-                      text: AppLocalizations.of(context).translate("favarits"),
-                    ),
-                    GButton(
-                      iconActiveColor: Colors.purple,
-                      iconColor: Colors.black,
-                      textColor: Colors.purple,
-                      backgroundColor: Colors.purple.withOpacity(.2),
-                      iconSize: 24,
-                      icon: Icons.settings,
-                      text: AppLocalizations.of(context).translate("settings"),
-                    ),
-                  ],
-                  selectedIndex: _selectedIndex,
-                  onTabChange: (index) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                  }),
-            ),
-          ),
+      body: PersistentTabView(
+        context,
+        controller: _controller,
+        screens: _buildScreens,
+        items: _navBarsItems(),
+        confineInSafeArea: true,
+        backgroundColor: Colors.white,
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset: true,
+        stateManagement: true,
+        navBarHeight: MediaQuery.of(context).viewInsets.bottom > 0
+            ? 0.0
+            : kBottomNavigationBarHeight,
+        hideNavigationBarWhenKeyboardShows: true,
+        margin: EdgeInsets.only(top: 10.0),
+        popActionScreens: PopActionScreensType.once,
+        bottomScreenMargin: 0.0,
+        routeAndNavigatorSettings: RouteAndNavigatorSettings(
+          initialRoute: '/',
+          routes: Routes.routes,
         ),
+        onWillPop: () async {
+          await showDialog(
+            context: context,
+            useSafeArea: true,
+            builder: (context) => Container(
+              height: 50.0,
+              width: 50.0,
+              color: Colors.white,
+              child: RaisedButton(
+                child: Text("Close"),
+                onPressed: () {
+                  SystemNavigator.pop();
+                },
+              ),
+            ),
+          );
+          return false;
+        },
+        selectedTabScreenContext: (context) {
+          testContext = context;
+        },
+        hideNavigationBar: _hideNavBar,
+        decoration: NavBarDecoration(
+            colorBehindNavBar: Colors.indigo,
+            borderRadius: BorderRadius.circular(20.0)),
+        popAllScreensOnTapOfSelectedTab: true,
+        itemAnimationProperties: ItemAnimationProperties(
+          duration: Duration(milliseconds: 400),
+          curve: Curves.ease,
+        ),
+        screenTransitionAnimation: ScreenTransitionAnimation(
+          animateTabTransition: true,
+          curve: Curves.ease,
+          duration: Duration(milliseconds: 200),
+        ),
+        navBarStyle:
+            NavBarStyle.style15, // Choose the nav bar style with this property
       ),
     );
   }

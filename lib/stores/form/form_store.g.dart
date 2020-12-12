@@ -405,11 +405,11 @@ mixin _$FormStore on _FormStore, Store {
   }
 
   @override
-  void setUsernameOrEmail(String input) {
+  void setUsernameOrEmail(String value) {
     final _$actionInfo = _$_FormStoreActionController.startAction(
         name: '_FormStore.setUsernameOrEmail');
     try {
-      return super.setUsernameOrEmail(input);
+      return super.setUsernameOrEmail(value);
     } finally {
       _$_FormStoreActionController.endAction(_$actionInfo);
     }

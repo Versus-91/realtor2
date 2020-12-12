@@ -227,6 +227,7 @@ class _LoginPageState extends State<LoginPage> {
                                 TextField(
                                     controller: _userNameController,
                                     onChanged: (value) {
+                                      print(_userNameController.text);
                                       widget.formStore.setUsernameOrEmail(
                                           _userNameController.text);
                                     },
