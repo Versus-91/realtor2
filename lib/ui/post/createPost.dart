@@ -81,7 +81,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   void initState() {
     super.initState();
     _controller.addListener(() => _extension = _controller.text);
-    print('object');
+  
   }
 
   void _openFileExplorer() async {
@@ -100,7 +100,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     } on PlatformException catch (e) {
       print("Unsupported operation" + e.toString());
     } catch (ex) {
-      print(ex);
+      
     }
     if (!mounted) return;
     setState(() {

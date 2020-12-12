@@ -47,7 +47,7 @@ class NetworkModule extends PreferenceModule {
               options.headers
                   .putIfAbsent('Authorization', () => 'Bearer ' + token);
             } else {
-              // print('Auth token is null');
+             
             }
           },
         ),

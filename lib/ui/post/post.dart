@@ -24,7 +24,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    print(widget.post.toMap());
+    
     animationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     animation = Tween(begin: 0, end: 60).animate(animationController)

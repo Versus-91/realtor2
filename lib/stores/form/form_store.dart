@@ -188,7 +188,7 @@ abstract class _FormStore with Store {
     }
     _usernameCheck = ObservableFuture(_repository.checkUsername(username));
     _usernameCheck.then((result) {
-      print(result);
+     
       if (result == true) {
         formErrorStore.username = null;
         return;
@@ -234,7 +234,7 @@ abstract class _FormStore with Store {
     }
     _numberCheck = ObservableFuture(_repository.checkPhoneNumber(number));
     _numberCheck.then((result) {
-      print(result);
+  
       if (result == true) {
         formErrorStore.number = null;
         return;

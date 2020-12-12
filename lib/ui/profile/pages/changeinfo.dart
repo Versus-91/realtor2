@@ -21,6 +21,14 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   UserStore _userStore;
 
+  bool _obscureText = true;
+  // Toggles the password show status
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
   final _formStore = FormStore(appComponent.getRepository());
 
   TextEditingController _newPasswordController = TextEditingController();
@@ -106,9 +114,10 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                   _userStore
                       .changePhoneNumber(_newNumberController.text)
                       .then((value) async {
-                    var result = await Navigator.of(context).pushNamed(
-                        Routes.phoneNumberVerificationCode,
-                        arguments: {'phone': _newNumberController.text});
+                    var result = await Navigator.of(context,
+                            rootNavigator: true)
+                        .pushNamed(Routes.phoneNumberVerificationCode,
+                            arguments: {'phone': _newNumberController.text});
                     _newNumberController.text = result;
                   }).catchError((error) {
                     _showErrorMessage(
@@ -118,13 +127,20 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 },
               ),
             ),
-            Divider(),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               height: 55,
               child: TextField(
                 controller: _oldPasswordController,
                 decoration: InputDecoration(
-                  suffix: Icon(Icons.visibility_off),
+                  suffix: IconButton(
+                    icon: _obscureText == true
+                        ? Icon(Icons.visibility_off)
+                        : Icon(Icons.visibility),
+                    onPressed: _toggle,
+                  ),
                   border: OutlineInputBorder(),
                   labelText:
                       AppLocalizations.of(context).translate('old_password'),
@@ -132,19 +148,23 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 onChanged: (value) {
                   _userStore.setOldPassword(value.toString());
                 },
+                obscureText: _obscureText,
               ),
             ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: FlatButton(
-                onPressed: () {},
-                child: Text(
-                  AppLocalizations.of(context)
-                      .translate('login_btn_forgot_password'),
-                  style: TextStyle(color: Colors.blue, fontSize: 10),
-                ),
-              ),
+            SizedBox(
+              height: 10,
             ),
+            // Align(
+            //   alignment: Alignment.bottomRight,
+            //   child: FlatButton(
+            //     onPressed: () {},
+            //     child: Text(
+            //       AppLocalizations.of(context)
+            //           .translate('login_btn_forgot_password'),
+            //       style: TextStyle(color: Colors.blue, fontSize: 10),
+            //     ),
+            //   ),
+            // ),
             Container(
               height: 55,
               child: TextField(
@@ -160,7 +180,9 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 },
               ),
             ),
-            Divider(),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               height: 55,
               child: TextField(

@@ -134,7 +134,7 @@ abstract class _PostFormStore with Store {
   @action
   void setRentPrice(double value) {
     rentPrice = value;
-    print(rentPrice);
+   
   }
 
   @action
@@ -203,10 +203,7 @@ abstract class _PostFormStore with Store {
         loading = false;
         throw error;
       });
-      // return Future.delayed(Duration(seconds: 1), () {
-      //   print(post.toMap());
-      //   loading = false;
-      // });
+      
     } else {
       throw Exception();
     }
@@ -227,7 +224,7 @@ abstract class _PostFormStore with Store {
   void validateArea(int value) {
     if (value == null || value <= 0) {
       formErrorStore.area = "مساحت را وارد کنید";
-      print(formErrorStore.area);
+     
     } else {
       formErrorStore.area = null;
     }
@@ -237,7 +234,7 @@ abstract class _PostFormStore with Store {
   void validateTypeHome(int value) {
     if (value == null) {
       formErrorStore.typeHome = "نوع ملک را مشخص کنید";
-      print(formErrorStore.typeHome);
+   
     } else {
       formErrorStore.typeHome = null;
     }

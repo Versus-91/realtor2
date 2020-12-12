@@ -148,11 +148,12 @@ class _SettingsScreenState extends State<SettingsScreen>
           SettingsSection(
             tiles: [
               SettingsTile(
-                onTap: () {
-                  _userStore.user != null
-                      ? Navigator.of(context).pushNamed(Routes.changeInfo)
-                      : (){};
-                },
+                onTap: _userStore.user != null
+                    ? () {
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamed(Routes.changeInfo);
+                      }
+                    : () {},
                 title: AppLocalizations.of(context).translate("my_details"),
                 leading: Icon(Icons.person),
                 // trailing: IconButton(

@@ -90,6 +90,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
               return PropertyCrad(
                 post: _postStore.userPostList.posts[position],
                 isEdditing: true,
+                showlike: false,
               );
             },
           )
