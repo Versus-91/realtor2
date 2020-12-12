@@ -1,6 +1,9 @@
-import 'package:boilerplate/ui/home/home.dart';
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
+
+import '../../routes.dart';
 
 class MySplashScreen extends StatefulWidget {
   @override
@@ -20,13 +23,25 @@ class _SplashScreenState extends State<MySplashScreen> {
         'خوش آمدید.',
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
       ),
-      seconds: 5,
-      navigateAfterSeconds: HomeScreen(),
+      navigateAfterFuture: navigate(),
       image: Image.asset('assets/icons/splash.png'),
       backgroundColor: Colors.white,
       styleTextUnderTheLoader: TextStyle(),
       photoSize: 150.0,
       loaderColor: Colors.redAccent,
     );
+  }
+
+  Future<String> navigate() async {
+    return Future.delayed(
+        Duration(seconds: 3),
+        () => SharedPreferences.getInstance().then((prefs) {
+              var loggedIn = prefs.getBool(Preferences.is_logged_in) ?? false;
+              if (loggedIn == true) {
+                return Routes.home;
+              } else {
+                return Routes.login;
+              }
+            }));
   }
 }
