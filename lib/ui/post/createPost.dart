@@ -22,6 +22,7 @@ import 'package:flushbar/flushbar_route.dart' as route;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -273,9 +274,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             ),
             _imageFeild(),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
-            _submitbotton()
+            Padding(
+              padding: const EdgeInsets.only(bottom: 80),
+              child: _submitbotton(),
+            )
           ],
         ),
       ),
@@ -392,7 +396,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     return Align(
       alignment: Alignment.bottomRight,
       child: FloatingActionButton.extended(
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.indigo,
         icon: _store.latitude == null && _store.longitude == null
             ? const Icon(Icons.add)
             : Icon(
@@ -402,13 +406,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         label: Text("نقشه"),
         onPressed: () {
           FocusScope.of(context).requestFocus(new FocusNode());
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => UserMapScreen(
-                      formState: _store,
-                    )),
-          );
+           pushNewScreen(context,
+        withNavBar: false,
+        screen: UserMapScreen(
+        formState: _store,
+        ));
+      
         },
       ),
     );

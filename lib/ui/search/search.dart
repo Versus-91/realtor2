@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
+
 import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/models/location/locations.dart';
 import 'package:boilerplate/models/post/post_request.dart';
@@ -13,6 +13,7 @@ import 'package:boilerplate/stores/type/type_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -47,7 +48,8 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _maxRentController = TextEditingController();
   final TextEditingController _lowAreaController = TextEditingController();
   final TextEditingController _hightAreaController = TextEditingController();
-final _minRentController = MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
+  final _minRentController =
+      MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
   String _selectedCity;
   var data;
   String dataurl =
@@ -125,7 +127,7 @@ final _minRentController = MoneyMaskedTextController(decimalSeparator: '.', thou
         resizeToAvoidBottomPadding: false,
         bottomNavigationBar: Padding(
             padding:
-                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 20),
+                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -547,96 +549,93 @@ final _minRentController = MoneyMaskedTextController(decimalSeparator: '.', thou
   }
 
   Widget areaViewUI(String label) {
-    return Observer(builder: (context) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: [
-                    Text(
-                      label,
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontSize:
-                              MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                          fontWeight: FontWeight.normal),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize:
+                            MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                        fontWeight: FontWeight.normal),
+                  ),
+                  Text(
+                    AppLocalizations.of(context).translate('area_range'),
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize:
+                            MediaQuery.of(context).size.width > 360 ? 13 : 13,
+                        fontWeight: FontWeight.normal),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Row(
+                  children: <Widget>[
+                    Flexible(
+                      child: TextField(
+                          onChanged: (value) {
+                            widget.filterForm.setLowArea(double.parse(value));
+                          },
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent)),
+                              labelText: AppLocalizations.of(context)
+                                  .translate('low_area'),
+                              fillColor: Color(0xfff3f3f4),
+                              filled: true,
+                              hintText: AppLocalizations.of(context)
+                                  .translate('low_area'),
+                              contentPadding: EdgeInsets.all(10))),
                     ),
-                    Text(
-                      AppLocalizations.of(context).translate('area_range'),
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontSize:
-                              MediaQuery.of(context).size.width > 360 ? 13 : 13,
-                          fontWeight: FontWeight.normal),
+                    VerticalDivider(),
+                    Flexible(
+                      child: TextField(
+                          onChanged: (value) {
+                            widget.filterForm.setHightArea(double.parse(value));
+                          },
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent)),
+                              fillColor: Color(0xfff3f3f4),
+                              filled: true,
+                              labelText: AppLocalizations.of(context)
+                                  .translate('hight_area'),
+                              hintText: AppLocalizations.of(context)
+                                  .translate('hight_area'),
+                              contentPadding: EdgeInsets.all(10))),
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Row(
-                    children: <Widget>[
-                      Flexible(
-                        child: TextField(
-                            onChanged: (value) {
-                              widget.filterForm.setLowArea(double.parse(value));
-                            },
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent)),
-                                labelText: AppLocalizations.of(context)
-                                    .translate('low_area'),
-                                fillColor: Color(0xfff3f3f4),
-                                filled: true,
-                                hintText: AppLocalizations.of(context)
-                                    .translate('low_area'),
-                                contentPadding: EdgeInsets.all(10))),
-                      ),
-                      VerticalDivider(),
-                      Flexible(
-                        child: TextField(
-                            onChanged: (value) {
-                              widget.filterForm
-                                  .setHightArea(double.parse(value));
-                            },
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent)),
-                                fillColor: Color(0xfff3f3f4),
-                                filled: true,
-                                labelText: AppLocalizations.of(context)
-                                    .translate('hight_area'),
-                                hintText: AppLocalizations.of(context)
-                                    .translate('hight_area'),
-                                contentPadding: EdgeInsets.all(10))),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          // SliderView(
-          //   distValue: widget.filterForm.area ?? 100,
-          //   onChangedistValue: (double value) {
-          //     widget.filterForm.setArea(value);
-          //   },
-          // ),
-          const SizedBox(
-            height: 8,
-          ),
-        ],
-      );
-    });
+        ),
+        // SliderView(
+        //   distValue: widget.filterForm.area ?? 100,
+        //   onChangedistValue: (double value) {
+        //     widget.filterForm.setArea(value);
+        //   },
+        // ),
+        const SizedBox(
+          height: 8,
+        ),
+      ],
+    );
   }
 
   Widget popularFilter() {
@@ -857,7 +856,7 @@ final _minRentController = MoneyMaskedTextController(decimalSeparator: '.', thou
               children: <Widget>[
                 Flexible(
                   child: TextField(
-                      controller: _minPriceController,  
+                      controller: _minPriceController,
                       onChanged: (value) {
                         widget.filterForm.setMinPrice(double.parse(value));
                       },

@@ -7,7 +7,6 @@ import 'package:boilerplate/ui/authorization/login/blaziercontainer.dart';
 import 'package:boilerplate/ui/authorization/login/login.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
-import 'package:boilerplate/widgets/textfield_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -91,20 +90,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildUserNameField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
-          hint: AppLocalizations.of(context).translate('user_name'),
+        return TextField(
           focusNode: _nameFocusNode,
-          onFieldSubmitted: (value) {
+          onSubmitted: (value) {
             FocusScope.of(context).requestFocus(_familyFocusNode);
           },
-          padding: EdgeInsets.only(top: 16.0),
-          icon: Icons.account_circle,
-          iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-          textController: _userNameController,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.account_circle,
+              color: Colors.black54,
+            ),
+            fillColor: Color(0xfff3f3f4),
+            filled: true,
+            // contentPadding: EdgeInsets.only(top: 16.0),
+            errorText: _formStore.formErrorStore.username,
+            hintText: AppLocalizations.of(context).translate('user_name'),
+            suffixIcon: _userNameController.text.length > 0
+                ? IconButton(
+                    onPressed: () {
+                      _userNameController.clear();
+                      _formStore.setUserName(_userNameController.text);
+                    },
+                    icon: Icon(Icons.clear),
+                  )
+                : SizedBox.shrink(),
+          ),
+          controller: _userNameController,
           onChanged: (value) {
             _formStore.setUserName(_userNameController.text);
           },
-          errorText: _formStore.formErrorStore.username,
         );
       },
     );
@@ -113,20 +127,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildFamilyField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
-          hint: AppLocalizations.of(context).translate('family'),
-          padding: EdgeInsets.only(top: 16.0),
-          icon: Icons.account_box,
+        return TextField(
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context).translate('family'),
+            prefixIcon: Icon(
+              Icons.account_box,
+              color: Colors.black54,
+            ),
+            errorText: _formStore.formErrorStore.family,
+            fillColor: Color(0xfff3f3f4),
+            filled: true,
+            suffixIcon: _familyController.text.length > 0
+                ? IconButton(
+                    onPressed: () {
+                      _familyController.clear();
+                      _formStore.setUserName(_familyController.text);
+                    },
+                    icon: Icon(Icons.clear),
+                  )
+                : SizedBox.shrink(),
+          ),
           focusNode: _familyFocusNode,
-          onFieldSubmitted: (value) {
+          onSubmitted: (value) {
             FocusScope.of(context).requestFocus(_usernameFocusNode);
           },
-          iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-          textController: _familyController,
+          controller: _familyController,
           onChanged: (value) {
             _formStore.setName(_nameController.text);
           },
-          errorText: _formStore.formErrorStore.family,
         );
       },
     );
@@ -135,16 +163,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildNameField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
-          hint: AppLocalizations.of(context).translate('Name'),
-          padding: EdgeInsets.only(top: 16.0),
-          icon: Icons.account_box,
-          iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-          textController: _nameController,
+        return TextField(
+          decoration: InputDecoration(
+            fillColor: Color(0xfff3f3f4),
+            filled: true,
+            suffixIcon: _nameController.text.length > 0
+                ? IconButton(
+                    onPressed: () {
+                      _nameController.clear();
+                      _formStore.setUserName(_nameController.text);
+                    },
+                    icon: Icon(Icons.clear),
+                  )
+                : SizedBox.shrink(),
+            hintText: AppLocalizations.of(context).translate('Name'),
+            prefixIcon: Icon(
+              Icons.account_box,
+              color: Colors.black54,
+            ),
+            errorText: _formStore.formErrorStore.name,
+          ),
+          controller: _nameController,
           onChanged: (value) {
             _formStore.setFamily(_nameController.text);
           },
-          errorText: _formStore.formErrorStore.name,
         );
       },
     );
@@ -153,22 +195,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildEmailField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
-          hint: AppLocalizations.of(context).translate('user_email'),
-          inputType: TextInputType.emailAddress,
-          icon: Icons.email,
-          padding: EdgeInsets.only(top: 16.0),
-          iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-          textController: _userEmailController,
-          inputAction: TextInputAction.next,
+        return TextField(
+          decoration: InputDecoration(
+            fillColor: Color(0xfff3f3f4),
+            filled: true,
+            suffixIcon: _userEmailController.text.length > 0
+                ? IconButton(
+                    onPressed: () {
+                      _userEmailController.clear();
+                      _formStore.setUserName(_userEmailController.text);
+                    },
+                    icon: Icon(Icons.clear),
+                  )
+                : SizedBox.shrink(),
+            hintText: AppLocalizations.of(context).translate('user_email'),
+            prefixIcon: Icon(
+              Icons.email,
+              color: Colors.black54,
+            ),
+            errorText: _formStore.formErrorStore.email,
+          ),
+          keyboardType: TextInputType.emailAddress,
+          controller: _userEmailController,
           focusNode: _emailFocusNode,
           onChanged: (value) {
             _formStore.setEmail(_userEmailController.text);
           },
-          onFieldSubmitted: (value) {
+          onSubmitted: (value) {
             FocusScope.of(context).requestFocus(_numberFocusNode);
           },
-          errorText: _formStore.formErrorStore.email,
         );
       },
     );
@@ -177,18 +232,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildPasswordField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
-          hint: AppLocalizations.of(context).translate('user_password'),
-          isObscure: true,
-          padding: EdgeInsets.only(top: 16.0),
-          icon: Icons.lock,
-          iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-          textController: _passwordController,
+        return TextField(
+          decoration: InputDecoration(
+            fillColor: Color(0xfff3f3f4),
+            filled: true,
+            suffixIcon: _passwordController.text.length > 0
+                ? IconButton(
+                    onPressed: () {
+                      _passwordController.clear();
+                      _formStore.setUserName(_passwordController.text);
+                    },
+                    icon: Icon(Icons.clear),
+                  )
+                : SizedBox.shrink(),
+            hintText: AppLocalizations.of(context).translate('user_password'),
+            prefixIcon: Icon(
+              Icons.lock,
+              color: Colors.black54,
+            ),
+            errorText: _formStore.formErrorStore.password,
+          ),
+          controller: _passwordController,
           focusNode: _passwordFocusNode,
-          errorText: _formStore.formErrorStore.password,
-          onFieldSubmitted: (value) {
+          onSubmitted: (value) {
             FocusScope.of(context).requestFocus(_confrimpasswordFocusNode);
           },
+          obscureText: true,
           onChanged: (value) {
             _formStore.setPassword(_passwordController.text);
           },
@@ -200,21 +269,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildNumberField() {
     return Observer(
       builder: (context) {
-        return TextFieldWidget(
-          inputType: TextInputType.number,
-          hint: AppLocalizations.of(context).translate('user_Number'),
-          padding: EdgeInsets.only(top: 16.0),
-          icon: Icons.phone_android,
-          iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-          textController: _numberController,
+        return TextField(
+          decoration: InputDecoration(
+            fillColor: Color(0xfff3f3f4),
+            filled: true,
+            suffixIcon: _numberController.text.length > 0
+                ? IconButton(
+                    onPressed: () {
+                      _numberController.clear();
+                      _formStore.setUserName(_numberController.text);
+                    },
+                    icon: Icon(Icons.clear),
+                  )
+                : SizedBox.shrink(),
+            hintText: AppLocalizations.of(context).translate('user_Number'),
+            prefixIcon: Icon(
+              Icons.phone_android,
+              color: Colors.black54,
+            ),
+            errorText: _formStore.formErrorStore.number,
+          ),
+          keyboardType: TextInputType.number,
+          controller: _numberController,
           focusNode: _numberFocusNode,
-          onFieldSubmitted: (value) {
+          onSubmitted: (value) {
             FocusScope.of(context).requestFocus(_passwordFocusNode);
           },
           onChanged: (value) {
             _formStore.setNumber(value.toString());
           },
-          errorText: _formStore.formErrorStore.number,
         );
       },
     );
@@ -332,7 +415,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               width: 10,
             ),
             Text(
-              AppLocalizations.of(context).translate('Register'),
+              AppLocalizations.of(context).translate('login_btn_sign_in'),
               style: TextStyle(
                   color: Color(0xfff79c4f),
                   fontSize: 13,
@@ -396,7 +479,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: BezierContainer(),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: 15),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -416,20 +499,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 duration: const Duration(milliseconds: 300),
                                 opacity:
                                     _formStore.isUserCheckPending ? 1 : 0)),
+                        SizedBox(
+                          height: 16,
+                        ),
                         _buildNameField(),
+                        SizedBox(
+                          height: 16,
+                        ),
                         _buildFamilyField(),
+                        SizedBox(
+                          height: 16,
+                        ),
                         _buildEmailField(),
                         Observer(
                             builder: (_) => AnimatedOpacity(
                                 child: const LinearProgressIndicator(),
                                 duration: const Duration(milliseconds: 300),
                                 opacity: _formStore.isEmailPending ? 1 : 0)),
+                        SizedBox(
+                          height: 16,
+                        ),
                         _buildNumberField(),
                         Observer(
                             builder: (_) => AnimatedOpacity(
                                 child: const LinearProgressIndicator(),
                                 duration: const Duration(milliseconds: 300),
                                 opacity: _formStore.isNumberPending ? 1 : 0)),
+                        SizedBox(
+                          height: 16,
+                        ),
                         _buildPasswordField(),
                       ],
                     ),

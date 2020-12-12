@@ -5,6 +5,7 @@ import 'package:boilerplate/ui/home/tabs/user_screen.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/settings.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -60,35 +61,35 @@ class _HomeScreenState extends State<HomeScreen> {
     return [
       PersistentBottomNavBarItem(
         icon: Icon(Icons.home),
-        title: "Home",
+        title: AppLocalizations.of(context).translate('home'),
         activeColor: Colors.blue,
-        inactiveColor: Colors.grey,
+        inactiveColor: Colors.blueAccent,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.search),
-        title: ("Search"),
+        title: AppLocalizations.of(context).translate('search'),
         activeColor: Colors.teal,
-        inactiveColor: Colors.grey,
+        inactiveColor: Colors.amber,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.add),
-        title: ("Add"),
+        title: AppLocalizations.of(context).translate('add_post'),
         activeColor: Colors.blueAccent,
-        inactiveColor: Colors.grey,
-        activeColorAlternate: Colors.white,
+        inactiveColor: Colors.redAccent,
+        activeColorAlternate: Colors.deepPurpleAccent,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.add),
-        title: ("Fav"),
+        icon: Icon(Icons.favorite),
+        title: AppLocalizations.of(context).translate('favarits'),
         activeColor: Colors.blueAccent,
-        inactiveColor: Colors.grey,
-        activeColorAlternate: Colors.white,
+        inactiveColor: Colors.redAccent,
+        activeColorAlternate: Colors.red,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.settings),
-        title: ("Settings"),
+        title: AppLocalizations.of(context).translate('settings'),
         activeColor: Colors.indigo,
-        inactiveColor: Colors.grey,
+        inactiveColor: Colors.black,
       ),
     ];
   }
@@ -109,6 +110,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: PersistentTabView(
         context,
+        onItemSelected: (int index) {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
         controller: _controller,
         screens: _buildScreens,
         items: _navBarsItems(),
@@ -162,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
           duration: Duration(milliseconds: 200),
         ),
         navBarStyle:
-            NavBarStyle.style15, // Choose the nav bar style with this property
+            NavBarStyle.style13, // Choose the nav bar style with this property
       ),
     );
   }

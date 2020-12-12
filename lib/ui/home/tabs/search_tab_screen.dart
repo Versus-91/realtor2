@@ -10,6 +10,7 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:incrementally_loading_listview/incrementally_loading_listview.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 import '../propertycrads.dart';
@@ -137,11 +138,11 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                   top: MediaQuery.of(context).size.height / 1.8,
                                   right: MediaQuery.of(context).size.width / 3,
                                   child: RaisedButton.icon(
+                                    color: Colors.indigo,
+                                    textColor: Colors.white,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        side: BorderSide(
-                                            color: Colors.transparent)),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
                                     label: Text(
                                       AppLocalizations.of(context)
                                           .translate('search'),
@@ -177,7 +178,8 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
-              padding: EdgeInsets.only(right: 15, bottom: MediaQuery.of(context).size.height/12),
+              padding: EdgeInsets.only(
+                  right: 15, bottom: MediaQuery.of(context).size.height / 12),
               child: FloatingActionButton(
                 heroTag: 'saveSearchButton',
                 child: Icon(Icons.save),
@@ -310,15 +312,12 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
 
   void openFilterScreen() {
     FocusScope.of(context).requestFocus(FocusNode());
-    Navigator.push<dynamic>(
-      context,
-      MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => SearchScreen(
-                filterForm: _filterForm,
-                postStore: _postStore,
-              ),
-          fullscreenDialog: true),
-    );
+    pushNewScreen(context,
+        withNavBar: false,
+        screen: SearchScreen(
+          filterForm: _filterForm,
+          postStore: _postStore,
+        ));
   }
 
   Widget getAppBarUI() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final IconData icon;
+  final Widget suffixIcon;
   final String hint;
   final String errorText;
   final bool isObscure;
@@ -19,6 +20,7 @@ class TextFieldWidget extends StatelessWidget {
   final InputDecoration decoration;
 
   const TextFieldWidget({
+    this.suffixIcon,
     Key key,
     this.icon,
     this.hint,
@@ -64,6 +66,7 @@ class TextFieldWidget extends StatelessWidget {
                 .bodyText2
                 .copyWith(color: hintColor),
             errorText: errorText,
+            suffixIcon: suffixIcon,
             counterText: '',
             icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
       ),
