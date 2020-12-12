@@ -22,7 +22,6 @@ import 'package:boilerplate/constants/font_family.dart';
  * `import` this file in your project, anywhere you needed it.
  * `import 'path/to/theme.dart';`
  */
-
 import 'package:flutter/material.dart';
 
 final ThemeData themeData = new ThemeData(
@@ -34,7 +33,6 @@ final ThemeData themeData = new ThemeData(
   accentColor: AppColors.green[500],
   accentColorBrightness: Brightness.light,
   backgroundColor: const Color(0xFFFFFFFF),
-  
 );
 
 final ThemeData themeDataDark = ThemeData(

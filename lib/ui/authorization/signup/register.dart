@@ -10,7 +10,6 @@ import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -432,8 +431,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       textAlign: TextAlign.center,
       text: TextSpan(
           text: 'خو',
-          style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.headline4,
+          style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.w700,
             color: Color(0xffe46b10),
