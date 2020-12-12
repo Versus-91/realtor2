@@ -34,7 +34,7 @@ class _SplashScreenState extends State<MySplashScreen> {
 
   Future<String> navigate() async {
     return Future.delayed(
-        Duration(seconds: 3),
+        Duration(seconds: 2),
         () => SharedPreferences.getInstance().then((prefs) {
               var loggedIn = prefs.getBool(Preferences.is_logged_in) ?? false;
               if (loggedIn == true) {
