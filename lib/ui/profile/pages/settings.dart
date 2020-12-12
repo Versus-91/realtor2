@@ -147,20 +147,19 @@ class _SettingsScreenState extends State<SettingsScreen>
           })),
           SettingsSection(
             tiles: [
-              _userStore.user != null
-                  ? SettingsTile(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(Routes.changeInfo);
-                      },
-                      title:
-                          AppLocalizations.of(context).translate("my_details"),
-                      leading: Icon(Icons.person),
-                      trailing: IconButton(
-                        icon: Icon(Icons.keyboard_arrow_left),
-                        onPressed: () {},
-                      ),
-                    )
-                  : SizedBox.shrink()
+              SettingsTile(
+                onTap: () {
+                  _userStore.user != null
+                      ? Navigator.of(context).pushNamed(Routes.changeInfo)
+                      : (){};
+                },
+                title: AppLocalizations.of(context).translate("my_details"),
+                leading: Icon(Icons.person),
+                // trailing: IconButton(
+                //   icon: Icon(Icons.keyboard_arrow_left),
+                //   onPressed: () {},
+                // ),
+              )
             ],
           ),
           SettingsSection(

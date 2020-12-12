@@ -116,7 +116,6 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                       post: _postStore.postList.posts[index]);
                                 },
                               ),
-                            
                               onRefresh: () async {
                                 await _postStore.getPosts(
                                     request: _filterForm.applyFilters());
@@ -135,7 +134,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                   ],
                                 ),
                                 Positioned(
-                                  top: MediaQuery.of(context).size.height / 5,
+                                  top: MediaQuery.of(context).size.height / 1.8,
                                   right: MediaQuery.of(context).size.width / 3,
                                   child: RaisedButton.icon(
                                     shape: RoundedRectangleBorder(
@@ -178,7 +177,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
-              padding: EdgeInsets.only(right: 15, bottom: 10),
+              padding: EdgeInsets.only(right: 15, bottom: MediaQuery.of(context).size.height/12),
               child: FloatingActionButton(
                 heroTag: 'saveSearchButton',
                 child: Icon(Icons.save),
@@ -205,7 +204,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
     return Stack(
       children: <Widget>[
         Positioned(
-          top: 0, 
+          top: 0,
           left: 0,
           right: 0,
           child: Container(
