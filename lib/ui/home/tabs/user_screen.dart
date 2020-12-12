@@ -65,48 +65,49 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
         ),
         backgroundColor: Colors.red,
       ),
-      body: Padding(
-          padding:
-              const EdgeInsets.only(top: 20, right: 10, left: 10, bottom: 0),
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppLocalizations.of(context).translate('recent_search'),
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    // decoration: new BoxDecoration(
-                    //     image: new DecorationImage(
-                    //   image: new AssetImage("assets/images/cloud.png"),
-                    //   fit: BoxFit.fill,
-                    // )),
-                    height: MediaQuery.of(context).size.height / 2.5,
-                    width: MediaQuery.of(context).size.width,
-                    alignment: Alignment.topRight,
-                    child: _buildListView(),
-                  ),
-                ],
-              ),
-              Positioned(
-                bottom: MediaQuery.of(context).size.height / 24,
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 3.1,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: new BoxDecoration(
-                      image: new DecorationImage(
-                    image: new AssetImage("assets/images/bg11.png"),
-                    fit: BoxFit.fill,
-                  )),
+      body: Stack(
+        children: [
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 20, right: 10, left: 10, bottom: 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppLocalizations.of(context).translate('recent_search'),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
                 ),
-              ),
-            ],
-          )),
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  // decoration: new BoxDecoration(
+                  //     image: new DecorationImage(
+                  //   image: new AssetImage("assets/images/cloud.png"),
+                  //   fit: BoxFit.fill,
+                  // )),
+                  height: MediaQuery.of(context).size.height / 2.5,
+                  width: MediaQuery.of(context).size.width,
+                  alignment: Alignment.topRight,
+                  child: _buildListView(),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: MediaQuery.of(context).size.height / 24,
+            child: Container(
+              height: MediaQuery.of(context).size.height / 3.1,
+              width: MediaQuery.of(context).size.width,
+              decoration: new BoxDecoration(
+                  image: new DecorationImage(
+                image: new AssetImage("assets/images/bg11.png"),
+                fit: BoxFit.fill,
+              )),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

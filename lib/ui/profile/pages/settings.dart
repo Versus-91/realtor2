@@ -139,9 +139,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                             ),
                           )),
                 Text(
-                  _userStore.user != null
-                      ? "سلام" + _userStore.user.name
-                      : "سلام",
+                  _userStore.user != null ? "سلام" + _userStore.user.name : "",
                   style: TextStyle(color: Color(0xFF777777)),
                 ),
               ],
@@ -149,17 +147,20 @@ class _SettingsScreenState extends State<SettingsScreen>
           })),
           SettingsSection(
             tiles: [
-              SettingsTile(
-                onTap: () {
-                  Navigator.of(context).pushNamed(Routes.changeInfo);
-                },
-                title: AppLocalizations.of(context).translate("my_details"),
-                leading: Icon(Icons.person),
-                trailing: IconButton(
-                  icon: Icon(Icons.keyboard_arrow_left),
-                  onPressed: () {},
-                ),
-              )
+              _userStore.user != null
+                  ? SettingsTile(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(Routes.changeInfo);
+                      },
+                      title:
+                          AppLocalizations.of(context).translate("my_details"),
+                      leading: Icon(Icons.person),
+                      trailing: IconButton(
+                        icon: Icon(Icons.keyboard_arrow_left),
+                        onPressed: () {},
+                      ),
+                    )
+                  : SizedBox.shrink()
             ],
           ),
           SettingsSection(
