@@ -208,8 +208,9 @@ class _SettingsScreenState extends State<SettingsScreen>
                           preference.remove(Preferences.auth_token);
                           _userStore.setLoginState(false);
                           await _rippleAnimationController.forward();
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              Routes.login, (Route<dynamic> route) => false);
+                          Navigator.of(context, rootNavigator: true)
+                              .pushNamedAndRemoveUntil(Routes.login,
+                                  (Route<dynamic> route) => false);
                         });
                       } else {
                         await _rippleAnimationController.forward();

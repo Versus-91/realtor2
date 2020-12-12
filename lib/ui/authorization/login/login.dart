@@ -36,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         textColor: kWhite,
         text: AppLocalizations.of(context).translate('login_btn_sign_in'),
         onPressed: () {
+          FocusScope.of(context).unfocus();
           widget.formStore.login().then((value) {
             if (value == true) {
               SharedPreferences.getInstance().then((prefs) {
@@ -189,7 +190,6 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
       body: Container(
-        height: height,
         child: Stack(
           children: <Widget>[
             Positioned(
@@ -233,6 +233,20 @@ class _LoginPageState extends State<LoginPage> {
                                     },
                                     obscureText: false,
                                     decoration: InputDecoration(
+                                        suffixIcon:
+                                            _userNameController.text.length > 0
+                                                ? IconButton(
+                                                    onPressed: () {
+                                                      _userNameController
+                                                          .clear();
+                                                      widget.formStore
+                                                          .setUsernameOrEmail(
+                                                              _passwordNameController
+                                                                  .text);
+                                                    },
+                                                    icon: Icon(Icons.clear),
+                                                  )
+                                                : SizedBox.shrink(),
                                         errorText: widget.formStore
                                             .formErrorStore.usernameOrEmail,
                                         border: InputBorder.none,
@@ -259,6 +273,20 @@ class _LoginPageState extends State<LoginPage> {
                                     },
                                     obscureText: true,
                                     decoration: InputDecoration(
+                                        suffixIcon: _passwordNameController
+                                                    .text.length >
+                                                0
+                                            ? IconButton(
+                                                onPressed: () {
+                                                  _passwordNameController
+                                                      .clear();
+                                                  widget.formStore.setPassword(
+                                                      _passwordNameController
+                                                          .text);
+                                                },
+                                                icon: Icon(Icons.clear),
+                                              )
+                                            : SizedBox.shrink(),
                                         errorText: widget
                                             .formStore.formErrorStore.password,
                                         border: InputBorder.none,
@@ -285,17 +313,17 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           );
                         }),
-                        Observer(
-                          builder: (context) {
-                            return widget.formStore.success
-                                ? navigate(context)
-                                : _showErrorMessage(
-                                    widget.formStore.errorStore.errorMessage);
-                          },
-                        ),
                       ],
                     ),
-                  )
+                  ),
+                  Observer(
+                    builder: (context) {
+                      return widget.formStore.success
+                          ? navigate(context)
+                          : _showErrorMessage(
+                              widget.formStore.errorStore.errorMessage);
+                    },
+                  ),
                 ],
               ),
             ),

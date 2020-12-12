@@ -256,8 +256,8 @@ abstract class _FormStore with Store {
 
   @action
   void validateUsernameOrEmail(String value) {
-    if (value == null) {
-      formErrorStore.usernameOrEmail = "نام کاربری یا ایمیل اشتباه است";
+    if (value == null || value.isEmpty) {
+      formErrorStore.usernameOrEmail = "نام کاربری یا ایمیل باید وارد شود ";
     } else if (value.length < 4) {
       formErrorStore.usernameOrEmail =
           "نام کاربری یا ایمیل کمتر از 4 کاراکتر نباشد";
@@ -347,10 +347,15 @@ abstract class _FormStore with Store {
       }).catchError((e) {
         loading = false;
         success = false;
-        if (e != null) {
-          if (e.toString().contains("ورود ناموفقیت آمیز است"))
-            errorStore.errorMessage =
-                "نام کاربری و رمز خود را چک کنید خطا در ورود";
+        if (e.response != null) {
+          if (e.response
+              .toString()
+              .toLowerCase()
+              .contains("invalid user name")) {
+            errorStore.errorMessage = "نام کاربری و رمز خود را چک کنید ";
+          } else {
+            errorStore.errorMessage = "خطا در ورود به حساب";
+          }
         } else {
           errorStore.errorMessage = "اتصال اینترنت برقرار نیست مجددا تلاش کنید";
         }
