@@ -1,7 +1,5 @@
-import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/user/changepassword.dart';
 import 'package:boilerplate/routes.dart';
-import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -28,8 +26,6 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
       _obscureText = !_obscureText;
     });
   }
-
-  final _formStore = FormStore(appComponent.getRepository());
 
   TextEditingController _newPasswordController = TextEditingController();
   TextEditingController _oldPasswordController = TextEditingController();
@@ -83,56 +79,55 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
 
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(children: [
-            Divider(),
-            Container(
-              height: 55,
-              child: TextField(
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                keyboardType: TextInputType.number,
-                textDirection: TextDirection.ltr,
-                controller: _newNumberController,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.edit),
-                  border: OutlineInputBorder(),
-                  labelText:
-                      AppLocalizations.of(context).translate('user_Number'),
+          child: Form(
+            child: Column(children: [
+              Divider(),
+              Container(
+                height: 55,
+                child: TextField(
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  keyboardType: TextInputType.number,
+                  textDirection: TextDirection.ltr,
+                  controller: _newNumberController,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.edit),
+                    border: OutlineInputBorder(),
+                    labelText:
+                        AppLocalizations.of(context).translate('user_Number'),
+                  ),
                 ),
               ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(vertical: 15),
-              alignment: Alignment.center,
-              child: CustomButton(
-                textColor: Colors.white,
-                color: Colors.red,
-                text: AppLocalizations.of(context).translate('change_number'),
-                onPressed: () async {
-                  _userStore
-                      .changePhoneNumber(_newNumberController.text)
-                      .then((value) async {
-                    var result = await Navigator.of(context,
-                            rootNavigator: true)
-                        .pushNamed(Routes.phoneNumberVerificationCode,
-                            arguments: {'phone': _newNumberController.text});
-                    _newNumberController.text = result;
-                  }).catchError((error) {
-                    _showErrorMessage(
-                      "خطا در تغییر شماره همراه",
-                    );
-                  });
-                },
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(vertical: 15),
+                alignment: Alignment.center,
+                child: CustomButton(
+                  textColor: Colors.white,
+                  color: Colors.red,
+                  text: AppLocalizations.of(context).translate('change_number'),
+                  onPressed: () async {
+                    _userStore
+                        .changePhoneNumber(_newNumberController.text)
+                        .then((value) async {
+                      var result = await Navigator.of(context,
+                              rootNavigator: true)
+                          .pushNamed(Routes.phoneNumberVerificationCode,
+                              arguments: {'phone': _newNumberController.text});
+                      _newNumberController.text = result;
+                    }).catchError((error) {
+                      _showErrorMessage(
+                        "خطا در تغییر شماره همراه",
+                      );
+                    });
+                  },
+                ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              height: 55,
-              child: TextField(
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
                 controller: _oldPasswordController,
                 decoration: InputDecoration(
                   suffix: IconButton(
@@ -141,7 +136,6 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                         : Icon(Icons.visibility),
                     onPressed: _toggle,
                   ),
-                  border: OutlineInputBorder(),
                   labelText:
                       AppLocalizations.of(context).translate('old_password'),
                 ),
@@ -150,48 +144,42 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 },
                 obscureText: _obscureText,
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            // Align(
-            //   alignment: Alignment.bottomRight,
-            //   child: FlatButton(
-            //     onPressed: () {},
-            //     child: Text(
-            //       AppLocalizations.of(context)
-            //           .translate('login_btn_forgot_password'),
-            //       style: TextStyle(color: Colors.blue, fontSize: 10),
-            //     ),
-            //   ),
-            // ),
-            Container(
-              height: 55,
-              child: TextField(
+
+              SizedBox(
+                height: 10,
+              ),
+              // Align(
+              //   alignment: Alignment.bottomRight,
+              //   child: FlatButton(
+              //     onPressed: () {},
+              //     child: Text(
+              //       AppLocalizations.of(context)
+              //           .translate('login_btn_forgot_password'),
+              //       style: TextStyle(color: Colors.blue, fontSize: 10),
+              //     ),
+              //   ),
+              // ),
+              TextFormField(
                 controller: _newPasswordController,
                 decoration: InputDecoration(
-                  errorText:_userStore. userErrorStore.newPassword ,
+                  errorText: _userStore.userErrorStore.newPassword,
                   suffix: Icon(Icons.lock),
-                  border: OutlineInputBorder(),
                   labelText:
                       AppLocalizations.of(context).translate('new_password'),
                 ),
                 onChanged: (value) {
                   _userStore.setNewPassword(value.toString());
                 },
-                
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-              height: 55,
-              child: TextField(
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
                 controller: _confirmPasswordController,
                 decoration: InputDecoration(
                   suffix: Icon(Icons.lock),
-                  border: OutlineInputBorder(),
+                  errorText: _userStore.userErrorStore.confrimPassword,
+                  // border: OutlineInputBorder(),
                   labelText: AppLocalizations.of(context)
                       .translate('confirm_password'),
                 ),
@@ -199,33 +187,34 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                   _userStore.setConfirmPassword(value.toString());
                 },
               ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(vertical: 15),
-              alignment: Alignment.center,
-              child: CustomButton(
-                color: Colors.red,
-                textColor: Colors.white,
-                text: AppLocalizations.of(context).translate('register_info'),
-                onPressed: () async {
-                  _userStore
-                      .changePass(ChangePassword(
-                    oldPassword: _oldPasswordController.text,
-                    newPassword: _newPasswordController.text,
-                    confirmPassword: _confirmPasswordController.text,
-                  ))
-                      .then((value) async {
-                    // _newNumberController.text = result;
-                  }).catchError((error) {
-                    _showErrorMessage(
-                      "خطا در تغییر رمز",
-                    );
-                  });
-                },
+
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(vertical: 15),
+                alignment: Alignment.center,
+                child: CustomButton(
+                  color: Colors.red,
+                  textColor: Colors.white,
+                  text: AppLocalizations.of(context).translate('register_info'),
+                  onPressed: () async {
+                    _userStore
+                        .changePass(ChangePassword(
+                      oldPassword: _oldPasswordController.text,
+                      newPassword: _newPasswordController.text,
+                      confirmPassword: _confirmPasswordController.text,
+                    ))
+                        .then((value) async {
+                      // _newNumberController.text = result;
+                    }).catchError((error) {
+                      _showErrorMessage(
+                        "خطا در تغییر رمز",
+                      );
+                    });
+                  },
+                ),
               ),
-            ),
-          ]),
+            ]),
+          ),
         );
       } else {
         return SizedBox.shrink();

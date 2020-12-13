@@ -89,161 +89,169 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SettingsList(
-        backgroundColor: Colors.white,
-        sections: [
-          CustomSection(child: Observer(builder: (context) {
-            return Column(
-              children: [
-                Padding(
-                    padding: const EdgeInsets.only(top: 32, bottom: 8),
-                    child: _userStore.user != null
-                        ? InkWell(
-                            onTap: () async {
-                              getImage(ImageSource.gallery);
-                            },
-                            child: _userStore?.user?.avatar == null
-                                ? CircleAvatar(
-                                    radius: 50,
-                                    backgroundColor: Colors.indigo,
-                                    child: CircleAvatar(
-                                      radius: 48,
-                                      backgroundImage: AssetImage(
-                                        "assets/images/no-profile.jpg",
+    return Observer(
+      builder: (_) {
+        return Scaffold(
+          body: SettingsList(
+            backgroundColor: Colors.white,
+            sections: [
+              CustomSection(child: Observer(builder: (context) {
+                return Column(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.only(top: 32, bottom: 8),
+                        child: _userStore.user != null
+                            ? InkWell(
+                                onTap: () async {
+                                  getImage(ImageSource.gallery);
+                                },
+                                child: _userStore?.user?.avatar == null
+                                    ? CircleAvatar(
+                                        radius: 50,
+                                        backgroundColor: Colors.indigo,
+                                        child: CircleAvatar(
+                                          radius: 48,
+                                          backgroundImage: AssetImage(
+                                            "assets/images/no-profile.jpg",
+                                          ),
+                                        ),
+                                      )
+                                    : CircleAvatar(
+                                        radius: 50,
+                                        backgroundColor: Colors.indigo,
+                                        child: CircleAvatar(
+                                            radius: 48,
+                                            backgroundImage: NetworkImage(
+                                              Endpoints.baseUrl +
+                                                  "/" +
+                                                  _userStore.user.avatar,
+                                            )),
                                       ),
-                                    ),
-                                  )
-                                : CircleAvatar(
-                                    radius: 50,
-                                    backgroundColor: Colors.indigo,
-                                    child: CircleAvatar(
-                                        radius: 48,
-                                        backgroundImage: NetworkImage(
-                                          Endpoints.baseUrl +
-                                              "/" +
-                                              _userStore.user.avatar,
-                                        )),
+                              )
+                            : CircleAvatar(
+                                radius: 50,
+                                backgroundColor: Colors.indigo,
+                                child: CircleAvatar(
+                                  radius: 48,
+                                  backgroundImage: AssetImage(
+                                    "assets/images/no-profile.jpg",
                                   ),
-                          )
-                        : CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Colors.indigo,
-                            child: CircleAvatar(
-                              radius: 48,
-                              backgroundImage: AssetImage(
-                                "assets/images/no-profile.jpg",
-                              ),
-                            ),
-                          )),
-                Text(
-                  _userStore.user != null ? "سلام" + _userStore.user.name : "",
-                  style: TextStyle(color: Color(0xFF777777)),
-                ),
-              ],
-            );
-          })),
-          SettingsSection(
-            tiles: [
-              SettingsTile(
-                onTap: _userStore.user != null
-                    ? () {
-                        Navigator.of(context, rootNavigator: true)
-                            .pushNamed(Routes.changeInfo);
-                      }
-                    : () {},
-                title: AppLocalizations.of(context).translate("my_details"),
-                leading: Icon(Icons.person),
-                // trailing: IconButton(
-                //   icon: Icon(Icons.keyboard_arrow_left),
-                //   onPressed: () {},
-                // ),
-              )
-            ],
-          ),
-          SettingsSection(
-            tiles: [
-              SettingsTile.switchTile(
-                title: AppLocalizations.of(context).translate("notifications"),
-                enabled: true,
-                leading: Icon(Icons.notifications_active),
-                switchValue: true,
-                onToggle: (value) {},
+                                ),
+                              )),
+                    Text(
+                      _userStore.user != null
+                          ? "سلام" + _userStore.user.name
+                          : "",
+                      style: TextStyle(color: Color(0xFF777777)),
+                    ),
+                  ],
+                );
+              })),
+              SettingsSection(
+                tiles: [
+                  SettingsTile(
+                    onTap: _userStore.user != null
+                        ? () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pushNamed(Routes.changeInfo);
+                          }
+                        : () {},
+                    title: AppLocalizations.of(context).translate("my_details"),
+                    leading: Icon(Icons.person),
+                    // trailing: IconButton(
+                    //   icon: Icon(Icons.keyboard_arrow_left),
+                    //   onPressed: () {},
+                    // ),
+                  )
+                ],
               ),
-            ],
-          ),
-          SettingsSection(
-            title: 'مدیریت آگهی',
-            tiles: [
-              SettingsTile(
-                  onTap: loggedIn == true
-                      ? () {
-                          Navigator.of(
-                            context,
-                            rootNavigator: true,
-                          ).pushNamed(Routes.userPosts);
+              SettingsSection(
+                tiles: [
+                  SettingsTile.switchTile(
+                    title:
+                        AppLocalizations.of(context).translate("notifications"),
+                    enabled: true,
+                    leading: Icon(Icons.notifications_active),
+                    switchValue: true,
+                    onToggle: (value) {},
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: 'مدیریت آگهی',
+                tiles: [
+                  SettingsTile(
+                      onTap: loggedIn == true
+                          ? () {
+                              Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              ).pushNamed(Routes.userPosts);
+                            }
+                          : () {},
+                      title: AppLocalizations.of(context).translate("my_posts"),
+                      leading: Icon(Icons.description)),
+                  // SettingsTile(
+                  //     title: AppLocalizations.of(context).translate("plants"),
+                  //     leading: Icon(Icons.collections_bookmark)),
+                  SettingsTile(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => AboutScreen(),
+                          ),
+                        );
+                      },
+                      title: AppLocalizations.of(context).translate("about_us"),
+                      leading: Icon(Icons.info)),
+                  SettingsTile(
+                      onTap: () async {
+                        {
+                          if (loggedIn == true) {
+                            SharedPreferences.getInstance()
+                                .then((preference) async {
+                              preference.setBool(
+                                  Preferences.is_logged_in, false);
+                              preference.remove(Preferences.auth_token);
+                              _userStore.setLoginState(false);
+                              await _rippleAnimationController.forward();
+                              Navigator.of(context, rootNavigator: true)
+                                  .pushNamedAndRemoveUntil(Routes.login,
+                                      (Route<dynamic> route) => false);
+                            });
+                          } else {
+                            await _rippleAnimationController.forward();
+                            Navigator.of(context, rootNavigator: true)
+                                .pushNamedAndRemoveUntil(Routes.login,
+                                    (Route<dynamic> route) => false);
+                            //   context,
+                            //   screen: LoginPage(),
+                            //   withNavBar: false,
+                            //   settings: null,
+                            // );
+                          }
                         }
-                      : () {},
-                  title: AppLocalizations.of(context).translate("my_posts"),
-                  leading: Icon(Icons.description)),
-              // SettingsTile(
-              //     title: AppLocalizations.of(context).translate("plants"),
-              //     leading: Icon(Icons.collections_bookmark)),
-              SettingsTile(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => AboutScreen(),
-                      ),
-                    );
-                  },
-                  title: AppLocalizations.of(context).translate("about_us"),
-                  leading: Icon(Icons.info)),
-              SettingsTile(
-                  onTap: () async {
-                    {
-                      if (loggedIn == true) {
-                        SharedPreferences.getInstance()
-                            .then((preference) async {
-                          preference.setBool(Preferences.is_logged_in, false);
-                          preference.remove(Preferences.auth_token);
-                          _userStore.setLoginState(false);
-                          await _rippleAnimationController.forward();
-                          Navigator.of(context, rootNavigator: true)
-                              .pushNamedAndRemoveUntil(Routes.login,
-                                  (Route<dynamic> route) => false);
-                        });
-                      } else {
-                        await _rippleAnimationController.forward();
-                        Navigator.of(context, rootNavigator: true)
-                            .pushNamedAndRemoveUntil(
-                                Routes.login, (Route<dynamic> route) => false);
-                        //   context,
-                        //   screen: LoginPage(),
-                        //   withNavBar: false,
-                        //   settings: null,
-                        // );
-                      }
-                    }
-                  },
-                  title: loggedIn == true
-                      ? AppLocalizations.of(context).translate("logout")
-                      : AppLocalizations.of(context)
-                          .translate("login_btn_sign_in"),
-                  leading: Icon(Icons.exit_to_app)),
+                      },
+                      title: loggedIn == true
+                          ? AppLocalizations.of(context).translate("logout")
+                          : AppLocalizations.of(context)
+                              .translate("login_btn_sign_in"),
+                      leading: Icon(Icons.exit_to_app)),
+                ],
+              ),
+              CustomSection(
+                  child: Center(
+                child: Image.asset(
+                  'assets/icons/settings.png',
+                  height: 200,
+                  width: 50,
+                  color: Color(0xFF777777),
+                ),
+              )),
             ],
           ),
-          CustomSection(
-              child: Center(
-            child: Image.asset(
-              'assets/icons/settings.png',
-              height: 200,
-              width: 50,
-              color: Color(0xFF777777),
-            ),
-          )),
-        ],
-      ),
+        );
+      },
     );
   }
 }

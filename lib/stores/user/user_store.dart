@@ -48,11 +48,11 @@ abstract class _UserStore with Store {
   @observable
   bool success = false;
   @observable
-  String newPassword = " ";
+  String newPassword = "";
   @observable
-  String confirmPassword = " ";
+  String confirmPassword = "";
   @observable
-  String oldPassword = " ";
+  String oldPassword = "";
   @observable
   bool avatarloading = false;
   @observable
@@ -85,15 +85,18 @@ abstract class _UserStore with Store {
   // actions:-------------------------------------------------------------------
   @action
   void validateNewPassword(String value) {
-    String passwordRegex =
-        r'(?=^.{8,}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s)[0-9a-zA-Z!@#$%^&*()]*$';
-    RegExp regExp = new RegExp(passwordRegex);
+    bool hasUppercase = value.contains(new RegExp(r'[A-Z]'));
+    bool hasDigits = value.contains(new RegExp(r'[0-9]'));
+    bool hasLowercase = value.contains(new RegExp(r'[a-z]'));
     if (value.isEmpty) {
       userErrorStore.newPassword = "پسوورد را وارد کنید";
-    } else if (!regExp.hasMatch(value)) {
-      userErrorStore.confrimPassword = "فرمت رمز وارد شده صحیح نیست";
-    } else if (value.length < 9) {
+    } else if (value.length < 8) {
       userErrorStore.newPassword = "طول پسورد کمتر از 8 کاراکتر نباشد";
+    } else if (hasUppercase == false ||
+        hasDigits == false ||
+        hasLowercase == false) {
+      userErrorStore.newPassword =
+          "رمز باید شامل حداقل یک حرف کوچک و یک حرف بزرگ انگلیسی و عدد باشد";
     } else {
       userErrorStore.newPassword = null;
     }
@@ -101,15 +104,12 @@ abstract class _UserStore with Store {
 
   @action
   void validateConfrimPassword(String value) {
-    String passwordRegex =
-        r'(?=^.{8,}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s)[0-9a-zA-Z!@#$%^&*()]*$';
-    RegExp regExp = new RegExp(passwordRegex);
-    if (value.isEmpty) {
-      userErrorStore.confrimPassword = "پسوورد را وارد کنید";
-    } else if (!regExp.hasMatch(value)) {
-      userErrorStore.confrimPassword = "فرمت رمز وارد شده صحیح نیست";
-    } else if (value.length < 9) {
-      userErrorStore.confrimPassword = "طول پسورد کمتر از 8 کاراکتر نباشد";
+    if (confirmPassword.length >= 8) {
+      if (newPassword != confirmPassword) {
+        userErrorStore.confrimPassword = "رمز و تکرار رمز یکسان نیست";
+      } else {
+        userErrorStore.confrimPassword = null;
+      }
     } else {
       userErrorStore.confrimPassword = null;
     }
