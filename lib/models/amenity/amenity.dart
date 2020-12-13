@@ -11,7 +11,7 @@ class Amenity {
         icon: json["icon"],
       );
 
-  Map<String, dynamic> toMap() => {
+   Map<String, dynamic> toMap() => {
         "id": id,
         "name": name,
         "icon": icon,

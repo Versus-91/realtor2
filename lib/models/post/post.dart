@@ -108,7 +108,9 @@ class Post {
       if (images != null) ...{
         "images": images.map((e) => toMapImage(e)).toList()
       },
-      if (amenities != null) ...{"amenities": amenities},
+      if (amenities != null) ...{
+        "amenities": amenities.map((amenity) => amenity.toMap()).toList()
+      },
     };
   }
 

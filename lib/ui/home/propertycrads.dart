@@ -138,7 +138,8 @@ class _PropertyCradState extends State<PropertyCrad>
                                               .translate('rahn') +
                                           ":" +
                                           AppLocalizations.of(context)
-                                              .transformCurrency(post.deposit ?? 0),
+                                              .transformCurrency(
+                                                  post.deposit ?? 0),
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w700,
@@ -220,21 +221,39 @@ class _PropertyCradState extends State<PropertyCrad>
                       Flexible(
                         child: Row(
                           children: [
-                            GestureDetector(
-                              onTap: () async {
-                                await appComponent
-                                    .getRepository()
-                                    .removeFavorite(post);
-                                setState(() {
-                                  appComponent
-                                      .getRepository()
-                                      .getFavoritesList();
-                                });
+                            FutureBuilder(
+                              future: isSelected(widget.post.id),
+                              builder: (context, snapshot) {
+                                return GestureDetector(
+                                  onTap: () async {
+                                    var post = await appComponent
+                                        .getRepository()
+                                        .findFavoriteById(widget.post.id);
+
+                                    if (post == null) {
+                                      await appComponent
+                                          .getRepository()
+                                          .addFavorite(widget.post);
+                                    } else {
+                                      await appComponent
+                                          .getRepository()
+                                          .removeFavorite(widget.post);
+                                    }
+                                    setState(() {
+                                      isSelected(widget.post.id);
+                                    });
+                                  },
+                                  child: snapshot.data == true
+                                      ? Icon(
+                                          Icons.favorite,
+                                          color: Colors.redAccent,
+                                        )
+                                      : Icon(
+                                          Icons.favorite,
+                                          color: Colors.grey,
+                                        ),
+                                );
                               },
-                              child: Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                              ),
                             ),
                             GestureDetector(
                               child: Icon(
@@ -242,7 +261,7 @@ class _PropertyCradState extends State<PropertyCrad>
                                 color: Colors.blue[200],
                               ),
                               onTap: () async {
-                                await Share.share("text");
+                                await Share.share(Endpoints.baseUrl);
                               },
                             ),
                             widget.isEdditing == true
@@ -252,7 +271,7 @@ class _PropertyCradState extends State<PropertyCrad>
                                       color: Colors.purple[200],
                                     ),
                                     onTap: () async {
-                                      await Share.share("text");
+                                      // await Share.share("text");
                                     },
                                   )
                                 : Container(
@@ -337,6 +356,14 @@ class _PropertyCradState extends State<PropertyCrad>
         ),
       ),
     );
+  }
+
+  Future isSelected(int id) async {
+    var post = await appComponent.getRepository().findFavoriteById(id);
+    if (post != null) {
+      return true;
+    }
+    return false;
   }
 
   @override
