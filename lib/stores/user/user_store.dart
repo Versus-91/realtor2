@@ -11,6 +11,8 @@ part 'user_store.g.dart';
 class UserStore = _UserStore with _$UserStore;
 
 abstract class _UserStore with Store {
+  final UserErrorStore userErrorStore = UserErrorStore();
+
   // repository instance
   Repository _repository;
 
@@ -18,7 +20,21 @@ abstract class _UserStore with Store {
   final ErrorStore errorStore = ErrorStore();
 
   // constructor:---------------------------------------------------------------
-  _UserStore(Repository repository) : this._repository = repository;
+  _UserStore(Repository repository) {
+    this._repository = repository;
+    _setupValidations();
+  }
+
+  List<ReactionDisposer> _disposers;
+
+  void _setupValidations() {
+    _disposers = [
+      reaction((_) => newPassword, validateNewPassword),
+      reaction((_) => confirmPassword, validateConfrimPassword),
+
+      // reaction((_) => confirmPassword, validateConfirmPassword)
+    ];
+  }
 
   // store variables:-----------------------------------------------------------
   static ObservableFuture emptyResponse = ObservableFuture.value(null);
@@ -68,13 +84,44 @@ abstract class _UserStore with Store {
 
   // actions:-------------------------------------------------------------------
   @action
+  void validateNewPassword(String value) {
+    String passwordRegex =
+        r'(?=^.{8,}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s)[0-9a-zA-Z!@#$%^&*()]*$';
+    RegExp regExp = new RegExp(passwordRegex);
+    if (value.isEmpty) {
+      userErrorStore.newPassword = "پسوورد را وارد کنید";
+    } else if (!regExp.hasMatch(value)) {
+      userErrorStore.confrimPassword = "فرمت رمز وارد شده صحیح نیست";
+    } else if (value.length < 9) {
+      userErrorStore.newPassword = "طول پسورد کمتر از 8 کاراکتر نباشد";
+    } else {
+      userErrorStore.newPassword = null;
+    }
+  }
+
+  @action
+  void validateConfrimPassword(String value) {
+    String passwordRegex =
+        r'(?=^.{8,}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s)[0-9a-zA-Z!@#$%^&*()]*$';
+    RegExp regExp = new RegExp(passwordRegex);
+    if (value.isEmpty) {
+      userErrorStore.confrimPassword = "پسوورد را وارد کنید";
+    } else if (!regExp.hasMatch(value)) {
+      userErrorStore.confrimPassword = "فرمت رمز وارد شده صحیح نیست";
+    } else if (value.length < 9) {
+      userErrorStore.confrimPassword = "طول پسورد کمتر از 8 کاراکتر نباشد";
+    } else {
+      userErrorStore.confrimPassword = null;
+    }
+  }
+
+  @action
   Future getUser() async {
     final future = _repository.getUser();
     fetchFuture = ObservableFuture(future);
 
     future.then((item) {
       this.user = item;
-      
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
@@ -96,8 +143,6 @@ abstract class _UserStore with Store {
     return future;
   }
 
-
-
   @action
   Future uploadAvatarImage(MultipartFile imageAvatar) async {
     avatarloading = true;
@@ -118,5 +163,25 @@ abstract class _UserStore with Store {
       return false;
     });
   }
+
+  void dispose() {
+    for (final d in _disposers) {
+      d();
+    }
+  }
 }
-/////
+
+class UserErrorStore = _UserErrorStore with _$UserErrorStore;
+
+abstract class _UserErrorStore with Store {
+  @observable
+  String oldPassword;
+  @observable
+  String newPassword;
+  @observable
+  String confrimPassword;
+
+  @computed
+  bool get hasErrorsChangeInfo =>
+      oldPassword != null || newPassword != null || confrimPassword != null;
+}

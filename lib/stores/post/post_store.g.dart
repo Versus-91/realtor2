@@ -22,6 +22,13 @@ mixin _$PostStore on _PostStore, Store {
   bool get loading => (_$loadingComputed ??=
           Computed<bool>(() => super.loading, name: '_PostStore.loading'))
       .value;
+  Computed<bool> _$loadingUserPostsComputed;
+
+  @override
+  bool get loadingUserPosts => (_$loadingUserPostsComputed ??= Computed<bool>(
+          () => super.loadingUserPosts,
+          name: '_PostStore.loadingUserPosts'))
+      .value;
   Computed<bool> _$loadingNextPageComputed;
 
   @override
@@ -42,6 +49,23 @@ mixin _$PostStore on _PostStore, Store {
   set fetchPostsFuture(ObservableFuture<PostList> value) {
     _$fetchPostsFutureAtom.reportWrite(value, super.fetchPostsFuture, () {
       super.fetchPostsFuture = value;
+    });
+  }
+
+  final _$fetchUserPostsFutureAtom =
+      Atom(name: '_PostStore.fetchUserPostsFuture');
+
+  @override
+  ObservableFuture<PostList> get fetchUserPostsFuture {
+    _$fetchUserPostsFutureAtom.reportRead();
+    return super.fetchUserPostsFuture;
+  }
+
+  @override
+  set fetchUserPostsFuture(ObservableFuture<PostList> value) {
+    _$fetchUserPostsFutureAtom.reportWrite(value, super.fetchUserPostsFuture,
+        () {
+      super.fetchUserPostsFuture = value;
     });
   }
 
@@ -173,6 +197,7 @@ mixin _$PostStore on _PostStore, Store {
   String toString() {
     return '''
 fetchPostsFuture: ${fetchPostsFuture},
+fetchUserPostsFuture: ${fetchUserPostsFuture},
 fetchNextPostsFuture: ${fetchNextPostsFuture},
 postList: ${postList},
 userPostList: ${userPostList},
@@ -181,6 +206,7 @@ page: ${page},
 pageSize: ${pageSize},
 hasNextPage: ${hasNextPage},
 loading: ${loading},
+loadingUserPosts: ${loadingUserPosts},
 loadingNextPage: ${loadingNextPage}
     ''';
   }

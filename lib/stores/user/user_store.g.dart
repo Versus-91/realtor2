@@ -215,6 +215,28 @@ mixin _$UserStore on _UserStore, Store {
   }
 
   @override
+  void validateNewPassword(String value) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.validateNewPassword');
+    try {
+      return super.validateNewPassword(value);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void validateConfrimPassword(String value) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.validateConfrimPassword');
+    try {
+      return super.validateConfrimPassword(value);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchFuture: ${fetchFuture},
@@ -226,6 +248,71 @@ oldPassword: ${oldPassword},
 avatarloading: ${avatarloading},
 isLoggedIn: ${isLoggedIn},
 loading: ${loading}
+    ''';
+  }
+}
+
+mixin _$UserErrorStore on _UserErrorStore, Store {
+  Computed<bool> _$hasErrorsChangeInfoComputed;
+
+  @override
+  bool get hasErrorsChangeInfo => (_$hasErrorsChangeInfoComputed ??=
+          Computed<bool>(() => super.hasErrorsChangeInfo,
+              name: '_UserErrorStore.hasErrorsChangeInfo'))
+      .value;
+
+  final _$oldPasswordAtom = Atom(name: '_UserErrorStore.oldPassword');
+
+  @override
+  String get oldPassword {
+    _$oldPasswordAtom.reportRead();
+    return super.oldPassword;
+  }
+
+  @override
+  set oldPassword(String value) {
+    _$oldPasswordAtom.reportWrite(value, super.oldPassword, () {
+      super.oldPassword = value;
+    });
+  }
+
+  final _$newPasswordAtom = Atom(name: '_UserErrorStore.newPassword');
+
+  @override
+  String get newPassword {
+    _$newPasswordAtom.reportRead();
+    return super.newPassword;
+  }
+
+  @override
+  set newPassword(String value) {
+    _$newPasswordAtom.reportWrite(value, super.newPassword, () {
+      super.newPassword = value;
+    });
+  }
+
+  final _$confrimPasswordAtom = Atom(name: '_UserErrorStore.confrimPassword');
+
+  @override
+  String get confrimPassword {
+    _$confrimPasswordAtom.reportRead();
+    return super.confrimPassword;
+  }
+
+  @override
+  set confrimPassword(String value) {
+    _$confrimPasswordAtom.reportWrite(value, super.confrimPassword, () {
+      super.confrimPassword = value;
+    });
+  }
+
+  @override
+  String toString() {
+    return '''
+oldPassword: ${oldPassword},
+newPassword: ${newPassword},
+confrimPassword: ${confrimPassword},
+hasErrorsChangeInfo: ${hasErrorsChangeInfo}
     ''';
   }
 }

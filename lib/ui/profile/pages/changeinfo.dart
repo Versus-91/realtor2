@@ -170,6 +170,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
               child: TextField(
                 controller: _newPasswordController,
                 decoration: InputDecoration(
+                  errorText:_userStore. userErrorStore.newPassword ,
                   suffix: Icon(Icons.lock),
                   border: OutlineInputBorder(),
                   labelText:
@@ -178,6 +179,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 onChanged: (value) {
                   _userStore.setNewPassword(value.toString());
                 },
+                
               ),
             ),
             SizedBox(

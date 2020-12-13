@@ -13,8 +13,6 @@ abstract class _FormStore with Store {
   // store for handling form errors
   final FormErrorStore formErrorStore = FormErrorStore();
   Repository _repository;
-
-  // store for handling error messages
   final ErrorStore errorStore = ErrorStore();
 
   _FormStore(Repository repository) {
@@ -188,7 +186,6 @@ abstract class _FormStore with Store {
     }
     _usernameCheck = ObservableFuture(_repository.checkUsername(username));
     _usernameCheck.then((result) {
-     
       if (result == true) {
         formErrorStore.username = null;
         return;
@@ -234,7 +231,6 @@ abstract class _FormStore with Store {
     }
     _numberCheck = ObservableFuture(_repository.checkPhoneNumber(number));
     _numberCheck.then((result) {
-  
       if (result == true) {
         formErrorStore.number = null;
         return;
