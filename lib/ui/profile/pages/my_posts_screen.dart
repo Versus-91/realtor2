@@ -72,7 +72,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return _postStore.loading
+        return _postStore.loadingUserPosts
             ? Center(child: CircularProgressIndicator())
             : Material(
                 child: _buildListView(),
