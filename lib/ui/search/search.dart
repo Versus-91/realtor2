@@ -75,7 +75,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    accomodationListData = widget.filterForm.selectedPropertyTypes;
+    accomodationListData = widget.filterForm?.selectedPropertyTypes;
     _cityStore = Provider.of<CityStore>(context);
     _districtStore = Provider.of<DistrictStore>(context);
     _categoryStore = Provider.of<CategoryStore>(context);
@@ -92,10 +92,10 @@ class _SearchScreenState extends State<SearchScreen> {
       _typeStore.getTypes();
     if (!_amenityStore.loading && _amenityStore.amenityList == null)
       _amenityStore.getAmenities();
-    _typeAheadController.text = widget.filterForm.district.name == null
-        ? widget.filterForm.city.name
+    _typeAheadController.text = widget.filterForm?.district?.name == null
+        ? widget.filterForm?.city?.name
         : widget.filterForm.district.name;
-    if (widget.filterForm.bedCount != null) {
+    if (widget.filterForm?.bedCount != null) {
       isSelected[widget.filterForm.bedCount - 1] = true;
     }
     if (widget.filterForm.minPrice != null) {

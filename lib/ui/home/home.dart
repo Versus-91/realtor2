@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
         icon: Icon(Icons.add),
         title: AppLocalizations.of(context).translate('add_post'),
         activeColor: Colors.blueAccent,
-        inactiveColor: Colors.redAccent,
+        inactiveColor: Colors.green,
         activeColorAlternate: Colors.deepPurpleAccent,
       ),
       PersistentBottomNavBarItem(

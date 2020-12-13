@@ -156,7 +156,8 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
                     await widget.postStore
                         .getPosts(request: request)
                         .then((value) {
-                      Navigator.of(context).pushNamed(Routes.search);
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamed(Routes.search);
                     });
                   },
                 ),
@@ -169,7 +170,6 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
   }
 
   Text createLabel(dynamic data) {
-  
     String text = "";
     if (data.categoryName != null) {
       text += data.categoryName;
