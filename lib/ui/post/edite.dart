@@ -991,9 +991,13 @@ class _EditPostScreenState extends State<EditPostScreen> {
                           var category =
                               _categoryStore.categoryList.categories[index];
                           if (_value == null) {
-                            _value = category.id;
-                            _categoryText = category.name;
-                            _store.setCategory(category.id);
+                            if (_store.categoryId == null) {
+                              _value = category.id;
+                              _categoryText = category.name;
+                              _store.setCategory(category.id);
+                            } else {
+                              _value = _store.categoryId;
+                            }
                           }
                           return Padding(
                             padding: const EdgeInsets.all(18.0),
@@ -1224,6 +1228,10 @@ class _EditPostScreenState extends State<EditPostScreen> {
     });
 
     return SizedBox.shrink();
+  }
+
+  PostFormStore azar() {
+    return _store;
   }
 
   Widget _handleErrorMessage() {
