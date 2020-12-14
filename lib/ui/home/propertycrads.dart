@@ -4,6 +4,7 @@ import 'package:boilerplate/models/post/post.dart';
 // ignore: unused_import
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/routes.dart';
+import 'package:boilerplate/ui/post/edite.dart';
 import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
@@ -271,7 +272,15 @@ class _PropertyCradState extends State<PropertyCrad>
                                       color: Colors.purple[200],
                                     ),
                                     onTap: () async {
-                                      // await Share.share("text");
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context,
+                                                    {rootNavigator: true}) =>
+                                                EditPostScreen(
+                                                  post: post,
+                                                )),
+                                      );
                                     },
                                   )
                                 : Container(

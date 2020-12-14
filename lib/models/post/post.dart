@@ -4,7 +4,7 @@ import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/image/image.dart';
 
 class Post {
-  String title;
+
   int categoryId;
   String description;
   bool isFeatured;
@@ -27,7 +27,7 @@ class Post {
   List<Amenity> amenities;
 
   Post(
-      {this.title,
+      {
       this.age,
       this.categoryId,
       this.description,
@@ -52,7 +52,6 @@ class Post {
   factory Post.fromMap(Map<String, dynamic> json) {
     try {
       return Post(
-          title: json["title"],
           age: json["age"],
           categoryId: json["categoryId"],
           description: json["description"],
@@ -80,7 +79,6 @@ class Post {
 
   Map<String, dynamic> toMap() {
     return {
-      "title": 'title',
       "age": age,
       "categoryId": categoryId,
       "description": description,

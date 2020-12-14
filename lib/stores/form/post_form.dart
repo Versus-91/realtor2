@@ -134,7 +134,6 @@ abstract class _PostFormStore with Store {
   @action
   void setRentPrice(double value) {
     rentPrice = value;
-   
   }
 
   @action
@@ -175,11 +174,27 @@ abstract class _PostFormStore with Store {
   }
 
   @action
+  void setFormValues(Post post) {
+    ageHome = post.age;
+    categoryId = post.categoryId;
+    postId = post.id;
+    propertyHomeTypeId = post.typeId;
+    latitude = post.latitude;
+    longitude = post.longitude;
+    selectedDistrict = post.districtId;
+    description = post.description;
+    area = post.area;
+    rahnPrice = post.deposit;
+    rentPrice = post.rent;
+    buyPrice = post.price;
+    countbedroom = post.bedroom;
+  }
+
+  @action
   Future insertPost() async {
     validateCreatePost();
     if (formErrorStore.isValid == true) {
       var post = Post(
-        title: this.title,
         longitude: this.longitude,
         latitude: this.latitude,
         description: this.description,
@@ -203,7 +218,6 @@ abstract class _PostFormStore with Store {
         loading = false;
         throw error;
       });
-      
     } else {
       throw Exception();
     }
@@ -224,7 +238,6 @@ abstract class _PostFormStore with Store {
   void validateArea(int value) {
     if (value == null || value <= 0) {
       formErrorStore.area = "مساحت را وارد کنید";
-     
     } else {
       formErrorStore.area = null;
     }
@@ -234,7 +247,6 @@ abstract class _PostFormStore with Store {
   void validateTypeHome(int value) {
     if (value == null) {
       formErrorStore.typeHome = "نوع ملک را مشخص کنید";
-   
     } else {
       formErrorStore.typeHome = null;
     }
