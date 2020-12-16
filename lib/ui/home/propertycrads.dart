@@ -4,7 +4,7 @@ import 'package:boilerplate/models/post/post.dart';
 // ignore: unused_import
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/routes.dart';
-import 'package:boilerplate/ui/post/edite.dart';
+import 'package:boilerplate/ui/post/editepost.dart';
 import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
@@ -221,6 +221,7 @@ class _PropertyCradState extends State<PropertyCrad>
                     children: [
                       Flexible(
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             FutureBuilder(
                               future: isSelected(widget.post.id),

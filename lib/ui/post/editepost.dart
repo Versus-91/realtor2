@@ -125,25 +125,40 @@ class _EditPostScreenState extends State<EditPostScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _store.setFormValues(widget.post);
-    _areaController.text = _store.area.toString();
-    _descriptionController.text = _store.description;
-    isSelected[(_store.countbedroom) - 1] = true;
     // get an instance of store class
     _cityStore = Provider.of<CityStore>(context);
     _districtStore = Provider.of<DistrictStore>(context);
     _categoryStore = Provider.of<CategoryStore>(context);
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
+    realodDieldsData().then((value) {
+      _store.setFormValues(widget.post);
+      isSelected[(_store.countbedroom) - 1] = true;
+      _areaController.text = _store.area.toString();
+      _descriptionController.text = _store.description;
+      _rahnPriceController.text = _store.rahnPrice.toString();
+      _rentPriceController.text = _store.rentPrice.toString();
+      _buyPriceController.text = _store.buyPrice.toString();
+    });
+
     //start api request if it's not started
-    realodDieldsData();
   }
 
-  void realodDieldsData() {
-    if (!_cityStore.loading) _cityStore.getCities();
-    if (!_categoryStore.loading) _categoryStore.getCategories();
-    if (!_typeStore.loading) _typeStore.getTypes();
-    if (!_amenityStore.loading) _amenityStore.getAmenities();
+  Future<bool> realodDieldsData() async {
+    return _categoryStore.getCategories().then((value) {
+      if (!_cityStore.loading) {
+        _cityStore.getCities().then((value) {
+          if (!_typeStore.loading)
+            _typeStore.getTypes().then((value) {
+              if (!_amenityStore.loading)
+                _amenityStore
+                    .getAmenities()
+                    .then((value) => true)
+                    .catchError((_) => false);
+            }).catchError((_) => false);
+        }).catchError((_) => false);
+      }
+    }).catchError((_) => false);
   }
 
   @override
@@ -206,16 +221,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             : _showErrorMessage(_store.errorStore.errorMessage);
                       },
                     ),
-                    Observer(
-                      builder: (context) {
-                        if (_store.postId != null) {
-                          upload(_store.postId);
-                          return Text('data');
-                        }
-                        return _showErrorMessage(
-                            _store.errorStore.errorMessage);
-                      },
-                    ),
                   ],
                 ),
               ),
@@ -250,6 +255,10 @@ class _EditPostScreenState extends State<EditPostScreen> {
                 _buildDistrictlistField(),
               ],
             ),
+            SizedBox(
+              height: 10,
+            ),
+            _buildEditeDistrict(),
             SizedBox(
               height: 10,
             ),
@@ -782,6 +791,49 @@ class _EditPostScreenState extends State<EditPostScreen> {
     );
   }
 
+  Widget _buildEditeDistrict() {
+    return Container(
+      child: DataTable(
+        columns: const <DataColumn>[
+          DataColumn(
+            label: Text(
+              'شهر',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
+          DataColumn(
+            label: Text(
+              'منطقه',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
+          DataColumn(
+            label: Text(
+              'ویرایش',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
+        ],
+        rows: const <DataRow>[
+          DataRow(
+            cells: <DataCell>[
+              DataCell(Text('Sarah')),
+              DataCell(Text('19')),
+              DataCell(
+                IconButton(
+                    icon: Icon(
+                      Icons.edit,
+                      color: Colors.blue,
+                    ),
+                    onPressed: null),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildDistrictlistField() {
     return Observer(
       builder: (context) {
@@ -869,6 +921,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                 .translate('age_home'),
                             contentPadding: EdgeInsets.all(10),
                           ),
+                          value: _store.ageHome,
                           onChanged: (int val) {
                             FocusScope.of(context)
                                 .requestFocus(new FocusNode());
@@ -883,9 +936,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               );
                             }
                             return DropdownMenuItem<int>(
-                              child: Text("بیش از 5 سال"),
-                              value: index,
-                            );
+                                child: Text("بیش از 5 سال"), value: index);
                           })),
                     ),
                   ],
@@ -997,6 +1048,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               _store.setCategory(category.id);
                             } else {
                               _value = _store.categoryId;
+                              _categoryText = category.name;
                             }
                           }
                           return Padding(
@@ -1106,7 +1158,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
   Widget _buildHomeTypeField() {
     return Observer(
       builder: (context) {
-        return _typeStore.typeList != null
+        return _typeStore.typeList != null &&
+                _typeStore.typeList.types.length > 0
             ? Flexible(
                 // width: MediaQuery.of(context).size.width / 2.4,
                 child: DropdownButtonFormField<int>(
@@ -1124,6 +1177,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     FocusScope.of(context).requestFocus(new FocusNode());
                     _store.setPropertyHomeType(val);
                   },
+                  value: 1,
                   items: _typeStore.typeList.types.map((item) {
                     return DropdownMenuItem<int>(
                       child: Text(item.name),
@@ -1160,44 +1214,46 @@ class _EditPostScreenState extends State<EditPostScreen> {
   }
 
   Widget _buildBedroomCountField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          AppLocalizations.of(context).translate('count_room'),
-          style: TextStyle(color: Colors.red[300]),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: ToggleButtons(
-              children: List.generate(9, (index) {
-                return Text(
-                  AppLocalizations.of(context)
-                      .transformNumbers((index + 1).toString()),
-                );
-              }),
-              onPressed: (int index) {
-                setState(() {
-                  for (int buttonIndex = 0;
-                      buttonIndex < isSelected.length;
-                      buttonIndex++) {
-                    if (buttonIndex == index) {
-                      isSelected[buttonIndex] = true;
-                    } else {
-                      isSelected[buttonIndex] = false;
+    return Observer(builder: (_) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            AppLocalizations.of(context).translate('count_room'),
+            style: TextStyle(color: Colors.red[300]),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ToggleButtons(
+                children: List.generate(9, (index) {
+                  return Text(
+                    AppLocalizations.of(context)
+                        .transformNumbers((index + 1).toString()),
+                  );
+                }),
+                onPressed: (int index) {
+                  setState(() {
+                    for (int buttonIndex = 0;
+                        buttonIndex < isSelected.length;
+                        buttonIndex++) {
+                      if (buttonIndex == index) {
+                        isSelected[buttonIndex] = true;
+                      } else {
+                        isSelected[buttonIndex] = false;
+                      }
                     }
-                  }
-                  _store.setcountbedroom(index + 1);
-                });
-              },
-              isSelected: isSelected,
+                    _store.setcountbedroom(index + 1);
+                  });
+                },
+                isSelected: isSelected,
+              ),
             ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 
   Widget navigate(BuildContext context) {

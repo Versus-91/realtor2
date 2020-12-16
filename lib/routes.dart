@@ -5,7 +5,6 @@ import 'package:boilerplate/ui/authorization/signup/register.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
-import 'package:boilerplate/ui/post/edite.dart';
 import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
 import 'package:boilerplate/ui/profile/pages/changeinfo.dart';
