@@ -75,13 +75,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   //focus node:-----------------------------------------------------------------
 
   //stores:---------------------------------------------------------------------
-  final _store = PostFormStore(appComponent.getRepository());
+  PostFormStore _store = PostFormStore(appComponent.getRepository());
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(() => _extension = _controller.text);
-  
   }
 
   void _openFileExplorer() async {
@@ -99,9 +98,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       }
     } on PlatformException catch (e) {
       print("Unsupported operation" + e.toString());
-    } catch (ex) {
-      
-    }
+    } catch (ex) {}
     if (!mounted) return;
     setState(() {
       _fileName = _paths != null ? _paths.map((e) => e.name).toString() : '...';
@@ -366,6 +363,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             "خطا در ایجاد پست",
           );
         });
+        _store = PostFormStore(appComponent.getRepository());
       },
       child: Container(
         height: 45,
@@ -406,12 +404,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         label: Text("نقشه"),
         onPressed: () {
           FocusScope.of(context).requestFocus(new FocusNode());
-           pushNewScreen(context,
-        withNavBar: false,
-        screen: UserMapScreen(
-        formState: _store,
-        ));
-      
+          pushNewScreen(context,
+              withNavBar: false,
+              screen: UserMapScreen(
+                formState: _store,
+              ));
         },
       ),
     );
