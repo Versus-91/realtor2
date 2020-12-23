@@ -1192,11 +1192,18 @@ class _EditPostScreenState extends State<EditPostScreen> {
                           AppLocalizations.of(context).translate('type_home'),
                       contentPadding: EdgeInsets.all(10),
                       errorText: _store.formErrorStore.typeHome),
+                  value: _store.propertyHomeTypeId != 0
+                      ? _typeStore.typeList.types.firstWhere(
+                          (element) => element.id == _store.propertyHomeTypeId,
+                          orElse: () {
+                            return _typeStore.typeList.types.first;
+                          },
+                        )?.id
+                      : _typeStore.typeList.types.first.id,
                   onChanged: (int val) {
                     FocusScope.of(context).requestFocus(new FocusNode());
                     _store.setPropertyHomeType(val);
                   },
-                  value: 1,
                   items: _typeStore.typeList.types.map((item) {
                     return DropdownMenuItem<int>(
                       child: Text(item.name),
@@ -1233,46 +1240,44 @@ class _EditPostScreenState extends State<EditPostScreen> {
   }
 
   Widget _buildBedroomCountField() {
-    return Observer(builder: (_) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            AppLocalizations.of(context).translate('count_room'),
-            style: TextStyle(color: Colors.red[300]),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: ToggleButtons(
-                children: List.generate(9, (index) {
-                  return Text(
-                    AppLocalizations.of(context)
-                        .transformNumbers((index + 1).toString()),
-                  );
-                }),
-                onPressed: (int index) {
-                  setState(() {
-                    for (int buttonIndex = 0;
-                        buttonIndex < isSelected.length;
-                        buttonIndex++) {
-                      if (buttonIndex == index) {
-                        isSelected[buttonIndex] = true;
-                      } else {
-                        isSelected[buttonIndex] = false;
-                      }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          AppLocalizations.of(context).translate('count_room'),
+          style: TextStyle(color: Colors.red[300]),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: ToggleButtons(
+              children: List.generate(9, (index) {
+                return Text(
+                  AppLocalizations.of(context)
+                      .transformNumbers((index + 1).toString()),
+                );
+              }),
+              onPressed: (int index) {
+                setState(() {
+                  for (int buttonIndex = 0;
+                      buttonIndex < isSelected.length;
+                      buttonIndex++) {
+                    if (buttonIndex == index) {
+                      isSelected[buttonIndex] = true;
+                    } else {
+                      isSelected[buttonIndex] = false;
                     }
-                    _store.setcountbedroom(index + 1);
-                  });
-                },
-                isSelected: isSelected,
-              ),
+                  }
+                  _store.setcountbedroom(index + 1);
+                });
+              },
+              isSelected: isSelected,
             ),
           ),
-        ],
-      );
-    });
+        ),
+      ],
+    );
   }
 
   Widget navigate(BuildContext context) {

@@ -4,7 +4,6 @@ import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/image/image.dart';
 
 class Post {
-
   int categoryId;
   String description;
   bool isFeatured;
@@ -27,8 +26,7 @@ class Post {
   List<Amenity> amenities;
 
   Post(
-      {
-      this.age,
+      {this.age,
       this.categoryId,
       this.description,
       this.isFeatured,
@@ -77,8 +75,9 @@ class Post {
     }
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({bool apiCall = false}) {
     return {
+      "title": "title",
       "age": age,
       "categoryId": categoryId,
       "description": description,
@@ -107,7 +106,11 @@ class Post {
         "images": images.map((e) => toMapImage(e)).toList()
       },
       if (amenities != null) ...{
-        "amenities": amenities.map((amenity) => amenity.toMap()).toList()
+        if (apiCall == true) ...{
+          "amenities": amenities.map((amenity) => amenity.id).toList()
+        } else ...{
+          "amenities": amenities.map((amenity) => amenity.toMap()).toList()
+        }
       },
     };
   }

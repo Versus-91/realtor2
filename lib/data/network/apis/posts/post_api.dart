@@ -61,7 +61,7 @@ class PostApi {
         uri = Uri.http(baseUrl, '/api/services/app/Post/GetUserPosts');
       }
       final res = await _dioClient.get(uri.toString());
-      
+
       return PostList.fromJson(
           res["result"]["items"], res["result"]["totalCount"]);
     } catch (e) {
@@ -179,9 +179,18 @@ class PostApi {
 
   Future createPost(Post post) async {
     try {
-      
       final res =
-          await _dioClient.post(Endpoints.createPosts, data: post.toMap());
+          await _dioClient.post(Endpoints.createPosts, data: post.toMap(apiCall: true));
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future updatePost(Post post) async {
+    try {
+      final res =
+          await _dioClient.post(Endpoints.updatePost, data: post.toMap());
       return res["result"];
     } catch (e) {
       throw e;

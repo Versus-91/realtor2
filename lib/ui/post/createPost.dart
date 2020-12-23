@@ -202,7 +202,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       builder: (context) {
                         if (_store.postId != null) {
                           upload(_store.postId);
-                          return Text('data');
+                          return SizedBox.shrink();
                         }
                         return _showErrorMessage(
                             _store.errorStore.errorMessage);
@@ -359,11 +359,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   AppLocalizations.of(context).translate('succes_send'),
                 ))
             .catchError((error) {
+          print(error);
           _showErrorMessage(
             "خطا در ایجاد پست",
           );
         });
-        _store = PostFormStore(appComponent.getRepository());
       },
       child: Container(
         height: 45,
@@ -589,7 +589,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     }
     _store
         .uploadImages(multipart, id.toString())
-        .then((value) => _store.setPostId(null));
+        .then((value) => _store = PostFormStore(appComponent.getRepository()));
   }
 
   Widget _buildRangeAreaField() {

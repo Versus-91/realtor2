@@ -188,6 +188,7 @@ abstract class _PostFormStore with Store {
     rentPrice = post.rent;
     buyPrice = post.price;
     countbedroom = post.bedroom;
+    print("test:" + post.age.toString());
   }
 
   @action
@@ -218,8 +219,6 @@ abstract class _PostFormStore with Store {
         loading = false;
         throw error;
       });
-    } else {
-      throw Exception();
     }
   }
 

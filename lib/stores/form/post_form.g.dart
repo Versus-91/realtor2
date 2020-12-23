@@ -496,6 +496,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
   }
 
   @override
+  void setFormValues(Post post) {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.setFormValues');
+    try {
+      return super.setFormValues(post);
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void validateArea(int value) {
     final _$actionInfo = _$_PostFormStoreActionController.startAction(
         name: '_PostFormStore.validateArea');
