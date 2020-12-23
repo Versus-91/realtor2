@@ -36,6 +36,7 @@ class EditPostScreen extends StatefulWidget {
 }
 
 class _EditPostScreenState extends State<EditPostScreen> {
+  bool _isVisible = true;
   int selectedItem;
   int cityDropdownValue;
   int _value;
@@ -131,7 +132,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
     _categoryStore = Provider.of<CategoryStore>(context);
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
-    realodDieldsData().then((value) {
+    _store.amenities = widget.post.amenities.map((e) => e.id).toList();
+    loadDataFields().then((value) {
       _store.setFormValues(widget.post);
       isSelected[(_store.countbedroom) - 1] = true;
       _areaController.text = _store.area.toString();
@@ -144,7 +146,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     //start api request if it's not started
   }
 
-  Future<bool> realodDieldsData() async {
+  Future<bool> loadDataFields() async {
     return _categoryStore.getCategories().then((value) {
       if (!_cityStore.loading) {
         _cityStore.getCities().then((value) {
@@ -230,7 +232,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
           return Center(
             child: RaisedButton.icon(
                 onPressed: () {
-                  realodDieldsData();
+                  loadDataFields();
                 },
                 icon: Icon(Icons.refresh),
                 label: Text("تلاش مجدد")),
@@ -248,17 +250,20 @@ class _EditPostScreenState extends State<EditPostScreen> {
         child: Column(
           children: <Widget>[
             _buildCategoryField(),
-            Row(
-              children: [
-                _buildCitylistField(),
-                VerticalDivider(),
-                _buildDistrictlistField(),
-              ],
+            Visibility(
+              visible: !_isVisible,
+              child: Row(
+                children: [
+                  _buildCitylistField(),
+                  VerticalDivider(),
+                  _buildDistrictlistField(),
+                ],
+              ),
             ),
             SizedBox(
               height: 10,
             ),
-            _buildEditeDistrict(),
+            Visibility(visible: _isVisible, child: _buildEditeDistrict()),
             SizedBox(
               height: 10,
             ),
@@ -814,18 +819,23 @@ class _EditPostScreenState extends State<EditPostScreen> {
             ),
           ),
         ],
-        rows: const <DataRow>[
+        rows: <DataRow>[
           DataRow(
             cells: <DataCell>[
-              DataCell(Text('Sarah')),
-              DataCell(Text('19')),
+              DataCell(Text(widget.post.district.city.name)),
+              DataCell(Text(widget.post.district.name)),
               DataCell(
                 IconButton(
-                    icon: Icon(
-                      Icons.edit,
-                      color: Colors.blue,
-                    ),
-                    onPressed: null),
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.blue,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isVisible = !_isVisible;
+                    });
+                  },
+                ),
               ),
             ],
           ),

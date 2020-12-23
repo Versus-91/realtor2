@@ -46,8 +46,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _maxDepositController = TextEditingController();
   // final TextEditingController _minRentController = TextEditingController();
   final TextEditingController _maxRentController = TextEditingController();
-  final TextEditingController _lowAreaController = TextEditingController();
-  final TextEditingController _hightAreaController = TextEditingController();
+
   final _minRentController =
       MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
   String _selectedCity;

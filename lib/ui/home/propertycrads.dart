@@ -89,6 +89,7 @@ class _PropertyCradState extends State<PropertyCrad>
         });
       },
       child: GestureDetector(
+        onTapDown: null,
         onTap: () {
           Navigator.push(
             context,
@@ -257,22 +258,22 @@ class _PropertyCradState extends State<PropertyCrad>
                                 );
                               },
                             ),
-                            GestureDetector(
-                              child: Icon(
+                            IconButton(
+                              icon: Icon(
                                 Icons.share,
                                 color: Colors.blue[200],
                               ),
-                              onTap: () async {
+                              onPressed: () async {
                                 await Share.share(Endpoints.baseUrl);
                               },
                             ),
                             widget.isEdditing == true
-                                ? GestureDetector(
-                                    child: Icon(
+                                ? IconButton(
+                                    icon: Icon(
                                       Icons.edit,
                                       color: Colors.purple[200],
                                     ),
-                                    onTap: () async {
+                                    onPressed: () async {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
