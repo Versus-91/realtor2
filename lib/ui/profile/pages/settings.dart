@@ -27,6 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     with TickerProviderStateMixin {
   File imageFile;
   bool loggedIn = false;
+  bool _isActive = true;
   UserStore _userStore;
   final _imagePicker = ImagePicker();
   AnimationController _rippleAnimationController;
@@ -168,12 +169,17 @@ class _SettingsScreenState extends State<SettingsScreen>
               SettingsSection(
                 tiles: [
                   SettingsTile.switchTile(
+                    switchActiveColor: Colors.lightGreen,
                     title:
                         AppLocalizations.of(context).translate("notifications"),
                     enabled: true,
                     leading: Icon(Icons.notifications_active),
-                    switchValue: true,
-                    onToggle: (value) {},
+                    switchValue: _isActive,
+                    onToggle: (value) {
+                      setState(() {
+                        _isActive = !_isActive;
+                      });
+                    },
                   ),
                 ],
               ),
