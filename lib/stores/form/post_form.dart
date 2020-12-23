@@ -223,6 +223,37 @@ abstract class _PostFormStore with Store {
   }
 
   @action
+  Future updatePost() async {
+    validateCreatePost();
+    if (formErrorStore.isValid == true) {
+      var post = Post(
+        longitude: this.longitude,
+        latitude: this.latitude,
+        description: this.description,
+        typeId: this.propertyHomeTypeId,
+        rent: this.rentPrice,
+        deposit: this.rahnPrice,
+        price: this.buyPrice,
+        area: this.area,
+        age: this.ageHome,
+        bedroom: this.countbedroom,
+        categoryId: this.categoryId,
+        districtId: this.selectedDistrict,
+        amenities: amenities.map((e) => Amenity(id: e)).toList(),
+      );
+
+      return _repository.updatePost(post).then((result) {
+        loading = false;
+        postId = result["id"];
+        return true;
+      }).catchError((error) {
+        loading = false;
+        throw error;
+      });
+    }
+  }
+
+  @action
   Future uploadImages(List<MultipartFile> files, String id) async {
     loading = true;
     _repository.uploadImages(files, id).then((result) {

@@ -113,7 +113,10 @@ class _UserMapScreenState extends State<UserMapScreen> {
               borderRadius: BorderRadius.circular(8),
             ),
             onPressed: () {
-              Navigator.pop(context);
+              if (widget.formState.latitude != null &&
+                  widget.formState.longitude != null) {
+                Navigator.pop(context);
+              }
             },
             color: Colors.green,
             textColor: Colors.white,
@@ -147,7 +150,7 @@ class _UserMapScreenState extends State<UserMapScreen> {
         ),
       );
     });
-    
+
     widget.formState.setLatitude(coordinations.latitude);
     widget.formState.setLongitude(coordinations.longitude);
   }

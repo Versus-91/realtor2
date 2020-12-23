@@ -382,13 +382,13 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return InkWell(
       onTap: () async {
         _store
-            .insertPost()
+            .updatePost()
             .then((value) => successPost(
                   AppLocalizations.of(context).translate('succes_send'),
                 ))
             .catchError((error) {
           _showErrorMessage(
-            "خطا در ایجاد پست",
+            "خطا در ارسال پست",
           );
         });
       },
