@@ -263,10 +263,16 @@ class _EditPostScreenState extends State<EditPostScreen> {
             SizedBox(
               height: 10,
             ),
-            Visibility(visible: _isVisible, child: _buildEditeDistrict()),
-            SizedBox(
-              height: 10,
-            ),
+            Visibility(
+                visible: _isVisible,
+                child: Column(
+                  children: [
+                    _buildEditeDistrict(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                )),
             Row(
               children: [
                 _buildHomeTypeField(),
@@ -803,27 +809,30 @@ class _EditPostScreenState extends State<EditPostScreen> {
           DataColumn(
             label: Text(
               'شهر',
-              style: TextStyle(fontStyle: FontStyle.italic),
             ),
           ),
           DataColumn(
             label: Text(
               'منطقه',
-              style: TextStyle(fontStyle: FontStyle.italic),
             ),
           ),
           DataColumn(
             label: Text(
               'ویرایش',
-              style: TextStyle(fontStyle: FontStyle.italic),
             ),
           ),
         ],
         rows: <DataRow>[
           DataRow(
             cells: <DataCell>[
-              DataCell(Text(widget.post.district.city.name)),
-              DataCell(Text(widget.post.district.name)),
+              DataCell(Text(
+                widget.post.district.city.name,
+                style: TextStyle(fontStyle: FontStyle.italic),
+              )),
+              DataCell(Text(
+                widget.post.district.name,
+                style: TextStyle(fontStyle: FontStyle.italic),
+              )),
               DataCell(
                 IconButton(
                   icon: Icon(
