@@ -283,13 +283,13 @@ mixin _$PostFormStore on _PostFormStore, Store {
   final _$postImagesAtom = Atom(name: '_PostFormStore.postImages');
 
   @override
-  List<Postimages> get postImages {
+  ObservableList<Postimages> get postImages {
     _$postImagesAtom.reportRead();
     return super.postImages;
   }
 
   @override
-  set postImages(List<Postimages> value) {
+  set postImages(ObservableList<Postimages> value) {
     _$postImagesAtom.reportWrite(value, super.postImages, () {
       super.postImages = value;
     });

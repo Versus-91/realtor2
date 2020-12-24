@@ -78,7 +78,7 @@ abstract class _PostFormStore with Store {
   @observable
   List<int> amenities = new List<int>();
   @observable
-  List<Postimages> postImages = new List<Postimages>();
+  var postImages = ObservableList<Postimages>();
   // actions:-------------------------------------------------------------------
   @action
   void setLatitude(double value) {
@@ -162,10 +162,12 @@ abstract class _PostFormStore with Store {
 
   @action
   void addFile(Postimages image) {
-    if (postImages.firstWhere((element) =>
-            element.path == image.path &&
-            element.isfromNetwork == image.isfromNetwork) ==
-        null) postImages.add(image);
+    var foundFile = postImages.where((element) =>
+        element.path == image.path &&
+        element.isfromNetwork == image.isfromNetwork);
+    if (foundFile == null || foundFile.isEmpty) {
+      postImages.add(image);
+    }
   }
 
   @action
@@ -217,10 +219,13 @@ abstract class _PostFormStore with Store {
     rentPrice = post.rent;
     buyPrice = post.price;
     countbedroom = post.bedroom;
-    postImages = post.images
+    var images = post.images
         .map((e) => Postimages(
             path: Endpoints.baseUrl + "/" + e.path, isfromNetwork: true))
         .toList();
+    for (var image in images) {
+      addFile(image);
+    }
   }
 
   @action

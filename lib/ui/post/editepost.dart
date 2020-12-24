@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/category/category.dart';
@@ -130,15 +131,17 @@ class _EditPostScreenState extends State<EditPostScreen> {
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
     _store.amenities = widget.post.amenities.map((e) => e.id).toList();
-    loadDataFields().then((value) {
-      _store.setFormValues(widget.post);
-      isSelected[(_store.countbedroom) - 1] = true;
-      _areaController.text = _store.area.toString();
-      _descriptionController.text = _store.description;
-      _rahnPriceController.text = _store.rahnPrice.toString();
-      _rentPriceController.text = _store.rentPrice.toString();
-      _buyPriceController.text = _store.buyPrice.toString();
-    });
+    if (_categoryStore.categoryList?.categories != null) {
+      loadDataFields().then((value) {
+        _store.setFormValues(widget.post);
+        isSelected[(_store.countbedroom) - 1] = true;
+        _areaController.text = _store.area.toString();
+        _descriptionController.text = _store.description;
+        _rahnPriceController.text = _store.rahnPrice.toString();
+        _rentPriceController.text = _store.rentPrice.toString();
+        _buyPriceController.text = _store.buyPrice.toString();
+      });
+    }
 
     //start api request if it's not started
   }
@@ -150,10 +153,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
           if (!_typeStore.loading)
             _typeStore.getTypes().then((value) {
               if (!_amenityStore.loading)
-                _amenityStore
-                    .getAmenities()
-                    .then((value) => true)
-                    .catchError((_) => false);
+                _amenityStore.getAmenities().then((value) {
+                  return true;
+                }).catchError((_) => false);
             }).catchError((_) => false);
         }).catchError((_) => false);
       }
@@ -439,16 +441,15 @@ class _EditPostScreenState extends State<EditPostScreen> {
   }
 
   Widget _imageFeild() {
-    return Observer(
-      builder: (_) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            color: Color(0xfff3f3f4),
-            height: MediaQuery.of(context).size.height * 0.23,
-            child: Scrollbar(
-              child: _store.postImages.length > 0
+    return Padding(
+        padding: const EdgeInsets.only(top: 5),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          color: Color(0xfff3f3f4),
+          height: MediaQuery.of(context).size.height * 0.23,
+          child: Scrollbar(
+            child: Observer(builder: (_) {
+              return _store.postImages.length > 0
                   ? GridView.count(
                       crossAxisCount: 4,
                       children: [
@@ -471,11 +472,18 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                 color: Colors.white,
                                 child: Stack(
                                   children: [
-                                    Image.file(
-                                      File(_store.postImages[index].path),
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                    ),
+                                    _store.postImages[index].isfromNetwork ==
+                                            false
+                                        ? Image.file(
+                                            File(_store.postImages[index].path),
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                          )
+                                        : Image.network(
+                                            _store.postImages[index].path,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                          ),
                                     Positioned(
                                       left: 0,
                                       top: 0,
@@ -508,12 +516,10 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       onPressed: () {
                         _openFileExplorer();
                       },
-                    ),
-            ),
+                    );
+            }),
           ),
-        );
-      },
-    );
+        ));
   }
 
   Widget _popularFilter() {
