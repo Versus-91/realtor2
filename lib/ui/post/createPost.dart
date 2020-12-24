@@ -351,42 +351,64 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   Widget _submitbotton() {
-    return InkWell(
-      onTap: () async {
-        _store
-            .insertPost()
-            .then((value) => successPost(
-                  AppLocalizations.of(context).translate('succes_send'),
-                ))
-            .catchError((error) {
-          print(error);
-          _showErrorMessage(
-            "خطا در ایجاد پست",
-          );
-        });
-      },
-      child: Container(
-        height: 45,
-        width: MediaQuery.of(context).size.width,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.grey.shade200,
-                  offset: Offset(2, 4),
-                  blurRadius: 5,
-                  spreadRadius: 2)
-            ],
-            gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [Color(0xffF77E78), Color(0xffF5150A)])),
-        child: Text(
-          AppLocalizations.of(context).translate('send'),
-          style: TextStyle(fontSize: 20, color: Colors.white),
+    return Row(
+      children: [
+        Flexible(
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                _store.resetForm();
+              });
+            },
+            child: Container(
+              height: 45,
+              // width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(5),
+                      bottomRight: Radius.circular(5)),
+                  color: Colors.pink[100]),
+              child: Text(
+                AppLocalizations.of(context).translate('removeform'),
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            ),
+          ),
         ),
-      ),
+        Flexible(
+          child: InkWell(
+            onTap: () async {
+              _store
+                  .insertPost()
+                  .then((value) => successPost(
+                        AppLocalizations.of(context).translate('succes_send'),
+                      ))
+                  .catchError((error) {
+                print(error);
+                _showErrorMessage(
+                  "خطا در ایجاد پست",
+                );
+              });
+            },
+            child: Container(
+              height: 45,
+              // width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5),
+                    bottomLeft: Radius.circular(5)),
+              ),
+              child: Text(
+                AppLocalizations.of(context).translate('send'),
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

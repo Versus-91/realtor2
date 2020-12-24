@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/models/post/post.dart';
+import 'package:boilerplate/models/postimages/postimages.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
@@ -16,7 +16,6 @@ import 'package:boilerplate/ui/post/user_map_screen.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flushbar/flushbar_route.dart' as route;
@@ -42,7 +41,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
   int _value;
   String _categoryText = '';
   String _fileName;
-  List<PlatformFile> _paths;
   String _extension;
   bool _multiPick = true;
   bool hasErrorInloading = false;
@@ -79,7 +77,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   //focus node:-----------------------------------------------------------------
 
   //stores:---------------------------------------------------------------------
-  final _store = PostFormStore(appComponent.getRepository());
+  PostFormStore _store = PostFormStore(appComponent.getRepository());
 
   @override
   void initState() {
@@ -98,15 +96,14 @@ class _EditPostScreenState extends State<EditPostScreen> {
       ))
           ?.files;
       if (items != null) {
-        _paths = items;
+        for (var file in items) {
+          _store.addFile(Postimages(path: file.path, isfromNetwork: false));
+        }
       }
     } on PlatformException catch (e) {
       print("Unsupported operation" + e.toString());
     } catch (ex) {}
     if (!mounted) return;
-    setState(() {
-      _fileName = _paths != null ? _paths.map((e) => e.name).toString() : '...';
-    });
   }
 
   // void _clearCachedFiles() {
@@ -302,7 +299,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
               height: 20,
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 80),
+              padding: const EdgeInsets.only(bottom: 30),
               child: _submitbotton(),
             )
           ],
@@ -442,75 +439,80 @@ class _EditPostScreenState extends State<EditPostScreen> {
   }
 
   Widget _imageFeild() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        color: Color(0xfff3f3f4),
-        height: MediaQuery.of(context).size.height * 0.23,
-        child: Scrollbar(
-          child: _paths != null
-              ? GridView.count(
-                  crossAxisCount: 4,
-                  children: [
-                    GridTile(
-                      child: InkWell(
-                        onTap: () {
-                          _openFileExplorer();
-                        },
-                        child: Card(
-                            color: Colors.white,
-                            child: Center(
-                              child: Icon(Icons.camera_alt_rounded),
-                            )),
+    return Observer(
+      builder: (_) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            color: Color(0xfff3f3f4),
+            height: MediaQuery.of(context).size.height * 0.23,
+            child: Scrollbar(
+              child: _store.postImages.length > 0
+                  ? GridView.count(
+                      crossAxisCount: 4,
+                      children: [
+                        GridTile(
+                          child: InkWell(
+                            onTap: () {
+                              _openFileExplorer();
+                            },
+                            child: Card(
+                                color: Colors.white,
+                                child: Center(
+                                  child: Icon(Icons.camera_alt_rounded),
+                                )),
+                          ),
+                        ),
+                        ...List<Widget>.generate(_store.postImages.length,
+                            (index) {
+                          return GridTile(
+                            child: Card(
+                                color: Colors.white,
+                                child: Stack(
+                                  children: [
+                                    Image.file(
+                                      File(_store.postImages[index].path),
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
+                                    Positioned(
+                                      left: 0,
+                                      top: 0,
+                                      child: IconButton(
+                                          icon: Icon(
+                                            Icons.delete,
+                                            color: Colors.redAccent,
+                                          ),
+                                          onPressed: () {
+                                            // setState(() {
+                                            //   _paths.removeWhere((item) =>
+                                            //       item.path == _paths[index].path);
+                                            // });
+                                          }),
+                                    ),
+                                  ],
+                                )),
+                          );
+                        })
+                      ],
+                    )
+                  : RaisedButton(
+                      color: Color(0xfff3f3f4),
+                      child: Image.asset(
+                        "assets/images/camera.png",
+                        fit: BoxFit.fitHeight,
+                        width: 100,
+                        height: 100,
                       ),
+                      onPressed: () {
+                        _openFileExplorer();
+                      },
                     ),
-                    ...List<Widget>.generate(_paths.length, (index) {
-                      return GridTile(
-                        child: Card(
-                            color: Colors.white,
-                            child: Stack(
-                              children: [
-                                Image.file(
-                                  File(_paths[index].path),
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  top: 0,
-                                  child: IconButton(
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Colors.redAccent,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _paths.removeWhere((item) =>
-                                              item.path == _paths[index].path);
-                                        });
-                                      }),
-                                ),
-                              ],
-                            )),
-                      );
-                    })
-                  ],
-                )
-              : RaisedButton(
-                  color: Color(0xfff3f3f4),
-                  child: Image.asset(
-                    "assets/images/camera.png",
-                    fit: BoxFit.fitHeight,
-                    width: 100,
-                    height: 100,
-                  ),
-                  onPressed: () {
-                    _openFileExplorer();
-                  },
-                ),
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -609,14 +611,14 @@ class _EditPostScreenState extends State<EditPostScreen> {
   }
 
   upload(int id) async {
-    List<MultipartFile> multipart = List<MultipartFile>();
-    for (int i = 0; i < _paths.length; i++) {
-      multipart.add(await MultipartFile.fromFile(_paths[i].path,
-          filename: _paths[i].name));
-    }
-    _store
-        .uploadImages(multipart, id.toString())
-        .then((value) => _store.setPostId(null));
+    // List<MultipartFile> multipart = List<MultipartFile>();
+    // for (int i = 0; i < _paths.length; i++) {
+    //   multipart.add(await MultipartFile.fromFile(_paths[i].path,
+    //       filename: _paths[i].name));
+    // }
+    // _store
+    //     .uploadImages(multipart, id.toString())
+    //     .then((value) => _store.setPostId(null));
   }
 
   Widget _buildRangeAreaField() {

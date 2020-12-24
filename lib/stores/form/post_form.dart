@@ -1,6 +1,8 @@
+import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/post/post.dart';
+import 'package:boilerplate/models/postimages/postimages.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
@@ -38,7 +40,7 @@ abstract class _PostFormStore with Store {
 
   // store variables:-----------------------------------------------------------
   @observable
-  String title = '';
+  String title;
   @observable
   bool success = false;
   @observable
@@ -75,6 +77,8 @@ abstract class _PostFormStore with Store {
   int countbedroom;
   @observable
   List<int> amenities = new List<int>();
+  @observable
+  List<Postimages> postImages = new List<Postimages>();
   // actions:-------------------------------------------------------------------
   @action
   void setLatitude(double value) {
@@ -157,6 +161,14 @@ abstract class _PostFormStore with Store {
   }
 
   @action
+  void addFile(Postimages image) {
+    if (postImages.firstWhere((element) =>
+            element.path == image.path &&
+            element.isfromNetwork == image.isfromNetwork) ==
+        null) postImages.add(image);
+  }
+
+  @action
   validateCreatePost() {
     validateArea(area);
     // validatePrice(buyPrice);
@@ -174,6 +186,23 @@ abstract class _PostFormStore with Store {
   }
 
   @action
+  void resetForm() {
+    buyPrice = null;
+    rahnPrice = null;
+    rentPrice = null;
+    ageHome = null;
+    categoryId = null;
+    postId = null;
+    propertyHomeTypeId = null;
+    latitude = null;
+    longitude = null;
+    selectedDistrict = null;
+    description = null;
+    area = null;
+    countbedroom = null;
+  }
+
+  @action
   void setFormValues(Post post) {
     ageHome = post.age;
     categoryId = post.categoryId;
@@ -188,7 +217,10 @@ abstract class _PostFormStore with Store {
     rentPrice = post.rent;
     buyPrice = post.price;
     countbedroom = post.bedroom;
-    print("test:" + post.age.toString());
+    postImages = post.images
+        .map((e) => Postimages(
+            path: Endpoints.baseUrl + "/" + e.path, isfromNetwork: true))
+        .toList();
   }
 
   @action

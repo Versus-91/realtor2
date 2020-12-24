@@ -280,11 +280,33 @@ mixin _$PostFormStore on _PostFormStore, Store {
     });
   }
 
+  final _$postImagesAtom = Atom(name: '_PostFormStore.postImages');
+
+  @override
+  List<Postimages> get postImages {
+    _$postImagesAtom.reportRead();
+    return super.postImages;
+  }
+
+  @override
+  set postImages(List<Postimages> value) {
+    _$postImagesAtom.reportWrite(value, super.postImages, () {
+      super.postImages = value;
+    });
+  }
+
   final _$insertPostAsyncAction = AsyncAction('_PostFormStore.insertPost');
 
   @override
   Future<dynamic> insertPost() {
     return _$insertPostAsyncAction.run(() => super.insertPost());
+  }
+
+  final _$updatePostAsyncAction = AsyncAction('_PostFormStore.updatePost');
+
+  @override
+  Future<dynamic> updatePost() {
+    return _$updatePostAsyncAction.run(() => super.updatePost());
   }
 
   final _$uploadImagesAsyncAction = AsyncAction('_PostFormStore.uploadImages');
@@ -474,6 +496,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
   }
 
   @override
+  void addFile(Postimages image) {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.addFile');
+    try {
+      return super.addFile(image);
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic validateCreatePost() {
     final _$actionInfo = _$_PostFormStoreActionController.startAction(
         name: '_PostFormStore.validateCreatePost');
@@ -490,6 +523,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
         name: '_PostFormStore.resetPrice');
     try {
       return super.resetPrice();
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void resetForm() {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.resetForm');
+    try {
+      return super.resetForm();
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
@@ -603,7 +647,8 @@ rahnPrice: ${rahnPrice},
 rentPrice: ${rentPrice},
 buyPrice: ${buyPrice},
 countbedroom: ${countbedroom},
-amenities: ${amenities}
+amenities: ${amenities},
+postImages: ${postImages}
     ''';
   }
 }
