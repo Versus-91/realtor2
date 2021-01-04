@@ -609,9 +609,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       multipart.add(await MultipartFile.fromFile(_paths[i].path,
           filename: _paths[i].name));
     }
-    _store
-        .uploadImages(multipart, id.toString())
-        .then((value) => _store = PostFormStore(appComponent.getRepository()));
+    _store.uploadImages(multipart, id.toString()).then((value) {
+      setState(() {
+        _store = PostFormStore(appComponent.getRepository());
+      });
+    });
   }
 
   Widget _buildRangeAreaField() {

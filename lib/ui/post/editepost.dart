@@ -92,7 +92,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
         type: _pickingType,
         allowMultiple: _multiPick,
         allowedExtensions: (_extension?.isNotEmpty ?? false)
-            ? _extension?.replaceAll(' ', '')?.split(',')
+            ? _extension?.replaceAll(' ', '')?.split(',') 
             : null,
       ))
           ?.files;

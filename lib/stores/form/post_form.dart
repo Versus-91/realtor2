@@ -293,7 +293,7 @@ abstract class _PostFormStore with Store {
   @action
   Future uploadImages(List<MultipartFile> files, String id) async {
     loading = true;
-    _repository.uploadImages(files, id).then((result) {
+    return _repository.uploadImages(files, id).then((result) {
       loading = false;
       success = true;
     }).catchError((error) {
