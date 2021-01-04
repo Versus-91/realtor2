@@ -204,11 +204,20 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                       confirmPassword: _confirmPasswordController.text,
                     ))
                         .then((value) async {
+                      successMessage('رمز با موفقیت تغییر کرد.');
                       // _newNumberController.text = result;
                     }).catchError((error) {
-                      _showErrorMessage(
-                        "خطا در تغییر رمز",
-                      );
+                      if (error?.response?.data
+                          .toString()
+                          .contains("not match")) {
+                        _showErrorMessage(
+                          "رمز فعلی اشتباه وارد شده است.",
+                        );
+                      } else {
+                        _showErrorMessage(
+                          "خطا در تغییر رمز",
+                        );
+                      }
                     });
                   },
                 ),
@@ -233,6 +242,19 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
       }
     });
 
+    return SizedBox.shrink();
+  }
+
+  Widget successMessage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () async {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: AppLocalizations.of(context).translate('succes_send'),
+          duration: Duration(seconds: 3),
+        )..show(context);
+      }
+    });
     return SizedBox.shrink();
   }
 

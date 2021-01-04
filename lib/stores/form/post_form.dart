@@ -429,6 +429,7 @@ abstract class _PostFormErrorStore with Store {
       area == null &&
       buyPrice == null &&
       rentPrice == null &&
+      age == null &&
       rahnPrice == null &&
       description == null;
 }
