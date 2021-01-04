@@ -35,6 +35,8 @@ abstract class _PostFormStore with Store {
       // reaction((_) => rentPrice, validateRentPrice),
       reaction((_) => description, validateDescription),
       reaction((_) => propertyHomeTypeId, validateTypeHome),
+      reaction((_) => selectedDistrict, validateDistrict),
+      reaction((_) => ageHome, validateAge),
     ];
   }
 
@@ -173,6 +175,9 @@ abstract class _PostFormStore with Store {
   @action
   validateCreatePost() {
     validateArea(area);
+    validateMap(latitude, longitude);
+    validateDistrict(selectedDistrict);
+    validateAge(ageHome);
     // validatePrice(buyPrice);
     // validateRahnPrice(rahnPrice);
     // validateRentPrice(rentPrice);
@@ -257,6 +262,7 @@ abstract class _PostFormStore with Store {
         throw error;
       });
     }
+    throw "invalid form";
   }
 
   @action
@@ -288,6 +294,7 @@ abstract class _PostFormStore with Store {
         throw error;
       });
     }
+    throw "invalid form";
   }
 
   @action
@@ -356,11 +363,11 @@ abstract class _PostFormStore with Store {
   }
 
   @action
-  void validateDistrict(String value) {
-    if (value.isEmpty) {
+  void validateDistrict(int districtId) {
+    if (districtId == null) {
       formErrorStore.district = "منطقه انتخاب نشده است";
     } else {
-      formErrorStore.description = null;
+      formErrorStore.district = null;
     }
   }
 
@@ -368,6 +375,22 @@ abstract class _PostFormStore with Store {
   void dispose() {
     for (final d in _disposers) {
       d();
+    }
+  }
+
+  void validateAge(int ageHome) {
+    if (ageHome == null) {
+      formErrorStore.age = "عمر بنا باید پر شود";
+    } else {
+      formErrorStore.age = null;
+    }
+  }
+
+  void validateMap(double latitude, double longitude) {
+    if (latitude == null || longitude == null) {
+      formErrorStore.map = "محل را انتخاب کنید";
+    } else {
+      formErrorStore.map = null;
     }
   }
 }
@@ -388,6 +411,10 @@ abstract class _PostFormErrorStore with Store {
   String rahnPrice;
   @observable
   String district;
+  @observable
+  String age;
+  @observable
+  String map;
   @observable
   String description;
   @observable

@@ -45,7 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     var image = await _imagePicker.getImage(source: ImageSource.gallery);
     if (image == null) return;
 
-    dynamic result = await Navigator.of(context)
+    dynamic result = await Navigator.of(context, rootNavigator: true)
         .pushNamed(Routes.crop, arguments: {'image': File(image.path)});
 
     var multiPartAvatarImage = await MultipartFile.fromFile(result.path);

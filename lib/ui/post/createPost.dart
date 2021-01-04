@@ -356,9 +356,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         Flexible(
           child: InkWell(
             onTap: () {
-              setState(() {
-                _store.resetForm();
-              });
+              resetForm();
             },
             child: Container(
               height: 45,
@@ -379,13 +377,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         Flexible(
           child: InkWell(
             onTap: () async {
-              _store
-                  .insertPost()
-                  .then((value) => successPost(
-                        AppLocalizations.of(context).translate('succes_send'),
-                      ))
-                  .catchError((error) {
-                print(error);
+              _store.insertPost().then((value) {}).catchError((error) {
                 _showErrorMessage(
                   "خطا در ایجاد پست",
                 );
@@ -412,27 +404,48 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
+  void resetForm() {
+    setState(() {
+      _descriptionController.clear();
+      _rahnPriceController.clear();
+      _rentPriceController.clear();
+      _buyPriceController.clear();
+      _areaController.clear();
+      _bedroomCountController.clear();
+      amenityList = [];
+      _value = null;
+      _paths = null;
+
+      cityDropdownValue = null;
+      _store = PostFormStore(appComponent.getRepository());
+    });
+  }
+
   Widget _mapFeild() {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: FloatingActionButton.extended(
-        backgroundColor: Colors.indigo,
-        icon: _store.latitude == null && _store.longitude == null
-            ? const Icon(Icons.add)
-            : Icon(
-                Icons.done,
-                color: Colors.green[400],
-              ),
-        label: Text("نقشه"),
-        onPressed: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          pushNewScreen(context,
-              withNavBar: false,
-              screen: UserMapScreen(
-                formState: _store,
-              ));
-        },
-      ),
+    return Observer(
+      builder: (_) {
+        return Align(
+          alignment: Alignment.bottomRight,
+          child: FloatingActionButton.extended(
+            backgroundColor: Colors.indigo,
+            icon: _store.latitude == null && _store.longitude == null
+                ? const Icon(Icons.add)
+                : Icon(
+                    Icons.done,
+                    color: Colors.green[400],
+                  ),
+            label: Text("نقشه"),
+            onPressed: () {
+              FocusScope.of(context).requestFocus(new FocusNode());
+              pushNewScreen(context,
+                  withNavBar: false,
+                  screen: UserMapScreen(
+                    formState: _store,
+                  ));
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -610,8 +623,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           filename: _paths[i].name));
     }
     _store.uploadImages(multipart, id.toString()).then((value) {
+      successPost(
+        AppLocalizations.of(context).translate('succes_send'),
+      );
       setState(() {
-        _store = PostFormStore(appComponent.getRepository());
+        resetForm();
       });
     });
   }
@@ -802,7 +818,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Widget _buildDistrictlistField() {
     return Observer(
       builder: (context) {
-        if (_districtStore.districtList != null) {
+        if (_districtStore.districtList != null && cityDropdownValue != null) {
           return Flexible(
             child: _districtStore.loading == true
                 ? LinearProgressIndicator()
@@ -848,7 +864,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           style: TextStyle(
                             fontSize: 20.0,
                           ),
-                        )
+                        ),
                       ],
                     )),
                 baseColor: Colors.black12,
@@ -875,6 +891,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     Flexible(
                       child: DropdownButtonFormField<int>(
                           decoration: InputDecoration(
+                            errorText: _store.formErrorStore.age,
                             border: OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Colors.transparent)),
@@ -939,14 +956,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 child: DropdownButtonFormField<int>(
                   value: cityDropdownValue,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent)),
-                    labelText: AppLocalizations.of(context).translate('city'),
-                    fillColor: Color(0xfff3f3f4),
-                    filled: true,
-                    hintText: AppLocalizations.of(context).translate('city'),
-                    contentPadding: EdgeInsets.all(10),
-                  ),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent)),
+                      labelText: AppLocalizations.of(context).translate('city'),
+                      fillColor: Color(0xfff3f3f4),
+                      filled: true,
+                      hintText: AppLocalizations.of(context).translate('city'),
+                      contentPadding: EdgeInsets.all(10),
+                      errorText: _store.formErrorStore.district),
                   onChanged: (int val) {
                     FocusScope.of(context).requestFocus(new FocusNode());
                     if (val != cityDropdownValue) {

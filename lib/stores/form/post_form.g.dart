@@ -617,11 +617,11 @@ mixin _$PostFormStore on _PostFormStore, Store {
   }
 
   @override
-  void validateDistrict(String value) {
+  void validateDistrict(int districtId) {
     final _$actionInfo = _$_PostFormStoreActionController.startAction(
         name: '_PostFormStore.validateDistrict');
     try {
-      return super.validateDistrict(value);
+      return super.validateDistrict(districtId);
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
@@ -758,6 +758,36 @@ mixin _$PostFormErrorStore on _PostFormErrorStore, Store {
     });
   }
 
+  final _$ageAtom = Atom(name: '_PostFormErrorStore.age');
+
+  @override
+  String get age {
+    _$ageAtom.reportRead();
+    return super.age;
+  }
+
+  @override
+  set age(String value) {
+    _$ageAtom.reportWrite(value, super.age, () {
+      super.age = value;
+    });
+  }
+
+  final _$mapAtom = Atom(name: '_PostFormErrorStore.map');
+
+  @override
+  String get map {
+    _$mapAtom.reportRead();
+    return super.map;
+  }
+
+  @override
+  set map(String value) {
+    _$mapAtom.reportWrite(value, super.map, () {
+      super.map = value;
+    });
+  }
+
   final _$descriptionAtom = Atom(name: '_PostFormErrorStore.description');
 
   @override
@@ -797,6 +827,8 @@ buyPrice: ${buyPrice},
 rentPrice: ${rentPrice},
 rahnPrice: ${rahnPrice},
 district: ${district},
+age: ${age},
+map: ${map},
 description: ${description},
 typeHome: ${typeHome},
 hasErrorInForgotPassword: ${hasErrorInForgotPassword},
