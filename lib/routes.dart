@@ -26,11 +26,11 @@ class Routes {
   static const String search = '/search';
   static const String favarite = '/favarite';
   static const String edite = '/edite';
-
   static const String post = '/post';
   static const String map = '/map';
   static const String crop = '/crop';
   static const String changeInfo = '/changeInfo';
+
   static const String phoneNumberVerificationCode = '/phoneverification';
   static const String userPosts = '/userPosts';
   static const String createpost = '/createpost';
