@@ -24,7 +24,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    
+
     animationController =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     animation = Tween(begin: 0, end: 60).animate(animationController)
@@ -50,11 +50,11 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
               FlatButton.icon(
                 onPressed: () {},
                 icon: Icon(
-                  Icons.save,
-                  color: Colors.grey,
+                  Icons.flag,
+                  color: Colors.red,
                 ),
                 label: Text(
-                  AppLocalizations.of(context).translate('save'),
+                  AppLocalizations.of(context).translate('report'),
                 ),
               ),
               FlatButton.icon(
