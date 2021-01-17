@@ -2,7 +2,6 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/post/post.dart';
-import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -10,7 +9,6 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:share/share.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostScreen extends StatefulWidget {
@@ -496,13 +494,12 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
             return AlertDialog(
               title: new Text("گزارش ملک"),
               content: Container(
-                height: 200,
-                width: 240,
+                height: MediaQuery.of(context).size.height / 3,
                 child: Column(
                   children: <Widget>[
                     Text("لطفا گزینه مورد نظر خود را وارد کنید."),
                     DropdownButton<String>(
-                      hint: Text('یک گزینه ا انتخاب کنید.'),
+                      hint: Text('یک گزینه را انتخاب کنید.'),
                       value: _chosenValue,
                       underline: Container(),
                       items: <String>[
@@ -530,15 +527,14 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 ),
               ),
               actions: <Widget>[
-                // usually buttons at the bottom of the dialog
                 FlatButton(
-                  child: Text("لغو"),
+                  child: Text("ارسال"),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 FlatButton(
-                  child: Text("ارسال"),
+                  child: Text("لغو"),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
