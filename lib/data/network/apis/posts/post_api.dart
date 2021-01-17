@@ -11,6 +11,7 @@ import 'package:boilerplate/models/district/district_list.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/post_request.dart';
+import 'package:boilerplate/models/report/report.dart';
 import 'package:boilerplate/models/type/type_list.dart';
 import 'package:boilerplate/models/user/changepassword.dart';
 import 'package:boilerplate/models/user/user.dart';
@@ -276,6 +277,15 @@ class PostApi {
     try {
       final res = await _dioClient
           .post(Endpoints.checkUsername, data: {"username": username});
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
+ Future createReport(Report report) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.createReport, data:  report.toMap());
       return res["result"];
     } catch (e) {
       throw e;

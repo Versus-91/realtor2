@@ -10,6 +10,7 @@ import 'package:boilerplate/models/district/district_list.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/post_request.dart';
+import 'package:boilerplate/models/report/report.dart';
 import 'package:boilerplate/models/type/type_list.dart';
 import 'package:boilerplate/models/user/changepassword.dart';
 import 'package:boilerplate/models/user/user.dart';
@@ -189,13 +190,12 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
- Future updatePost(Post post) {
+  Future updatePost(Post post) {
     return _postApi.updatePost(post).then((result) {
       return result;
     }).catchError((error) => throw error);
   }
 
-  
   Future<int> update(Post post) => _postDataSource
       .update(post)
       .then((id) => id)
@@ -282,6 +282,12 @@ class Repository {
       }
       return false;
     }).catchError((err) => throw err);
+  }
+
+  Future insertReport(Report report) {
+    return _postApi.createReport(report).then((result) {
+      return result;
+    }).catchError((error) => throw error);
   }
 }
 //////
