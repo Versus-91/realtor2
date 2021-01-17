@@ -3,10 +3,12 @@ import 'dart:ui';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/ui/home/propertycrads.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:boilerplate/widgets/post_placeholder.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:incrementally_loading_listview/incrementally_loading_listview.dart';
 import 'package:provider/provider.dart';
 
 class MyPostsScreen extends StatefulWidget {
@@ -18,7 +20,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
     with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   PostStore _postStore;
-
+  bool _loadingMore;
   var initialIndex = 0;
   @override
   void initState() {
@@ -83,22 +85,61 @@ class _MyPostsScreenState extends State<MyPostsScreen>
   }
 
   Widget _buildListView() {
-    return (_postStore.userPostList != null &&
-            _postStore.userPostList.posts.length > 0)
-        ? ListView.builder(
-            itemCount: _postStore.userPostList.posts.length,
-            itemBuilder: (context, position) {
-              return PropertyCrad(
-                post: _postStore.userPostList.posts[position],
-                isEdditing: true,
-              );
-            },
-          )
-        : Center(
-            child: Text(
-              AppLocalizations.of(context).translate('home_tv_no_post_found'),
-            ),
+    return Observer(
+      builder: (context) {
+        if (_postStore.loadingUserPosts == true) {
+          return Center(
+            child: CircularProgressIndicator(),
           );
+        } else {
+          if (_postStore.userPostList != null &&
+              _postStore.userPostList.posts.length > 0) {
+            return RefreshIndicator(
+              child: IncrementallyLoadingListView(
+                loadMore: () async {
+                  await _postStore.loadUserNextPage();
+                },
+                onLoadMore: () {
+                  setState(() {
+                    _loadingMore = true;
+                  });
+                },
+                onLoadMoreFinished: () {
+                  setState(() {
+                    _loadingMore = false;
+                  });
+                },
+                hasMore: () =>
+                    _postStore.userPostList.posts.length <
+                    _postStore.userPostList.totalCount,
+                itemCount: () => _postStore.userPostList.posts.length,
+                itemBuilder: (context, index) {
+                  if (index == _postStore.userPostList.posts.length - 1 &&
+                      (_loadingMore ?? false)) {
+                    return Column(
+                      children: [
+                        PropertyCrad(
+                            post: _postStore.userPostList.posts[index]),
+                        PlaceholderPostCard()
+                      ],
+                    );
+                  }
+                  return PropertyCrad(
+                      post: _postStore.userPostList.posts[index]);
+                },
+              ),
+              onRefresh: () async {
+                await _postStore.getUserPosts();
+              },
+            );
+          } else {
+            return Center(
+              child: Text('پستی برای نمایش وجود ندارد.'),
+            );
+          }
+        }
+      },
+    );
   }
 
   Widget _handleErrorMessage() {

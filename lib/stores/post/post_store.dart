@@ -42,6 +42,8 @@ abstract class _PostStore with Store {
   @observable
   int page = 1;
   @observable
+  int userPage = 1;
+  @observable
   int pageSize = 10;
   @computed
   bool get hasNextPage {
@@ -58,6 +60,23 @@ abstract class _PostStore with Store {
       return future.then((postList) {
         this.postList.posts.addAll(postList.posts);
         page = page + 1;
+      }).catchError((error) {
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+      });
+    }
+  }
+
+  @action
+  Future loadUserNextPage({PostRequest request}) async {
+    if (!loadingNextPage &&
+        userPostList.posts.length < userPostList.totalCount) {
+      request.page = userPage + 1;
+      request.pageSize = pageSize;
+      final future = _repository.getUserPosts(request: request);
+      fetchNextPostsFuture = ObservableFuture(future);
+      return future.then((postList) {
+        this.userPostList.posts.addAll(postList.posts);
+        userPage = userPage + 1;
       }).catchError((error) {
         errorStore.errorMessage = DioErrorUtil.handleError(error);
       });
