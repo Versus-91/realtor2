@@ -2,6 +2,7 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/post/post.dart';
+import 'package:boilerplate/ui/authorization/login/custom_button.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -492,7 +493,18 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: new Text("گزارش ملک"),
+              title: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }),
+                  Center(child: Text("گزارش ملک")),
+                ],
+              ),
               content: Container(
                 height: MediaQuery.of(context).size.height / 3,
                 child: Column(
@@ -503,10 +515,10 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                       value: _chosenValue,
                       underline: Container(),
                       items: <String>[
-                        'I\'m not able to help',
-                        'Unclear description',
-                        'Not available at set date and time',
-                        'Other'
+                        'توضیحات مشکل دارد',
+                        'نقشه اپلود نشده',
+                        'اطلاعات دقیق نیست',
+                        'سایر موارد'
                       ].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -527,23 +539,25 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 ),
               ),
               actions: <Widget>[
-                FlatButton(
-                  child: Text("ارسال"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                FlatButton(
-                  child: Text("لغو"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
+                registerButton(),
               ],
             );
           },
         );
       },
+    );
+  }
+
+  Widget registerButton() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.symmetric(vertical: 15),
+      alignment: Alignment.center,
+      child: CustomButton(
+          color: Colors.red,
+          textColor: Colors.white,
+          text: AppLocalizations.of(context).translate('register_info'),
+          onPressed: () async {}),
     );
   }
 
