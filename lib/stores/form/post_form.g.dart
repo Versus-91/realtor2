@@ -69,6 +69,21 @@ mixin _$PostFormStore on _PostFormStore, Store {
     });
   }
 
+  final _$fetchFormDataAtom = Atom(name: '_PostFormStore.fetchFormData');
+
+  @override
+  bool get fetchFormData {
+    _$fetchFormDataAtom.reportRead();
+    return super.fetchFormData;
+  }
+
+  @override
+  set fetchFormData(bool value) {
+    _$fetchFormDataAtom.reportWrite(value, super.fetchFormData, () {
+      super.fetchFormData = value;
+    });
+  }
+
   final _$categoryIdAtom = Atom(name: '_PostFormStore.categoryId');
 
   @override
@@ -325,6 +340,28 @@ mixin _$PostFormStore on _PostFormStore, Store {
         name: '_PostFormStore.setLatitude');
     try {
       return super.setLatitude(value);
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void startLoadingData() {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.startLoadingData');
+    try {
+      return super.startLoadingData();
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void finishedLoadingData() {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.finishedLoadingData');
+    try {
+      return super.finishedLoadingData();
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
@@ -634,6 +671,7 @@ title: ${title},
 success: ${success},
 ageHome: ${ageHome},
 loading: ${loading},
+fetchFormData: ${fetchFormData},
 categoryId: ${categoryId},
 postId: ${postId},
 propertyHomeTypeId: ${propertyHomeTypeId},

@@ -50,7 +50,8 @@ abstract class _PostFormStore with Store {
 
   @observable
   bool loading = false;
-
+  @observable
+  bool fetchFormData = false;
   @observable
   int categoryId;
   @observable
@@ -85,6 +86,16 @@ abstract class _PostFormStore with Store {
   @action
   void setLatitude(double value) {
     latitude = value;
+  }
+
+  @action
+  void startLoadingData() {
+    fetchFormData = true;
+  }
+
+  @action
+  void finishedLoadingData() {
+    fetchFormData = false;
   }
 
   @action

@@ -140,7 +140,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ? IconButton(
                     onPressed: () {
                       _familyController.clear();
-                      _formStore.setUserName(_familyController.text);
+                      _formStore.setFamily(_familyController.text);
                     },
                     icon: Icon(Icons.clear),
                   )

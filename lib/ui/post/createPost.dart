@@ -128,14 +128,25 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
     //start api request if it's not started
-    realodDieldsData();
+    if (_store.fetchFormData == false) loadDataFields();
   }
 
-  void realodDieldsData() {
-    if (!_cityStore.loading) _cityStore.getCities();
-    if (!_categoryStore.loading) _categoryStore.getCategories();
-    if (!_typeStore.loading) _typeStore.getTypes();
-    if (!_amenityStore.loading) _amenityStore.getAmenities();
+  Future<bool> loadDataFields() async {
+    _store.startLoadingData();
+    return _categoryStore.getCategories().then((value) {
+      if (!_cityStore.loading) {
+        _cityStore.getCities().then((value) {
+          if (!_typeStore.loading)
+            _typeStore.getTypes().then((value) {
+              if (!_amenityStore.loading)
+                _amenityStore.getAmenities().then((value) {
+                  _store.finishedLoadingData();
+                  return true;
+                }).catchError((_) => false);
+            }).catchError((_) => false);
+        }).catchError((_) => false);
+      }
+    }).catchError((_) => false);
   }
 
   @override
@@ -174,55 +185,43 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           },
         );
       } else {
-        if (_cityStore.success == true) {
-          return SingleChildScrollView(
-            reverse: false,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: bottom),
-              child: Material(
-                child: Stack(
-                  children: <Widget>[
-                    _handleErrorMessage(),
-                    Column(
-                      children: <Widget>[
-                        _buildRightSide(),
-                      ],
-                    ),
-                    Observer(
-                      builder: (context) {
-                        return _store.success
-                            ? successPost(
-                                AppLocalizations.of(context)
-                                    .translate('succes_send'),
-                              )
-                            : _showErrorMessage(_store.errorStore.errorMessage);
-                      },
-                    ),
-                    Observer(
-                      builder: (context) {
-                        if (_store.postId != null) {
-                          upload(_store.postId);
-                          return SizedBox.shrink();
-                        }
-                        return _showErrorMessage(
-                            _store.errorStore.errorMessage);
-                      },
-                    ),
-                  ],
-                ),
+        return SingleChildScrollView(
+          reverse: false,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: bottom),
+            child: Material(
+              child: Stack(
+                children: <Widget>[
+                  _handleErrorMessage(),
+                  Column(
+                    children: <Widget>[
+                      _buildRightSide(),
+                    ],
+                  ),
+                  Observer(
+                    builder: (context) {
+                      return _store.success
+                          ? successPost(
+                              AppLocalizations.of(context)
+                                  .translate('succes_send'),
+                            )
+                          : _showErrorMessage(_store.errorStore.errorMessage);
+                    },
+                  ),
+                  Observer(
+                    builder: (context) {
+                      if (_store.postId != null) {
+                        upload(_store.postId);
+                        return SizedBox.shrink();
+                      }
+                      return _showErrorMessage(_store.errorStore.errorMessage);
+                    },
+                  ),
+                ],
               ),
             ),
-          );
-        } else {
-          return Center(
-            child: RaisedButton.icon(
-                onPressed: () {
-                  realodDieldsData();
-                },
-                icon: Icon(Icons.refresh),
-                label: Text("تلاش مجدد")),
-          );
-        }
+          ),
+        );
       }
     });
   }
