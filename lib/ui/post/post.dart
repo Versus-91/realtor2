@@ -2,12 +2,15 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/post/post.dart';
+import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:share/share.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostScreen extends StatefulWidget {
@@ -19,6 +22,8 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   AnimationController animationController;
+  TextEditingController _descriptionController = TextEditingController();
+  String _chosenValue;
   Animation animation;
   int currentState = 0;
   @override
@@ -48,7 +53,9 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               FlatButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  _showDecline();
+                },
                 icon: Icon(
                   Icons.flag,
                   color: Colors.red,
@@ -125,7 +132,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 50,
-                    color: Colors.transparent,
+                    color: Colors.blueGrey[700],
                     child: Row(
                       children: [
                         IconButton(
@@ -228,6 +235,14 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                           fontWeight: FontWeight.normal,
                         ),
                       ),
+                      Divider(
+                        endIndent: MediaQuery.of(context).size.width / 1.5,
+                        color: Colors.blue,
+                        thickness: 1,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       widget.post.category.name.contains(
                               AppLocalizations.of(context).translate('sell'))
                           ? Text(
@@ -243,6 +258,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                                 Text(
                                   AppLocalizations.of(context)
                                           .translate('rahn') +
+                                      ":  " +
                                       AppLocalizations.of(context)
                                           .transformCurrency(
                                               widget.post.deposit),
@@ -252,11 +268,12 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 8,
+                                  width: 15,
                                 ),
                                 Text(
                                   AppLocalizations.of(context)
                                           .translate('rent') +
+                                      ":  " +
                                       AppLocalizations.of(context)
                                           .transformCurrency(widget.post.rent),
                                   style: TextStyle(
@@ -267,11 +284,6 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                               ],
                             ),
                     ],
-                  ),
-                  Divider(
-                    endIndent: MediaQuery.of(context).size.width / 1.5,
-                    color: Colors.blue,
-                    thickness: 1,
                   ),
                   IntrinsicHeight(
                     child: Padding(
@@ -291,7 +303,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: VerticalDivider(
-                              color: Colors.grey,
+                              color: Colors.blue,
                               width: 10,
                               endIndent: 4,
                             ),
@@ -308,7 +320,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: VerticalDivider(
-                              color: Colors.grey,
+                              color: Colors.blue,
                               width: 10,
                               endIndent: 4,
                             ),
@@ -325,7 +337,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: VerticalDivider(
-                              color: Colors.grey,
+                              color: Colors.blue,
                               width: 10,
                               endIndent: 4,
                             ),
@@ -343,6 +355,11 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'ConcertOne-Regular'),
+                  ),
+                  Divider(
+                    endIndent: MediaQuery.of(context).size.width / 1.5,
+                    color: Colors.blue,
+                    thickness: 1,
                   ),
                   descriptionFeild('${widget.post.description}'),
                   if (widget.post.latitude == null) ...[
@@ -365,6 +382,12 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'ConcertOne-Regular'),
+                              ),
+                              Divider(
+                                endIndent:
+                                    MediaQuery.of(context).size.width / 1.5,
+                                color: Colors.blue,
+                                thickness: 1,
                               ),
                               Column(
                                 children:
@@ -462,6 +485,161 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
       return true;
     }
     return false;
+  }
+
+  void _showDecline() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: new Text("گزارش ملک"),
+              content: Container(
+                height: 200,
+                width: 240,
+                child: Column(
+                  children: <Widget>[
+                    Text("لطفا گزینه مورد نظر خود را وارد کنید."),
+                    DropdownButton<String>(
+                      hint: Text('یک گزینه ا انتخاب کنید.'),
+                      value: _chosenValue,
+                      underline: Container(),
+                      items: <String>[
+                        'I\'m not able to help',
+                        'Unclear description',
+                        'Not available at set date and time',
+                        'Other'
+                      ].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String value) {
+                        setState(() {
+                          _chosenValue = value;
+                        });
+                      },
+                    ),
+                    _buildDescriptionField()
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                FlatButton(
+                  child: Text("لغو"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text("ارسال"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildDescriptionField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          AppLocalizations.of(context).translate('description'),
+          style: TextStyle(color: Colors.red[300]),
+        ),
+        Observer(builder: (context) {
+          return TextField(
+            decoration: InputDecoration(
+              // errorText: _store.formErrorStore.description,
+              border: InputBorder.none,
+              fillColor: Color(0xfff3f3f4),
+              filled: true,
+              // when user presses enter it will adapt to it
+            ),
+            keyboardType: TextInputType.multiline,
+            minLines: 2, //Normal textInputField will be displayed
+            maxLines: 5,
+            controller: _descriptionController,
+
+            onChanged: (value) {
+              // _store.setDescription(_descriiptionController.text);
+            },
+            textAlign: TextAlign.right,
+            textDirection: TextDirection.rtl,
+          );
+        })
+      ],
+    );
+  }
+
+  Widget _buildSelectErrorField() {
+    return Observer(
+      builder: (context) {
+        return Container(
+            padding: EdgeInsets.only(top: 5, bottom: 15),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: DropdownButton<String>(
+                    value: _chosenValue,
+                    underline: Container(),
+                    items: <String>[
+                      'I\'m not able to help',
+                      'Unclear description',
+                      'Not available at set date and time',
+                      'Other'
+                    ].map((String value) {
+                      return new DropdownMenuItem<String>(
+                        value: value,
+                        child: new Text(
+                          value,
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String value) {
+                      setState(() {
+                        _chosenValue = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ));
+        // : Opacity(
+        //     opacity: 0.8,
+        //     child: Shimmer.fromColors(
+        //       child: Container(
+        //           padding: EdgeInsets.only(top: 10, bottom: 15),
+        //           child: Row(
+        //             children: <Widget>[
+        //               Text(
+        //                 AppLocalizations.of(context).translate('age_home'),
+        //                 style: TextStyle(
+        //                   fontSize: 20.0,
+        //                 ),
+        //               )
+        //             ],
+        //           )),
+        //       baseColor: Colors.black12,
+        //       highlightColor: Colors.white,
+        //       loop: 30,
+        //     ),
+        //   );
+      },
+    );
   }
 
   Widget amenities(
