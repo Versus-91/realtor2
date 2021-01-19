@@ -1,10 +1,10 @@
 import 'package:boilerplate/models/optionreport/optionReport.dart';
 
 class OptionList {
-  final List<OptionReport> optionsReport;
+  final List<OptionReport> options;
 
   OptionList({
-    this.optionsReport,
+    this.options,
   });
 
   factory OptionList.fromJson(List<dynamic> json) {
@@ -12,7 +12,7 @@ class OptionList {
     optionsReport = json.map((item) => OptionReport.fromMap(item)).toList();
 
     return OptionList(
-      optionsReport: optionsReport,
+      options: optionsReport,
     );
   }
 }

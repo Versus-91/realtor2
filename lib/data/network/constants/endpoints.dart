@@ -43,12 +43,12 @@ class Endpoints {
   static const String checkUsername =
       baseUrl + "/api/services/app/account/checkUsername";
   static const String createReport =
-      baseUrl + "/api/services/app/account/checkUsername";
+      baseUrl + "/api/services/app/report/create";
+  static const String getoptionsReport =
+      baseUrl + "/api/services/app/reportoption/GetAll";
   static const String checkPhoneNumber =
       baseUrl + "/api/services/app/account/checkPhoneNumber";
   static const String checkEmail =
       baseUrl + "/api/services/app/account/checkEmail";
   static const String updatePost = baseUrl + "/api/services/app/Post/create";
-  static const String getoptionsReport =
-      baseUrl + "/api/services/app/Post/create";
 }

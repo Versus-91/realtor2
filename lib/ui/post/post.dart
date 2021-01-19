@@ -1,6 +1,7 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
+import 'package:boilerplate/models/optionreport/optionReport.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/report/report.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
@@ -9,7 +10,6 @@ import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,11 +21,13 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
+  List<OptionReport> options;
   AnimationController animationController;
   TextEditingController _descriptionController = TextEditingController();
-  String _chosenValue;
+  int _chosenValue;
   Animation animation;
   int currentState = 0;
+  Future getOptions;
   @override
   void initState() {
     super.initState();
@@ -36,6 +38,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
       ..addListener(() {
         setState(() {});
       });
+    getOptions = appComponent.getRepository().getOptionsReport();
   }
 
   @override
@@ -518,35 +521,37 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 ],
               ),
               content: Container(
-                height: MediaQuery.of(context).size.height / 3,
+                height: MediaQuery.of(context).size.height / 4,
                 child: Column(
                   children: <Widget>[
                     Text("لطفا گزینه مورد نظر خود را وارد کنید."),
-                    DropdownButton<String>(
-                      hint: Text('یک گزینه را انتخاب کنید'),
-                      value: _chosenValue,
-                      underline: Container(),
-                      items: <String>[
+                    FutureBuilder(
+                      future: getOptions,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          List<DropdownMenuItem<int>> menuItems = snapshot
+                              .data.options
+                              .map<DropdownMenuItem<int>>((item) {
+                            return DropdownMenuItem<int>(
+                              child: Text(item.name),
+                              value: item.id,
+                            );
+                          }).toList();
 
-
-                        
-                        // 'توضیحات مشکل دارد',
-                        // 'نقشه اپلود نشده',
-                        // 'اطلاعات دقیق نیست',
-                        // 'سایر موارد'
-                      ].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (String value) {
-                        setState(() {
-                          _chosenValue = value;
-                        });
+                          return DropdownButton<int>(
+                            hint: Text('یک گزینه را انتخاب کنید'),
+                            value: _chosenValue,
+                            items: menuItems,
+                            underline: Container(),
+                            onChanged: (int value) {
+                              setState(() {
+                                _chosenValue = value;
+                              });
+                            },
+                          );
+                        } else {
+                          return Center(child: Text("ddd"));
+                        }
                       },
                     ),
                     _buildDescriptionField()
@@ -589,29 +594,31 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
           AppLocalizations.of(context).translate('description'),
           style: TextStyle(color: Colors.red[300]),
         ),
-        Observer(builder: (context) {
-          return TextField(
-            decoration: InputDecoration(
-              // errorText: _store.formErrorStore.description,
-              border: InputBorder.none,
-              fillColor: Color(0xfff3f3f4),
-              filled: true,
-              // when user presses enter it will adapt to it
-            ),
-            keyboardType: TextInputType.multiline,
-            minLines: 2, //Normal textInputField will be displayed
-            maxLines: 5,
-            controller: _descriptionController,
+        TextField(
+          decoration: InputDecoration(
+            errorText: validateDescription(_descriptionController.text),
+            border: InputBorder.none,
+            fillColor: Color(0xfff3f3f4),
+            filled: true,
+            // when user presses enter it will adapt to it
+          ),
+          keyboardType: TextInputType.multiline,
+          minLines: 2, //Normal textInputField will be displayed
+          maxLines: 5,
+          controller: _descriptionController,
 
-            onChanged: (value) {
-              // _store.setDescription(_descriiptionController.text);
-            },
-            textAlign: TextAlign.right,
-            textDirection: TextDirection.rtl,
-          );
-        })
+          textAlign: TextAlign.right,
+          textDirection: TextDirection.rtl,
+        )
       ],
     );
+  }
+
+  String validateDescription(String value) {
+    if (!(value.length > 5) && value.isNotEmpty) {
+      return "این فیلد باید پر شود";
+    }
+    return null;
   }
 
   Widget amenities(
