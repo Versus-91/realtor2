@@ -46,6 +46,17 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blueGrey[700],
+          title: Text(
+            ' ${widget.post.district.city.name} - ${widget.post.district.name} ',
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.normal),
+          ),
+          actions: [],
+        ),
         bottomNavigationBar: BottomAppBar(
           child: new Row(
             mainAxisSize: MainAxisSize.max,
@@ -126,33 +137,33 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                         ],
                       ],
                     )),
-                Positioned(
-                  top: 0,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    color: Colors.blueGrey[700],
-                    child: Row(
-                      children: [
-                        IconButton(
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            }),
-                        Text(
-                          ' ${widget.post.district.city.name} - ${widget.post.district.name} ',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   top: 0,
+                //   child: Container(
+                //     width: MediaQuery.of(context).size.width,
+                //     height: 50,
+                //     color: Colors.blueGrey[700],
+                //     child: Row(
+                //       children: [
+                //         IconButton(
+                //             icon: Icon(
+                //               Icons.arrow_back,
+                //               color: Colors.white,
+                //             ),
+                //             onPressed: () {
+                //               Navigator.pop(context);
+                //             }),
+                //         Text(
+                //           ' ${widget.post.district.city.name} - ${widget.post.district.name} ',
+                //           style: TextStyle(
+                //               fontSize: 20,
+                //               color: Colors.white,
+                //               fontWeight: FontWeight.normal),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             Container(
