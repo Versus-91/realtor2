@@ -2,6 +2,7 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/post/post.dart';
+import 'package:boilerplate/models/report/report.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
@@ -522,14 +523,17 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                   children: <Widget>[
                     Text("لطفا گزینه مورد نظر خود را وارد کنید."),
                     DropdownButton<String>(
-                      hint: Text('یک گزینه را انتخاب کنید.'),
+                      hint: Text('یک گزینه را انتخاب کنید'),
                       value: _chosenValue,
                       underline: Container(),
                       items: <String>[
-                        'توضیحات مشکل دارد',
-                        'نقشه اپلود نشده',
-                        'اطلاعات دقیق نیست',
-                        'سایر موارد'
+
+
+                        
+                        // 'توضیحات مشکل دارد',
+                        // 'نقشه اپلود نشده',
+                        // 'اطلاعات دقیق نیست',
+                        // 'سایر موارد'
                       ].map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -568,7 +572,12 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
           color: Colors.red,
           textColor: Colors.white,
           text: AppLocalizations.of(context).translate('register_info'),
-          onPressed: () async {}),
+          onPressed: () async {
+            appComponent.getRepository().insertReport(Report(
+                postId: widget.post.id,
+                optionId: 2,
+                description: _descriptionController.text));
+          }),
     );
   }
 
@@ -602,64 +611,6 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
           );
         })
       ],
-    );
-  }
-
-  Widget _buildSelectErrorField() {
-    return Observer(
-      builder: (context) {
-        return Container(
-            padding: EdgeInsets.only(top: 5, bottom: 15),
-            child: Row(
-              children: <Widget>[
-                Flexible(
-                  child: DropdownButton<String>(
-                    value: _chosenValue,
-                    underline: Container(),
-                    items: <String>[
-                      'I\'m not able to help',
-                      'Unclear description',
-                      'Not available at set date and time',
-                      'Other'
-                    ].map((String value) {
-                      return new DropdownMenuItem<String>(
-                        value: value,
-                        child: new Text(
-                          value,
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (String value) {
-                      setState(() {
-                        _chosenValue = value;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ));
-        // : Opacity(
-        //     opacity: 0.8,
-        //     child: Shimmer.fromColors(
-        //       child: Container(
-        //           padding: EdgeInsets.only(top: 10, bottom: 15),
-        //           child: Row(
-        //             children: <Widget>[
-        //               Text(
-        //                 AppLocalizations.of(context).translate('age_home'),
-        //                 style: TextStyle(
-        //                   fontSize: 20.0,
-        //                 ),
-        //               )
-        //             ],
-        //           )),
-        //       baseColor: Colors.black12,
-        //       highlightColor: Colors.white,
-        //       loop: 30,
-        //     ),
-        //   );
-      },
     );
   }
 

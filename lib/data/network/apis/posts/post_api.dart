@@ -8,6 +8,7 @@ import 'package:boilerplate/models/authenticate/login.dart';
 import 'package:boilerplate/models/category/categori_list.dart';
 import 'package:boilerplate/models/city/city_list.dart';
 import 'package:boilerplate/models/district/district_list.dart';
+import 'package:boilerplate/models/optionreport/option_list.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/post_request.dart';
@@ -180,8 +181,8 @@ class PostApi {
 
   Future createPost(Post post) async {
     try {
-      final res =
-          await _dioClient.post(Endpoints.createPosts, data: post.toMap(apiCall: true));
+      final res = await _dioClient.post(Endpoints.createPosts,
+          data: post.toMap(apiCall: true));
       return res["result"];
     } catch (e) {
       throw e;
@@ -282,23 +283,23 @@ class PostApi {
       throw e;
     }
   }
- Future createReport(Report report) async {
+
+  Future createReport(Report report) async {
     try {
-      final res = await _dioClient
-          .post(Endpoints.createReport, data:  report.toMap());
+      final res =
+          await _dioClient.post(Endpoints.createReport, data: report.toMap());
       return res["result"];
     } catch (e) {
       throw e;
     }
   }
 
-  /// sample api call with default rest client
-//  Future<PostsList> getPosts() {
-//
-//    return _restClient
-//        .get(Endpoints.getPosts)
-//        .then((dynamic res) => PostsList.fromJson(res))
-//        .catchError((error) => throw NetworkException(message: error));
-//  }
-
+  Future<OptionList> getOptionsReport() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getoptionsReport);
+      return OptionList.fromJson(res["result"]["items"]);
+    } catch (e) {
+      throw e;
+    }
+  }
 }

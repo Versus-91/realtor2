@@ -49,4 +49,6 @@ class Endpoints {
   static const String checkEmail =
       baseUrl + "/api/services/app/account/checkEmail";
   static const String updatePost = baseUrl + "/api/services/app/Post/create";
+  static const String getoptionsReport =
+      baseUrl + "/api/services/app/Post/create";
 }

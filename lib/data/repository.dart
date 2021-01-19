@@ -7,6 +7,7 @@ import 'package:boilerplate/models/authenticate/login.dart';
 import 'package:boilerplate/models/category/categori_list.dart';
 import 'package:boilerplate/models/city/city_list.dart';
 import 'package:boilerplate/models/district/district_list.dart';
+import 'package:boilerplate/models/optionreport/option_list.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
 import 'package:boilerplate/models/post/post_request.dart';
@@ -289,5 +290,11 @@ class Repository {
       return result;
     }).catchError((error) => throw error);
   }
+
+  Future<OptionList> getOptionsReport() async {
+    return await _postApi.getOptionsReport().then((optionsList) {
+      return optionsList;
+    }).catchError((error) => throw error);
+  }
 }
-//////
+
