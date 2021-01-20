@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
@@ -32,7 +34,8 @@ abstract class _PostFormStore with Store {
       reaction((_) => area, validateArea),
       // reaction((_) => buyPrice, validatePrice),
       // reaction((_) => rahnPrice, validateRahnPrice),
-      // reaction((_) => rentPrice, validateRentPrice),
+      reaction((_) => latitude, validateLattitude),
+      reaction((_) => longitude, validateLattitude),
       reaction((_) => description, validateDescription),
       reaction((_) => propertyHomeTypeId, validateTypeHome),
       reaction((_) => selectedDistrict, validateDistrict),
@@ -62,6 +65,8 @@ abstract class _PostFormStore with Store {
   double latitude;
   @observable
   double longitude;
+  @observable
+  Point point;
   @observable
   int selectedCity;
   @observable
@@ -186,7 +191,8 @@ abstract class _PostFormStore with Store {
   @action
   validateCreatePost() {
     validateArea(area);
-    validateMap(latitude, longitude);
+    validateLattitude(latitude);
+    validateLng(longitude);
     validateDistrict(selectedDistrict);
     validateAge(ageHome);
     // validatePrice(buyPrice);
@@ -263,11 +269,11 @@ abstract class _PostFormStore with Store {
         districtId: this.selectedDistrict,
         amenities: amenities.map((e) => Amenity(id: e)).toList(),
       );
-
+      loading = true;
       return _repository.insert(post).then((result) {
         loading = false;
         postId = result["id"];
-        return true;
+        return result["id"];
       }).catchError((error) {
         loading = false;
         throw error;
@@ -397,8 +403,18 @@ abstract class _PostFormStore with Store {
     }
   }
 
-  void validateMap(double latitude, double longitude) {
-    if (latitude == null || longitude == null) {
+  void validateLattitude(double latitude) {
+    if (latitude == null && latitude != 0 ||
+        longitude == null && latitude != 0) {
+      formErrorStore.map = "محل را انتخاب کنید";
+    } else {
+      formErrorStore.map = null;
+    }
+  }
+
+  void validateLng(double longitude) {
+    if (latitude == null && latitude != 0 ||
+        longitude == null && latitude != 0) {
       formErrorStore.map = "محل را انتخاب کنید";
     } else {
       formErrorStore.map = null;

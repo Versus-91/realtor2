@@ -36,6 +36,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   int selectedItem;
   int cityDropdownValue;
   int _value;
+  int _propertyTypevalue;
   String _categoryText = '';
   String _fileName;
   List<PlatformFile> _paths;
@@ -208,15 +209,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           : _showErrorMessage(_store.errorStore.errorMessage);
                     },
                   ),
-                  Observer(
-                    builder: (context) {
-                      if (_store.postId != null) {
-                        upload(_store.postId);
-                        return SizedBox.shrink();
-                      }
-                      return _showErrorMessage(_store.errorStore.errorMessage);
-                    },
-                  ),
                 ],
               ),
             ),
@@ -264,6 +256,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               child: _buildBedroomCountField(),
             ),
             _mapFeild(),
+            Observer(
+              builder: (context) {
+                if (_store.formErrorStore.map != null) {
+                  return Text(
+                    _store.formErrorStore.map,
+                    textAlign: TextAlign.right,
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 15),
               child: _buildDescriptionField(),
@@ -376,7 +380,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         Flexible(
           child: InkWell(
             onTap: () async {
-              _store.insertPost().then((value) {}).catchError((error) {
+              _store.insertPost().then((result) {
+                if (_paths != null && _paths.length > 0) {
+                  upload(result);
+                } else {
+                  successPost(
+                    AppLocalizations.of(context).translate('succes_send'),
+                  );
+                  setState(() {
+                    resetForm();
+                  });
+                }
+              }).catchError((error) {
                 _showErrorMessage(
                   "خطا در ایجاد پست",
                 );
@@ -414,7 +429,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       amenityList = [];
       _value = null;
       _paths = null;
-
+      _propertyTypevalue = null;
       cityDropdownValue = null;
       _store = PostFormStore(appComponent.getRepository());
     });
@@ -617,7 +632,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   upload(int id) async {
     List<MultipartFile> multipart = List<MultipartFile>();
-    for (int i = 0; i < _paths.length; i++) {
+    for (int i = 0; i < _paths?.length; i++) {
       multipart.add(await MultipartFile.fromFile(_paths[i].path,
           filename: _paths[i].name));
     }
@@ -1149,7 +1164,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           AppLocalizations.of(context).translate('type_home'),
                       contentPadding: EdgeInsets.all(10),
                       errorText: _store.formErrorStore.typeHome),
+                  value: _propertyTypevalue,
                   onChanged: (int val) {
+                    setState(() {
+                      _propertyTypevalue = val;
+                    });
                     FocusScope.of(context).requestFocus(new FocusNode());
                     _store.setPropertyHomeType(val);
                   },
