@@ -262,6 +262,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   return Text(
                     _store.formErrorStore.map,
                     textAlign: TextAlign.right,
+                    style: TextStyle(color: Colors.red),
                   );
                 } else {
                   return SizedBox.shrink();
