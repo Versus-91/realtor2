@@ -9,6 +9,7 @@ import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -550,7 +551,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                             },
                           );
                         } else {
-                          return Center(child: Text("ddd"));
+                          return Center(child: Text("loading..."));
                         }
                       },
                     ),
@@ -578,12 +579,46 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
           textColor: Colors.white,
           text: AppLocalizations.of(context).translate('register_info'),
           onPressed: () async {
-            appComponent.getRepository().insertReport(Report(
-                postId: widget.post.id,
-                optionId: 2,
-                description: _descriptionController.text));
+            appComponent
+                .getRepository()
+                .insertReport(Report(
+                    postId: widget.post.id,
+                    optionId: _chosenValue,
+                    description: _descriptionController.text))
+                .then((value) async {
+              successMessage('گزارش با موفقیت ارسال شد');
+            }).catchError(_showErrorMessage(
+              "خطا در ارسال",
+            ));
           }),
     );
+  }
+
+  Widget successMessage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () async {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createSuccess(
+          message: message,
+          title: AppLocalizations.of(context).translate('succes_send'),
+          duration: Duration(seconds: 3),
+        )..show(context);
+      }
+    });
+    return SizedBox.shrink();
+  }
+
+  _showErrorMessage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message != null && message.isNotEmpty) {
+        FlushbarHelper.createError(
+          message: message,
+          title: AppLocalizations.of(context).translate('home_tv_error'),
+          duration: Duration(seconds: 3),
+        )..show(context);
+      }
+    });
+
+    return SizedBox.shrink();
   }
 
   Widget _buildDescriptionField() {
@@ -726,5 +761,11 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _descriptionController.clear();
+    super.dispose();
   }
 }
