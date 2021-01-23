@@ -4,6 +4,7 @@ import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/optionreport/optionReport.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/report/report.dart';
+import 'package:boilerplate/stores/form/post_form.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
@@ -29,6 +30,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   Animation animation;
   int currentState = 0;
   Future getOptions;
+  PostFormStore _store = PostFormStore(appComponent.getRepository());
+
   @override
   void initState() {
     super.initState();
@@ -526,6 +529,9 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                 child: Column(
                   children: <Widget>[
                     Text("لطفا گزینه مورد نظر خود را وارد کنید."),
+                    SizedBox(
+                      height: 10,
+                    ),
                     FutureBuilder(
                       future: getOptions,
                       builder: (context, snapshot) {
@@ -539,21 +545,37 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                             );
                           }).toList();
 
-                          return DropdownButton<int>(
+                          return DropdownButtonFormField<int>(
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent)),
+                                // labelText: AppLocalizations.of(context)
+                                //     .translate('city'),
+                                fillColor: Color(0xfff3f3f4),
+                                filled: true,
+                                // hintText: AppLocalizations.of(context)
+                                //     .translate('city'),
+                                contentPadding: EdgeInsets.all(10),
+                                errorText: _store.formErrorStore.district),
                             hint: Text('یک گزینه را انتخاب کنید'),
                             value: _chosenValue,
                             items: menuItems,
-                            underline: Container(),
                             onChanged: (int value) {
                               setState(() {
                                 _chosenValue = value;
+                                _store.setReport(_chosenValue);
                               });
                             },
                           );
                         } else {
-                          return Center(child: Text("loading..."));
+                          return Flexible(
+                              child: Center(child: LinearProgressIndicator()));
                         }
                       },
+                    ),
+                    SizedBox(
+                      height: 15,
                     ),
                     _buildDescriptionField()
                   ],

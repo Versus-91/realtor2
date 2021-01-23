@@ -8,11 +8,7 @@ class LanguageStore = _LanguageStore with _$LanguageStore;
 
 abstract class _LanguageStore with Store {
   static const String TAG = "LanguageStore";
-
-  // repository instance
   final Repository _repository;
-
-  // store for handling errors
   final ErrorStore errorStore = ErrorStore();
 
   // supported languages
