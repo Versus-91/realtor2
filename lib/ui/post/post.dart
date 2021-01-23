@@ -631,7 +631,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
         ),
         TextField(
           decoration: InputDecoration(
-            errorText: validateDescription(_descriptionController.text),
+            // errorText: validateDescription(_descriptionController.text),
             border: InputBorder.none,
             fillColor: Color(0xfff3f3f4),
             filled: true,
@@ -649,12 +649,12 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
     );
   }
 
-  String validateDescription(String value) {
-    if (!(value.length > 5) && value.isNotEmpty) {
-      return "این فیلد باید پر شود";
-    }
-    return null;
-  }
+  // String validateDescription(String value) {
+  //   if (value.isEmpty) {
+  //     return "این فیلد باید پر شود";
+  //   }
+  //   return null;
+  // }
 
   Widget amenities(
     String url1,
