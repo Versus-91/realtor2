@@ -220,8 +220,10 @@ abstract class _FormStore with Store {
     RegExp regExp = new RegExp(patttern);
     if (number == null) {
       formErrorStore.number = 'پرکردن شماره تماس الزامی است';
+      return;
     } else if (!regExp.hasMatch(number)) {
       formErrorStore.number = ' شماره تماس نامعتبر است';
+      return;
     } else {
       formErrorStore.number = null;
     }

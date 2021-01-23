@@ -152,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           },
           controller: _familyController,
           onChanged: (value) {
-            _formStore.setName(_nameController.text);
+            _formStore.setFamily(_familyController.text);
           },
         );
       },
@@ -170,7 +170,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ? IconButton(
                     onPressed: () {
                       _nameController.clear();
-                      _formStore.setUserName(_nameController.text);
+                      _formStore.setName(_nameController.text);
                     },
                     icon: Icon(Icons.clear),
                   )
@@ -184,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           controller: _nameController,
           onChanged: (value) {
-            _formStore.setFamily(_nameController.text);
+            _formStore.setName(_nameController.text);
           },
         );
       },
@@ -202,7 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ? IconButton(
                     onPressed: () {
                       _userEmailController.clear();
-                      _formStore.setUserName(_userEmailController.text);
+                      _formStore.setEmail(_userEmailController.text);
                     },
                     icon: Icon(Icons.clear),
                   )
@@ -239,7 +239,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ? IconButton(
                     onPressed: () {
                       _passwordController.clear();
-                      _formStore.setUserName(_passwordController.text);
+                      _formStore.setPassword(_passwordController.text);
                     },
                     icon: Icon(Icons.clear),
                   )
@@ -276,7 +276,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ? IconButton(
                     onPressed: () {
                       _numberController.clear();
-                      _formStore.setUserName(_numberController.text);
+                      _formStore.setNumber(_numberController.text);
                     },
                     icon: Icon(Icons.clear),
                   )
