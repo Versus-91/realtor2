@@ -74,7 +74,7 @@ abstract class _LanguageStore with Store {
     // getting current language from shared preference
     _repository?.currentLanguage?.then((locale) {
       if (locale != null) {
-        _locale = locale;
+        _locale = 'fa';
       }
     });
   }
