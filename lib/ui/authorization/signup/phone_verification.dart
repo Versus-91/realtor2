@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:boilerplate/main.dart';
+import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import '../../../routes.dart';
 
 class Otp extends StatefulWidget {
   final String email;
@@ -27,6 +30,7 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   // Constants
   final int time = 60;
   AnimationController _controller;
+  final _formStore = FormStore(appComponent.getRepository());
 
   // Variables
   bool loading = false;
@@ -59,6 +63,13 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
           color: Colors.black54,
         ),
         onTap: () {
+          Map args = ModalRoute.of(context).settings.arguments;
+          if (args['fromRegister'] != null) {
+            Future.delayed(Duration(seconds: 1), () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  Routes.home, (Route<dynamic> route) => false);
+            });
+          }
           Navigator.pop(context);
         },
       ),
@@ -154,6 +165,20 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
         ),
       ),
       onTap: () {
+        Map args = ModalRoute.of(context).settings.arguments;
+
+        _formStore.changePhoneNumber(args["phone"]).then((value) async {
+          setState(() {
+            _hideResendButton = true;
+          });
+        }).catchError((error) {
+          setState(() {
+            _hideResendButton = false;
+          });
+          _showErrorMessage(
+            "خطا در تایید شماره همراه",
+          );
+        });
         // Resend you OTP via API or anything
       },
     );
