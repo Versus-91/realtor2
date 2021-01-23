@@ -329,30 +329,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
             if (result == true) {
               _formStore.setUsernameOrEmail(_formStore.userName);
               _formStore.setPassword(_formStore.password);
-              _formStore.login().then((value) {
+              _formStore.login().then((value) async {
                 if (value == true) {
                   SharedPreferences.getInstance().then((prefs) {
                     prefs.setBool(Preferences.is_logged_in, true);
                   });
-
                   _formStore
                       .changePhoneNumber(_numberController.text)
-                      .then((value) async {
-                    var result = await Navigator.of(context).pushNamed(
-                        Routes.phoneNumberVerificationCode,
-                        arguments: {'phone': _numberController.text});
-                    if (result != null) {
-                      Future.delayed(Duration(seconds: 1), () {
-                        Navigator.of(context, rootNavigator: true)
-                            .pushNamedAndRemoveUntil(
-                                Routes.home, (Route<dynamic> route) => false);
-                      });
-                    }
-                  }).catchError((error) {
+                      .then((value) async {})
+                      .catchError((error) {
                     _showErrorMessage(
                       "خطا در تایید شماره همراه",
                     );
                   });
+                  var result = await Navigator.of(context).pushNamed(
+                      Routes.phoneNumberVerificationCode,
+                      arguments: {
+                        'phone': _numberController.text,
+                        'fromRegister': true
+                      });
+                  if (result != null) {
+                    Future.delayed(Duration(seconds: 1), () {
+                      Navigator.of(context, rootNavigator: true)
+                          .pushNamedAndRemoveUntil(
+                              Routes.home, (Route<dynamic> route) => false);
+                    });
+                  }
+
                   // _showSuccessMessage(
                   //     AppLocalizations.of(context).translate('succes_signup'));
                 } else {
