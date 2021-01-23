@@ -90,9 +90,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Observer(
       builder: (context) {
         return TextField(
-          focusNode: _nameFocusNode,
+          focusNode: _usernameFocusNode,
           onSubmitted: (value) {
-            FocusScope.of(context).requestFocus(_familyFocusNode);
+            FocusScope.of(context).requestFocus(_nameFocusNode);
           },
           decoration: InputDecoration(
             prefixIcon: Icon(
@@ -130,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: InputDecoration(
             hintText: AppLocalizations.of(context).translate('family'),
             prefixIcon: Icon(
-              Icons.account_box,
+              Icons.account_tree,
               color: Colors.black54,
             ),
             errorText: _formStore.formErrorStore.family,
@@ -148,7 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           focusNode: _familyFocusNode,
           onSubmitted: (value) {
-            FocusScope.of(context).requestFocus(_usernameFocusNode);
+            FocusScope.of(context).requestFocus(_emailFocusNode);
           },
           controller: _familyController,
           onChanged: (value) {
@@ -183,6 +183,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             errorText: _formStore.formErrorStore.name,
           ),
           controller: _nameController,
+          focusNode: _nameFocusNode,
+          onSubmitted: (value) {
+            FocusScope.of(context).requestFocus(_familyFocusNode);
+          },
           onChanged: (value) {
             _formStore.setName(_nameController.text);
           },

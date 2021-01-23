@@ -70,15 +70,17 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _onWillPop() {
+  Future<bool> _onWillPop() {
     Map args = ModalRoute.of(context).settings.arguments;
     if (args['fromRegister'] != null) {
-      Future.delayed(Duration(seconds: 1), () {
+      return Future.delayed(Duration(seconds: 1), () {
         Navigator.of(context).pushNamedAndRemoveUntil(
             Routes.home, (Route<dynamic> route) => false);
       });
     } else {
-      Navigator.pop(context);
+      return Future.delayed(Duration(seconds: 1), () {
+        Navigator.pop(context);
+      });
     }
   }
 
