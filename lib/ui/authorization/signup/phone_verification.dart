@@ -63,18 +63,23 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
           color: Colors.black54,
         ),
         onTap: () {
-          Map args = ModalRoute.of(context).settings.arguments;
-          if (args['fromRegister'] != null) {
-            Future.delayed(Duration(seconds: 1), () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  Routes.home, (Route<dynamic> route) => false);
-            });
-          }
-          Navigator.pop(context);
+          _onWillPop();
         },
       ),
       centerTitle: true,
     );
+  }
+
+  void _onWillPop() {
+    Map args = ModalRoute.of(context).settings.arguments;
+    if (args['fromRegister'] != null) {
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            Routes.home, (Route<dynamic> route) => false);
+      });
+    } else {
+      Navigator.pop(context);
+    }
   }
 
   // Return "Verification Code" label
@@ -325,16 +330,19 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     _screenSize = MediaQuery.of(context).size;
-    return new Scaffold(
-      appBar: _getAppbar,
-      backgroundColor: Colors.white,
-      body: loading == true
-          ? Center(child: CircularProgressIndicator())
-          : Container(
-              width: _screenSize.width,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: _getAppbar,
+        backgroundColor: Colors.white,
+        body: loading == true
+            ? Center(child: CircularProgressIndicator())
+            : Container(
+                width: _screenSize.width,
 //        padding: new EdgeInsets.only(bottom: 16.0),
-              child: _getInputPart,
-            ),
+                child: _getInputPart,
+              ),
+      ),
     );
   }
 
