@@ -41,7 +41,6 @@ class _SettingsScreenState extends State<SettingsScreen>
   final cropKey = GlobalKey<ImgCropState>();
 
   Future getImage(type) async {
-    //عکس =جوابیکه از فیوچر میاد
     var image = await _imagePicker.getImage(source: ImageSource.gallery);
     if (image == null) return;
 
