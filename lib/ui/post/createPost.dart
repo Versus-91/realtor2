@@ -22,6 +22,7 @@ import 'package:flushbar/flushbar_route.dart' as route;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -33,10 +34,14 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   int selectedItem;
   int cityDropdownValue;
   int _value;
   int _propertyTypevalue;
+  final _imagePicker = ImagePicker();
+
   String _categoryText = '';
   String _fileName;
   List<PlatformFile> _paths;
@@ -87,6 +92,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   void _openFileExplorer() async {
     try {
       var items = (await FilePicker.platform.pickFiles(
+        allowCompression: true,
         type: _pickingType,
         allowMultiple: _multiPick,
         allowedExtensions: (_extension?.isNotEmpty ?? false)
@@ -99,25 +105,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       }
     } on PlatformException catch (e) {
       print("Unsupported operation" + e.toString());
-    } catch (ex) {}
+    } catch (ex) {
+      print(ex.toString());
+    }
     if (!mounted) return;
     setState(() {
       _fileName = _paths != null ? _paths.map((e) => e.name).toString() : '...';
     });
   }
 
-  // void _clearCachedFiles() {
-  //   FilePicker.platform.clearTemporaryFiles().then((result) {
-  //     _scaffoldKey.currentState.showSnackBar(
-  //       SnackBar(
-  //         backgroundColor: result ? Colors.green : Colors.red,
-  //         content: Text((result
-  //             ? 'Temporary files removed with success.'
-  //             : 'Failed to clean temporary files')),
-  //       ),
-  //     );
-  //   });
-  // }
+  void _clearCachedFiles() {
+    FilePicker.platform.clearTemporaryFiles().then((result) {});
+  }
 
   @override
   void didChangeDependencies() {
@@ -638,6 +637,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           filename: _paths[i].name));
     }
     _store.uploadImages(multipart, id.toString()).then((value) {
+      _clearCachedFiles();
       successPost(
         AppLocalizations.of(context).translate('succes_send'),
       );
