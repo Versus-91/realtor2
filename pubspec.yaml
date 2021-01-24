@@ -13,6 +13,7 @@ environment:
   sdk: '>=2.8.0 <3.0.0'
 
 dependencies:
+  firebase_messaging: ^7.0.3
   flutter_masked_text: ^0.8.0
   settings_ui: ^0.4.0
   incrementally_loading_listview: ^0.3.0
