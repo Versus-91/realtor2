@@ -68,15 +68,15 @@ class _HomeScreenState extends State<HomeScreen> {
       PersistentBottomNavBarItem(
         icon: Icon(Icons.search),
         title: AppLocalizations.of(context).translate('search'),
-        activeColor: Colors.teal,
+        activeColor: Colors.amber,
         inactiveColor: Colors.amber,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.add),
         title: AppLocalizations.of(context).translate('add_post'),
-        activeColor: Colors.blueAccent,
+        activeColor: Colors.green,
         inactiveColor: Colors.green,
-        activeColorAlternate: Colors.deepPurpleAccent,
+        activeColorAlternate: Colors.green,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.favorite),
@@ -88,8 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
       PersistentBottomNavBarItem(
         icon: Icon(Icons.settings),
         title: AppLocalizations.of(context).translate('settings'),
-        activeColor: Colors.indigo,
-        inactiveColor: Colors.black,
+        activeColor: Colors.grey,
+        inactiveColor: Colors.grey,
       ),
     ];
   }

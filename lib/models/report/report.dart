@@ -1,18 +1,18 @@
 class Report {
   String description;
-  int optionId;
+  int reportOptionId;
   int postId;
-  Report({this.description, this.optionId, this.postId});
+  Report({this.description, this.reportOptionId, this.postId});
 
   factory Report.fromMap(Map<String, dynamic> json) => Report(
         description: json["description"],
-        optionId: json["optionId"],
+        reportOptionId: json["reportOptionId"],
         postId: json["postId"],
       );
 
   Map<String, dynamic> toMap() => {
         "description": description,
-        " optionId": optionId,
-        " postId": postId,
+        "reportOptionId": reportOptionId,
+        "postId": postId,
       };
 }

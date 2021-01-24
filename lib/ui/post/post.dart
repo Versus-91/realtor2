@@ -30,8 +30,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   Animation animation;
   int currentState = 0;
   Future getOptions;
-  PostFormStore _store = PostFormStore(appComponent.getRepository());
-
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -145,33 +144,6 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                         ],
                       ],
                     )),
-                // Positioned(
-                //   top: 0,
-                //   child: Container(
-                //     width: MediaQuery.of(context).size.width,
-                //     height: 50,
-                //     color: Colors.blueGrey[700],
-                //     child: Row(
-                //       children: [
-                //         IconButton(
-                //             icon: Icon(
-                //               Icons.arrow_back,
-                //               color: Colors.white,
-                //             ),
-                //             onPressed: () {
-                //               Navigator.pop(context);
-                //             }),
-                //         Text(
-                //           ' ${widget.post.district.city.name} - ${widget.post.district.name} ',
-                //           style: TextStyle(
-                //               fontSize: 20,
-                //               color: Colors.white,
-                //               fontWeight: FontWeight.normal),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
               ],
             ),
             Container(
@@ -423,7 +395,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
               child: Center(
                   child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: 250,
+                height: 260,
                 child: MapScreen(
                   latitude: widget.post.latitude,
                   longitude: widget.post.longitude,
@@ -512,41 +484,31 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      }),
-                  Center(child: Text("گزارش ملک")),
-                ],
-              ),
-              content: Container(
-                height: MediaQuery.of(context).size.height / 4,
-                child: Column(
-                  children: <Widget>[
-                    Text("لطفا گزینه مورد نظر خود را وارد کنید."),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    FutureBuilder(
-                      future: getOptions,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          List<DropdownMenuItem<int>> menuItems = snapshot
-                              .data.options
-                              .map<DropdownMenuItem<int>>((item) {
-                            return DropdownMenuItem<int>(
-                              child: Text(item.name),
-                              value: item.id,
-                            );
-                          }).toList();
+              title: Center(child: Text("گزارش ملک")),
+              content: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Text("لطفا گزینه مورد نظر خود را وارد کنید."),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      FutureBuilder(
+                        future: getOptions,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            List<DropdownMenuItem<int>> menuItems = snapshot
+                                .data.options
+                                .map<DropdownMenuItem<int>>((item) {
+                              return DropdownMenuItem<int>(
+                                child: Text(item.name),
+                                value: item.id,
+                              );
+                            }).toList();
 
-                          return DropdownButtonFormField<int>(
-                            decoration: InputDecoration(
+                            return DropdownButtonFormField<int>(
+                              decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Colors.transparent)),
@@ -557,32 +519,44 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                                 // hintText: AppLocalizations.of(context)
                                 //     .translate('city'),
                                 contentPadding: EdgeInsets.all(10),
-                                errorText: _store.formErrorStore.district),
-                            hint: Text('یک گزینه را انتخاب کنید'),
-                            value: _chosenValue,
-                            items: menuItems,
-                            onChanged: (int value) {
-                              setState(() {
-                                _chosenValue = value;
-                                _store.setReport(_chosenValue);
-                              });
-                            },
-                          );
-                        } else {
-                          return Flexible(
-                              child: Center(child: LinearProgressIndicator()));
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    _buildDescriptionField()
-                  ],
+                              ),
+                              hint: Text(
+                                'یک گزینه را انتخاب کنید',
+                                style: TextStyle(color: Colors.blueGrey),
+                              ),
+                              value: _chosenValue,
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'این فیلد باید انتخاب شود';
+                                }
+                                return null;
+                              },
+                              autovalidateMode: AutovalidateMode.always,
+                              items: menuItems,
+                              onChanged: (int value) {
+                                setState(() {
+                                  _chosenValue = value;
+                                });
+                              },
+                            );
+                          } else {
+                            return Center(child: Text("Loading..."));
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      _buildDescriptionField()
+                    ],
+                  ),
                 ),
               ),
+              actionsPadding:
+                  EdgeInsets.only(left: MediaQuery.of(context).size.width / 5),
               actions: <Widget>[
                 registerButton(),
+                cancelButton(),
               ],
             );
           },
@@ -591,29 +565,45 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
     );
   }
 
+  void resetReport() {
+    _descriptionController.clear();
+    _chosenValue = null;
+  }
+
+  Widget cancelButton() {
+    return FlatButton(
+        color: Colors.red,
+        textColor: Colors.white,
+        child: Text(AppLocalizations.of(context).translate('cancel')),
+        onPressed: () async {
+          resetReport();
+          Navigator.pop(context);
+        });
+  }
+
   Widget registerButton() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(vertical: 15),
-      alignment: Alignment.center,
-      child: CustomButton(
-          color: Colors.red,
-          textColor: Colors.white,
-          text: AppLocalizations.of(context).translate('register_info'),
-          onPressed: () async {
+    return FlatButton(
+        color: Colors.green,
+        textColor: Colors.white,
+        child: Text(AppLocalizations.of(context).translate('register_info')),
+        onPressed: () async {
+          FocusScope.of(context).requestFocus(FocusNode());
+          if (_formKey.currentState.validate()) {
             appComponent
                 .getRepository()
                 .insertReport(Report(
                     postId: widget.post.id,
-                    optionId: _chosenValue,
+                    reportOptionId: _chosenValue,
                     description: _descriptionController.text))
                 .then((value) async {
+              resetReport();
+              Navigator.of(context).pop();
               successMessage('گزارش با موفقیت ارسال شد');
-            }).catchError(_showErrorMessage(
-              "خطا در ارسال",
-            ));
-          }),
-    );
+            }).catchError((error) => _showErrorMessage(
+                      "خطا در ارسال",
+                    ));
+          }
+        });
   }
 
   Widget successMessage(String message) {
@@ -629,7 +619,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
     return SizedBox.shrink();
   }
 
-  _showErrorMessage(String message) {
+  Widget _showErrorMessage(String message) {
     Future.delayed(Duration(milliseconds: 0), () {
       if (message != null && message.isNotEmpty) {
         FlushbarHelper.createError(
@@ -649,7 +639,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
       children: <Widget>[
         Text(
           AppLocalizations.of(context).translate('description'),
-          style: TextStyle(color: Colors.red[300]),
+          style: TextStyle(color: Colors.black),
         ),
         TextField(
           decoration: InputDecoration(
@@ -670,13 +660,6 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
       ],
     );
   }
-
-  // String validateDescription(String value) {
-  //   if (value.isEmpty) {
-  //     return "این فیلد باید پر شود";
-  //   }
-  //   return null;
-  // }
 
   Widget amenities(
     String url1,
