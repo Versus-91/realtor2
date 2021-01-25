@@ -18,6 +18,7 @@ dependencies:
   incrementally_loading_listview: ^0.3.0
   url_launcher: ^5.7.10
   image: ^2.1.19
+  firebase_messaging: ^7.0.3
   flutter:
     sdk: flutter
 

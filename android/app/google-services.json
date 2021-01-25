@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "435784724600",
+    "firebase_url": "https://abcde-f76db.firebaseio.com",
+    "project_id": "abcde-f76db",
+    "storage_bucket": "abcde-f76db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435784724600:android:653f16471c7c41174fbd8d",
+        "android_client_info": {
+          "package_name": "com.kamyab.realtoorapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435784724600-gk1bv4psnv4hrk55pr3anqqikv8pa583.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5maiz02DW5kDqW1S_YXIvCmVGgTlhCaQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "435784724600-gk1bv4psnv4hrk55pr3anqqikv8pa583.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
