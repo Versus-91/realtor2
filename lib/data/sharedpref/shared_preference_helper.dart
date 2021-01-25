@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants/preferences.dart';
@@ -23,10 +24,22 @@ class SharedPreferenceHelper {
     });
   }
 
+  Future<void> saveUserId(int id) async {
+    return _sharedPreference.then((preference) {
+      preference.setInt(Preferences.userId, id);
+    });
+  }
+
   Future<void> removeAuthToken() async {
-   
     return _sharedPreference.then((preference) {
       preference.remove(Preferences.auth_token);
+    });
+  }
+
+  Future<void> removeUser() async {
+    return _sharedPreference.then((preference) {
+      preference.remove(Preferences.userId);
+      preference.remove(Preferences.userId);
     });
   }
 
