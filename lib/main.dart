@@ -24,6 +24,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:inject/inject.dart';
 import 'package:provider/provider.dart';
 
+import 'notifications/notification_manageer.dart';
+
 // global instance for app component
 AppComponent appComponent;
 
@@ -66,6 +68,8 @@ class MyApp extends StatelessWidget {
       LanguageStore(appComponent.getRepository());
   final TypeStore _typeStore = TypeStore(appComponent.getRepository());
   final UserStore _userStore = UserStore(appComponent.getRepository());
+  final PushNotificationsManager _firebaseMessaging =
+      PushNotificationsManager();
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +85,7 @@ class MyApp extends StatelessWidget {
         Provider<TypeStore>(create: (_) => _typeStore),
         Provider<UserStore>(create: (_) => _userStore),
         Provider<AmenityStore>(create: (_) => _amenityStore),
+        Provider<PushNotificationsManager>(create: (_) => _firebaseMessaging),
       ],
       child: Observer(
         name: 'global-observer',

@@ -1,6 +1,7 @@
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/main.dart';
+import 'package:boilerplate/notifications/notification_manageer.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/ui/authorization/login/blaziercontainer.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -9,6 +10,7 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../routes.dart';
@@ -27,6 +29,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _userNameController = TextEditingController();
   final _passwordNameController = TextEditingController();
+  @override
+  void initState() {
+    Provider.of<PushNotificationsManager>(context, listen: false).init();
+    super.initState();
+  }
 
   Widget _submitButton() {
     return Container(
@@ -227,7 +234,6 @@ class _LoginPageState extends State<LoginPage> {
                                 TextField(
                                     controller: _userNameController,
                                     onChanged: (value) {
-                                   
                                       widget.formStore.setUsernameOrEmail(
                                           _userNameController.text);
                                     },
