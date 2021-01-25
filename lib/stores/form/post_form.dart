@@ -69,8 +69,7 @@ abstract class _PostFormStore with Store {
   Point point;
   @observable
   int selectedCity;
-  @observable
-  int selectedReport;
+
   @observable
   int selectedDistrict;
   @observable
@@ -128,11 +127,6 @@ abstract class _PostFormStore with Store {
   @action
   void setDistrict(int value) {
     selectedDistrict = value;
-  }
-
-  @action
-  void setReport(int value) {
-    selectedReport = value;
   }
 
   @action
@@ -202,7 +196,6 @@ abstract class _PostFormStore with Store {
     validateLng(longitude);
     validateDistrict(selectedDistrict);
     validateAge(ageHome);
-    validateReport(selectedReport);
     // validateRahnPrice(rahnPrice);
     // validateRentPrice(rentPrice);
     validateDescription(description);
@@ -387,15 +380,6 @@ abstract class _PostFormStore with Store {
   }
 
   @action
-  void validateReport(int reportId) {
-    if (reportId == null) {
-      formErrorStore.report = "گزینه ای انتخاب نشده است";
-    } else {
-      formErrorStore.report = null;
-    }
-  }
-
-  @action
   void validateDistrict(int districtId) {
     if (districtId == null) {
       formErrorStore.district = "منطقه انتخاب نشده است";
@@ -443,8 +427,6 @@ class PostFormErrorStore = _PostFormErrorStore with _$PostFormErrorStore;
 abstract class _PostFormErrorStore with Store {
   @observable
   String titel;
-  @observable
-  String report;
 
   @observable
   String area;
@@ -471,7 +453,6 @@ abstract class _PostFormErrorStore with Store {
       titel == null &&
       district == null &&
       typeHome == null &&
-      report == null &&
       area == null &&
       buyPrice == null &&
       rentPrice == null &&

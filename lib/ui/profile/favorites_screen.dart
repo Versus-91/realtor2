@@ -14,7 +14,7 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen>
     with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
-  bool loading = true;
+
   var initialIndex = 0;
   @override
   void initState() {
@@ -62,14 +62,6 @@ class _FavoritesScreenState extends State<FavoritesScreen>
   }
 
   Widget _buildListView() {
-    // if (loading == true) {
-    //   return Center(
-    //     child: CircularProgressIndicator(),
-    //   );
-    // } else {
-    //   if
-    // }
-
     return FutureBuilder(
       future: appComponent.getRepository().getFavoritesList(),
       builder: (context, snapshot) {

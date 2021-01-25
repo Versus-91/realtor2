@@ -3,7 +3,7 @@
   "user_email": " ایمیل یا نام کاربری",
   "user_name":"نام کاربری ",
   "Name":"نام ",
-  "report":"گزارش اشکال ",
+  "report":"گزارش",
   "family":"نام خانوادگی ",
   "user_password": "رمز",
   "currency_type": "(دالر)",
@@ -18,6 +18,7 @@
   "error": "گزارش خطا",
 
   "register_info": "ثبت ",
+  "cancel": "لغو ",
   "skip": "رد شدن",
   "my_details": "اطلاعات حساب ",
   "notifications": "فعالسازی اعلان ها",
