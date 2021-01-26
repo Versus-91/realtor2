@@ -54,29 +54,29 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
               children: <Widget>[
                 getAppBarUI(),
                 Expanded(
-                  child: NestedScrollView(
-                    controller: _scrollController,
-                    headerSliverBuilder:
-                        (BuildContext context, bool innerBoxIsScrolled) {
-                      return <Widget>[
-                        SliverPersistentHeader(
-                          pinned: true,
-                          floating: true,
-                          delegate: ContestTabHeader(
-                            getFilterBarUI(),
-                          ),
-                        ),
-                      ];
-                    },
-                    body: Observer(
-                      builder: (context) {
-                        if (_postStore.loading == true) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          if (_postStore.postList != null) {
-                            return RefreshIndicator(
+                  child: Observer(
+                    builder: (context) {
+                      if (_postStore.loading == true) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        if (_postStore.postList != null) {
+                          return NestedScrollView(
+                            controller: _scrollController,
+                            headerSliverBuilder: (BuildContext context,
+                                bool innerBoxIsScrolled) {
+                              return <Widget>[
+                                SliverPersistentHeader(
+                                  pinned: true,
+                                  floating: true,
+                                  delegate: ContestTabHeader(
+                                    getFilterBarUI(),
+                                  ),
+                                ),
+                              ];
+                            },
+                            body: RefreshIndicator(
                               child: IncrementallyLoadingListView(
                                 loadMore: () async {
                                   var request =
@@ -121,44 +121,44 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                 await _postStore.getPosts(
                                     request: _filterForm.applyFilters());
                               },
-                            );
-                          } else {
-                            return Stack(
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset("assets/images/search.png"),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                  ],
-                                ),
-                                Positioned(
-                                  top: MediaQuery.of(context).size.height / 1.8,
-                                  right: MediaQuery.of(context).size.width / 3,
-                                  child: RaisedButton.icon(
-                                    color: Colors.indigo,
-                                    textColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    label: Text(
-                                      AppLocalizations.of(context)
-                                          .translate('search'),
-                                    ),
-                                    onPressed: () {
-                                      openFilterScreen();
-                                    },
-                                    icon: Icon(Icons.search),
+                            ),
+                          );
+                        } else {
+                          return Stack(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset("assets/images/search.png"),
+                                  SizedBox(
+                                    height: 10,
                                   ),
-                                )
-                              ],
-                            );
-                          }
+                                ],
+                              ),
+                              Positioned(
+                                top: MediaQuery.of(context).size.height / 1.8,
+                                right: MediaQuery.of(context).size.width / 3,
+                                child: RaisedButton.icon(
+                                  color: Colors.green[400],
+                                  textColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  label: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('search'),
+                                  ),
+                                  onPressed: () {
+                                    openFilterScreen();
+                                  },
+                                  icon: Icon(Icons.search),
+                                ),
+                              )
+                            ],
+                          );
                         }
-                      },
-                    ),
+                      }
+                    },
                   ),
                 ),
 

@@ -198,7 +198,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
                 Routes.login, (Route<dynamic> route) => false);
           },
-          icon: Icon(Icons.login_outlined),
+          icon: Icon(Icons.person),
         ),
       );
     } else {

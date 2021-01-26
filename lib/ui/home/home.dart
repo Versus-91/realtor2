@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
       PersistentBottomNavBarItem(
         icon: Icon(Icons.favorite),
         title: AppLocalizations.of(context).translate('favarits'),
-        activeColor: Colors.blueAccent,
+        activeColor: Colors.redAccent,
         inactiveColor: Colors.redAccent,
         activeColorAlternate: Colors.red,
       ),
