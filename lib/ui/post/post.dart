@@ -4,8 +4,7 @@ import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/optionreport/optionReport.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/report/report.dart';
-import 'package:boilerplate/stores/form/post_form.dart';
-import 'package:boilerplate/ui/authorization/login/custom_button.dart';
+
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -30,6 +29,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   Animation animation;
   int currentState = 0;
   Future getOptions;
+  bool isSendigReport = false;
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -227,7 +227,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                       ),
                       Divider(
                         endIndent: MediaQuery.of(context).size.width / 1.5,
-                        color: Colors.blue,
+                        color: Colors.blueGrey,
                         thickness: 1,
                       ),
                       SizedBox(
@@ -293,7 +293,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: VerticalDivider(
-                              color: Colors.blue,
+                              color: Colors.blueGrey,
                               width: 10,
                               endIndent: 4,
                             ),
@@ -310,7 +310,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: VerticalDivider(
-                              color: Colors.blue,
+                              color: Colors.blueGrey,
                               width: 10,
                               endIndent: 4,
                             ),
@@ -327,7 +327,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: VerticalDivider(
-                              color: Colors.blue,
+                              color: Colors.blueGrey,
                               width: 10,
                               endIndent: 4,
                             ),
@@ -348,7 +348,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                   ),
                   Divider(
                     endIndent: MediaQuery.of(context).size.width / 1.5,
-                    color: Colors.blue,
+                    color: Colors.blueGrey,
                     thickness: 1,
                   ),
                   descriptionFeild('${widget.post.description}'),
@@ -485,79 +485,85 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
               title: Center(child: Text("گزارش ملک")),
-              content: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      Text("لطفا گزینه مورد نظر خود را وارد کنید."),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      FutureBuilder(
-                        future: getOptions,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            List<DropdownMenuItem<int>> menuItems = snapshot
-                                .data.options
-                                .map<DropdownMenuItem<int>>((item) {
-                              return DropdownMenuItem<int>(
-                                child: Text(item.name),
-                                value: item.id,
-                              );
-                            }).toList();
+              content: isSendigReport == true
+                  ? CircularProgressIndicator()
+                  : SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: <Widget>[
+                            Text("لطفا گزینه مورد نظر خود را وارد کنید."),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            FutureBuilder(
+                              future: getOptions,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  List<DropdownMenuItem<int>> menuItems =
+                                      snapshot.data.options
+                                          .map<DropdownMenuItem<int>>((item) {
+                                    return DropdownMenuItem<int>(
+                                      child: Text(item.name),
+                                      value: item.id,
+                                    );
+                                  }).toList();
 
-                            return DropdownButtonFormField<int>(
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent)),
-                                // labelText: AppLocalizations.of(context)
-                                //     .translate('city'),
-                                fillColor: Color(0xfff3f3f4),
-                                filled: true,
-                                // hintText: AppLocalizations.of(context)
-                                //     .translate('city'),
-                                contentPadding: EdgeInsets.all(10),
-                              ),
-                              hint: Text(
-                                'یک گزینه را انتخاب کنید',
-                                style: TextStyle(color: Colors.blueGrey),
-                              ),
-                              value: _chosenValue,
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'این فیلد باید انتخاب شود';
+                                  return DropdownButtonFormField<int>(
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.transparent)),
+                                      // labelText: AppLocalizations.of(context)
+                                      //     .translate('city'),
+                                      fillColor: Color(0xfff3f3f4),
+                                      filled: true,
+                                      // hintText: AppLocalizations.of(context)
+                                      //     .translate('city'),
+                                      contentPadding: EdgeInsets.all(10),
+                                    ),
+                                    hint: Text(
+                                      'یک گزینه را انتخاب کنید',
+                                      style: TextStyle(color: Colors.blueGrey),
+                                    ),
+                                    value: _chosenValue,
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'این فیلد باید انتخاب شود';
+                                      }
+                                      return null;
+                                    },
+                                    autovalidateMode: AutovalidateMode.always,
+                                    items: menuItems,
+                                    onChanged: (int value) {
+                                      setState(() {
+                                        _chosenValue = value;
+                                      });
+                                    },
+                                  );
+                                } else {
+                                  return Center(child: Text("Loading..."));
                                 }
-                                return null;
                               },
-                              autovalidateMode: AutovalidateMode.always,
-                              items: menuItems,
-                              onChanged: (int value) {
-                                setState(() {
-                                  _chosenValue = value;
-                                });
-                              },
-                            );
-                          } else {
-                            return Center(child: Text("Loading..."));
-                          }
-                        },
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            _buildDescriptionField()
+                          ],
+                        ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      _buildDescriptionField()
-                    ],
-                  ),
-                ),
-              ),
+                    ),
               actionsPadding:
                   EdgeInsets.only(left: MediaQuery.of(context).size.width / 5),
-              actions: <Widget>[
-                registerButton(),
-                cancelButton(),
-              ],
+              actions: isSendigReport == false
+                  ? <Widget>[
+                      registerButton(),
+                      cancelButton(),
+                    ]
+                  : <Widget>[
+                      SizedBox.shrink(),
+                    ],
             );
           },
         );
@@ -589,6 +595,9 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
         onPressed: () async {
           FocusScope.of(context).requestFocus(FocusNode());
           if (_formKey.currentState.validate()) {
+            setState(() {
+              isSendigReport = true;
+            });
             appComponent
                 .getRepository()
                 .insertReport(Report(
@@ -597,11 +606,20 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                     description: _descriptionController.text))
                 .then((value) async {
               resetReport();
+
               Navigator.of(context).pop();
               successMessage('گزارش با موفقیت ارسال شد');
-            }).catchError((error) => _showErrorMessage(
-                      "خطا در ارسال",
-                    ));
+              setState(() {
+                isSendigReport = false;
+              });
+            }).catchError((error) {
+              setState(() {
+                isSendigReport = false;
+              });
+              return _showErrorMessage(
+                "خطا در ارسال",
+              );
+            });
           }
         });
   }

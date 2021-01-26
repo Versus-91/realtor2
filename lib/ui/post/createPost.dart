@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/category/category.dart';
@@ -79,7 +80,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   TypeStore _typeStore;
   AmenityStore _amenityStore;
   //focus node:-----------------------------------------------------------------
-
+  bool loggedIn;
   //stores:---------------------------------------------------------------------
   PostFormStore _store = PostFormStore(appComponent.getRepository());
 
@@ -87,6 +88,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   void initState() {
     super.initState();
     _controller.addListener(() => _extension = _controller.text);
+    getUserLogin();
+  }
+
+  void getUserLogin() async {
+    var sharePerf = await SharedPreferences.getInstance();
+    setState(() {
+      loggedIn =
+          sharePerf.getBool(Preferences.is_logged_in) == true ? true : false;
+    });
   }
 
   void _openFileExplorer() async {
@@ -173,48 +183,76 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   // body methods:--------------------------------------------------------------
   Widget _buildBody() {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
-
-    return Observer(builder: (context) {
-      if (_store.loading == true) {
-        return Observer(
-          builder: (context) {
-            return Visibility(
-              visible: _store.loading,
-              child: CustomProgressIndicatorWidget(),
-            );
-          },
-        );
-      } else {
-        return SingleChildScrollView(
-          reverse: false,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: bottom),
-            child: Material(
-              child: Stack(
-                children: <Widget>[
-                  _handleErrorMessage(),
-                  Column(
-                    children: <Widget>[
-                      _buildRightSide(),
-                    ],
-                  ),
-                  Observer(
-                    builder: (context) {
-                      return _store.success
-                          ? successPost(
-                              AppLocalizations.of(context)
-                                  .translate('succes_send'),
-                            )
-                          : _showErrorMessage(_store.errorStore.errorMessage);
-                    },
-                  ),
-                ],
+    if (loggedIn == false) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            FlatButton.icon(
+              color: Colors.grey,
+              splashColor: Colors.red[100],
+              icon: const Icon(
+                Icons.login_outlined,
+                size: 18,
+                color: Colors.white,
+              ),
+              label: Text(
+                  AppLocalizations.of(context).translate('login_btn_sign_in'),
+                  style: TextStyle(color: Colors.black, fontSize: 20)),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true)
+                    .pushNamedAndRemoveUntil(
+                        Routes.login, (Route<dynamic> route) => false);
+              },
+            ),
+            Text(".برای ثبت اعلان باید عضو شده باشید"),
+          ],
+        ),
+      );
+    } else {
+      return Observer(builder: (context) {
+        if (_store.loading == true) {
+          return Observer(
+            builder: (context) {
+              return Visibility(
+                visible: _store.loading,
+                child: CustomProgressIndicatorWidget(),
+              );
+            },
+          );
+        } else {
+          return SingleChildScrollView(
+            reverse: false,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: bottom),
+              child: Material(
+                child: Stack(
+                  children: <Widget>[
+                    _handleErrorMessage(),
+                    Column(
+                      children: <Widget>[
+                        _buildRightSide(),
+                      ],
+                    ),
+                    Observer(
+                      builder: (context) {
+                        return _store.success
+                            ? successPost(
+                                AppLocalizations.of(context)
+                                    .translate('succes_send'),
+                              )
+                            : _showErrorMessage(_store.errorStore.errorMessage);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      }
-    });
+          );
+        }
+      });
+    }
   }
 
   Widget _buildRightSide() {
