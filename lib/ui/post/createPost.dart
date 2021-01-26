@@ -186,7 +186,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     if (loggedIn == false) {
       return Center(
         child: RaisedButton.icon(
-          color: Colors.indigo,
+          color: Colors.green[400],
           textColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
