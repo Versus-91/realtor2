@@ -185,35 +185,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     if (loggedIn == false) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            FlatButton.icon(
-              color: Colors.grey,
-              splashColor: Colors.red[100],
-              icon: const Icon(
-                Icons.login_outlined,
-                size: 18,
-                color: Colors.white,
-              ),
-              label: Text(
-                  AppLocalizations.of(context).translate('login_btn_sign_in'),
-                  style: TextStyle(color: Colors.black, fontSize: 20)),
-              onPressed: () {
-                Navigator.of(context, rootNavigator: true)
-                    .pushNamedAndRemoveUntil(
-                        Routes.login, (Route<dynamic> route) => false);
-              },
-            ),
-            Text(
-              AppLocalizations.of(context).translate('error-post'),
-              style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.black,
-                  fontWeight: FontWeight.normal),
-            ),
-          ],
+        child: RaisedButton.icon(
+          color: Colors.indigo,
+          textColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          label: Text(
+            AppLocalizations.of(context).translate('error-post'),
+          ),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+                Routes.login, (Route<dynamic> route) => false);
+          },
+          icon: Icon(Icons.login_outlined),
         ),
       );
     } else {
