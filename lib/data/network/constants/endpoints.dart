@@ -5,10 +5,10 @@ class Endpoints {
   static const String baseUrl = "http://hmahmudi-001-site2.gtempurl.com";
 
   // receiveTimeout
-  static const int receiveTimeout = 50000;
+  static const int receiveTimeout = 5000;
 
   // connectTimeout
-  static const int connectionTimeout = 30000;
+  static const int connectionTimeout = 3000;
   // Amenities endpoints
   static const String getAmenities =
       baseUrl + "/api/services/app/Amenity/GetAll";

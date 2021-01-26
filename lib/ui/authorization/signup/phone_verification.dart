@@ -76,10 +76,12 @@ class _OtpState extends State<Otp> with SingleTickerProviderStateMixin {
       return Future.delayed(Duration(seconds: 1), () {
         Navigator.of(context).pushNamedAndRemoveUntil(
             Routes.home, (Route<dynamic> route) => false);
+        return true;
       });
     } else {
       return Future.delayed(Duration(seconds: 1), () {
         Navigator.pop(context);
+        return true;
       });
     }
   }

@@ -345,7 +345,7 @@ abstract class _FormStore with Store {
       }).catchError((e) {
         loading = false;
         success = false;
-        if (e.response != null) {
+        if (e?.response != null) {
           if (e.response
               .toString()
               .toLowerCase()
