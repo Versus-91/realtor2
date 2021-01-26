@@ -206,7 +206,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         Routes.login, (Route<dynamic> route) => false);
               },
             ),
-            Text(".برای ثبت اعلان باید عضو شده باشید"),
+            Text(
+              AppLocalizations.of(context).translate('error-post'),
+              style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal),
+            ),
           ],
         ),
       );
