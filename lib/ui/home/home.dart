@@ -8,6 +8,7 @@ import 'package:boilerplate/ui/profile/pages/settings.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,8 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
       PersistentBottomNavBarItem(
         icon: Icon(Icons.search),
         title: AppLocalizations.of(context).translate('search'),
-        activeColor: Colors.amber,
-        inactiveColor: Colors.amber,
+        activeColor: Colors.purpleAccent,
+        inactiveColor: Colors.purple,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.add),
@@ -88,8 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
       PersistentBottomNavBarItem(
         icon: Icon(Icons.settings),
         title: AppLocalizations.of(context).translate('settings'),
-        activeColor: Colors.grey,
-        inactiveColor: Colors.grey,
+        activeColor: Colors.black,
+        inactiveColor: Colors.black,
       ),
     ];
   }
@@ -147,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: RaisedButton(
                 child: Text("خروج "),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                 },
               ),
             ),
@@ -169,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
           duration: Duration(milliseconds: 200),
         ),
         navBarStyle:
-            NavBarStyle.style13, // Choose the nav bar style with this property
+            NavBarStyle.style9, // Choose the nav bar style with this property
       ),
     );
   }

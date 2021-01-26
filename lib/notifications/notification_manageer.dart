@@ -2,8 +2,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 class PushNotificationsManager {
   PushNotificationsManager._();
-
-  factory PushNotificationsManager() => _instance;
+  factory PushNotificationsManager() {
+    _instance.init();
+    return _instance;
+  }
 
   static final PushNotificationsManager _instance =
       PushNotificationsManager._();

@@ -29,11 +29,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _userNameController = TextEditingController();
   final _passwordNameController = TextEditingController();
-  @override
-  void initState() {
-    Provider.of<PushNotificationsManager>(context, listen: false).init();
-    super.initState();
-  }
 
   Widget _submitButton() {
     return Container(

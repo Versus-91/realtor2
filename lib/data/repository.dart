@@ -118,6 +118,7 @@ class Repository {
   Future authenticate(Login login) async {
     return await _postApi.login(login).then((result) async {
       await _sharedPrefsHelper.saveAuthToken(result["result"]["accessToken"]);
+      await _sharedPrefsHelper.saveAuthToken(result["result"]["userId"]);
       return result;
     }).catchError((error) {
       throw error;
@@ -297,4 +298,3 @@ class Repository {
     }).catchError((error) => throw error);
   }
 }
-
