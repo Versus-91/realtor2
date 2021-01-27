@@ -147,7 +147,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     width: 4,
                   ),
                   _userStore.user.isPhoneNumberConfirmed
-                      ? Text("تایید شده")
+                      ? Text("تایید شده",)
                       : Text("تایید نشده"),
                 ],
               ),
