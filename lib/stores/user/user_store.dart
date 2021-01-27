@@ -119,7 +119,6 @@ abstract class _UserStore with Store {
   Future getUser() async {
     final future = _repository.getUser();
     fetchFuture = ObservableFuture(future);
-
     future.then((item) {
       this.user = item;
     }).catchError((error) {

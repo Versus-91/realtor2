@@ -82,47 +82,72 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
           child: Form(
             child: Column(children: [
               Divider(),
-              Container(
-                height: 55,
-                child: TextField(
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  keyboardType: TextInputType.number,
-                  textDirection: TextDirection.ltr,
-                  controller: _newNumberController,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.edit),
-                    border: OutlineInputBorder(),
-                    labelText:
-                        AppLocalizations.of(context).translate('user_Number'),
+              Row(
+                children: [
+                  Flexible(
+                    flex: 3,
+                    child: Container(
+                      height: 50,
+                      child: TextField(
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        keyboardType: TextInputType.number,
+                        textDirection: TextDirection.ltr,
+                        controller: _newNumberController,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.edit),
+                          border: OutlineInputBorder(),
+                          labelText: AppLocalizations.of(context)
+                              .translate('user_Number'),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  VerticalDivider(),
+                  Flexible(
+                    flex: 1,
+                    child: CustomButton(
+                      textColor: Colors.white,
+                      color: Colors.green,
+                      text: AppLocalizations.of(context)
+                          .translate('register_info'),
+                      onPressed: () async {
+                        _userStore
+                            .changePhoneNumber(_newNumberController.text)
+                            .then((value) async {
+                          var result =
+                              await Navigator.of(context, rootNavigator: true)
+                                  .pushNamed(Routes.phoneNumberVerificationCode,
+                                      arguments: {
+                                'phone': _newNumberController.text
+                              });
+                          _newNumberController.text = result;
+                        }).catchError((error) {
+                          _showErrorMessage(
+                            "خطا در تغییر شماره همراه",
+                          );
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(vertical: 15),
-                alignment: Alignment.center,
-                child: CustomButton(
-                  textColor: Colors.white,
-                  color: Colors.red,
-                  text: AppLocalizations.of(context).translate('change_number'),
-                  onPressed: () async {
-                    _userStore
-                        .changePhoneNumber(_newNumberController.text)
-                        .then((value) async {
-                      var result = await Navigator.of(context,
-                              rootNavigator: true)
-                          .pushNamed(Routes.phoneNumberVerificationCode,
-                              arguments: {'phone': _newNumberController.text});
-                      _newNumberController.text = result;
-                    }).catchError((error) {
-                      _showErrorMessage(
-                        "خطا در تغییر شماره همراه",
-                      );
-                    });
-                  },
-                ),
+              Row(
+                children: <Widget>[
+                  Icon(
+                    _userStore.user.isPhoneNumberConfirmed
+                        ? Icons.check_circle_outline
+                        : Icons.radio_button_off_sharp,
+                    color: _userStore.user.isPhoneNumberConfirmed
+                        ? Colors.green
+                        : Colors.grey.withOpacity(0.5),
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text("تایید شده"),
+                ],
               ),
               SizedBox(
                 height: 20,
@@ -193,7 +218,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 padding: EdgeInsets.symmetric(vertical: 15),
                 alignment: Alignment.center,
                 child: CustomButton(
-                  color: Colors.red,
+                  color: Colors.green,
                   textColor: Colors.white,
                   text: AppLocalizations.of(context).translate('register_info'),
                   onPressed: () async {
