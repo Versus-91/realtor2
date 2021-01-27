@@ -15,6 +15,9 @@ class Endpoints {
   // post endpoints
   static const String getPosts = baseUrl + "/api/services/app/Post/GetAll";
   static const String createPosts = baseUrl + "/api/services/app/Post/create";
+  static const String saveFirebaseId =
+      baseUrl + "/api/services/app/notification/create";
+
   //city endpoints
   static const String getCities = baseUrl + "/api/services/app/City/GetAll";
   //district endpoints

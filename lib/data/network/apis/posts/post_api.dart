@@ -8,6 +8,7 @@ import 'package:boilerplate/models/authenticate/login.dart';
 import 'package:boilerplate/models/category/categori_list.dart';
 import 'package:boilerplate/models/city/city_list.dart';
 import 'package:boilerplate/models/district/district_list.dart';
+import 'package:boilerplate/models/notification/notification.dart';
 import 'package:boilerplate/models/optionreport/option_list.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/post/post_list.dart';
@@ -294,6 +295,15 @@ class PostApi {
     }
   }
 
+ Future saveFirebaseId(Notification notification) async {
+    try {
+      final res =
+          await _dioClient.post(Endpoints.saveFirebaseId, data: notification.toMap());
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
   Future<OptionList> getOptionsReport() async {
     try {
       final res = await _dioClient.get(Endpoints.getoptionsReport);

@@ -146,7 +146,9 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                   const SizedBox(
                     width: 4,
                   ),
-                  Text("تایید شده"),
+                  _userStore.user.isPhoneNumberConfirmed
+                      ? Text("تایید شده")
+                      : Text("تایید نشده"),
                 ],
               ),
               SizedBox(
