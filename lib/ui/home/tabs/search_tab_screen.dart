@@ -6,6 +6,7 @@ import 'package:boilerplate/ui/search/list_theme.dart';
 import 'package:boilerplate/ui/search/search.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/post_placeholder.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -124,21 +125,15 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                             ),
                           );
                         } else {
-                          return Stack(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset("assets/images/search.png"),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
-                              ),
-                              Positioned(
-                                top: MediaQuery.of(context).size.height / 1.8,
-                                right: MediaQuery.of(context).size.width / 3,
-                                child: RaisedButton.icon(
+                          return Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset("assets/images/search.png"),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                RaisedButton.icon(
                                   color: Colors.green[400],
                                   textColor: Colors.white,
                                   shape: RoundedRectangleBorder(
@@ -152,9 +147,9 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                                     openFilterScreen();
                                   },
                                   icon: Icon(Icons.search),
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           );
                         }
                       }
@@ -175,25 +170,28 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
             ),
           ),
           _handleErrorMessage(),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  right: 15, bottom: MediaQuery.of(context).size.height / 12),
-              child: FloatingActionButton(
-                heroTag: 'saveSearchButton',
-                child: Icon(Icons.save),
-                onPressed: () {
-                  var request = _filterForm.applyFilters();
-                  appComponent
-                      .getRepository()
-                      .saveSearch(request)
-                      .then((value) {
-                    FlushbarHelper.createSuccess(message: 'ذخیره شد.');
-                  }).catchError((err) {
-                    FlushbarHelper.createError(message: 'خطا در ذخیره سازی');
-                  });
-                },
+          Visibility(
+            visible: _postStore.postList != null,
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    right: 15, bottom: MediaQuery.of(context).size.height / 12),
+                child: FloatingActionButton(
+                  heroTag: 'saveSearchButton',
+                  child: Icon(Icons.save),
+                  onPressed: () {
+                    var request = _filterForm.applyFilters();
+                    appComponent
+                        .getRepository()
+                        .saveSearch(request)
+                        .then((value) {
+                      FlushbarHelper.createSuccess(message: 'ذخیره شد.');
+                    }).catchError((err) {
+                      FlushbarHelper.createError(message: 'خطا در ذخیره سازی');
+                    });
+                  },
+                ),
               ),
             ),
           ),

@@ -64,6 +64,8 @@ class _SearchScreenState extends State<SearchScreen> {
     false,
     false,
     false,
+    false,
+    false,
   ];
 
   @override
@@ -392,9 +394,11 @@ class _SearchScreenState extends State<SearchScreen> {
             );
           },
           noItemsFoundBuilder: (context) {
-            return Container(height: 45,
-              child: Padding(padding: EdgeInsets.only(top:5,right: 10),
-                              child: Text(
+            return Container(
+              height: 45,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5, right: 10),
+                child: Text(
                   AppLocalizations.of(context).translate('no_result'),
                   style: TextStyle(fontSize: 20, color: Colors.grey[400]),
                 ),
@@ -836,6 +840,16 @@ class _SearchScreenState extends State<SearchScreen> {
                     "+" +
                         AppLocalizations.of(context)
                             .transformNumbers(5.toString()),
+                  ),
+                  Text(
+                    "+" +
+                        AppLocalizations.of(context)
+                            .transformNumbers(10.toString()),
+                  ),
+                  Text(
+                    "+" +
+                        AppLocalizations.of(context)
+                            .transformNumbers(20.toString()),
                   ),
                 ],
                 onPressed: (int index) {
