@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/plugin/cropper.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
@@ -16,7 +15,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../main.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -32,9 +32,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   final _imagePicker = ImagePicker();
   AnimationController _rippleAnimationController;
   Future<Null> getSharedPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      loggedIn = prefs.getBool(Preferences.is_logged_in) ?? false;
+    setState(() async {
+      loggedIn = await appComponent.getRepository().isLoggedIn ?? false;
     });
   }
 
@@ -61,10 +60,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   void getUserLogin() async {
-    var sharePerf = await SharedPreferences.getInstance();
-    setState(() {
-      loggedIn =
-          sharePerf.getBool(Preferences.is_logged_in) == true ? true : false;
+    setState(() async {
+      loggedIn = await appComponent.getRepository().isLoggedIn ?? false;
     });
     if (loggedIn == true) {
       if (_userStore.user == null) _userStore.getUser();
@@ -251,13 +248,6 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Future Logout(BuildContext context) async {
-    return SharedPreferences.getInstance().then((preference) async {
-      preference.setBool(Preferences.is_logged_in, false);
-      preference.remove(Preferences.auth_token);
-      _userStore.setLoginState(false);
-      await _rippleAnimationController.forward();
-      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-          Routes.login, (Route<dynamic> route) => false);
-    });
+    return await appComponent.getRepository().logOut();
   }
 }

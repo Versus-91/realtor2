@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/category/category.dart';
@@ -106,10 +105,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   void getUserLogin() async {
-    var sharePerf = await SharedPreferences.getInstance();
-    setState(() {
-      loggedIn =
-          sharePerf.getBool(Preferences.is_logged_in) == true ? true : false;
+    setState(() async {
+      loggedIn = await appComponent.getRepository().isLoggedIn ?? false;
     });
   }
 

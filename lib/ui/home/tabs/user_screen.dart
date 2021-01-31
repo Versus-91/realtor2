@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:boilerplate/constants/constants.dart';
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
@@ -37,10 +36,8 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
   }
 
   void getUserLogin() async {
-    var sharePerf = await SharedPreferences.getInstance();
-    setState(() {
-      loggedIn =
-          sharePerf.getBool(Preferences.is_logged_in) == true ? true : false;
+    setState(() async {
+      loggedIn = await appComponent.getRepository().isLoggedIn ?? false;
     });
     // if (loggedIn == true) {
     //   if (widget.userStore?.user == null) widget.userStore.getUser();

@@ -1,6 +1,5 @@
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/main.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 import '../../routes.dart';
@@ -33,15 +32,10 @@ class _SplashScreenState extends State<MySplashScreen> {
   }
 
   Future<String> navigate() async {
-    return Future.delayed(
-        Duration(seconds: 2),
-        () => SharedPreferences.getInstance().then((prefs) {
-              var loggedIn = prefs.getBool(Preferences.is_logged_in) ?? false;
-              if (loggedIn == true) {
-                return Routes.home;
-              } else {
-                return Routes.login;
-              }
-            }));
+    return Future.delayed(Duration(seconds: 2), () {
+      return appComponent.getRepository().isLoggedIn.then((val) {
+        return val == true ? Routes.home : Routes.login;
+      });
+    });
   }
 }
