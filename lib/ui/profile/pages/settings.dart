@@ -31,11 +31,6 @@ class _SettingsScreenState extends State<SettingsScreen>
   UserStore _userStore;
   final _imagePicker = ImagePicker();
   AnimationController _rippleAnimationController;
-  Future<Null> getSharedPrefs() async {
-    setState(() async {
-      loggedIn = await appComponent.getRepository().isLoggedIn ?? false;
-    });
-  }
 
   final cropKey = GlobalKey<ImgCropState>();
 
@@ -60,8 +55,9 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   void getUserLogin() async {
-    setState(() async {
-      loggedIn = await appComponent.getRepository().isLoggedIn ?? false;
+    bool isLoggedIn = await appComponent.getRepository().isLoggedIn ?? false;
+    setState(() {
+      loggedIn = isLoggedIn;
     });
     if (loggedIn == true) {
       if (_userStore.user == null) _userStore.getUser();
@@ -72,7 +68,6 @@ class _SettingsScreenState extends State<SettingsScreen>
   void didChangeDependencies() {
     super.didChangeDependencies();
     _userStore = Provider.of<UserStore>(context);
-    getUserLogin();
   }
 
   @override

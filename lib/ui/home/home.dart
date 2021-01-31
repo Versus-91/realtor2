@@ -30,11 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
   UserStore _userStore;
   PostStore _postStore;
   PersistentTabController _controller;
-
   bool loggedIn = false;
+
   Future<Null> getSharedPrefs() async {
+    var isLoggedIn = await appComponent.getRepository().isLoggedIn ?? false;
     setState(() {
-      loggedIn = appComponent.getRepository().isLoggedIn ?? false;
+      loggedIn = isLoggedIn;
     });
   }
 

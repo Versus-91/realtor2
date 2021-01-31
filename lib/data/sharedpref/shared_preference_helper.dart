@@ -31,7 +31,8 @@ class SharedPreferenceHelper {
   }
 
   Future<void> setAuthData(dynamic result) async {
-    return saveAuthToken(result["result"]["accessToken"]).then((val) => saveUserId(result["result"]["userId"]));
+    return saveAuthToken(result["result"]["accessToken"])
+        .then((val) => saveUserId(result["result"]["userId"]));
   }
 
   Future<void> removeAuthToken() async {
@@ -55,7 +56,9 @@ class SharedPreferenceHelper {
 
   Future<bool> get isLoggedIn async {
     return _sharedPreference.then((preference) {
-      return preference.getString(Preferences.auth_token) ?? false;
+      return preference.getString(Preferences.auth_token) == null
+          ? false
+          : true;
     });
   }
 

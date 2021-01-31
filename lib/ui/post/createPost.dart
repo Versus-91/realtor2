@@ -105,8 +105,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   void getUserLogin() async {
-    setState(() async {
-      loggedIn = await appComponent.getRepository().isLoggedIn ?? false;
+    bool isLoggedIn = await appComponent.getRepository().isLoggedIn ?? false;
+    setState(() {
+      loggedIn = isLoggedIn;
     });
   }
 

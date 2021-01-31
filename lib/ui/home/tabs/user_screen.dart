@@ -36,8 +36,9 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
   }
 
   void getUserLogin() async {
-    setState(() async {
-      loggedIn = await appComponent.getRepository().isLoggedIn ?? false;
+    var isLoggedIn = await appComponent.getRepository().isLoggedIn ?? false;
+    setState(() {
+      loggedIn = isLoggedIn;
     });
     // if (loggedIn == true) {
     //   if (widget.userStore?.user == null) widget.userStore.getUser();
