@@ -1,7 +1,5 @@
 import 'package:boilerplate/constants/constants.dart';
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/main.dart';
-import 'package:boilerplate/notifications/notification_manageer.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/ui/authorization/login/blaziercontainer.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -10,8 +8,6 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../routes.dart';
 import 'custom_button.dart';
@@ -39,13 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         text: AppLocalizations.of(context).translate('login_btn_sign_in'),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          widget.formStore.login().then((value) {
-            if (value == true) {
-              SharedPreferences.getInstance().then((prefs) {
-                prefs.setBool(Preferences.is_logged_in, true);
-              });
-            }
-          });
+          widget.formStore.login().then((value) {});
         },
       ),
     );

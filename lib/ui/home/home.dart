@@ -1,3 +1,4 @@
+import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
@@ -11,9 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/sharedpref/constants/preferences.dart';
 import '../../routes.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,9 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool loggedIn = false;
   Future<Null> getSharedPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      loggedIn = prefs.getBool(Preferences.is_logged_in) ?? false;
+      loggedIn = appComponent.getRepository().isLoggedIn ?? false;
     });
   }
 

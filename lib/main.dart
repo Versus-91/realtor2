@@ -24,6 +24,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:inject/inject.dart';
 import 'package:provider/provider.dart';
 
+import 'nav_service.dart';
 import 'notifications/notification_manageer.dart';
 
 // global instance for app component
@@ -97,6 +98,7 @@ class MyApp extends StatelessWidget {
         name: 'global-observer',
         builder: (context) {
           return MaterialApp(
+            navigatorKey: NavigationService.instance.navigationKey,
             debugShowCheckedModeBanner: false,
             title: Strings.appName,
             theme: _themeStore.darkMode ? themeDataDark : themeData,

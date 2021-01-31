@@ -30,6 +30,10 @@ class SharedPreferenceHelper {
     });
   }
 
+  Future<void> setAuthData(dynamic result) async {
+    return saveAuthToken(result["result"]["accessToken"]).then((val) => saveUserId(result["result"]["userId"]));
+  }
+
   Future<void> removeAuthToken() async {
     return _sharedPreference.then((preference) {
       preference.remove(Preferences.auth_token);

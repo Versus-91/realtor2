@@ -118,8 +118,7 @@ class Repository {
   // submit login request: ---------------------------------------------------------------------
   Future authenticate(Login login) async {
     return await _postApi.login(login).then((result) async {
-      await _sharedPrefsHelper.saveAuthToken(result["result"]["accessToken"]);
-      await _sharedPrefsHelper.saveUserId(result["result"]["userId"]);
+      await _sharedPrefsHelper.setAuthData(result);
       return result;
     }).catchError((error) {
       throw error;
@@ -214,6 +213,7 @@ class Repository {
       _sharedPrefsHelper.changeBrightnessToDark(value);
 
   Future<bool> get isDarkMode => _sharedPrefsHelper.isDarkMode;
+  Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
 
   // Language: -----------------------------------------------------------------
   Future<void> changeLanguage(String value) =>

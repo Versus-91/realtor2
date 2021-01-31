@@ -335,9 +335,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _formStore.setPassword(_formStore.password);
               _formStore.login().then((value) async {
                 if (value == true) {
-                  SharedPreferences.getInstance().then((prefs) {
-                    prefs.setBool(Preferences.is_logged_in, true);
-                  });
                   _formStore
                       .changePhoneNumber(_numberController.text)
                       .then((value) async {})
