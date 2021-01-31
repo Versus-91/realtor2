@@ -61,6 +61,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     false,
     false,
     false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
     false
   ];
 
@@ -1061,59 +1074,63 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List<Widget>.generate(
-                        _categoryStore.categoryList.categories.length,
-                        (index) {
-                          var category =
-                              _categoryStore.categoryList.categories[index];
-                          if (_value == null) {
-                            _value = category.id;
-                            _categoryText = category.name;
-                            _store.setCategory(category.id);
-                          }
-                          return Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                if (_value != category.id) {
-                                  setState(() {
-                                    _categoryText = category.name;
-                                    _value = category.id;
-                                    resetPrice(category);
-                                  });
-                                }
-                                _categoryText = category.name;
-                                _store.setCategory(category.id);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: _value == category.id
-                                      ? Border(
-                                          bottom: BorderSide(
-                                              width: 2.0,
-                                              color: Colors.redAccent),
-                                        )
-                                      : Border(
-                                          bottom: BorderSide(
-                                              width: 2.0,
-                                              color: Colors.transparent),
-                                        ),
-                                ),
-                                child: Text(
-                                  category.name,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: _value == category.id
-                                          ? Colors.redAccent
-                                          : Colors.black),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List<Widget>.generate(
+                          _categoryStore.categoryList.categories.length,
+                          (index) {
+                            var category =
+                                _categoryStore.categoryList.categories[index];
+                            if (_value == null) {
+                              _value = category.id;
+                              _categoryText = category.name;
+                              _store.setCategory(category.id);
+                            }
+                            return Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (_value != category.id) {
+                                    setState(() {
+                                      _categoryText = category.name;
+                                      _value = category.id;
+                                      resetPrice(category);
+                                    });
+                                  }
+                                  _categoryText = category.name;
+                                  _store.setCategory(category.id);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: _value == category.id
+                                        ? Border(
+                                            bottom: BorderSide(
+                                                width: 2.0,
+                                                color: Colors.redAccent),
+                                          )
+                                        : Border(
+                                            bottom: BorderSide(
+                                                width: 2.0,
+                                                color: Colors.transparent),
+                                          ),
+                                  ),
+                                  child: Text(
+                                    category.name,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: _value == category.id
+                                            ? Colors.redAccent
+                                            : Colors.black),
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      ).toList(),
+                            );
+                          },
+                        ).toList(),
+                      ),
                     ),
                     if (_categoryText.contains(
                       AppLocalizations.of(context).translate('rahn'),
@@ -1250,7 +1267,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: ToggleButtons(
-              children: List.generate(9, (index) {
+              children: List.generate(22, (index) {
                 return Text(
                   AppLocalizations.of(context)
                       .transformNumbers((index + 1).toString()),
