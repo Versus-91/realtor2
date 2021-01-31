@@ -1,6 +1,9 @@
 import 'package:boilerplate/main.dart';
 import 'package:dio/dio.dart';
 
+import '../../nav_service.dart';
+import '../../routes.dart';
+
 class DioClient {
   // dio instance
   final Dio _dio;
@@ -28,7 +31,9 @@ class DioClient {
       return response.data;
     } catch (e) {
       if (e?.response?.statusCode == 401) {
-        appComponent.app.userStore.setLoginState(false);
+        appComponent.getRepository().logOut().then((res) {
+          NavigationService.instance.navigateToRemoevUntil(Routes.login);
+        });
       }
       throw e;
     }
