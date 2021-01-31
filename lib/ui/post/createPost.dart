@@ -50,6 +50,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   bool _multiPick = true;
   bool hasErrorInloading = false;
   FileType _pickingType = FileType.image;
+
   List<SelectedPropertyTypes> amenityList = [];
   TextEditingController _controller = TextEditingController();
   final List<bool> isSelected = [
@@ -262,68 +263,65 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Widget _buildRightSide() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 0, top: 15, left: 15, right: 15),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            _buildCategoryField(),
-            Row(
-              children: [
-                _buildCitylistField(),
-                VerticalDivider(),
-                _buildDistrictlistField(),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                _buildHomeTypeField(),
-                VerticalDivider(),
-                _buildRangeAreaField(),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 15),
-              child: _popularFilter(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 15),
-              child: _buildAgeField(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 15),
-              child: _buildBedroomCountField(),
-            ),
-            _mapFeild(),
-            Observer(
-              builder: (context) {
-                if (_store.formErrorStore.map != null) {
-                  return Text(
-                    _store.formErrorStore.map,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(color: Colors.red),
-                  );
-                } else {
-                  return SizedBox.shrink();
-                }
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 15),
-              child: _buildDescriptionField(),
-            ),
-            _imageFeild(),
-            SizedBox(
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 80),
-              child: _submitbotton(),
-            )
-          ],
-        ),
+      child: Column(
+        children: <Widget>[
+          _buildCategoryField(),
+          Row(
+            children: [
+              _buildCitylistField(),
+              VerticalDivider(),
+              _buildDistrictlistField(),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              _buildHomeTypeField(),
+              VerticalDivider(),
+              _buildRangeAreaField(),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 15),
+            child: _popularFilter(),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 15),
+            child: _buildAgeField(),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 15),
+            child: _buildBedroomCountField(),
+          ),
+          _mapFeild(),
+          Observer(
+            builder: (context) {
+              if (_store.formErrorStore.map != null) {
+                return Text(
+                  _store.formErrorStore.map,
+                  textAlign: TextAlign.right,
+                  style: TextStyle(color: Colors.red),
+                );
+              } else {
+                return SizedBox.shrink();
+              }
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 15),
+            child: _buildDescriptionField(),
+          ),
+          _imageFeild(),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 80),
+            child: _submitbotton(),
+          )
+        ],
       ),
     );
   }
@@ -351,7 +349,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       _store.setAmenity(amenity.id);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(top: 10),
                       child: Row(
                         children: <Widget>[
                           Icon(
@@ -608,7 +606,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       fontWeight: FontWeight.normal),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 16, left: 16),
+                  padding: const EdgeInsets.only(left: 16),
                   child: Column(
                     children:
                         getAmeniotiesList(_amenityStore.amenityList.amenities),
@@ -1076,61 +1074,50 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   children: <Widget>[
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List<Widget>.generate(
-                          _categoryStore.categoryList.categories.length,
-                          (index) {
-                            var category =
-                                _categoryStore.categoryList.categories[index];
-                            if (_value == null) {
-                              _value = category.id;
-                              _categoryText = category.name;
-                              _store.setCategory(category.id);
-                            }
-                            return Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  if (_value != category.id) {
-                                    setState(() {
-                                      _categoryText = category.name;
-                                      _value = category.id;
-                                      resetPrice(category);
-                                    });
-                                  }
-                                  _categoryText = category.name;
-                                  _store.setCategory(category.id);
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: _value == category.id
-                                        ? Border(
-                                            bottom: BorderSide(
-                                                width: 2.0,
-                                                color: Colors.redAccent),
-                                          )
-                                        : Border(
-                                            bottom: BorderSide(
-                                                width: 2.0,
-                                                color: Colors.transparent),
-                                          ),
-                                  ),
-                                  child: Text(
-                                    category.name,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        color: _value == category.id
-                                            ? Colors.redAccent
-                                            : Colors.black),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ).toList(),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            // color: Colors.white, //set background color
+                            // border: Border(
+                            //     bottom:
+                            //         BorderSide(width: 1, color: Colors.black12)),
+                            //set the bottom-border
+                            ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: List<Widget>.generate(
+                            _categoryStore.categoryList.categories.length,
+                            (index) {
+                              var category =
+                                  _categoryStore.categoryList.categories[index];
+                              if (_value == null) {
+                                _value = category.id;
+                                _categoryText = category.name;
+                                _store.setCategory(category.id);
+                              }
+                              return Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: chipOne(category.name, () {
+                                    if (_value != category.id) {
+                                      setState(() {
+                                        _categoryText = category.name;
+                                        _value = category.id;
+                                        resetPrice(category);
+                                      });
+                                    }
+                                    _categoryText = category.name;
+                                    _store.setCategory(category.id);
+                                  },
+                                      active: _value == category.id
+                                          ? true
+                                          : false));
+                            },
+                          ).toList(),
+                        ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     if (_categoryText.contains(
                       AppLocalizations.of(context).translate('rahn'),
@@ -1192,6 +1179,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       _rahnPriceController.clear();
       _rentPriceController.clear();
     }
+  }
+
+  Widget chipOne(String title, Function clickAction, {bool active = false}) {
+    //active argument is optional
+    return Container(
+        color: Colors.transparent,
+        margin: EdgeInsets.all(5),
+        child: FlatButton(
+            color: active ? Colors.green[200] : Colors.white,
+            //if active == true then background color is black
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                side: BorderSide(color: Colors.grey, width: 1)
+                //set border radius, color and width
+                ),
+            onPressed: clickAction, //set function
+            child: Text(title) //set title
+            ));
   }
 
   Widget _buildHomeTypeField() {
