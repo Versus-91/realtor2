@@ -25,6 +25,8 @@ class PostApi {
   // rest-client instance
   final RestClient _restClient;
   var plusSign = '+';
+  var baseAddress = Endpoints.baseUrl.replaceFirst("http://", "");
+
   // injecting dio instance
   PostApi(this._dioClient, this._restClient);
 
@@ -35,11 +37,11 @@ class PostApi {
       if (request != null) {
         uri = Uri(
             scheme: 'http',
-            host: Endpoints.baseUrl,
+            host: baseAddress,
             path: '/api/services/app/Post/GetAll',
             queryParameters: request.toJson());
       } else {
-        uri = Uri.http(Endpoints.baseUrl, '/api/services/app/Post/GetAll');
+        uri = Uri.http(baseAddress, '/api/services/app/Post/GetAll');
       }
       final res = await _dioClient.get(uri.toString());
       return PostList.fromJson(
@@ -52,16 +54,15 @@ class PostApi {
   /// Returns list of post in response
   Future<PostList> getUserPosts({PostRequest request}) async {
     try {
-      var address = Endpoints.baseUrl.replaceFirst("http://", "");
       Uri uri = Uri();
       if (request != null) {
         uri = Uri(
             scheme: 'http',
-            host: address,
+            host: baseAddress,
             path: '/api/services/app/Post/GetUserPosts',
             queryParameters: request.toJson());
       } else {
-        uri = Uri.http(address, '/api/services/app/Post/GetUserPosts');
+        uri = Uri.http(baseAddress, '/api/services/app/Post/GetUserPosts');
       }
       final res = await _dioClient.get(uri.toString());
 
