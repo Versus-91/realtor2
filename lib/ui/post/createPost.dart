@@ -349,7 +349,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       _store.setAmenity(amenity.id);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(left:8.0),
+                      padding: const EdgeInsets.only(top: 10),
                       child: Row(
                         children: <Widget>[
                           Icon(
@@ -606,7 +606,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       fontWeight: FontWeight.normal),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 16, left: 16),
+                  padding: const EdgeInsets.only(left: 16),
                   child: Column(
                     children:
                         getAmeniotiesList(_amenityStore.amenityList.amenities),
@@ -1076,12 +1076,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       scrollDirection: Axis.horizontal,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white, //set background color
-                          border: Border(
-                              bottom:
-                                  BorderSide(width: 1, color: Colors.black12)),
-                          //set the bottom-border
-                        ),
+                            // color: Colors.white, //set background color
+                            // border: Border(
+                            //     bottom:
+                            //         BorderSide(width: 1, color: Colors.black12)),
+                            //set the bottom-border
+                            ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1108,57 +1108,22 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     _categoryText = category.name;
                                     _store.setCategory(category.id);
                                   },
-                                      active:
-                                          _value == category.id ? true : false)
-                                  //  GestureDetector(
-                                  //   onTap: () {
-                                  //     if (_value != category.id) {
-                                  //       setState(() {
-                                  //         _categoryText = category.name;
-                                  //         _value = category.id;
-                                  //         resetPrice(category);
-                                  //       });
-                                  //     }
-                                  //     _categoryText = category.name;
-                                  //     _store.setCategory(category.id);
-                                  //   },
-                                  //   child: Container(
-                                  //     decoration: BoxDecoration(
-                                  //       border: _value == category.id
-                                  //           ? Border(
-                                  //               bottom: BorderSide(
-                                  //                   width: 2.0,
-                                  //                   color: Colors.redAccent),
-                                  //             )
-                                  //           : Border(
-                                  //               bottom: BorderSide(
-                                  //                   width: 2.0,
-                                  //                   color: Colors.transparent),
-                                  //             ),
-                                  //     ),
-                                  //     child: Text(
-                                  //       category.name,
-                                  //       style: TextStyle(
-                                  //           fontSize: 18,
-                                  //           color: _value == category.id
-                                  //               ? Colors.redAccent
-                                  //               : Colors.black),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  );
+                                      active: _value == category.id
+                                          ? true
+                                          : false));
                             },
                           ).toList(),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     if (_categoryText.contains(
                       AppLocalizations.of(context).translate('rahn'),
                     )) ...[
                       Row(
                         children: [
-                          
                           Flexible(
                             child: _buildRentPriceField(),
                           ),
@@ -1219,13 +1184,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Widget chipOne(String title, Function clickAction, {bool active = false}) {
     //active argument is optional
     return Container(
+        color: Colors.transparent,
         margin: EdgeInsets.all(5),
         child: FlatButton(
-            color: active ? Colors.black12 : Colors.white,
+            color: active ? Colors.green[200] : Colors.white,
             //if active == true then background color is black
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
-                side: BorderSide(color: Colors.black12, width: 2)
+                side: BorderSide(color: Colors.grey, width: 1)
                 //set border radius, color and width
                 ),
             onPressed: clickAction, //set function

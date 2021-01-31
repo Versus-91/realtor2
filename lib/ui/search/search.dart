@@ -197,62 +197,76 @@ class _SearchScreenState extends State<SearchScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List<Widget>.generate(
-                        _categoryStore.categoryList.categories.length,
-                        // برای اینکه یکی از کتگوری ها انتخاب بشه
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: List<Widget>.generate(
+                          _categoryStore.categoryList.categories.length,
+                          // برای اینکه یکی از کتگوری ها انتخاب بشه
 
-                        (index) {
-                          var category =
-                              _categoryStore.categoryList.categories[index];
-                          _value = widget.filterForm.category.id;
-                          if (_value == null &&
-                              !category.name.contains('گروی')) {
-                            _value = category.id;
-                            widget.filterForm
-                                .setCategory(category.id, category.name);
-                          }
-                          return Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                if (_value != category.id) {
-                                  setState(() {
-                                    _value = category.id;
-                                    resetPrice(category);
-                                  });
-                                }
-                                widget.filterForm
-                                    .setCategory(category.id, category.name);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: _value == category.id
-                                      ? Border(
-                                          bottom: BorderSide(
-                                              width: 2.0,
-                                              color: Colors.redAccent),
-                                        )
-                                      : Border(
-                                          bottom: BorderSide(
-                                              width: 2.0,
-                                              color: Colors.transparent),
-                                        ),
-                                ),
-                                child: Text(
-                                  category.name,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: _value == category.id
-                                          ? Colors.redAccent
-                                          : Colors.black),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ).toList(),
+                          (index) {
+                            var category =
+                                _categoryStore.categoryList.categories[index];
+                            _value = widget.filterForm.category.id;
+                            if (_value == null &&
+                                !category.name.contains('گروی')) {
+                              _value = category.id;
+                              widget.filterForm
+                                  .setCategory(category.id, category.name);
+                            }
+                            return Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: chipOne(category.name, () {
+                                  if (_value != category.id) {
+                                    setState(() {
+                                      _value = category.id;
+                                      resetPrice(category);
+                                    });
+                                  }
+                                  widget.filterForm
+                                      .setCategory(category.id, category.name);
+                                }, active: _value == category.id ? true : false)
+
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     if (_value != category.id) {
+                                //       setState(() {
+                                //         _value = category.id;
+                                //         resetPrice(category);
+                                //       });
+                                //     }
+                                //     widget.filterForm
+                                //         .setCategory(category.id, category.name);
+                                //   },
+                                //   child: Container(
+                                //     decoration: BoxDecoration(
+                                //       border: _value == category.id
+                                //           ? Border(
+                                //               bottom: BorderSide(
+                                //                   width: 2.0,
+                                //                   color: Colors.redAccent),
+                                //             )
+                                //           : Border(
+                                //               bottom: BorderSide(
+                                //                   width: 2.0,
+                                //                   color: Colors.transparent),
+                                //             ),
+                                //     ),
+                                //     child: Text(
+                                //       category.name,
+                                //       style: TextStyle(
+                                //           fontSize: 18,
+                                //           color: _value == category.id
+                                //               ? Colors.redAccent
+                                //               : Colors.black),
+                                //     ),
+                                //   ),
+                                // ),
+                                );
+                          },
+                        ).toList(),
+                      ),
                     ),
                     Visibility(
                         visible: widget.filterForm.category.name != null &&
@@ -321,68 +335,95 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
+  Widget chipOne(String title, Function clickAction, {bool active = false}) {
+    //active argument is optional
+    return Container(
+        color: Colors.transparent,
+        margin: EdgeInsets.all(5),
+        child: FlatButton(
+            color: active ? Colors.green[200] : Colors.white,
+            //if active == true then background color is black
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                side: BorderSide(color: Colors.grey, width: 1)
+                //set border radius, color and width
+                ),
+            onPressed: clickAction, //set function
+            child: Text(title) //set title
+            ));
+  }
+
   Widget searchField() {
     return Padding(
       padding: const EdgeInsets.only(top: 20, left: 14, right: 14),
-      child: TypeAheadFormField(
-        textFieldConfiguration: TextFieldConfiguration(
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    widget.filterForm.setDistrict(null, null);
-                    widget.filterForm.setCity(null, null);
-                    _typeAheadController.clear();
-                  },
-                  icon: Icon(Icons.clear)),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent)),
-              labelText:
-                  AppLocalizations.of(context).translate('search_in_district'),
-              fillColor: Color(0xfff3f3f4),
-              filled: true,
-              hintText:
-                  AppLocalizations.of(context).translate('search_in_district')),
-          controller: this._typeAheadController,
-        ),
-        suggestionsCallback: (pattern) {
-          if (pattern.trim().length >= 2 && pattern.trim() != _selectedCity) {
-            return getSuggestion(pattern);
-          }
-          return null;
-        },
-        itemBuilder: (context, suggestion) {
-          return ListTile(
-            title: Text(suggestion),
-          );
-        },
-        noItemsFoundBuilder: (context) {
-          return Text(
-            AppLocalizations.of(context).translate('no_result'),
-            style: TextStyle(fontSize: 30, color: Colors.grey[300]),
-          );
-        },
-        transitionBuilder: (context, suggestionsBox, controller) {
-          return suggestionsBox;
-        },
-        onSuggestionSelected: (suggestion) {
-          this._typeAheadController.text = suggestion;
-          var selectedLocation = _locations
-              .where((element) => suggestion.contains(element.name))
-              ?.first;
-          if (selectedLocation != null) {
-            if (selectedLocation.isCity) {
-              widget.filterForm.setDistrict(null, null);
-              widget.filterForm.setCity(selectedLocation.id, suggestion);
-            } else {
-              widget.filterForm.setCity(null, null);
-              widget.filterForm.setDistrict(selectedLocation.id, suggestion);
+      child: Container(
+        height: 55,
+        child: TypeAheadFormField(
+          textFieldConfiguration: TextFieldConfiguration(
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      widget.filterForm.setDistrict(null, null);
+                      widget.filterForm.setCity(null, null);
+                      _typeAheadController.clear();
+                    },
+                    icon: _typeAheadController.text != null
+                        ? Icon(Icons.clear)
+                        : Icon(Icons.search)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent)),
+                labelText: AppLocalizations.of(context)
+                    .translate('search_in_district'),
+                fillColor: Color(0xfff3f3f4),
+                filled: true,
+                hintText: AppLocalizations.of(context)
+                    .translate('search_in_district')),
+            controller: this._typeAheadController,
+          ),
+          suggestionsCallback: (pattern) {
+            if (pattern.trim().length >= 2 && pattern.trim() != _selectedCity) {
+              return getSuggestion(pattern);
             }
-          }
-        },
-        validator: (value) => value.isEmpty
-            ? AppLocalizations.of(context).translate('insert_district')
-            : null,
-        onSaved: (value) => this._selectedCity = value,
+            return null;
+          },
+          itemBuilder: (context, suggestion) {
+            return ListTile(
+              title: Text(suggestion),
+            );
+          },
+          noItemsFoundBuilder: (context) {
+            return Container(height: 45,
+              child: Padding(padding: EdgeInsets.only(top:5,right: 10),
+                              child: Text(
+                  AppLocalizations.of(context).translate('no_result'),
+                  style: TextStyle(fontSize: 20, color: Colors.grey[400]),
+                ),
+              ),
+            );
+          },
+          transitionBuilder: (context, suggestionsBox, controller) {
+            return suggestionsBox;
+          },
+          onSuggestionSelected: (suggestion) {
+            this._typeAheadController.text = suggestion;
+            var selectedLocation = _locations
+                .where((element) => suggestion.contains(element.name))
+                ?.first;
+            if (selectedLocation != null) {
+              if (selectedLocation.isCity) {
+                widget.filterForm.setDistrict(null, null);
+                widget.filterForm.setCity(selectedLocation.id, suggestion);
+              } else {
+                widget.filterForm.setCity(null, null);
+                widget.filterForm.setDistrict(selectedLocation.id, suggestion);
+              }
+            }
+          },
+          validator: (value) => value.isEmpty
+              ? AppLocalizations.of(context).translate('insert_district')
+              : null,
+          onSaved: (value) => this._selectedCity = value,
+        ),
       ),
     );
   }
