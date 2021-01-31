@@ -2,7 +2,7 @@ class Endpoints {
   Endpoints._();
 
   // base url
-  static const String baseUrl = "http://hmahmudi-001-site2.gtempurl.com";
+  static const String baseUrl = "http://www.kamyabhouse.com";
 
   // receiveTimeout
   static const int receiveTimeout = 5000;

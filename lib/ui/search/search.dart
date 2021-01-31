@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/models/location/locations.dart';
 import 'package:boilerplate/models/post/post_request.dart';
@@ -51,8 +52,7 @@ class _SearchScreenState extends State<SearchScreen> {
       MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
   String _selectedCity;
   var data;
-  String dataurl =
-      "http://hmahmudi-001-site2.gtempurl.com/api/services/app/District/Find";
+  String dataurl = Endpoints.baseUrl + "/api/services/app/District/Find";
   CityStore _cityStore;
   DistrictStore _districtStore;
   CategoryStore _categoryStore;

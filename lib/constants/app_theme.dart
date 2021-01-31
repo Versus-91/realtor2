@@ -33,6 +33,7 @@ final ThemeData themeData = new ThemeData(
   accentColor: AppColors.green[500],
   accentColorBrightness: Brightness.light,
   backgroundColor: const Color(0xFFFFFFFF),
+  hintColor: Colors.grey,
 );
 
 final ThemeData themeDataDark = ThemeData(

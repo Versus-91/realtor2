@@ -96,22 +96,29 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                         textDirection: TextDirection.ltr,
                         controller: _newNumberController,
                         decoration: InputDecoration(
+                          //  when the TextFormField in unfocused
+                          labelStyle: TextStyle(color: Colors.black),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                            //  when the TextFormField in focused
+                          ),
+
                           prefixIcon: Icon(Icons.edit),
-                          border: OutlineInputBorder(),
+                          // border: OutlineInputBorder(),
                           labelText: AppLocalizations.of(context)
                               .translate('user_Number'),
                         ),
                       ),
                     ),
                   ),
-                  VerticalDivider(),
+                  VerticalDivider(width:40,),
                   Flexible(
                     flex: 1,
                     child: CustomButton(
                       textColor: Colors.white,
                       color: Colors.green,
                       text: AppLocalizations.of(context)
-                          .translate('register_info'),
+                          .translate('submit'),
                       onPressed: () async {
                         _userStore
                             .changePhoneNumber(_newNumberController.text)
@@ -133,21 +140,26 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                   ),
                 ],
               ),
+              SizedBox(
+                height: 5,
+              ),
               Row(
                 children: <Widget>[
                   Icon(
                     _userStore.user.isPhoneNumberConfirmed
                         ? Icons.check_circle_outline
-                        : Icons.radio_button_off_sharp,
+                        : Icons.error,
                     color: _userStore.user.isPhoneNumberConfirmed
                         ? Colors.green
-                        : Colors.grey.withOpacity(0.5),
+                        : Colors.red.withOpacity(1),
                   ),
                   const SizedBox(
                     width: 4,
                   ),
                   _userStore.user.isPhoneNumberConfirmed
-                      ? Text("تایید شده",)
+                      ? Text(
+                          "تایید شده",
+                        )
                       : Text("تایید نشده"),
                 ],
               ),
@@ -157,6 +169,15 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
               TextFormField(
                 controller: _oldPasswordController,
                 decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    //  when the TextFormField in unfocused
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    //  when the TextFormField in focused
+                  ),
+                  border: UnderlineInputBorder(),
                   suffix: IconButton(
                     icon: _obscureText == true
                         ? Icon(Icons.visibility_off)
@@ -189,6 +210,15 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
               TextFormField(
                 controller: _newPasswordController,
                 decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    //  when the TextFormField in unfocused
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    //  when the TextFormField in focused
+                  ),
+                  border: UnderlineInputBorder(),
                   errorText: _userStore.userErrorStore.newPassword,
                   suffix: Icon(Icons.lock),
                   labelText:
@@ -204,6 +234,15 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
               TextFormField(
                 controller: _confirmPasswordController,
                 decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    //  when the TextFormField in unfocused
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    //  when the TextFormField in focused
+                  ),
+                  border: UnderlineInputBorder(),
                   suffix: Icon(Icons.lock),
                   errorText: _userStore.userErrorStore.confrimPassword,
                   // border: OutlineInputBorder(),

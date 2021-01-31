@@ -140,7 +140,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                               )),
                     Text(
                       _userStore.user != null
-                          ? "سلام" + _userStore.user.name
+                          ? " سلام " + _userStore.user.name
                           : "",
                       style: TextStyle(color: Color(0xFF777777)),
                     ),
@@ -213,17 +213,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                       onTap: () async {
                         {
                           if (loggedIn == true) {
-                            SharedPreferences.getInstance()
-                                .then((preference) async {
-                              preference.setBool(
-                                  Preferences.is_logged_in, false);
-                              preference.remove(Preferences.auth_token);
-                              _userStore.setLoginState(false);
-                              await _rippleAnimationController.forward();
-                              Navigator.of(context, rootNavigator: true)
-                                  .pushNamedAndRemoveUntil(Routes.login,
-                                      (Route<dynamic> route) => false);
-                            });
+                            await Logout(context);
                           } else {
                             await _rippleAnimationController.forward();
                             Navigator.of(context, rootNavigator: true)
@@ -258,5 +248,16 @@ class _SettingsScreenState extends State<SettingsScreen>
         );
       },
     );
+  }
+
+  Future Logout(BuildContext context) async {
+    return SharedPreferences.getInstance().then((preference) async {
+      preference.setBool(Preferences.is_logged_in, false);
+      preference.remove(Preferences.auth_token);
+      _userStore.setLoginState(false);
+      await _rippleAnimationController.forward();
+      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+          Routes.login, (Route<dynamic> route) => false);
+    });
   }
 }

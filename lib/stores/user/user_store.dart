@@ -56,7 +56,7 @@ abstract class _UserStore with Store {
   @observable
   bool avatarloading = false;
   @observable
-  bool isLoggedIn = false;
+  bool isLoggedIn;
   @computed
   bool get loading => fetchFuture.status == FutureStatus.pending;
   @action
@@ -122,6 +122,7 @@ abstract class _UserStore with Store {
     future.then((item) {
       this.user = item;
     }).catchError((error) {
+      errorStore.statusCode = error?.response?.statusCode;
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }

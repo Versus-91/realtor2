@@ -1,3 +1,4 @@
+import 'package:boilerplate/main.dart';
 import 'package:dio/dio.dart';
 
 class DioClient {
@@ -23,8 +24,12 @@ class DioClient {
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
+
       return response.data;
     } catch (e) {
+      if (e?.response?.statusCode == 401) {
+        appComponent.app.userStore.setLoginState(false);
+      }
       throw e;
     }
   }

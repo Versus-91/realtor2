@@ -22,7 +22,6 @@ import 'package:dio/dio.dart';
 class PostApi {
   // dio instance
   final DioClient _dioClient;
-  static const String baseUrl = 'hmahmudi-001-site2.gtempurl.com';
   // rest-client instance
   final RestClient _restClient;
   var plusSign = '+';
@@ -36,11 +35,11 @@ class PostApi {
       if (request != null) {
         uri = Uri(
             scheme: 'http',
-            host: baseUrl,
+            host: Endpoints.baseUrl,
             path: '/api/services/app/Post/GetAll',
             queryParameters: request.toJson());
       } else {
-        uri = Uri.http(baseUrl, '/api/services/app/Post/GetAll');
+        uri = Uri.http(Endpoints.baseUrl, '/api/services/app/Post/GetAll');
       }
       final res = await _dioClient.get(uri.toString());
       return PostList.fromJson(
@@ -53,15 +52,16 @@ class PostApi {
   /// Returns list of post in response
   Future<PostList> getUserPosts({PostRequest request}) async {
     try {
+      var address = Endpoints.baseUrl.replaceFirst("http://", "");
       Uri uri = Uri();
       if (request != null) {
         uri = Uri(
             scheme: 'http',
-            host: baseUrl,
+            host: address,
             path: '/api/services/app/Post/GetUserPosts',
             queryParameters: request.toJson());
       } else {
-        uri = Uri.http(baseUrl, '/api/services/app/Post/GetUserPosts');
+        uri = Uri.http(address, '/api/services/app/Post/GetUserPosts');
       }
       final res = await _dioClient.get(uri.toString());
 
@@ -295,15 +295,16 @@ class PostApi {
     }
   }
 
- Future saveFirebaseId(Notification notification) async {
+  Future saveFirebaseId(Notification notification) async {
     try {
-      final res =
-          await _dioClient.post(Endpoints.saveFirebaseId, data: notification.toMap());
+      final res = await _dioClient.post(Endpoints.saveFirebaseId,
+          data: notification.toMap());
       return res["result"];
     } catch (e) {
       throw e;
     }
   }
+
   Future<OptionList> getOptionsReport() async {
     try {
       final res = await _dioClient.get(Endpoints.getoptionsReport);

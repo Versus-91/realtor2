@@ -67,12 +67,18 @@ class MyApp extends StatelessWidget {
   final LanguageStore _languageStore =
       LanguageStore(appComponent.getRepository());
   final TypeStore _typeStore = TypeStore(appComponent.getRepository());
-  final UserStore _userStore = UserStore(appComponent.getRepository());
+  final UserStore userStore = UserStore(appComponent.getRepository());
   final PushNotificationsManager _firebaseMessaging =
       PushNotificationsManager();
 
   @override
   Widget build(BuildContext context) {
+    // void logOut() {
+    //   appComponent.getRepository().logOut();
+    //   Navigator.of(context)
+    //       .pushNamedAndRemoveUntil(Routes.login, (vakue) => false);
+    // }
+
     return MultiProvider(
       providers: [
         Provider<ThemeStore>(create: (_) => _themeStore),
@@ -83,7 +89,7 @@ class MyApp extends StatelessWidget {
         Provider<CategoryStore>(create: (_) => _categoryStore),
         Provider<LanguageStore>(create: (_) => _languageStore),
         Provider<TypeStore>(create: (_) => _typeStore),
-        Provider<UserStore>(create: (_) => _userStore),
+        Provider<UserStore>(create: (_) => userStore),
         Provider<AmenityStore>(create: (_) => _amenityStore),
         Provider<PushNotificationsManager>(create: (_) => _firebaseMessaging),
       ],
