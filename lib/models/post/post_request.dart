@@ -58,7 +58,9 @@ class PostRequest {
       result.addAll({"minDeposit": minDepositPrice.toString()});
       result.addAll({"maxDeposit": maxDepositPrice.toString()});
     }
-    result.addAll({"category": category.toString()});
+    if (category != null) {
+      result.addAll({"category": category.toString()});
+    }
 
     result.addAll({"maxResultCount": pageSize.toString()});
     if (pageSize != null) {

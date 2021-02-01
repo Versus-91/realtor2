@@ -214,6 +214,7 @@ class Repository {
 
   Future<bool> get isDarkMode => _sharedPrefsHelper.isDarkMode;
   Future<bool> get isLoggedIn => _sharedPrefsHelper.isLoggedIn;
+  Future<int> get userId => _sharedPrefsHelper.userId;
 
   // Language: -----------------------------------------------------------------
   Future<void> changeLanguage(String value) =>
@@ -299,7 +300,9 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
-  Future saveNotification(Notification notification) {
+  Future saveNotification(String token) async {
+    int id = await this.userId;
+    Notification notification = Notification(firebaseId: token, userId: id);
     return _postApi.saveFirebaseId(notification).then((result) {
       return result;
     }).catchError((error) => throw error);

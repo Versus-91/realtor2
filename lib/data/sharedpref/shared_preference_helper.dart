@@ -87,4 +87,10 @@ class SharedPreferenceHelper {
       return prefs.setString(Preferences.current_language, language);
     });
   }
+
+  Future<int> get userId {
+    return _sharedPreference.then((prefs) {
+      return prefs.getInt(Preferences.userId);
+    });
+  }
 }

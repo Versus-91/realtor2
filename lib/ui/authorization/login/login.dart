@@ -1,13 +1,16 @@
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/main.dart';
+import 'package:boilerplate/notifications/notification_manageer.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
 import 'package:boilerplate/ui/authorization/login/blaziercontainer.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 
 import '../../../routes.dart';
 import 'custom_button.dart';
@@ -17,7 +20,6 @@ class LoginPage extends StatefulWidget {
 
   final String title;
   final formStore = FormStore(appComponent.getRepository());
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -25,6 +27,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _userNameController = TextEditingController();
   final _passwordNameController = TextEditingController();
+  PushNotificationsManager _firebaseService;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _firebaseService = Provider.of<PushNotificationsManager>(context);
+  }
 
   Widget _submitButton() {
     return Container(
@@ -35,7 +44,12 @@ class _LoginPageState extends State<LoginPage> {
         text: AppLocalizations.of(context).translate('login_btn_sign_in'),
         onPressed: () {
           FocusScope.of(context).unfocus();
-          widget.formStore.login().then((value) {});
+          widget.formStore.login().then((value) async {
+            if (value == true) {
+              var token = await _firebaseService.fcmToken;
+              await appComponent.getRepository().saveNotification(token);
+            }
+          });
         },
       ),
     );
@@ -97,59 +111,6 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     return SizedBox.shrink();
-  }
-
-  Widget _facebookButton() {
-    return Container(
-      height: 45,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(width: 0.3, color: Colors.grey),
-                borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(5),
-                    topRight: Radius.circular(5)),
-              ),
-              alignment: Alignment.center,
-              child: Text('G',
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 25,
-                      fontWeight: FontWeight.w400)),
-            ),
-          ),
-          Expanded(
-            flex: 5,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(width: 0.3, color: Colors.grey),
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(5),
-                    topLeft: Radius.circular(5)),
-              ),
-              alignment: Alignment.center,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 50),
-                child: Text(
-                    AppLocalizations.of(context).translate('login_btn_gmail'),
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400)),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   Widget _title() {

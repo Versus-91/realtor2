@@ -1,8 +1,5 @@
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/main.dart';
-import 'package:boilerplate/models/notification/notification.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PushNotificationsManager {
   PushNotificationsManager._();
@@ -16,7 +13,7 @@ class PushNotificationsManager {
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   bool _initialized = false;
-
+  Future<String> get fcmToken => _firebaseMessaging.getToken();
   Future<void> init() async {
     if (!_initialized) {
       // For iOS request permission first.
@@ -26,13 +23,11 @@ class PushNotificationsManager {
       // For testing purposes print the Firebase Messaging token
       String token = await _firebaseMessaging.getToken();
       int userId;
-      await SharedPreferences.getInstance().then((prefs) {
-        userId = prefs.getInt(Preferences.userId) ?? 0;
+      await appComponent.getRepository().userId.then((val) {
+        userId = val ?? 0;
       });
       if (userId != null && userId != 0) {
-        await appComponent
-            .getRepository()
-            .saveNotification(Notification(userId: userId, firebaseId: token));
+        await appComponent.getRepository().saveNotification(token);
       }
       print("FirebaseMessaging token: $token");
 
