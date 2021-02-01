@@ -145,25 +145,33 @@ class PostRequest {
         id: json["id"],
         // amenities: json["amenities"],
       );
-  factory PostRequest.fromMapLocalStore(Map<String, dynamic> json) {
+  factory PostRequest.fromMapLocalStore(Map<String, dynamic> item) {
+    List<int> amenities = item["amenities"] != null
+        ? (item["amenities"] as List).map((item) => int.tryParse(item)).toList()
+        : [];
+    List<int> types = item["type"] != null
+        ? (item["type"] as List).map((item) => int.tryParse(item)).toList()
+        : [];
+
     return PostRequest(
-      maxArea: int.tryParse(json["maxArea"] ?? ""),
-      minArea: int.tryParse(json["minArea"] ?? ""),
-      maxPrice: int.tryParse(json["maxPrice" ?? ""]),
-      minPrice: int.tryParse(json["minPrice"] ?? ""),
-      maxRentPrice: int.tryParse(json["maxRentPrice" ?? ""]),
-      minRentPrice: int.tryParse(json["minRentPrice"] ?? ""),
-      maxDepositPrice: int.tryParse(json["maxDepositPrice" ?? ""]),
-      minDepositPrice: int.tryParse(json["minDepositPrice"] ?? ""),
-      age: int.tryParse(json["age"] ?? ""),
-      category: int.tryParse(json["category"] ?? ""),
-      district: int.tryParse(json["district"] ?? ""),
-      city: int.tryParse(json["city"] ?? ""),
-      bedCount: int.tryParse(json["beds"] ?? ""),
-      categoryName: json["categoryName"],
-      districtName: json["cityName"],
-      cityName: json["districtName"],
-      // amenities: json["amenities"],
+      maxArea: int.tryParse(item["maxArea"] ?? ""),
+      minArea: int.tryParse(item["minArea"] ?? ""),
+      maxPrice: int.tryParse(item["maxPrice" ?? ""]),
+      minPrice: int.tryParse(item["minPrice"] ?? ""),
+      maxRentPrice: int.tryParse(item["maxRentPrice" ?? ""]),
+      minRentPrice: int.tryParse(item["minRentPrice"] ?? ""),
+      maxDepositPrice: int.tryParse(item["maxDepositPrice" ?? ""]),
+      minDepositPrice: int.tryParse(item["minDepositPrice"] ?? ""),
+      age: int.tryParse(item["age"] ?? ""),
+      category: int.tryParse(item["category"] ?? ""),
+      district: int.tryParse(item["district"] ?? ""),
+      city: int.tryParse(item["city"] ?? ""),
+      bedCount: int.tryParse(item["beds"] ?? ""),
+      categoryName: item["categoryName"],
+      districtName: item["cityName"],
+      cityName: item["districtName"],
+      amenities: amenities,
+      types: types,
     );
   }
   Function eq = const ListEquality().equals;

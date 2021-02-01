@@ -24,7 +24,33 @@ mixin _$ErrorStore on _ErrorStore, Store {
     });
   }
 
+  final _$statusCodeAtom = Atom(name: '_ErrorStore.statusCode');
+
+  @override
+  int get statusCode {
+    _$statusCodeAtom.reportRead();
+    return super.statusCode;
+  }
+
+  @override
+  set statusCode(int value) {
+    _$statusCodeAtom.reportWrite(value, super.statusCode, () {
+      super.statusCode = value;
+    });
+  }
+
   final _$_ErrorStoreActionController = ActionController(name: '_ErrorStore');
+
+  @override
+  void setStatusCode(int code) {
+    final _$actionInfo = _$_ErrorStoreActionController.startAction(
+        name: '_ErrorStore.setStatusCode');
+    try {
+      return super.setStatusCode(code);
+    } finally {
+      _$_ErrorStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setErrorMessage(String message) {
@@ -62,7 +88,8 @@ mixin _$ErrorStore on _ErrorStore, Store {
   @override
   String toString() {
     return '''
-errorMessage: ${errorMessage}
+errorMessage: ${errorMessage},
+statusCode: ${statusCode}
     ''';
   }
 }

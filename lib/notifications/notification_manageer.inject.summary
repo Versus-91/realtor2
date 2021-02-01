@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/notifications/notification_manageer.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

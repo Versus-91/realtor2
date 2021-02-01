@@ -146,6 +146,21 @@ mixin _$PostStore on _PostStore, Store {
     });
   }
 
+  final _$userPageAtom = Atom(name: '_PostStore.userPage');
+
+  @override
+  int get userPage {
+    _$userPageAtom.reportRead();
+    return super.userPage;
+  }
+
+  @override
+  set userPage(int value) {
+    _$userPageAtom.reportWrite(value, super.userPage, () {
+      super.userPage = value;
+    });
+  }
+
   final _$pageSizeAtom = Atom(name: '_PostStore.pageSize');
 
   @override
@@ -167,6 +182,15 @@ mixin _$PostStore on _PostStore, Store {
   Future<dynamic> loadNextPage({PostRequest request}) {
     return _$loadNextPageAsyncAction
         .run(() => super.loadNextPage(request: request));
+  }
+
+  final _$loadUserNextPageAsyncAction =
+      AsyncAction('_PostStore.loadUserNextPage');
+
+  @override
+  Future<dynamic> loadUserNextPage({PostRequest request}) {
+    return _$loadUserNextPageAsyncAction
+        .run(() => super.loadUserNextPage(request: request));
   }
 
   final _$getPostsAsyncAction = AsyncAction('_PostStore.getPosts');
@@ -203,6 +227,7 @@ postList: ${postList},
 userPostList: ${userPostList},
 success: ${success},
 page: ${page},
+userPage: ${userPage},
 pageSize: ${pageSize},
 hasNextPage: ${hasNextPage},
 loading: ${loading},

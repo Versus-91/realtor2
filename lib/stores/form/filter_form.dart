@@ -36,8 +36,8 @@ abstract class _FilterFormStore with Store {
   @observable
   double minDepositPrice;
   @observable
-  List<SelectedPropertyTypes> selectedPropertyTypes =
-      new List<SelectedPropertyTypes>();
+  ObservableList<SelectedPropertyTypes> selectedPropertyTypes =
+      new ObservableList<SelectedPropertyTypes>();
   @observable
   double maxPrice;
   @observable
@@ -112,7 +112,7 @@ abstract class _FilterFormStore with Store {
 
   @action
   void setPropertyTypeList(List<SelectedPropertyTypes> items) {
-    selectedPropertyTypes = items;
+    selectedPropertyTypes = ObservableList.of(items);
   }
 
   @action
@@ -180,6 +180,30 @@ abstract class _FilterFormStore with Store {
     //       district: request.district);
     // }
     return request;
+  }
+
+  @action
+  void mapFilters(PostRequest request) {
+    maxPrice = request.maxPrice?.toDouble();
+    minPrice = request.minPrice?.toDouble();
+    maxRentPrice = request.maxRentPrice?.toDouble();
+    minRentPrice = request.minRentPrice?.toDouble();
+    maxDepositPrice = request.maxDepositPrice?.toDouble();
+    minDepositPrice = request.minDepositPrice?.toDouble();
+    minArea = request.minArea?.toDouble();
+    maxArea = request.maxArea?.toDouble();
+    bedCount = request.bedCount;
+    category = Category(id: request.category, name: request.categoryName);
+    district = District(id: request.district, name: request.districtName);
+    city = City(id: request.city, name: request.cityName);
+    if (request.types != null) {
+      selectedPropertyTypes = ObservableList.of(request.types.map((element) {
+        return SelectedPropertyTypes(id: element, isSelected: true);
+      }).toList());
+    }
+    if (request.amenities != null) {
+      amenities = request.amenities;
+    }
   }
 
   @action

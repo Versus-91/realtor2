@@ -3,20 +3,22 @@ import 'dart:ui';
 import 'package:boilerplate/constants/constants.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/routes.dart';
+import 'package:boilerplate/stores/form/filter_form.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../main.dart';
 
 class UserScreen extends StatefulWidget {
-  UserScreen({Key key, this.title, this.userStore, this.postStore})
+  UserScreen(
+      {Key key, this.title, this.userStore, this.postStore, this.filterForm})
       : super(key: key);
   final String title;
   final UserStore userStore;
   final PostStore postStore;
+  final FilterFormStore filterForm;
 
   @override
   _UserScreenState createState() => _UserScreenState();
@@ -140,7 +142,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
                     var request = PostRequest(
                         maxPrice: snapshot.data[position].maxPrice?.floor(),
                         minPrice: snapshot.data[position].minPrice?.floor(),
-                        minArea: 0,
+                        minArea: snapshot.data[position].minArea?.floor(),
                         maxArea: snapshot.data[position].maxArea?.floor(),
                         district: snapshot.data[position].district,
                         districtName: snapshot.data[position].districtName,
@@ -151,6 +153,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
                         categoryName: snapshot.data[position].categoryName,
                         types: snapshot.data[position]?.types,
                         amenities: snapshot.data[position]?.amenities);
+                    widget.filterForm.mapFilters(request);
                     await widget.postStore
                         .getPosts(request: request)
                         .then((value) {

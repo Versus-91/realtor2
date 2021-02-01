@@ -1,4 +1,5 @@
 import 'package:boilerplate/main.dart';
+import 'package:boilerplate/stores/form/filter_form.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/home/tabs/search_tab_screen.dart';
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //stores:---------------------------------------------------------------------
   UserStore _userStore;
   PostStore _postStore;
+  FilterFormStore _filterForm;
   PersistentTabController _controller;
   bool loggedIn = false;
 
@@ -55,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _userStore = Provider.of<UserStore>(context);
     _postStore = Provider.of<PostStore>(context);
+    _filterForm = Provider.of<FilterFormStore>(context);
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -100,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
       UserScreen(
         userStore: _userStore,
         postStore: _postStore,
+        filterForm: _filterForm,
       ),
       SearchTabScreen(),
       CreatePostScreen(),

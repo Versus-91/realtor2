@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/nav_service.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

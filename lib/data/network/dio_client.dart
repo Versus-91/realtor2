@@ -61,6 +61,11 @@ class DioClient {
       );
       return response.data;
     } catch (e) {
+      if (e?.response?.statusCode == 401) {
+        appComponent.getRepository().logOut().then((res) {
+          NavigationService.instance.navigateToRemoevUntil(Routes.login);
+        });
+      }
       throw e;
     }
   }
@@ -87,6 +92,11 @@ class DioClient {
       );
       return response.data;
     } catch (e) {
+      if (e?.response?.statusCode == 401) {
+        appComponent.getRepository().logOut().then((res) {
+          NavigationService.instance.navigateToRemoevUntil(Routes.login);
+        });
+      }
       throw e;
     }
   }

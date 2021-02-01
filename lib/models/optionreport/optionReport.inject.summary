@@ -1,0 +1,8 @@
+{
+  "asset": "asset:boilerplate/lib/models/optionreport/optionReport.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

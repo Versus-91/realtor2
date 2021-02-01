@@ -14,7 +14,6 @@ import 'package:boilerplate/stores/type/type_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,13 +42,14 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _typeAheadController = TextEditingController();
   final TextEditingController _minPriceController = TextEditingController();
   final TextEditingController _maxPriceController = TextEditingController();
+  final TextEditingController _minAreaController = TextEditingController();
+  final TextEditingController _maxAreaController = TextEditingController();
   final TextEditingController _minDepositController = TextEditingController();
   final TextEditingController _maxDepositController = TextEditingController();
   // final TextEditingController _minRentController = TextEditingController();
   final TextEditingController _maxRentController = TextEditingController();
 
-  final _minRentController =
-      MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
+  final _minRentController = TextEditingController();
   String _selectedCity;
   var data;
   String dataurl = Endpoints.baseUrl + "/api/services/app/District/Find";
@@ -104,6 +104,12 @@ class _SearchScreenState extends State<SearchScreen> {
     }
     if (widget.filterForm.maxPrice != null) {
       _maxPriceController.text = widget.filterForm.maxPrice.toString();
+    }
+    if (widget.filterForm.minArea != null) {
+      _minAreaController.text = widget.filterForm.minArea.toString();
+    }
+    if (widget.filterForm.maxArea != null) {
+      _maxAreaController.text = widget.filterForm.maxArea.toString();
     }
     if (widget.filterForm.minDepositPrice != null) {
       _minDepositController.text = widget.filterForm.minDepositPrice.toString();
@@ -475,7 +481,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         Observer(builder: (context) {
           if (_typeStore.typeList != null) {
-            if (accomodationListData.length == 0) {
+            if (accomodationListData?.length == 0) {
               accomodationListData = _typeStore.typeList.types
                   .map((item) => SelectedPropertyTypes(
                       isSelected: false, titleTxt: item.name, id: item.id))
@@ -511,7 +517,7 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Widget> getAccomodationListUI() {
     final List<Widget> noList = <Widget>[];
 
-    for (int i = 0; i < accomodationListData.length; i++) {
+    for (int i = 0; i < accomodationListData?.length; i++) {
       final SelectedPropertyTypes date = accomodationListData[i];
       noList.add(
         Material(
@@ -628,6 +634,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: <Widget>[
                     Flexible(
                       child: TextField(
+                          controller: _minAreaController,
                           onChanged: (value) {
                             widget.filterForm.setLowArea(double.parse(value));
                           },
@@ -647,6 +654,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     VerticalDivider(),
                     Flexible(
                       child: TextField(
+                          controller: _maxAreaController,
                           onChanged: (value) {
                             widget.filterForm.setHightArea(double.parse(value));
                           },
@@ -690,13 +698,14 @@ class _SearchScreenState extends State<SearchScreen> {
               .map((item) => SelectedPropertyTypes(
                     id: item.id,
                     titleTxt: item.name,
-                    isSelected: widget.filterForm.amenities
-                            .where((m) => m == item.id)
-                            .isNotEmpty
+                    isSelected: widget.filterForm.amenities != null &&
+                            widget.filterForm.amenities
+                                .where((m) => m == item.id)
+                                .isNotEmpty
                         ? true
                         : false,
                   ))
-              .toList();
+              ?.toList();
         }
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,

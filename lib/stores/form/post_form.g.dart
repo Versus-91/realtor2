@@ -160,6 +160,21 @@ mixin _$PostFormStore on _PostFormStore, Store {
     });
   }
 
+  final _$pointAtom = Atom(name: '_PostFormStore.point');
+
+  @override
+  Point<num> get point {
+    _$pointAtom.reportRead();
+    return super.point;
+  }
+
+  @override
+  set point(Point<num> value) {
+    _$pointAtom.reportWrite(value, super.point, () {
+      super.point = value;
+    });
+  }
+
   final _$selectedCityAtom = Atom(name: '_PostFormStore.selectedCity');
 
   @override
@@ -677,6 +692,7 @@ postId: ${postId},
 propertyHomeTypeId: ${propertyHomeTypeId},
 latitude: ${latitude},
 longitude: ${longitude},
+point: ${point},
 selectedCity: ${selectedCity},
 selectedDistrict: ${selectedDistrict},
 description: ${description},

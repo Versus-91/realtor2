@@ -58,13 +58,13 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
       Atom(name: '_FilterFormStore.selectedPropertyTypes');
 
   @override
-  List<SelectedPropertyTypes> get selectedPropertyTypes {
+  ObservableList<SelectedPropertyTypes> get selectedPropertyTypes {
     _$selectedPropertyTypesAtom.reportRead();
     return super.selectedPropertyTypes;
   }
 
   @override
-  set selectedPropertyTypes(List<SelectedPropertyTypes> value) {
+  set selectedPropertyTypes(ObservableList<SelectedPropertyTypes> value) {
     _$selectedPropertyTypesAtom.reportWrite(value, super.selectedPropertyTypes,
         () {
       super.selectedPropertyTypes = value;
@@ -384,6 +384,17 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
         name: '_FilterFormStore.applyFilters');
     try {
       return super.applyFilters(paginate: paginate);
+    } finally {
+      _$_FilterFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void mapFilters(PostRequest request) {
+    final _$actionInfo = _$_FilterFormStoreActionController.startAction(
+        name: '_FilterFormStore.mapFilters');
+    try {
+      return super.mapFilters(request);
     } finally {
       _$_FilterFormStoreActionController.endAction(_$actionInfo);
     }
