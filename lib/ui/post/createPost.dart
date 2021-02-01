@@ -1130,7 +1130,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         ],
                       ),
                     ],
-                    if (_value == 1) ...[
+                    if (_categoryText.contains(
+                      AppLocalizations.of(context).translate('rent'),
+                    )) ...[
+                      Row(
+                        children: [
+                          Flexible(child: _buildEjarePriceField()),
+                        ],
+                      ),
+                    ],
+                    if (_categoryText.contains(
+                      AppLocalizations.of(context).translate('buy'),
+                    )) ...[
                       _buildBuyPriceField(),
                     ],
                   ],
