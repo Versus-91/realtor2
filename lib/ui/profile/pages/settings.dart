@@ -73,6 +73,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   @override
   void initState() {
     super.initState();
+    getUserLogin();
     _rippleAnimationController = AnimationController(
       vsync: this,
       duration: kRippleAnimationDuration,
