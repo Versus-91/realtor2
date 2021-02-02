@@ -54,20 +54,18 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
     });
   }
 
-  final _$selectedPropertyTypesAtom =
-      Atom(name: '_FilterFormStore.selectedPropertyTypes');
+  final _$propertyTypesAtom = Atom(name: '_FilterFormStore.propertyTypes');
 
   @override
-  ObservableList<SelectedPropertyTypes> get selectedPropertyTypes {
-    _$selectedPropertyTypesAtom.reportRead();
-    return super.selectedPropertyTypes;
+  ObservableList<int> get propertyTypes {
+    _$propertyTypesAtom.reportRead();
+    return super.propertyTypes;
   }
 
   @override
-  set selectedPropertyTypes(ObservableList<SelectedPropertyTypes> value) {
-    _$selectedPropertyTypesAtom.reportWrite(value, super.selectedPropertyTypes,
-        () {
-      super.selectedPropertyTypes = value;
+  set propertyTypes(ObservableList<int> value) {
+    _$propertyTypesAtom.reportWrite(value, super.propertyTypes, () {
+      super.propertyTypes = value;
     });
   }
 
@@ -209,13 +207,13 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   final _$amenitiesAtom = Atom(name: '_FilterFormStore.amenities');
 
   @override
-  List<int> get amenities {
+  ObservableList<int> get amenities {
     _$amenitiesAtom.reportRead();
     return super.amenities;
   }
 
   @override
-  set amenities(List<int> value) {
+  set amenities(ObservableList<int> value) {
     _$amenitiesAtom.reportWrite(value, super.amenities, () {
       super.amenities = value;
     });
@@ -335,11 +333,11 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
-  void setPropertyTypeList(List<SelectedPropertyTypes> items) {
+  void setPropertyType(int value) {
     final _$actionInfo = _$_FilterFormStoreActionController.startAction(
-        name: '_FilterFormStore.setPropertyTypeList');
+        name: '_FilterFormStore.setPropertyType');
     try {
-      return super.setPropertyTypeList(items);
+      return super.setPropertyType(value);
     } finally {
       _$_FilterFormStoreActionController.endAction(_$actionInfo);
     }
@@ -428,7 +426,7 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
 minPrice: ${minPrice},
 minRentPrice: ${minRentPrice},
 minDepositPrice: ${minDepositPrice},
-selectedPropertyTypes: ${selectedPropertyTypes},
+propertyTypes: ${propertyTypes},
 maxPrice: ${maxPrice},
 maxRentPrice: ${maxRentPrice},
 maxDepositPrice: ${maxDepositPrice},

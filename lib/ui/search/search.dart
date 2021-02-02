@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/models/location/locations.dart';
 import 'package:boilerplate/models/post/post_request.dart';
+import 'package:boilerplate/models/type/type.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
@@ -22,7 +24,6 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'list_theme.dart';
-import 'model/pop_list.dart';
 
 class SearchScreen extends StatefulWidget {
   final FilterFormStore filterForm;
@@ -35,9 +36,6 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   PostRequest _filterRequest;
   List<dynamic> _locations;
-  List<int> selectedTypes = [];
-  List<SelectedPropertyTypes> accomodationListData = [];
-  List<SelectedPropertyTypes> amenityList = [];
   int _value;
   final TextEditingController _typeAheadController = TextEditingController();
   final TextEditingController _minPriceController = TextEditingController();
@@ -76,7 +74,6 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    accomodationListData = widget.filterForm?.selectedPropertyTypes;
     _cityStore = Provider.of<CityStore>(context);
     _districtStore = Provider.of<DistrictStore>(context);
     _categoryStore = Provider.of<CategoryStore>(context);
@@ -93,12 +90,14 @@ class _SearchScreenState extends State<SearchScreen> {
       _typeStore.getTypes();
     if (!_amenityStore.loading && _amenityStore.amenityList == null)
       _amenityStore.getAmenities();
+
     _typeAheadController.text = widget.filterForm?.district?.name == null
         ? widget.filterForm?.city?.name
         : widget.filterForm.district.name;
     if (widget.filterForm?.bedCount != null) {
       isSelected[widget.filterForm.bedCount - 1] = true;
     }
+
     if (widget.filterForm.minPrice != null) {
       _minPriceController.text = widget.filterForm.minPrice.toString();
     }
@@ -153,8 +152,6 @@ class _SearchScreenState extends State<SearchScreen> {
                         AppLocalizations.of(context).translate('search'),
                         style: TextStyle(color: Colors.white, fontSize: 20)),
                     onPressed: () {
-                      widget.filterForm
-                          .setPropertyTypeList(accomodationListData);
                       _filterRequest = widget.filterForm.applyFilters();
                       if (_filterRequest != null) {
                         widget.postStore.getPosts(request: _filterRequest);
@@ -179,14 +176,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 getAppBarUI(),
                 searchField(),
                 _buildCategoryField(),
-                Visibility(
-                  visible: _amenityStore.amenityList != null &&
-                      _amenityStore.amenityList.amenities.length > 0,
-                  child: popularFilter(),
-                ),
+                popularFilter(),
                 _buildBedroomCountField(),
                 areaViewUI(AppLocalizations.of(context).translate('area')),
-                allAccommodationUI()
+                propertyTypes()
               ],
             ),
           ),
@@ -462,7 +455,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return data.toList();
   }
 
-  Widget allAccommodationUI() {
+  Widget propertyTypes() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -481,24 +474,10 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         Observer(builder: (context) {
           if (_typeStore.typeList != null) {
-            if (accomodationListData?.length == 0) {
-              accomodationListData = _typeStore.typeList.types
-                  .map((item) => SelectedPropertyTypes(
-                      isSelected: false, titleTxt: item.name, id: item.id))
-                  .toList();
-              accomodationListData.insert(
-                  0,
-                  SelectedPropertyTypes(
-                    titleTxt:
-                        AppLocalizations.of(context).translate('all_cases'),
-                    isSelected: false,
-                  ));
-            }
-
             return Padding(
               padding: const EdgeInsets.only(right: 16, left: 16),
               child: Column(
-                children: getAccomodationListUI(),
+                children: getAccomodationListUI(_typeStore.typeList.types),
               ),
             );
           } else {
@@ -514,20 +493,20 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  List<Widget> getAccomodationListUI() {
+  List<Widget> getAccomodationListUI(List<Type> types) {
     final List<Widget> noList = <Widget>[];
 
-    for (int i = 0; i < accomodationListData?.length; i++) {
-      final SelectedPropertyTypes date = accomodationListData[i];
+    for (int i = 0; i < types.length; i++) {
+      final Type propertyType = types[i];
+      var isPropertySelected = widget.filterForm.propertyTypes
+          .firstWhere((m) => m == propertyType.id, orElse: () => null);
       noList.add(
         Material(
           color: Colors.transparent,
           child: InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(4.0)),
             onTap: () {
-              setState(() {
-                checkAppPosition(i);
-              });
+              widget.filterForm.setPropertyType(propertyType.id);
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -535,20 +514,18 @@ class _SearchScreenState extends State<SearchScreen> {
                 children: <Widget>[
                   Expanded(
                     child: Text(
-                      date.titleTxt,
+                      propertyType.name,
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
                   CupertinoSwitch(
-                    activeColor: date.isSelected
+                    activeColor: isPropertySelected != null
                         ? HotelAppTheme.buildLightTheme().primaryColor
                         : Colors.grey.withOpacity(0.6),
                     onChanged: (bool value) {
-                      setState(() {
-                        checkAppPosition(i);
-                      });
+                      widget.filterForm.setPropertyType(propertyType.id);
                     },
-                    value: date.isSelected,
+                    value: isPropertySelected != null,
                   ),
                 ],
               ),
@@ -563,39 +540,6 @@ class _SearchScreenState extends State<SearchScreen> {
       }
     }
     return noList;
-  }
-
-  void checkAppPosition(int index) {
-    if (index == 0) {
-      if (accomodationListData[0].isSelected) {
-        accomodationListData.forEach((d) {
-          d.isSelected = false;
-        });
-      } else {
-        accomodationListData.forEach((d) {
-          d.isSelected = true;
-        });
-      }
-    } else {
-      accomodationListData[index].isSelected =
-          !accomodationListData[index].isSelected;
-
-      int count = 0;
-      for (int i = 0; i < accomodationListData.length; i++) {
-        if (i != 0) {
-          final SelectedPropertyTypes data = accomodationListData[i];
-          if (data.isSelected) {
-            count += 1;
-          }
-        }
-      }
-
-      if (count == accomodationListData.length - 1) {
-        accomodationListData[0].isSelected = true;
-      } else {
-        accomodationListData[0].isSelected = false;
-      }
-    }
   }
 
   Widget areaViewUI(String label) {
@@ -693,20 +637,6 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget popularFilter() {
     return Observer(builder: (context) {
       if (_amenityStore.amenityList != null) {
-        if (amenityList.length == 0) {
-          amenityList = _amenityStore.amenityList.amenities
-              .map((item) => SelectedPropertyTypes(
-                    id: item.id,
-                    titleTxt: item.name,
-                    isSelected: widget.filterForm.amenities != null &&
-                            widget.filterForm.amenities
-                                .where((m) => m == item.id)
-                                .isNotEmpty
-                        ? true
-                        : false,
-                  ))
-              ?.toList();
-        }
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -726,7 +656,7 @@ class _SearchScreenState extends State<SearchScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 16, left: 16),
               child: Column(
-                children: getPList(),
+                children: getPList(_amenityStore.amenityList.amenities),
               ),
             ),
             const SizedBox(
@@ -740,15 +670,15 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  List<Widget> getPList() {
+  List<Widget> getPList(List<Amenity> amenities) {
     final List<Widget> noList = <Widget>[];
     int count = 0;
     const int columnCount = 2;
-    for (int i = 0; i < amenityList.length / columnCount; i++) {
+    for (int i = 0; i < amenities.length / columnCount; i++) {
       final List<Widget> listUI = <Widget>[];
       for (int i = 0; i < columnCount; i++) {
         try {
-          final SelectedPropertyTypes amenity = amenityList[count];
+          final Amenity amenity = amenities[count];
           listUI.add(Expanded(
             child: Row(
               children: <Widget>[
@@ -757,20 +687,23 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: InkWell(
                     borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                     onTap: () {
-                      setState(() {
-                        amenity.isSelected = !amenity.isSelected;
-                        widget.filterForm.setAmenity(amenity.id);
-                      });
+                      widget.filterForm.setAmenity(amenity.id);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: <Widget>[
                           Icon(
-                            amenity.isSelected
+                            widget.filterForm.amenities.firstWhere(
+                                        (m) => m == amenity.id,
+                                        orElse: () => null) !=
+                                    null
                                 ? Icons.check_box
                                 : Icons.check_box_outline_blank,
-                            color: amenity.isSelected
+                            color: widget.filterForm.amenities.firstWhere(
+                                        (m) => m == amenity.id,
+                                        orElse: () => null) !=
+                                    null
                                 ? HotelAppTheme.buildLightTheme().primaryColor
                                 : Colors.grey.withOpacity(0.6),
                           ),
@@ -778,7 +711,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             width: 4,
                           ),
                           Text(
-                            amenity.titleTxt,
+                            amenity.name,
                           ),
                         ],
                       ),
@@ -788,7 +721,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             ),
           ));
-          if (count < amenityList.length - 1) {
+          if (count < amenities.length - 1) {
             count += 1;
           } else {
             break;

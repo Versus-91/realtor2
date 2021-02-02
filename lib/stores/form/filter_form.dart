@@ -3,7 +3,6 @@ import 'package:boilerplate/models/city/city.dart';
 import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
-import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:mobx/mobx.dart';
 
 part 'filter_form.g.dart';
@@ -36,8 +35,8 @@ abstract class _FilterFormStore with Store {
   @observable
   double minDepositPrice;
   @observable
-  ObservableList<SelectedPropertyTypes> selectedPropertyTypes =
-      new ObservableList<SelectedPropertyTypes>();
+  ObservableList<int> propertyTypes = new ObservableList<int>();
+
   @observable
   double maxPrice;
   @observable
@@ -58,7 +57,7 @@ abstract class _FilterFormStore with Store {
   @observable
   City city = City();
   @observable
-  List<int> amenities = new List<int>();
+  ObservableList<int> amenities = new ObservableList<int>();
   PostRequest prevRequest;
   @action
   void setMinPrice(double value) {
@@ -111,8 +110,10 @@ abstract class _FilterFormStore with Store {
   }
 
   @action
-  void setPropertyTypeList(List<SelectedPropertyTypes> items) {
-    selectedPropertyTypes = ObservableList.of(items);
+  void setPropertyType(int value) {
+    propertyTypes.contains(value)
+        ? propertyTypes.remove(value)
+        : propertyTypes.add(value);
   }
 
   @action
@@ -151,11 +152,7 @@ abstract class _FilterFormStore with Store {
         bedCount: bedCount,
         category: category.id,
         categoryName: category.name,
-        types: selectedPropertyTypes.map((element) {
-          if (element.isSelected == true) {
-            return element.id;
-          }
-        }).toList(),
+        types: propertyTypes,
         amenities: amenities);
     // if (paginate) {
     //   return request;
@@ -197,12 +194,10 @@ abstract class _FilterFormStore with Store {
     district = District(id: request.district, name: request.districtName);
     city = City(id: request.city, name: request.cityName);
     if (request.types != null) {
-      selectedPropertyTypes = ObservableList.of(request.types.map((element) {
-        return SelectedPropertyTypes(id: element, isSelected: true);
-      }).toList());
+      propertyTypes = ObservableList.of(request.types);
     }
     if (request.amenities != null) {
-      amenities = request.amenities;
+      amenities = ObservableList.of(request.amenities);
     }
   }
 
