@@ -1,6 +1,7 @@
 {
   "login_start": "Below are list of strings for login",
   "user_email": " ایمیل یا نام کاربری",
+  "email": "ایمیل",
   "user_name":"نام کاربری ",
   "Name":"نام ",
   "report":"گزارش",

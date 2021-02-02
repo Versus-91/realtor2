@@ -30,6 +30,10 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
   TextEditingController _newPasswordController = TextEditingController();
   TextEditingController _oldPasswordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _familyController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -82,6 +86,49 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
           child: Form(
             child: Column(children: [
               Divider(),
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    //  when the TextFormField in unfocused
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    //  when the TextFormField in focused
+                  ),
+                  border: UnderlineInputBorder(),
+                  errorText: _userStore.userErrorStore.newPassword,
+                  suffix: Icon(Icons.lock),
+                  labelText: AppLocalizations.of(context).translate('Name'),
+                ),
+                onChanged: (value) {
+                  _userStore.setNewPassword(value.toString());
+                },
+              ),
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    //  when the TextFormField in unfocused
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    //  when the TextFormField in focused
+                  ),
+                  border: UnderlineInputBorder(),
+                  errorText: _userStore.userErrorStore.newPassword,
+                  suffix: Icon(Icons.lock),
+                  labelText: AppLocalizations.of(context).translate('family'),
+                ),
+                onChanged: (value) {
+                  _userStore.setNewPassword(value.toString());
+                },
+              ),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 children: [
                   Flexible(
@@ -111,14 +158,15 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                       ),
                     ),
                   ),
-                  VerticalDivider(width:40,),
+                  VerticalDivider(
+                    width: 40,
+                  ),
                   Flexible(
                     flex: 1,
                     child: CustomButton(
                       textColor: Colors.white,
                       color: Colors.green,
-                      text: AppLocalizations.of(context)
-                          .translate('submit'),
+                      text: AppLocalizations.of(context).translate('submit'),
                       onPressed: () async {
                         _userStore
                             .changePhoneNumber(_newNumberController.text)
@@ -253,7 +301,47 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                   _userStore.setConfirmPassword(value.toString());
                 },
               ),
-
+              TextFormField(
+                decoration: InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                    //  when the TextFormField in unfocused
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    //  when the TextFormField in focused
+                  ),
+                  border: UnderlineInputBorder(),
+                  suffix: Icon(
+                    Icons.email,
+                  ),
+                  labelText: AppLocalizations.of(context).translate('email'),
+                ),
+                onTap: () => _alertDialog(),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: <Widget>[
+                  Icon(
+                    _userStore.user.isEmailConfirmed
+                        ? Icons.check_circle_outline
+                        : Icons.error,
+                    color: _userStore.user.isEmailConfirmed
+                        ? Colors.green
+                        : Colors.red.withOpacity(1),
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  _userStore.user.isEmailConfirmed
+                      ? Text(
+                          "تایید شده",
+                        )
+                      : Text("تایید نشده"),
+                ],
+              ),
               Container(
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 15),
@@ -295,6 +383,69 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
         return SizedBox.shrink();
       }
     });
+  }
+
+  void _alertDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+                title: Center(child: Text("ایمیل")),
+                content: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                            //  when the TextFormField in unfocused
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                            //  when the TextFormField in focused
+                          ),
+                          border: UnderlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          // _userStore.setNewPassword(value.toString());
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                actionsPadding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width / 5
+                    ),
+                actions: <Widget>[
+                  registerButton(),
+                  cancelButton(),
+                ]);
+          },
+        );
+      },
+    );
+  }
+
+  Widget cancelButton() {
+    return FlatButton(
+      
+        color: Colors.red,
+        textColor: Colors.white,
+        child: Text(AppLocalizations.of(context).translate('cancel')),
+        onPressed: () async {
+          Navigator.pop(context);
+        });
+  }
+
+  Widget registerButton() {
+    return FlatButton(
+        color: Colors.green,
+        textColor: Colors.white,
+        child: Text(AppLocalizations.of(context).translate('register_info')),
+        onPressed: () {});
   }
 
   _showErrorMessage(String message) {

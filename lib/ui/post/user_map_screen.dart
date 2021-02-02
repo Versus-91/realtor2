@@ -34,8 +34,12 @@ class _UserMapScreenState extends State<UserMapScreen> {
   @override
   Widget build(BuildContext context) {
     // final dynamic args = ModalRoute.of(context).settings.arguments;
-
-    return _mapSection();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+      ),
+      body: _mapSection(),
+    );
   }
 
   void _getPosition() async {
