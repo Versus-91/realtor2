@@ -103,6 +103,18 @@ abstract class _UserStore with Store {
   }
 
   @action
+  void validateName(String value) {
+    var number = RegExp('!@#<>?":_``~;[]\|=-+)(*&^%1234567890');
+    if (value.length < 4) {
+      userErrorStore.name = "طول نام کمتر از4 کاراکتر نباشد";
+    } else if (RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]').hasMatch(value)) {
+      userErrorStore.name = "نامعتبر";
+    } else {
+      userErrorStore.name = null;
+    }
+  }
+
+  @action
   void validateConfrimPassword(String value) {
     if (confirmPassword.length >= 8) {
       if (newPassword != confirmPassword) {
@@ -180,8 +192,13 @@ abstract class _UserErrorStore with Store {
   String newPassword;
   @observable
   String confrimPassword;
+  @observable
+  String name;
 
   @computed
   bool get hasErrorsChangeInfo =>
-      oldPassword != null || newPassword != null || confrimPassword != null;
+      name != null ||
+      oldPassword != null ||
+      newPassword != null ||
+      confrimPassword != null;
 }

@@ -283,6 +283,11 @@ mixin _$UserErrorStore on _UserErrorStore, Store {
     _$newPasswordAtom.reportRead();
     return super.newPassword;
   }
+    @override
+  String get Name {
+    _$newPasswordAtom.reportRead();
+    return super.newPassword;
+  }
 
   @override
   set newPassword(String value) {
