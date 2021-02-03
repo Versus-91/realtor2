@@ -160,6 +160,25 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               SettingsSection(
                 tiles: [
+                  SettingsTile(
+                    onTap: _userStore.user != null
+                        ? () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pushNamed(Routes.changeUserPass);
+                          }
+                        : () {},
+                    title: AppLocalizations.of(context)
+                        .translate("chang_user_password"),
+                    leading: Icon(Icons.lock),
+                    // trailing: IconButton(
+                    //   icon: Icon(Icons.keyboard_arrow_left),
+                    //   onPressed: () {},
+                    // ),
+                  )
+                ],
+              ),
+              SettingsSection(
+                tiles: [
                   SettingsTile.switchTile(
                     switchActiveColor: Colors.lightGreen,
                     title:

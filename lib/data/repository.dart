@@ -15,6 +15,7 @@ import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/models/report/report.dart';
 import 'package:boilerplate/models/type/type_list.dart';
 import 'package:boilerplate/models/user/changepassword.dart';
+import 'package:boilerplate/models/user/changuserinfo.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:dio/dio.dart';
 import 'package:sembast/sembast.dart';
@@ -250,7 +251,9 @@ class Repository {
   Future<void> changepassword(ChangePassword passwords) {
     return _postApi.changepassword(passwords);
   }
-
+Future<void> changeUserInfo(ChangeUserInfo userInfo) {
+    return _postApi.changeUserInfo(userInfo);
+  }
   Future addPhoneNumber(String phonenumber) {
     return _postApi.addPhoneNumber(phonenumber);
   }

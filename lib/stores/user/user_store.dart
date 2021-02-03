@@ -1,5 +1,6 @@
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/user/changepassword.dart';
+import 'package:boilerplate/models/user/changuserinfo.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
@@ -154,7 +155,13 @@ abstract class _UserStore with Store {
 
     return future;
   }
+  @action
+  Future changeUserInfo(ChangeUserInfo userInfo) async {
+    final future = _repository.changeUserInfo(userInfo);
+    fetchFuture = ObservableFuture(future);
 
+    return future;
+  }
   @action
   Future uploadAvatarImage(MultipartFile imageAvatar) async {
     avatarloading = true;

@@ -1,4 +1,4 @@
-import 'package:boilerplate/models/user/changepassword.dart';
+import 'package:boilerplate/models/user/changuserinfo.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
@@ -27,12 +27,10 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
     });
   }
 
-  TextEditingController _newPasswordController = TextEditingController();
-  TextEditingController _oldPasswordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _familyController = TextEditingController();
+  TextEditingController _verificationCodeController = TextEditingController();
 
   @override
   void initState() {
@@ -56,33 +54,6 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        actions: [
-          FlatButton(
-            child: Text("ذخیره"),
-            onPressed: () async {
-              _userStore
-                  .changePass(ChangePassword(
-                oldPassword: _oldPasswordController.text,
-                newPassword: _newPasswordController.text,
-                confirmPassword: _confirmPasswordController.text,
-              ))
-                  .then((value) async {
-                successMessage('رمز با موفقیت تغییر کرد.');
-                // _newNumberController.text = result;
-              }).catchError((error) {
-                if (error?.response?.data.toString().contains("not match")) {
-                  _showErrorMessage(
-                    "رمز فعلی اشتباه وارد شده است.",
-                  );
-                } else {
-                  _showErrorMessage(
-                    "خطا در تغییر رمز",
-                  );
-                }
-              });
-            },
-          )
-        ],
         title: Text(
           AppLocalizations.of(context).translate('edite_info'),
           style: TextStyle(
@@ -134,7 +105,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                   },
                 ),
                 TextFormField(
-                  controller: _nameController,
+                  controller: _familyController,
                   decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
@@ -159,7 +130,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 Row(
                   children: [
                     Flexible(
-                      flex: 3,
+                      flex: 4,
                       child: Container(
                         height: 40,
                         child: TextField(
@@ -168,7 +139,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                           ],
                           keyboardType: TextInputType.number,
                           textDirection: TextDirection.ltr,
-                          controller: _familyController,
+                          controller: _newNumberController,
                           decoration: InputDecoration(
                             //  when the TextFormField in unfocused
                             labelStyle: TextStyle(color: Colors.black),
@@ -186,7 +157,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                       ),
                     ),
                     VerticalDivider(
-                      width: 40,
+                      width: 20,
                     ),
                     Flexible(
                       flex: 1,
@@ -243,93 +214,6 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                   height: 20,
                 ),
                 TextFormField(
-                  controller: _oldPasswordController,
-                  decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      //  when the TextFormField in unfocused
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      //  when the TextFormField in focused
-                    ),
-                    border: UnderlineInputBorder(),
-                    suffix: IconButton(
-                      icon: _obscureText == true
-                          ? Icon(Icons.visibility_off)
-                          : Icon(Icons.visibility),
-                      onPressed: _toggle,
-                    ),
-                    labelText:
-                        AppLocalizations.of(context).translate('old_password'),
-                  ),
-                  onChanged: (value) {
-                    _userStore.setOldPassword(value.toString());
-                  },
-                  obscureText: _obscureText,
-                ),
-
-                SizedBox(
-                  height: 10,
-                ),
-                // Align(
-                //   alignment: Alignment.bottomRight,
-                //   child: FlatButton(
-                //     onPressed: () {},
-                //     child: Text(
-                //       AppLocalizations.of(context)
-                //           .translate('login_btn_forgot_password'),
-                //       style: TextStyle(color: Colors.blue, fontSize: 10),
-                //     ),
-                //   ),
-                // ),
-                TextFormField(
-                  controller: _newPasswordController,
-                  decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      //  when the TextFormField in unfocused
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      //  when the TextFormField in focused
-                    ),
-                    border: UnderlineInputBorder(),
-                    errorText: _userStore.userErrorStore.newPassword,
-                    suffix: Icon(Icons.lock),
-                    labelText:
-                        AppLocalizations.of(context).translate('new_password'),
-                  ),
-                  onChanged: (value) {
-                    _userStore.setNewPassword(value.toString());
-                  },
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      //  when the TextFormField in unfocused
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      //  when the TextFormField in focused
-                    ),
-                    border: UnderlineInputBorder(),
-                    suffix: Icon(Icons.lock),
-                    errorText: _userStore.userErrorStore.confrimPassword,
-                    // border: OutlineInputBorder(),
-                    labelText: AppLocalizations.of(context)
-                        .translate('confirm_password'),
-                  ),
-                  onChanged: (value) {
-                    _userStore.setConfirmPassword(value.toString());
-                  },
-                ),
-                TextFormField(
                   decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
@@ -370,41 +254,44 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                         : Text("تایید نشده"),
                   ],
                 ),
-                // Container(
-                //   width: MediaQuery.of(context).size.width,
-                //   padding: EdgeInsets.symmetric(vertical: 15),
-                //   alignment: Alignment.center,
-                //   child: CustomButton(
-                //     color: Colors.green,
-                //     textColor: Colors.white,
-                //     text:
-                //         AppLocalizations.of(context).translate('register_info'),
-                //     onPressed: () async {
-                //       _userStore
-                //           .changePass(ChangePassword(
-                //         oldPassword: _oldPasswordController.text,
-                //         newPassword: _newPasswordController.text,
-                //         confirmPassword: _confirmPasswordController.text,
-                //       ))
-                //           .then((value) async {
-                //         successMessage('رمز با موفقیت تغییر کرد.');
-                //         // _newNumberController.text = result;
-                //       }).catchError((error) {
-                //         if (error?.response?.data
-                //             .toString()
-                //             .contains("not match")) {
-                //           _showErrorMessage(
-                //             "رمز فعلی اشتباه وارد شده است.",
-                //           );
-                //         } else {
-                //           _showErrorMessage(
-                //             "خطا در تغییر رمز",
-                //           );
-                //         }
-                //       });
-                //     },
-                //   ),
-                // ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  alignment: Alignment.center,
+                  child: CustomButton(
+                    color: Colors.green,
+                    textColor: Colors.white,
+                    text:
+                        AppLocalizations.of(context).translate('register_info'),
+                    onPressed: () async {
+                      _userStore
+                          .changeUserInfo(ChangeUserInfo(
+                        newName: _nameController.text,
+                        newFamily: _familyController.text,
+                        email: _emailController.text,
+                      ))
+                          .then((value) async {
+                        successMessage('اطلاعات با موفقیت تغییر کرد.');
+                        // _newNumberController.text = result;
+                      }).catchError((error) {
+                        if (error?.response?.data
+                            .toString()
+                            .contains("not match")) {
+                          _showErrorMessage(
+                            "رمز فعلی اشتباه وارد شده است.",
+                          );
+                        } else {
+                          _showErrorMessage(
+                            "خطا در تغییر رمز",
+                          );
+                        }
+                      });
+                    },
+                  ),
+                ),
               ]),
             ),
           ),
@@ -426,9 +313,14 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 content: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
+                      Text(
+                          "برنامه نیاز دارد تا ایمیل شما را تایید کند. لطفا ایمیل خود را وارد کنید تا لینک تایید برای شما ارسال شود"),
+                      SizedBox(
+                        height: 20,
+                      ),
                       TextFormField(
-                        controller: _emailController,
                         decoration: InputDecoration(
+                          hintText: "آدرس ایمیل",
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey),
                             //  when the TextFormField in unfocused
@@ -438,11 +330,40 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                             //  when the TextFormField in focused
                           ),
                           border: UnderlineInputBorder(),
+                          helperText: "khddn kani",
                         ),
                         onChanged: (value) {
                           // _userStore.setNewPassword(value.toString());
                         },
                       ),
+                      TextFormField(
+                        controller: _verificationCodeController,
+                        decoration: InputDecoration(
+                          labelText: "labelTxt",
+                          helperText: "helperTxt",
+                          prefixIcon: Icon(
+                            Icons.account_circle,
+                            color: Colors.black45,
+                          ),
+                          suffixIcon: Icon(
+                            Icons.account_box,
+                            color: Colors.black45,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28.0),
+                            borderSide: BorderSide(
+                              color: Colors.green,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28.0),
+                            borderSide: BorderSide(
+                              color: Colors.green,
+                            ),
+                          ),
+                          hintText: "Enter Firstname",
+                        ),
+                      )
                     ],
                   ),
                 ),
