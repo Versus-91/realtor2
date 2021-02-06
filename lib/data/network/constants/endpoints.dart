@@ -3,39 +3,28 @@ class Endpoints {
 
   // base url
   static const String baseUrl = "http://www.kamyabhouse.com";
-
-  // receiveTimeout
   static const int receiveTimeout = 5000;
-
-  // connectTimeout
   static const int connectionTimeout = 3000;
-  // Amenities endpoints
   static const String getAmenities =
       baseUrl + "/api/services/app/Amenity/GetAll";
-  // post endpoints
   static const String getPosts = baseUrl + "/api/services/app/Post/GetAll";
-  static const String changeUserInfo =   baseUrl + "/api/services/app/user/update";
+  static const String changeUserInfo =
+      baseUrl + "/api/services/app/user/update";
   static const String createPosts = baseUrl + "/api/services/app/Post/create";
   static const String saveFirebaseId =
       baseUrl + "/api/services/app/notification/create";
-
-  //city endpoints
   static const String getCities = baseUrl + "/api/services/app/City/GetAll";
-  //district endpoints
   static const String getDistricts =
       baseUrl + "/api/services/app/District/GetAll";
   static const String getDistrictsById =
       baseUrl + "/api/services/app/District/GetByCityId";
   static const String authenticate = baseUrl + "/api/TokenAuth/Authenticate";
-  //Category endpoints
   static const String getCategories =
       baseUrl + "/api/services/app/category/GetAll";
-
   static const String getuser = baseUrl + "/api/services/app/account/user";
   static const String createUser =
       baseUrl + "/api/services/app/account/register";
   static const String updateUser = baseUrl + "/api/services/app/account/update";
-  //Category endpoints
   static const String getTypes = baseUrl + "/api/services/app/type/GetAll";
   static const String uploadImages = baseUrl + "/upload";
   static const String uploadAvatarImage = baseUrl + "/upload/avatar";
@@ -53,6 +42,8 @@ class Endpoints {
   static const String checkPhoneNumber =
       baseUrl + "/api/services/app/account/checkPhoneNumber";
   static const String checkEmail =
+      baseUrl + "/api/services/app/account/checkEmail";
+  static const String editeEmail =
       baseUrl + "/api/services/app/account/checkEmail";
   static const String updatePost = baseUrl + "/api/services/app/Post/create";
 }

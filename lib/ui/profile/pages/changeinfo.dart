@@ -1,5 +1,4 @@
 import 'package:boilerplate/models/user/changuserinfo.dart';
-import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -19,9 +18,9 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   UserStore _userStore;
 
-  // TextEditingController _emailController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
-  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _familyController = TextEditingController();
   TextEditingController _verificationCodeController = TextEditingController();
   TextEditingController _newNumberController = TextEditingController();
 
@@ -37,7 +36,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
     _userStore = Provider.of<UserStore>(context);
     _newNumberController.text = _userStore.user.phonenumber;
     _nameController.text = _userStore.user.name;
-    _usernameController.text = _userStore.user.surname;
+    _familyController.text = _userStore.user.surname;
     if (!_userStore.loading && _userStore.user == null) _userStore.getUser();
   }
 
@@ -92,7 +91,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                   },
                 ),
                 TextFormField(
-                  controller: _usernameController,
+                  controller: _familyController,
                   decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
@@ -215,73 +214,94 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 SizedBox(
                   height: 20,
                 ),
-                // Row(
-                //   children: [
-                //     Flexible(
-                //       flex: 4,
-                //       child: Container(
-                //         height: 40,
-                //         child: TextFormField(
-                //           controller: _emailController,
-                //           decoration: InputDecoration(
-                //             prefixIcon: Icon(Icons.edit),
-                //             enabledBorder: UnderlineInputBorder(
-                //               borderSide: BorderSide(color: Colors.grey),
-                //               //  when the TextFormField in unfocused
-                //             ),
-                //             focusedBorder: UnderlineInputBorder(
-                //               borderSide: BorderSide(color: Colors.blue),
-                //               //  when the TextFormField in focused
-                //             ),
-                //             border: UnderlineInputBorder(),
-                //             suffix: Icon(
-                //               Icons.email,
-                //             ),
-                //             labelText:
-                //                 AppLocalizations.of(context).translate('email'),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     VerticalDivider(
-                //       width: 20,
-                //     ),
-                //     Flexible(
-                //       flex: 1,
-                //       child: CustomButton(
-                //         textColor: Colors.white,
-                //         color: Colors.green,
-                //         text: AppLocalizations.of(context).translate('submit'),
-                //         onPressed: () async {
-                //           _alertDialog();
-                //         },
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                // SizedBox(
-                //   height: 5,
-                // ),
-                // Row(
-                //   children: <Widget>[
-                //     Icon(
-                //       _userStore.user.isEmailConfirmed
-                //           ? Icons.check_circle_outline
-                //           : Icons.error,
-                //       color: _userStore.user.isEmailConfirmed
-                //           ? Colors.green
-                //           : Colors.red.withOpacity(1),
-                //     ),
-                //     const SizedBox(
-                //       width: 4,
-                //     ),
-                //     _userStore.user.isEmailConfirmed
-                //         ? Text(
-                //             "تایید شده",
-                //           )
-                //         : Text("تایید نشده"),
-                //   ],
-                // ),
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 4,
+                      child: Container(
+                        height: 40,
+                        child: TextFormField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.edit),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                              //  when the TextFormField in unfocused
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue),
+                              //  when the TextFormField in focused
+                            ),
+                            border: UnderlineInputBorder(),
+                            suffix: Icon(
+                              Icons.email,
+                            ),
+                            labelText:
+                                AppLocalizations.of(context).translate('email'),
+                          ),
+                        ),
+                      ),
+                    ),
+                    VerticalDivider(
+                      width: 20,
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: CustomButton(
+                        textColor: Colors.white,
+                        color: Colors.green,
+                        text: AppLocalizations.of(context).translate('submit'),
+                        onPressed: () async {
+                          var snackBar =
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                            // duration:  Duration(seconds: 4),
+                            content: Row(
+                              children: <Widget>[
+                                CircularProgressIndicator(),
+                                Text(" درحال دریافت اطلاعات")
+                              ],
+                            ),
+                          ));
+                          _userStore
+                              .changeEmailAdderss(_emailController.text)
+                              .then((value) async {
+                            _alertDialog();
+
+                            snackBar.close();
+                          }).catchError((error) {
+                            snackBar.close();
+                            _showErrorMessage(
+                              "خطا در سرور",
+                            );
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      _userStore.user.isEmailConfirmed
+                          ? Icons.check_circle_outline
+                          : Icons.error,
+                      color: _userStore.user.isEmailConfirmed
+                          ? Colors.green
+                          : Colors.red.withOpacity(1),
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    _userStore.user.isEmailConfirmed
+                        ? Text(
+                            "تایید شده",
+                          )
+                        : Text("تایید نشده"),
+                  ],
+                ),
                 SizedBox(
                   height: 30,
                 ),
@@ -297,8 +317,10 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     onPressed: () async {
                       _userStore
                           .changeUserInfo(ChangeUserInfo(
-                        newName: _nameController.text,
-                        newUserName: _usernameController.text,
+                        name: _nameController.text,
+                        surname: _familyController.text,
+                        emailAddress: _emailController.text,
+                        // id: _userStore.user,
                       ))
                           .then((value) async {
                         successMessage('اطلاعات با موفقیت تغییر کرد.');

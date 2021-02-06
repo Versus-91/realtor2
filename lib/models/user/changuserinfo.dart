@@ -1,10 +1,14 @@
 class ChangeUserInfo {
-  String newName;
-  String newUserName;
+  String name;
+  String surname;
+  String emailAddress;
+  int id;
 
-  ChangeUserInfo({this.newName, this.newUserName});
+  ChangeUserInfo({this.name, this.emailAddress, this.id, this.surname});
   Map<String, dynamic> toMap() => {
-        "newName": newName,
-        "newUserName": newUserName,
+        "name": name,
+        "emailAddress": "userexample@gmail.com",
+        "id": id,
+        "surname": surname,
       };
 }

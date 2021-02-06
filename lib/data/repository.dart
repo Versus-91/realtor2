@@ -258,6 +258,11 @@ Future<void> changeUserInfo(ChangeUserInfo userInfo) {
     return _postApi.addPhoneNumber(phonenumber);
   }
 
+
+ Future addEmailAddress(String email) {
+    return _postApi.addEmail(email);
+  }
+
   Future verificationCodePhone(String phonenumber, String code) {
     return _postApi.verificationCodePhone(phonenumber, code);
   }

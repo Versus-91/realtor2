@@ -132,6 +132,7 @@ class PostApi {
       throw e;
     }
   }
+
   Future changeUserInfo(ChangeUserInfo changeUserInfo) async {
     try {
       final res = await _dioClient.put(Endpoints.changeUserInfo,
@@ -141,6 +142,7 @@ class PostApi {
       throw e;
     }
   }
+
   /// Returns list of post in response
   Future<CategoryList> getCategories() async {
     try {
@@ -247,6 +249,16 @@ class PostApi {
       final res = await _dioClient
           .post(Endpoints.addphonenumber, data: {"phoneNumber": phoneNumber});
       return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future addEmail(String email) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.editeEmail, data: {"EmailAddress": email});
+      return res["result"];
     } catch (e) {
       throw e;
     }

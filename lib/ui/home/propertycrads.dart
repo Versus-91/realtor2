@@ -323,15 +323,20 @@ class _PropertyCradState extends State<PropertyCrad>
                                     width: 0,
                                     height: 0,
                                   ),
-                            Flexible(
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.delete,
-                                  color: Colors.red[200],
-                                ),
-                                onPressed: () {},
-                              ),
-                            )
+                            widget.isEdditing == true
+                                ? Flexible(
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Colors.red[200],
+                                      ),
+                                      onPressed: () {},
+                                    ),
+                                  )
+                                : Container(
+                                    width: 0,
+                                    height: 0,
+                                  ),
                           ],
                         ),
                       ),

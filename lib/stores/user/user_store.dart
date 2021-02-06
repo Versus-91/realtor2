@@ -148,6 +148,15 @@ abstract class _UserStore with Store {
     return future;
   }
 
+ @action
+  Future changeEmailAdderss(String email) async {
+    final future = _repository.addEmailAddress(email);
+    fetchFuture = ObservableFuture(future);
+
+    return future;
+  }
+
+
   @action
   Future changePass(ChangePassword passwords) async {
     final future = _repository.changepassword(passwords);
