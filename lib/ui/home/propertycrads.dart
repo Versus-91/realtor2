@@ -13,7 +13,7 @@ import 'package:progressive_image/progressive_image.dart';
 import 'package:share/share.dart';
 
 class PropertyCrad extends StatefulWidget {
-  PropertyCrad({this.post, this.isEdditing = false});
+  PropertyCrad({this.post, this.isEdditing});
   final Post post;
   final bool isEdditing;
   @override
@@ -216,14 +216,15 @@ class _PropertyCradState extends State<PropertyCrad>
               ),
               Padding(
                 padding:
-                    const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 5.0),
+                    const EdgeInsets.only(left: 0.0, right: 0.0, bottom: 5.0),
                 child: IntrinsicHeight(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Flexible(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             FutureBuilder(
                               future: isSelected(widget.post.id),
@@ -290,6 +291,15 @@ class _PropertyCradState extends State<PropertyCrad>
                                     width: 0,
                                     height: 0,
                                   ),
+                            Flexible(
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Colors.red[200],
+                                ),
+                                onPressed: () {},
+                              ),
+                            )
                           ],
                         ),
                       ),

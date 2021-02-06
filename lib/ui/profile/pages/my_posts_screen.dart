@@ -125,7 +125,9 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                     );
                   }
                   return PropertyCrad(
-                      post: _postStore.userPostList.posts[index]);
+                    post: _postStore.userPostList.posts[index],
+                    isEdditing: true,
+                  );
                 },
               ),
               onRefresh: () async {

@@ -19,18 +19,11 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   UserStore _userStore;
 
-  bool _obscureText = true;
-  // Toggles the password show status
-  void _toggle() {
-    setState(() {
-      _obscureText = !_obscureText;
-    });
-  }
-
-  TextEditingController _emailController = TextEditingController();
+  // TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
-  TextEditingController _familyController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
   TextEditingController _verificationCodeController = TextEditingController();
+  TextEditingController _newNumberController = TextEditingController();
 
   @override
   void initState() {
@@ -38,37 +31,32 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
   }
   //text controllers:-----------------------------------------------------------
 
-  TextEditingController _newNumberController = TextEditingController();
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _userStore = Provider.of<UserStore>(context);
-
+    _newNumberController.text = _userStore.user.phonenumber;
+    _nameController.text = _userStore.user.name;
+    _usernameController.text = _userStore.user.surname;
     if (!_userStore.loading && _userStore.user == null) _userStore.getUser();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context).translate('edite_info'),
-          style: TextStyle(
-              fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
+        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          title: Text(
+            AppLocalizations.of(context).translate('edite_info'),
+            style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.normal),
+          ),
+          backgroundColor: Colors.red,
         ),
-        backgroundColor: Colors.red,
-      ),
-      body: Observer(
-        builder: (context) {
-          return _userStore.loading == true
-              ? Center(child: CircularProgressIndicator())
-              : _buildBody();
-        },
-      ),
-    );
+        body: _buildBody());
   }
 
   // app bar methods:-----------------------------------------------------------
@@ -77,8 +65,6 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
   Widget _buildBody() {
     return Observer(builder: (context) {
       if (_userStore.user != null) {
-        _newNumberController.text = _userStore.user.phonenumber;
-
         return Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 20.0),
           child: Form(
@@ -87,6 +73,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.edit),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
                       //  when the TextFormField in unfocused
@@ -101,11 +88,11 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     labelText: AppLocalizations.of(context).translate('Name'),
                   ),
                   onChanged: (value) {
-                    _userStore.setNewPassword(value.toString());
+                    // _userStore.setName(_nameController.text);
                   },
                 ),
                 TextFormField(
-                  controller: _familyController,
+                  controller: _usernameController,
                   decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
@@ -116,12 +103,14 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                       //  when the TextFormField in focused
                     ),
                     border: UnderlineInputBorder(),
+                    prefixIcon: Icon(Icons.edit),
                     errorText: _userStore.userErrorStore.name,
                     // suffix: Icon(Icons.person_add_alt_1_outlined),
-                    labelText: AppLocalizations.of(context).translate('family'),
+                    labelText:
+                        AppLocalizations.of(context).translate('user_name'),
                   ),
                   onChanged: (value) {
-                    // _userStore.setNewPassword(value.toString());
+                    // _userStore.setFamily(_familyController.text);
                   },
                 ),
                 SizedBox(
@@ -166,20 +155,33 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                         color: Colors.green,
                         text: AppLocalizations.of(context).translate('submit'),
                         onPressed: () async {
+                          var snackBar =
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                            // duration:  Duration(seconds: 4),
+                            content: Row(
+                              children: <Widget>[
+                                CircularProgressIndicator(),
+                                Text(" درحال دریافت اطلاعات")
+                              ],
+                            ),
+                          ));
                           _userStore
                               .changePhoneNumber(_newNumberController.text)
                               .then((value) async {
-                            var result =
-                                await Navigator.of(context, rootNavigator: true)
-                                    .pushNamed(
-                                        Routes.phoneNumberVerificationCode,
-                                        arguments: {
-                                  'phone': _newNumberController.text
-                                });
-                            _newNumberController.text = result;
+                            _alertDialog();
+                            // var result =
+                            //     await Navigator.of(context, rootNavigator: true)
+                            //         .pushNamed(
+                            //             Routes.phoneNumberVerificationCode,
+                            //             arguments: {
+                            //       'phone': _newNumberController.text
+                            //     });
+                            // _newNumberController.text = result;
+                            snackBar.close();
                           }).catchError((error) {
+                            snackBar.close();
                             _showErrorMessage(
-                              "خطا در تغییر شماره همراه",
+                              "خطا در سرور",
                             );
                           });
                         },
@@ -213,47 +215,73 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                 SizedBox(
                   height: 20,
                 ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      //  when the TextFormField in unfocused
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                      //  when the TextFormField in focused
-                    ),
-                    border: UnderlineInputBorder(),
-                    suffix: Icon(
-                      Icons.email,
-                    ),
-                    labelText: AppLocalizations.of(context).translate('email'),
-                  ),
-                  onTap: () => _alertDialog(),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      _userStore.user.isEmailConfirmed
-                          ? Icons.check_circle_outline
-                          : Icons.error,
-                      color: _userStore.user.isEmailConfirmed
-                          ? Colors.green
-                          : Colors.red.withOpacity(1),
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    _userStore.user.isEmailConfirmed
-                        ? Text(
-                            "تایید شده",
-                          )
-                        : Text("تایید نشده"),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Flexible(
+                //       flex: 4,
+                //       child: Container(
+                //         height: 40,
+                //         child: TextFormField(
+                //           controller: _emailController,
+                //           decoration: InputDecoration(
+                //             prefixIcon: Icon(Icons.edit),
+                //             enabledBorder: UnderlineInputBorder(
+                //               borderSide: BorderSide(color: Colors.grey),
+                //               //  when the TextFormField in unfocused
+                //             ),
+                //             focusedBorder: UnderlineInputBorder(
+                //               borderSide: BorderSide(color: Colors.blue),
+                //               //  when the TextFormField in focused
+                //             ),
+                //             border: UnderlineInputBorder(),
+                //             suffix: Icon(
+                //               Icons.email,
+                //             ),
+                //             labelText:
+                //                 AppLocalizations.of(context).translate('email'),
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     VerticalDivider(
+                //       width: 20,
+                //     ),
+                //     Flexible(
+                //       flex: 1,
+                //       child: CustomButton(
+                //         textColor: Colors.white,
+                //         color: Colors.green,
+                //         text: AppLocalizations.of(context).translate('submit'),
+                //         onPressed: () async {
+                //           _alertDialog();
+                //         },
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: 5,
+                // ),
+                // Row(
+                //   children: <Widget>[
+                //     Icon(
+                //       _userStore.user.isEmailConfirmed
+                //           ? Icons.check_circle_outline
+                //           : Icons.error,
+                //       color: _userStore.user.isEmailConfirmed
+                //           ? Colors.green
+                //           : Colors.red.withOpacity(1),
+                //     ),
+                //     const SizedBox(
+                //       width: 4,
+                //     ),
+                //     _userStore.user.isEmailConfirmed
+                //         ? Text(
+                //             "تایید شده",
+                //           )
+                //         : Text("تایید نشده"),
+                //   ],
+                // ),
                 SizedBox(
                   height: 30,
                 ),
@@ -270,24 +298,15 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                       _userStore
                           .changeUserInfo(ChangeUserInfo(
                         newName: _nameController.text,
-                        newFamily: _familyController.text,
-                        email: _emailController.text,
+                        newUserName: _usernameController.text,
                       ))
                           .then((value) async {
                         successMessage('اطلاعات با موفقیت تغییر کرد.');
                         // _newNumberController.text = result;
                       }).catchError((error) {
-                        if (error?.response?.data
-                            .toString()
-                            .contains("not match")) {
-                          _showErrorMessage(
-                            "رمز فعلی اشتباه وارد شده است.",
-                          );
-                        } else {
-                          _showErrorMessage(
-                            "خطا در تغییر رمز",
-                          );
-                        }
+                        _showErrorMessage(
+                          "خطا در تغییر اطلاعات",
+                        );
                       });
                     },
                   ),
@@ -309,44 +328,16 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-                title: Center(child: Text("ایمیل")),
+                title: Center(child: Text("کد تایید شماره همراه")),
                 content: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      Text(
-                          "برنامه نیاز دارد تا ایمیل شما را تایید کند. لطفا ایمیل خود را وارد کنید تا لینک تایید برای شما ارسال شود"),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          hintText: "آدرس ایمیل",
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                            //  when the TextFormField in unfocused
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue),
-                            //  when the TextFormField in focused
-                          ),
-                          border: UnderlineInputBorder(),
-                          helperText: "khddn kani",
-                        ),
-                        onChanged: (value) {
-                          // _userStore.setNewPassword(value.toString());
-                        },
-                      ),
                       TextFormField(
                         controller: _verificationCodeController,
                         decoration: InputDecoration(
-                          labelText: "labelTxt",
                           helperText: "helperTxt",
                           prefixIcon: Icon(
                             Icons.account_circle,
-                            color: Colors.black45,
-                          ),
-                          suffixIcon: Icon(
-                            Icons.account_box,
                             color: Colors.black45,
                           ),
                           enabledBorder: OutlineInputBorder(
@@ -361,7 +352,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                               color: Colors.green,
                             ),
                           ),
-                          hintText: "Enter Firstname",
+                          hintText: "کد تایید را وارد کنید",
                         ),
                       )
                     ],

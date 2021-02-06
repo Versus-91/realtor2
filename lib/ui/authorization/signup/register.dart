@@ -1,4 +1,3 @@
-import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/form/form_store.dart';
@@ -11,7 +10,6 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({Key key, this.title}) : super(key: key);

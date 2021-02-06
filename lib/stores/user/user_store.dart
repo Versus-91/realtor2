@@ -155,6 +155,7 @@ abstract class _UserStore with Store {
 
     return future;
   }
+
   @action
   Future changeUserInfo(ChangeUserInfo userInfo) async {
     final future = _repository.changeUserInfo(userInfo);
@@ -162,6 +163,7 @@ abstract class _UserStore with Store {
 
     return future;
   }
+
   @action
   Future uploadAvatarImage(MultipartFile imageAvatar) async {
     avatarloading = true;
