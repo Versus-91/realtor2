@@ -16,6 +16,7 @@ import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/models/report/report.dart';
 import 'package:boilerplate/models/type/type_list.dart';
 import 'package:boilerplate/models/user/changepassword.dart';
+import 'package:boilerplate/models/user/changuserinfo.dart';
 import 'package:boilerplate/models/user/user.dart';
 import 'package:dio/dio.dart';
 
@@ -131,7 +132,15 @@ class PostApi {
       throw e;
     }
   }
-
+  Future changeUserInfo(ChangeUserInfo changeUserInfo) async {
+    try {
+      final res = await _dioClient.put(Endpoints.changeUserInfo,
+          data: changeUserInfo.toMap());
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
   /// Returns list of post in response
   Future<CategoryList> getCategories() async {
     try {

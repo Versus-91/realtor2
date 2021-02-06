@@ -7,6 +7,7 @@ import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
+import 'package:boilerplate/ui/profile/pages/change_password.dart';
 import 'package:boilerplate/ui/profile/pages/changeinfo.dart';
 import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
 import 'package:boilerplate/widgets/image_crop_screen.dart';
@@ -30,7 +31,7 @@ class Routes {
   static const String map = '/map';
   static const String crop = '/crop';
   static const String changeInfo = '/changeInfo';
-
+  static const String changeUserPass = '/changeUserPass';
   static const String phoneNumberVerificationCode = '/phoneverification';
   static const String userPosts = '/userPosts';
   static const String createpost = '/createpost';
@@ -50,6 +51,7 @@ class Routes {
     crop: (BuildContext context) => ImageCropScreen(),
     phoneNumberVerificationCode: (BuildContext context) => Otp(),
     changeInfo: (BuildContext context) => ChangeInfo(),
+    changeUserPass: (BuildContext context) => ChangePasswordPage(),
     userPosts: (BuildContext context) => MyPostsScreen(),
   };
 }

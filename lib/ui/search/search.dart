@@ -269,24 +269,45 @@ class _SearchScreenState extends State<SearchScreen> {
                         ).toList(),
                       ),
                     ),
-                    Visibility(
-                        visible: widget.filterForm.category.name != null &&
-                            widget.filterForm.category.name.contains(
-                                AppLocalizations.of(context).translate('rent')),
-                        child: Column(
-                          children: [
-                            depositPriceBarFilter(AppLocalizations.of(context)
-                                .translate('rahn_scope')),
-                            rentPriceBarFilter(AppLocalizations.of(context)
-                                .translate('rent_scope'))
-                          ],
-                        )),
-                    Visibility(
-                        visible: widget.filterForm.category.name != null &&
-                            widget.filterForm.category.name.contains(
-                                AppLocalizations.of(context).translate('sell')),
-                        child: priceBarFilter(AppLocalizations.of(context)
-                            .translate('price_scope'))),
+                    if (widget.filterForm.category.name.contains(
+                      AppLocalizations.of(context).translate('rahn'),
+                    )) ...[
+                      depositPriceBarFilter(
+                          AppLocalizations.of(context).translate('rahn_scope')),
+                      rentPriceBarFilter(
+                          AppLocalizations.of(context).translate('rent_scope')),
+                    ],
+                    if (widget.filterForm.category.name.contains(
+                      AppLocalizations.of(context).translate('rent'),
+                    )) ...[
+                      Row(
+                        children: [
+                          Flexible(
+                              child: rentPriceBarFilter(
+                                  AppLocalizations.of(context)
+                                      .translate('rent_scope'))),
+                        ],
+                      ),
+                    ],
+                    if (widget.filterForm.category.name.contains(
+                      AppLocalizations.of(context).translate('buy'),
+                    )) ...[
+                      priceBarFilter(
+                          AppLocalizations.of(context).translate('price_scope'))
+                    ],
+
+                    // Visibility(
+                    //     visible: widget.filterForm.category.name != null &&
+                    //         widget.filterForm.category.name.contains(
+                    //             AppLocalizations.of(context).translate('rent')),
+                    //     child: Column(
+                    //       children: [
+                    // depositPriceBarFilter(AppLocalizations.of(context)
+                    //     .translate('rahn_scope')),
+                    // rentPriceBarFilter(AppLocalizations.of(context)
+                    //     .translate('rent_scope'))
+                    //       ],
+                    //     )),
                   ],
                 )
               : Opacity(
