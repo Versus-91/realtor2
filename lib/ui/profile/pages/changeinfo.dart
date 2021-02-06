@@ -95,11 +95,9 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                   decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
-                      //  when the TextFormField in unfocused
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
-                      //  when the TextFormField in focused
                     ),
                     border: UnderlineInputBorder(),
                     prefixIcon: Icon(Icons.edit),
@@ -129,11 +127,9 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                           textDirection: TextDirection.ltr,
                           controller: _newNumberController,
                           decoration: InputDecoration(
-                            //  when the TextFormField in unfocused
                             labelStyle: TextStyle(color: Colors.black),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue),
-                              //  when the TextFormField in focused
                             ),
 
                             prefixIcon: Icon(Icons.edit),
@@ -168,14 +164,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                               .changePhoneNumber(_newNumberController.text)
                               .then((value) async {
                             _alertDialog();
-                            // var result =
-                            //     await Navigator.of(context, rootNavigator: true)
-                            //         .pushNamed(
-                            //             Routes.phoneNumberVerificationCode,
-                            //             arguments: {
-                            //       'phone': _newNumberController.text
-                            //     });
-                            // _newNumberController.text = result;
+
                             snackBar.close();
                           }).catchError((error) {
                             snackBar.close();
@@ -226,11 +215,9 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                             prefixIcon: Icon(Icons.edit),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey),
-                              //  when the TextFormField in unfocused
                             ),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue),
-                              //  when the TextFormField in focused
                             ),
                             border: UnderlineInputBorder(),
                             suffix: Icon(
@@ -320,7 +307,6 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                         name: _nameController.text,
                         surname: _familyController.text,
                         emailAddress: _emailController.text,
-                        // id: _userStore.user,
                       ))
                           .then((value) async {
                         successMessage('اطلاعات با موفقیت تغییر کرد.');

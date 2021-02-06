@@ -84,7 +84,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   TextEditingController _rentPriceController = TextEditingController();
   TextEditingController _buyPriceController = TextEditingController();
   TextEditingController _areaController = TextEditingController();
-  TextEditingController _bedroomCountController = TextEditingController();
 
   //stores:---------------------------------------------------------------------
   CityStore _cityStore;
@@ -463,8 +462,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       _rentPriceController.clear();
       _buyPriceController.clear();
       _areaController.clear();
-      _bedroomCountController.clear();
       amenityList = [];
+      // isSelected = false;
       _value = null;
       _paths = null;
       _propertyTypevalue = null;
@@ -1391,7 +1390,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     _rentPriceController.dispose();
     _buyPriceController.dispose();
     _areaController.dispose();
-    _bedroomCountController.dispose();
 
     super.dispose();
   }
