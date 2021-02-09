@@ -370,7 +370,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-                title: Center(child: Text("کد تایید  ")),
+                title: Center(child: Text("کد تایید")),
                 content: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
