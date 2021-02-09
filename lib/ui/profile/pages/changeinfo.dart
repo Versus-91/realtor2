@@ -17,13 +17,18 @@ class ChangeInfo extends StatefulWidget {
 class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
   //stores:---------------------------------------------------------------------
   UserStore _userStore;
-
   TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _familyController = TextEditingController();
   TextEditingController _verificationCodeController = TextEditingController();
   TextEditingController _newNumberController = TextEditingController();
 
+  FocusNode _nameFocusNode;
+  FocusNode _familyFocusNode;
+  FocusNode _emailFocusNode;
+  FocusNode _numberFocusNode;
+
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -37,6 +42,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
     _newNumberController.text = _userStore.user.phonenumber;
     _nameController.text = _userStore.user.name;
     _familyController.text = _userStore.user.surname;
+    _emailController.text = _userStore.user.email;
     if (!_userStore.loading && _userStore.user == null) _userStore.getUser();
   }
 
@@ -67,9 +73,20 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
         return Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 20.0),
           child: Form(
+            key: _formKey,
             child: SingleChildScrollView(
               child: Column(children: [
                 TextFormField(
+                  focusNode: _nameFocusNode,
+                  validator: (value) {
+                    if (value.length < 4) {
+                      return 'طول نام باید بیش از 4 کاراکتر باشد';
+                    } else if (RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]')
+                        .hasMatch(value)) {
+                      return "نامعتبر";
+                    }
+                    return null;
+                  },
                   controller: _nameController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.edit),
@@ -87,10 +104,23 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     labelText: AppLocalizations.of(context).translate('Name'),
                   ),
                   onChanged: (value) {
-                    // _userStore.setName(_nameController.text);
+                    FocusScope.of(context).requestFocus(_familyFocusNode);
                   },
                 ),
                 TextFormField(
+                  validator: (value) {
+                    if (value.length < 4) {
+                      return 'طول این فیلد باید بیش از 4 کاراکتر باشد';
+                    } else if (RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]')
+                        .hasMatch(value)) {
+                      return "نامعتبر";
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    FocusScope.of(context).requestFocus(_numberFocusNode);
+                  },
+                  focusNode: _familyFocusNode,
                   controller: _familyController,
                   decoration: InputDecoration(
                     enabledBorder: UnderlineInputBorder(
@@ -103,12 +133,8 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     prefixIcon: Icon(Icons.edit),
                     errorText: _userStore.userErrorStore.name,
                     // suffix: Icon(Icons.person_add_alt_1_outlined),
-                    labelText:
-                        AppLocalizations.of(context).translate('user_name'),
+                    labelText: AppLocalizations.of(context).translate('family'),
                   ),
-                  onChanged: (value) {
-                    // _userStore.setFamily(_familyController.text);
-                  },
                 ),
                 SizedBox(
                   height: 20,
@@ -210,6 +236,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                       child: Container(
                         height: 40,
                         child: TextFormField(
+                          focusNode: _emailFocusNode,
                           controller: _emailController,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.edit),
@@ -302,20 +329,22 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     text:
                         AppLocalizations.of(context).translate('register_info'),
                     onPressed: () async {
-                      _userStore
-                          .changeUserInfo(ChangeUserInfo(
-                        name: _nameController.text,
-                        surname: _familyController.text,
-                        emailAddress: _emailController.text,
-                      ))
-                          .then((value) async {
-                        successMessage('اطلاعات با موفقیت تغییر کرد.');
-                        // _newNumberController.text = result;
-                      }).catchError((error) {
-                        _showErrorMessage(
-                          "خطا در تغییر اطلاعات",
-                        );
-                      });
+                      if (_formKey.currentState.validate()) {
+                        _userStore
+                            .changeUserInfo(ChangeUserInfo(
+                          name: _nameController.text,
+                          surname: _familyController.text,
+                          emailAddress: _emailController.text,
+                        ))
+                            .then((value) async {
+                          successMessage('اطلاعات با موفقیت تغییر کرد.');
+                          // _newNumberController.text = result;
+                        }).catchError((error) {
+                          _showErrorMessage(
+                            "خطا در تغییر اطلاعات",
+                          );
+                        });
+                      }
                     },
                   ),
                 ),
@@ -324,7 +353,10 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
           ),
         );
       } else {
-        return SizedBox.shrink();
+        return Container(
+          width: 0,
+          height: 0,
+        );
       }
     });
   }
@@ -336,7 +368,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-                title: Center(child: Text("کد تایید شماره همراه")),
+                title: Center(child: Text("کد تایید  ")),
                 content: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
