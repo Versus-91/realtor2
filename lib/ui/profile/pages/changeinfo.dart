@@ -335,6 +335,8 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                           name: _nameController.text,
                           surname: _familyController.text,
                           emailAddress: _emailController.text,
+                          phonenumber:_newNumberController.text
+
                         ))
                             .then((value) async {
                           successMessage('اطلاعات با موفقیت تغییر کرد.');

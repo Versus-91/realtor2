@@ -59,9 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen>
     setState(() {
       loggedIn = isLoggedIn;
     });
-    if (loggedIn == true) {
-      if (_userStore.user == null) _userStore.getUser();
-    }
+    _userStore.getUser();
   }
 
   @override
