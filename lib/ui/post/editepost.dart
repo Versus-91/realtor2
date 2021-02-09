@@ -153,6 +153,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
         _rahnPriceController.text = _store.rahnPrice.toString();
         _rentPriceController.text = _store.rentPrice.toString();
         _buyPriceController.text = _store.buyPrice.toString();
+        _value = _store.categoryId;
       });
     }
 
