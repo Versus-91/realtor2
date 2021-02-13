@@ -1,4 +1,5 @@
 class User {
+  int id;
   String username;
   bool isEmailConfirmed;
   bool isPhoneNumberConfirmed;
@@ -13,6 +14,7 @@ class User {
       this.surname,
       this.password,
       this.email,
+      this.id,
       this.username,
       this.phonenumber,
       this.isEmailConfirmed,
@@ -21,6 +23,7 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) => User(
       email: json["emailAddress"],
       name: json["name"],
+      id: json["id"],
       isEmailConfirmed: json["isEmailConfirmed"],
       isPhoneNumberConfirmed: json["isPhoneNumberConfirmed"],
       surname: json["surname"],
@@ -35,5 +38,6 @@ class User {
         "password": password,
         "phoneNumber": phonenumber,
         "avatar": avatar,
+        "id": id,
       };
 }

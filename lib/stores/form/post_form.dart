@@ -196,8 +196,7 @@ abstract class _PostFormStore with Store {
     validateLng(longitude);
     validateDistrict(selectedDistrict);
     validateAge(ageHome);
-    // validateRahnPrice(rahnPrice);
-    // validateRentPrice(rentPrice);
+ 
     validateDescription(description);
     validateTypeHome(propertyHomeTypeId);
   }

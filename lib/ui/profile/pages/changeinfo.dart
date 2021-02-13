@@ -234,7 +234,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     Flexible(
                       flex: 4,
                       child: Container(
-                        height: 40,
+                        height: 55,
                         child: TextFormField(
                           focusNode: _emailFocusNode,
                           controller: _emailController,
@@ -332,12 +332,11 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                       if (_formKey.currentState.validate()) {
                         _userStore
                             .changeUserInfo(ChangeUserInfo(
-                          name: _nameController.text,
-                          surname: _familyController.text,
-                          emailAddress: _emailController.text,
-                          phonenumber:_newNumberController.text
-
-                        ))
+                                name: _nameController.text,
+                                surname: _familyController.text,
+                                emailAddress: _emailController.text,
+                                phonenumber: _newNumberController.text,
+                                id: _userStore.user.id))
                             .then((value) async {
                           successMessage('اطلاعات با موفقیت تغییر کرد.');
                           // _newNumberController.text = result;

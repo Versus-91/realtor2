@@ -9,7 +9,7 @@ class Endpoints {
       baseUrl + "/api/services/app/Amenity/GetAll";
   static const String getPosts = baseUrl + "/api/services/app/Post/GetAll";
   static const String changeUserInfo =
-      baseUrl + "/api/services/app/user/update";
+      baseUrl + "/api/services/app/account/update";
   static const String createPosts = baseUrl + "/api/services/app/Post/create";
   static const String saveFirebaseId =
       baseUrl + "/api/services/app/notification/create";
@@ -45,5 +45,5 @@ class Endpoints {
       baseUrl + "/api/services/app/account/checkEmail";
   static const String editeEmail =
       baseUrl + "/api/services/app/account/checkEmail";
-  static const String updatePost = baseUrl + "/api/services/app/Post/create";
+  static const String updatePost = baseUrl + "/api/services/app/Post/edite";
 }
