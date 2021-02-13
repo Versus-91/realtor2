@@ -9,7 +9,7 @@ class ChangeUserInfo {
       {this.name, this.emailAddress, this.id, this.surname, this.phonenumber});
   Map<String, dynamic> toMap() => {
         "name": name,
-        "emailAddress": "userexample@gmail.com",
+        "emailAddress": emailAddress,
         "id": id,
         "surname": surname,
         "phonenumber": phonenumber,
