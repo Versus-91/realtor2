@@ -126,7 +126,7 @@ class Repository {
     });
   }
 
-  Future logOut() async {
+  Future<bool> logOut() async {
     return await _sharedPrefsHelper.logOut();
   }
 
@@ -251,15 +251,16 @@ class Repository {
   Future<void> changepassword(ChangePassword passwords) {
     return _postApi.changepassword(passwords);
   }
-Future<void> changeUserInfo(ChangeUserInfo userInfo) {
+
+  Future<void> changeUserInfo(ChangeUserInfo userInfo) {
     return _postApi.changeUserInfo(userInfo);
   }
+
   Future addPhoneNumber(String phonenumber) {
     return _postApi.addPhoneNumber(phonenumber);
   }
 
-
- Future addEmailAddress(String email) {
+  Future addEmailAddress(String email) {
     return _postApi.addEmail(email);
   }
 

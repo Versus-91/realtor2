@@ -223,7 +223,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                       onTap: () async {
                         {
                           if (loggedIn == true) {
-                            await Logout(context);
+                            appComponent.getRepository().logOut().then((res) {
+                              if (res == true) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pushNamedAndRemoveUntil(Routes.login,
+                                        (Route<dynamic> route) => false);
+                              }
+                            });
                           } else {
                             await _rippleAnimationController.forward();
                             Navigator.of(context, rootNavigator: true)
@@ -258,9 +264,5 @@ class _SettingsScreenState extends State<SettingsScreen>
         );
       },
     );
-  }
-
-  Future Logout(BuildContext context) async {
-    return await appComponent.getRepository().logOut();
   }
 }

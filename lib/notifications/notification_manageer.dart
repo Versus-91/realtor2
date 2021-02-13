@@ -10,6 +10,20 @@ class PushNotificationsManager {
 
   static final PushNotificationsManager _instance =
       PushNotificationsManager._();
+  static Future<dynamic> myBackgroundMessageHandler(
+      Map<String, dynamic> message) async {
+    if (message.containsKey('data')) {
+      // Handle data message
+      final dynamic data = message['data'];
+    }
+
+    if (message.containsKey('notification')) {
+      // Handle notification message
+      final dynamic notification = message['notification'];
+    }
+
+    // Or do other work.
+  }
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   bool _initialized = false;
@@ -18,7 +32,22 @@ class PushNotificationsManager {
     if (!_initialized) {
       // For iOS request permission first.
       _firebaseMessaging.requestNotificationPermissions();
-      _firebaseMessaging.configure();
+      _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print("onMessage: $message");
+          //_showItemDialog(message);
+        },
+        onBackgroundMessage: myBackgroundMessageHandler,
+        onLaunch: (Map<String, dynamic> message) async {
+          print("onLaunch: $message");
+          // _navigateToItemDetail(message);
+        },
+        onResume: (Map<String, dynamic> message) async {
+          print("onResume: $message");
+          // _navigateToItemDetail(message);
+        },
+      );
+      ;
 
       // For testing purposes print the Firebase Messaging token
       String token = await _firebaseMessaging.getToken();

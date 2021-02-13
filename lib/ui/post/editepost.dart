@@ -397,11 +397,11 @@ class _EditPostScreenState extends State<EditPostScreen> {
         _store
             .updatePost()
             .then((value) => successPost(
-                  AppLocalizations.of(context).translate('succes_send'),
+                  AppLocalizations.of(context).translate('send_editepost'),
                 ))
             .catchError((error) {
           _showErrorMessage(
-            "خطا در ارسال پست",
+            "خطا در ویرایش پست",
           );
         });
       },
