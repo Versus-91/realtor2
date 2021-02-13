@@ -41,11 +41,16 @@ class SharedPreferenceHelper {
     });
   }
 
-  Future<void> logOut() async {
-    return _sharedPreference.then((preference) {
-      preference.remove(Preferences.auth_token);
-      preference.remove(Preferences.userId);
-    });
+  Future<bool> logOut() async {
+    try {
+      return _sharedPreference.then((preference) {
+        preference.remove(Preferences.auth_token);
+        preference.remove(Preferences.userId);
+        return true;
+      });
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<void> removeUser() async {
