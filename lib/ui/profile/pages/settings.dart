@@ -235,11 +235,6 @@ class _SettingsScreenState extends State<SettingsScreen>
                             Navigator.of(context, rootNavigator: true)
                                 .pushNamedAndRemoveUntil(Routes.login,
                                     (Route<dynamic> route) => false);
-                            //   context,
-                            //   screen: LoginPage(),
-                            //   withNavBar: false,
-                            //   settings: null,
-                            // );
                           }
                         }
                       },
