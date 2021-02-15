@@ -225,6 +225,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                           if (loggedIn == true) {
                             appComponent.getRepository().logOut().then((res) {
                               if (res == true) {
+                                _userStore.setLoginState(false);
                                 Navigator.of(context, rootNavigator: true)
                                     .pushNamedAndRemoveUntil(Routes.login,
                                         (Route<dynamic> route) => false);

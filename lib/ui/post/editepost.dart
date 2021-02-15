@@ -17,6 +17,7 @@ import 'package:boilerplate/ui/post/user_map_screen.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flushbar/flushbar_route.dart' as route;
@@ -38,7 +39,7 @@ class EditPostScreen extends StatefulWidget {
 class _EditPostScreenState extends State<EditPostScreen> {
   bool _isVisible = true;
   int selectedItem;
-  int cityDropdownValue;
+  String cityDropdownValue;
   int _value;
   String _categoryText = '';
   String _fileName;
@@ -137,7 +138,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // get an instance of store class
     _cityStore = Provider.of<CityStore>(context);
     _districtStore = Provider.of<DistrictStore>(context);
     _categoryStore = Provider.of<CategoryStore>(context);
@@ -156,8 +156,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
         _value = _store.categoryId;
       });
     }
-
-    //start api request if it's not started
   }
 
   Future<bool> loadDataFields() async {
@@ -883,29 +881,32 @@ class _EditPostScreenState extends State<EditPostScreen> {
             child: _districtStore.loading == true
                 ? LinearProgressIndicator()
                 : (_districtStore.districtList.districts.length > 0
-                    ? DropdownButtonFormField<int>(
-                        decoration: InputDecoration(
-                          errorText: _store.formErrorStore.district,
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          fillColor: Color(0xfff3f3f4),
-                          filled: true,
-                          hintText: AppLocalizations.of(context)
-                              .translate('district'),
-                          contentPadding: EdgeInsets.all(10),
-                        ),
-                        onChanged: (int val) {
+                    ? DropdownSearch<String>(
+                        mode: Mode.MENU,
+                        maxHeight: 300,
+                        items: _districtStore.districtList.districts
+                            .map((district) => district.name)
+                            .toList(),
+                        isFilteredOnline: true,
+                        label: "منطقه",
+                        onChanged: (String val) {
                           FocusScope.of(context).requestFocus(new FocusNode());
-                          _store.setDistrict(val);
+                          _store.setDistrict(int.parse(val));
                         },
-                        items:
-                            _districtStore.districtList.districts.map((item) {
-                          return DropdownMenuItem<int>(
-                            child: Text(item.name),
-                            value: item.id,
-                          );
-                        }).toList(),
+                        selectedItem: "منطقه",
+                        showSearchBox: true,
+                        autoFocusSearchBox: true,
+                        searchBoxDecoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                          labelText: "انتخاب منطقه",
+                        ),
+                        popupShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                        ),
                       )
                     : Text(AppLocalizations.of(context)
                         .translate('notfound_district'))),
@@ -1011,33 +1012,69 @@ class _EditPostScreenState extends State<EditPostScreen> {
       builder: (context) {
         return _cityStore.cityList != null
             ? Flexible(
-                child: DropdownButtonFormField<int>(
-                  value: cityDropdownValue,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent)),
-                    labelText: AppLocalizations.of(context).translate('city'),
-                    fillColor: Color(0xfff3f3f4),
-                    filled: true,
-                    hintText: AppLocalizations.of(context).translate('city'),
-                    contentPadding: EdgeInsets.all(10),
-                  ),
-                  onChanged: (int val) {
+                child: DropdownSearch<String>(
+                  mode: Mode.MENU,
+                  maxHeight: 300,
+                  items: _cityStore.cityList.cities
+                      .map((city) => city.name)
+                      .toList(),
+                  isFilteredOnline: true,
+                  label: "شهر",
+                  onChanged: (String val) {
                     FocusScope.of(context).requestFocus(new FocusNode());
                     if (val != cityDropdownValue) {
                       setState(() {
                         cityDropdownValue = val;
                       });
-                      _districtStore.getDistrictsByCityid(val);
+                      _districtStore.getDistrictsByCityid(_cityStore
+                          .cityList.cities
+                          .firstWhere((city) => city.name == cityDropdownValue)
+                          ?.id);
                     }
                   },
-                  items: _cityStore.cityList.cities.map((item) {
-                    return DropdownMenuItem<int>(
-                      child: Text(item.name),
-                      value: item.id,
-                    );
-                  }).toList(),
+                  selectedItem: cityDropdownValue,
+                  showSearchBox: true,
+                  autoFocusSearchBox: true,
+                  searchBoxDecoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                    labelText: "انتخاب شهر",
+                  ),
+                  popupShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
                 ),
+
+                //  DropdownButtonFormField<int>(
+                //   value: cityDropdownValue,
+                //   decoration: InputDecoration(
+                //     border: OutlineInputBorder(
+                //         borderSide: BorderSide(color: Colors.transparent)),
+                //     labelText: AppLocalizations.of(context).translate('city'),
+                //     fillColor: Color(0xfff3f3f4),
+                //     filled: true,
+                //     hintText: AppLocalizations.of(context).translate('city'),
+                //     contentPadding: EdgeInsets.all(10),
+                //   ),
+                // onChanged: (int val) {
+                //   FocusScope.of(context).requestFocus(new FocusNode());
+                //   if (val != cityDropdownValue) {
+                //     setState(() {
+                //       cityDropdownValue = val;
+                //     });
+                //     _districtStore.getDistrictsByCityid(val);
+                //   }
+                // },
+                //   items: _cityStore.cityList.cities.map((item) {
+                //     return DropdownMenuItem<int>(
+                //       child: Text(item.name),
+                //       value: item.id,
+                //     );
+                //   }).toList(),
+                // ),
               )
             : Flexible(
                 child: Opacity(

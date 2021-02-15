@@ -183,6 +183,9 @@ abstract class _FormStore with Store {
     } else if (username.length < 4) {
       formErrorStore.username = 'نام کاربری باید بیشتر از 4 کاراکتر باشد';
       return;
+    } else if (username.length > 4) {
+      formErrorStore.username = '';
+      return;
     }
     _usernameCheck = ObservableFuture(_repository.checkUsername(username));
     _usernameCheck.then((result) {
@@ -282,10 +285,14 @@ abstract class _FormStore with Store {
 
   @action
   Future changePhoneNumber(String phoneNumber) async {
-    final future = _repository.addPhoneNumber(phoneNumber);
-    fetchFuture = ObservableFuture(future);
-
-    return future;
+    loading = true;
+    return _repository.addPhoneNumber(phoneNumber).then((value) {
+      loading = false;
+      return true;
+    }).catchError((error) {
+      loading = false;
+      throw error;
+    });
   }
 
   @action

@@ -876,29 +876,32 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             child: _districtStore.loading == true
                 ? LinearProgressIndicator()
                 : (_districtStore.districtList.districts.length > 0
-                    ? DropdownButtonFormField<int>(
-                        decoration: InputDecoration(
-                          errorText: _store.formErrorStore.district,
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          fillColor: Color(0xfff3f3f4),
-                          filled: true,
-                          hintText: AppLocalizations.of(context)
-                              .translate('district'),
-                          contentPadding: EdgeInsets.all(10),
-                        ),
-                        onChanged: (int val) {
+                    ? DropdownSearch<String>(
+                        mode: Mode.MENU,
+                        maxHeight: 300,
+                        items: _districtStore.districtList.districts
+                            .map((district) => district.name)
+                            .toList(),
+                        isFilteredOnline: true,
+                        label: "منطقه",
+                        onChanged: (String val) {
                           FocusScope.of(context).requestFocus(new FocusNode());
-                          _store.setDistrict(val);
+                          _store.setDistrict(int.parse(val));
                         },
-                        items:
-                            _districtStore.districtList.districts.map((item) {
-                          return DropdownMenuItem<int>(
-                            child: Text(item.name),
-                            value: item.id,
-                          );
-                        }).toList(),
+                        selectedItem: "منطقه",
+                        showSearchBox: true,
+                        autoFocusSearchBox: true,
+                        searchBoxDecoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                          labelText: "جست و جو منطقه",
+                        ),
+                        popupShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                        ),
                       )
                     : Text(AppLocalizations.of(context)
                         .translate('notfound_district'))),
@@ -1013,8 +1016,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       .map((city) => city.name)
                       .toList(),
                   isFilteredOnline: true,
-                  // onFind: _getItems(),
-                  //itemAsString: _getItems(),
                   label: "شهر",
                   onChanged: (String val) {
                     FocusScope.of(context).requestFocus(new FocusNode());
@@ -1034,7 +1035,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   searchBoxDecoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                    labelText: "Search a country",
+                    labelText: "جست و جو شهر",
                   ),
                   popupShape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -1043,33 +1044,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ),
                   ),
                 ),
-                // child: DropdownButtonFormField<int>(
-                //   value: cityDropdownValue,
-                //   decoration: InputDecoration(
-                //       border: OutlineInputBorder(
-                //           borderSide: BorderSide(color: Colors.transparent)),
-                //       labelText: AppLocalizations.of(context).translate('city'),
-                //       fillColor: Color(0xfff3f3f4),
-                //       filled: true,
-                //       hintText: AppLocalizations.of(context).translate('city'),
-                //       contentPadding: EdgeInsets.all(10),
-                //       errorText: _store.formErrorStore.district),
-                //   onChanged: (int val) {
-                //     FocusScope.of(context).requestFocus(new FocusNode());
-                //     if (val != cityDropdownValue) {
-                //       setState(() {
-                //         cityDropdownValue = val;
-                //       });
-                //       _districtStore.getDistrictsByCityid(val);
-                //     }
-                //   },
-                //   items: _cityStore.cityList.cities.map((item) {
-                //     return DropdownMenuItem<int>(
-                //       child: Text(item.name),
-                //       value: item.id,
-                //     );
-                //   }).toList(),
-                // ),
               )
             : Flexible(
                 child: Opacity(
@@ -1097,6 +1071,72 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
+Widget _buildArealistField() {
+    return Observer(
+      builder: (context) {
+        return _cityStore.cityList != null
+            ? Flexible(
+                child: DropdownSearch<String>(
+                  mode: Mode.MENU,
+                  maxHeight: 300,
+                  items: _cityStore.cityList.cities
+                      .map((city) => city.name)
+                      .toList(),
+                  isFilteredOnline: true,
+                  label: "شهر",
+                  onChanged: (String val) {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    if (val != cityDropdownValue) {
+                      setState(() {
+                        cityDropdownValue = val;
+                      });
+                      _districtStore.getDistrictsByCityid(_cityStore
+                          .cityList.cities
+                          .firstWhere((city) => city.name == cityDropdownValue)
+                          ?.id);
+                    }
+                  },
+                  selectedItem: cityDropdownValue,
+                  showSearchBox: true,
+                  autoFocusSearchBox: true,
+                  searchBoxDecoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                    labelText: "جست و جو شهر",
+                  ),
+                  popupShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
+                ),
+              )
+            : Flexible(
+                child: Opacity(
+                  opacity: 0.8,
+                  child: Shimmer.fromColors(
+                    child: Container(
+                        padding: EdgeInsets.only(top: 10, bottom: 15),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              AppLocalizations.of(context).translate('city'),
+                              style: TextStyle(
+                                fontSize: 20.0,
+                              ),
+                            )
+                          ],
+                        )),
+                    baseColor: Colors.black12,
+                    highlightColor: Colors.white,
+                    loop: 30,
+                  ),
+                ),
+              );
+      },
+    );
+  }
   _getItems() {
     _cityStore.cityList.cities.map((item) {
       return DropdownMenuItem<int>(

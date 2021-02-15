@@ -155,12 +155,13 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  SizedBox(height: height * .2),
                   _title(),
-                  SizedBox(height: height * .01),
+                   SizedBox(height: 20),
                   Container(
-                    height: height / 1.5,
+                    height: height / 1.7,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Observer(builder: (context) {
                           return Container(
@@ -298,15 +299,16 @@ class _LoginPageState extends State<LoginPage> {
                       AppLocalizations.of(context)
                           .translate('login_btn_Register'),
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
+                    VerticalDivider(),
                     RichText(
                         text: TextSpan(
                             text: AppLocalizations.of(context)
                                 .translate('Register'),
                             style: TextStyle(
                                 color: Color(0xfff79c4f),
-                                fontSize: 13,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w600),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {

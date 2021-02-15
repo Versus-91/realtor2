@@ -13,6 +13,9 @@ class Endpoints {
   static const String saveFirebaseId =
       baseUrl + "/api/services/app/notification/create";
   static const String getCities = baseUrl + "/api/services/app/City/GetAll";
+  static const String getAreas = baseUrl + "/api/services/app/Area/GetAll";
+  static const String getAreasById =
+      baseUrl + "/api/services/app/District/GetByAreaId";
   static const String getDistricts =
       baseUrl + "/api/services/app/District/GetAll";
   static const String getDistrictsById =

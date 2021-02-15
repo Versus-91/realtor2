@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/models/amenity/amenity_list.dart';
+import 'package:boilerplate/models/area/arealist.dart';
 import 'package:boilerplate/models/authenticate/login.dart';
 import 'package:boilerplate/models/category/categori_list.dart';
 import 'package:boilerplate/models/city/city_list.dart';
@@ -78,6 +79,12 @@ class Repository {
       // });
 
       return citiesList;
+    }).catchError((error) => throw error);
+  }
+
+  Future<AreaList> getAreas() async {
+    return await _postApi.getAreas().then((areasList) {
+      return areasList;
     }).catchError((error) => throw error);
   }
 

@@ -157,15 +157,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                   ),
                 ),
 
-                // Observer(builder: (context) {
-                //   if (_filterForm.loading) {
-                //     _filterRequest = _filterForm.applyFilters();
-                //     _postStore.getPosts(request: _filterRequest);
-                //     _filterForm.loading = false;
-                //     return SizedBox.shrink();
-                //   }
-                //   return SizedBox.shrink();
-                // })
+              
               ],
             ),
           ),

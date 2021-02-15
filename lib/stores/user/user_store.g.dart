@@ -152,11 +152,28 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.changePhoneNumber(phoneNumber));
   }
 
+  final _$changeEmailAdderssAsyncAction =
+      AsyncAction('_UserStore.changeEmailAdderss');
+
+  @override
+  Future<dynamic> changeEmailAdderss(String email) {
+    return _$changeEmailAdderssAsyncAction
+        .run(() => super.changeEmailAdderss(email));
+  }
+
   final _$changePassAsyncAction = AsyncAction('_UserStore.changePass');
 
   @override
   Future<dynamic> changePass(ChangePassword passwords) {
     return _$changePassAsyncAction.run(() => super.changePass(passwords));
+  }
+
+  final _$changeUserInfoAsyncAction = AsyncAction('_UserStore.changeUserInfo');
+
+  @override
+  Future<dynamic> changeUserInfo(ChangeUserInfo userInfo) {
+    return _$changeUserInfoAsyncAction
+        .run(() => super.changeUserInfo(userInfo));
   }
 
   final _$uploadAvatarImageAsyncAction =
@@ -283,11 +300,6 @@ mixin _$UserErrorStore on _UserErrorStore, Store {
     _$newPasswordAtom.reportRead();
     return super.newPassword;
   }
-    @override
-  String get Name {
-    _$newPasswordAtom.reportRead();
-    return super.newPassword;
-  }
 
   @override
   set newPassword(String value) {
@@ -311,12 +323,28 @@ mixin _$UserErrorStore on _UserErrorStore, Store {
     });
   }
 
+  final _$nameAtom = Atom(name: '_UserErrorStore.name');
+
+  @override
+  String get name {
+    _$nameAtom.reportRead();
+    return super.name;
+  }
+
+  @override
+  set name(String value) {
+    _$nameAtom.reportWrite(value, super.name, () {
+      super.name = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 oldPassword: ${oldPassword},
 newPassword: ${newPassword},
 confrimPassword: ${confrimPassword},
+name: ${name},
 hasErrorsChangeInfo: ${hasErrorsChangeInfo}
     ''';
   }

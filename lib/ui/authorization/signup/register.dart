@@ -343,7 +343,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           'fromRegister': true
                         });
                     if (result != null) {
-                      Future.delayed(Duration(seconds: 1), () {
+                      Future.delayed(Duration(milliseconds: 100), () {
                         Navigator.of(context, rootNavigator: true)
                             .pushNamedAndRemoveUntil(
                                 Routes.home, (Route<dynamic> route) => false);
@@ -422,7 +422,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               AppLocalizations.of(context).translate('login_btn_sign_in'),
               style: TextStyle(
                   color: Color(0xfff79c4f),
-                  fontSize: 13,
+                  fontSize: 15,
                   fontWeight: FontWeight.w600),
             ),
           ],

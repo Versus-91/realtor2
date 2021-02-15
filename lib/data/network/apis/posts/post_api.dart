@@ -4,6 +4,7 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/dio_client.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/models/amenity/amenity_list.dart';
+import 'package:boilerplate/models/area/arealist.dart';
 import 'package:boilerplate/models/authenticate/login.dart';
 import 'package:boilerplate/models/category/categori_list.dart';
 import 'package:boilerplate/models/city/city_list.dart';
@@ -94,6 +95,17 @@ class PostApi {
     }
   }
 
+Future<AreaList> getAreasByCityId(int id) async {
+    try {
+      final res = await _dioClient
+          .get(Endpoints.getAreasById + "?id=" + id.toString());
+      return AreaList.fromJson(res["result"]);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+
   Future<User> getUser() async {
     try {
       final res = await _dioClient.get(Endpoints.getuser);
@@ -177,6 +189,14 @@ class PostApi {
     try {
       final res = await _dioClient.get(Endpoints.getCities);
       return CityList.fromJson(res["result"]["items"]);
+    } catch (e) {
+      throw e;
+    }
+  }
+  Future<AreaList> getAreas() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getAreas);
+      return AreaList.fromJson(res["result"]["items"]);
     } catch (e) {
       throw e;
     }
