@@ -38,7 +38,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   int selectedItem;
-  int cityDropdownValue;
+  String cityDropdownValue;
   int _value;
   int _propertyTypevalue;
   final _imagePicker = ImagePicker();
@@ -1006,33 +1006,26 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       builder: (context) {
         return _cityStore.cityList != null
             ? Flexible(
-                child: DropdownSearch<int>(
+                child: DropdownSearch<String>(
                   mode: Mode.MENU,
                   maxHeight: 300,
+                  items: _cityStore.cityList.cities
+                      .map((city) => city.name)
+                      .toList(),
                   isFilteredOnline: true,
-                  onFind:_cityStore.cityList.cities.map((item) {
-                    return DropdownMenuItem<int>(
-                      child: Text(item.name),
-                      value: item.id,
-                    );
-                  }).toList(),
-
-
-                  itemAsString:_cityStore.cityList.cities.map((item) {
-                    return DropdownMenuItem<int>(
-                      child: Text(item.name),
-                      value: item.id,
-                    );
-                  }).toList(),
-              
+                  // onFind: _getItems(),
+                  //itemAsString: _getItems(),
                   label: "شهر",
-                  onChanged: (int val) {
+                  onChanged: (String val) {
                     FocusScope.of(context).requestFocus(new FocusNode());
                     if (val != cityDropdownValue) {
                       setState(() {
                         cityDropdownValue = val;
                       });
-                      _districtStore.getDistrictsByCityid(val);
+                      _districtStore.getDistrictsByCityid(_cityStore
+                          .cityList.cities
+                          .firstWhere((city) => city.name == cityDropdownValue)
+                          ?.id);
                     }
                   },
                   selectedItem: cityDropdownValue,
@@ -1102,6 +1095,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               );
       },
     );
+  }
+
+  _getItems() {
+    _cityStore.cityList.cities.map((item) {
+      return DropdownMenuItem<int>(
+        child: Text(item.name),
+        value: item.id,
+      );
+    }).toList();
   }
 
   Widget _buildCategoryField() {
