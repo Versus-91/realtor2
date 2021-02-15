@@ -16,6 +16,7 @@ import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
 import 'package:dio/dio.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flushbar/flushbar_route.dart' as route;
@@ -1005,17 +1006,26 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       builder: (context) {
         return _cityStore.cityList != null
             ? Flexible(
-                child: DropdownButtonFormField<int>(
-                  value: cityDropdownValue,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent)),
-                      labelText: AppLocalizations.of(context).translate('city'),
-                      fillColor: Color(0xfff3f3f4),
-                      filled: true,
-                      hintText: AppLocalizations.of(context).translate('city'),
-                      contentPadding: EdgeInsets.all(10),
-                      errorText: _store.formErrorStore.district),
+                child: DropdownSearch<int>(
+                  mode: Mode.MENU,
+                  maxHeight: 300,
+                  isFilteredOnline: true,
+                  onFind:_cityStore.cityList.cities.map((item) {
+                    return DropdownMenuItem<int>(
+                      child: Text(item.name),
+                      value: item.id,
+                    );
+                  }).toList(),
+
+
+                  itemAsString:_cityStore.cityList.cities.map((item) {
+                    return DropdownMenuItem<int>(
+                      child: Text(item.name),
+                      value: item.id,
+                    );
+                  }).toList(),
+              
+                  label: "شهر",
                   onChanged: (int val) {
                     FocusScope.of(context).requestFocus(new FocusNode());
                     if (val != cityDropdownValue) {
@@ -1025,13 +1035,48 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       _districtStore.getDistrictsByCityid(val);
                     }
                   },
-                  items: _cityStore.cityList.cities.map((item) {
-                    return DropdownMenuItem<int>(
-                      child: Text(item.name),
-                      value: item.id,
-                    );
-                  }).toList(),
+                  selectedItem: cityDropdownValue,
+                  showSearchBox: true,
+                  autoFocusSearchBox: true,
+                  searchBoxDecoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                    labelText: "Search a country",
+                  ),
+                  popupShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
                 ),
+                // child: DropdownButtonFormField<int>(
+                //   value: cityDropdownValue,
+                //   decoration: InputDecoration(
+                //       border: OutlineInputBorder(
+                //           borderSide: BorderSide(color: Colors.transparent)),
+                //       labelText: AppLocalizations.of(context).translate('city'),
+                //       fillColor: Color(0xfff3f3f4),
+                //       filled: true,
+                //       hintText: AppLocalizations.of(context).translate('city'),
+                //       contentPadding: EdgeInsets.all(10),
+                //       errorText: _store.formErrorStore.district),
+                //   onChanged: (int val) {
+                //     FocusScope.of(context).requestFocus(new FocusNode());
+                //     if (val != cityDropdownValue) {
+                //       setState(() {
+                //         cityDropdownValue = val;
+                //       });
+                //       _districtStore.getDistrictsByCityid(val);
+                //     }
+                //   },
+                //   items: _cityStore.cityList.cities.map((item) {
+                //     return DropdownMenuItem<int>(
+                //       child: Text(item.name),
+                //       value: item.id,
+                //     );
+                //   }).toList(),
+                // ),
               )
             : Flexible(
                 child: Opacity(
