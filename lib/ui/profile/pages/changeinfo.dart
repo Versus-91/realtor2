@@ -1,4 +1,4 @@
-import 'package:boilerplate/models/user/changuserinfo.dart';
+import 'package:boilerplate/main.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -329,23 +329,24 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     text:
                         AppLocalizations.of(context).translate('register_info'),
                     onPressed: () async {
-                      if (_formKey.currentState.validate()) {
-                        _userStore
-                            .changeUserInfo(ChangeUserInfo(
-                                name: _nameController.text,
-                                surname: _familyController.text,
-                                emailAddress: _emailController.text,
-                                phonenumber: _newNumberController.text,
-                                id: _userStore.user.id))
-                            .then((value) async {
-                          successMessage('اطلاعات با موفقیت تغییر کرد.');
-                          // _newNumberController.text = result;
-                        }).catchError((error) {
-                          _showErrorMessage(
-                            "خطا در تغییر اطلاعات",
-                          );
-                        });
-                      }
+                      _alertDialog();
+                      // if (_formKey.currentState.validate()) {
+                      //   _userStore
+                      //       .changeUserInfo(ChangeUserInfo(
+                      //           name: _nameController.text,
+                      //           surname: _familyController.text,
+                      //           emailAddress: _emailController.text,
+                      //           phonenumber: _newNumberController.text,
+                      //           id: _userStore.user.id))
+                      //       .then((value) async {
+                      //     successMessage('اطلاعات با موفقیت تغییر کرد.');
+                      //     // _newNumberController.text = result;
+                      //   }).catchError((error) {
+                      //     _showErrorMessage(
+                      //       "خطا در تغییر اطلاعات",
+                      //     );
+                      //   });
+                      // }
                     },
                   ),
                 ),
@@ -374,26 +375,21 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                   child: Column(
                     children: <Widget>[
                       TextFormField(
+                        //  autovalidate: true,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'کد را وارد کنید';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
                         controller: _verificationCodeController,
                         decoration: InputDecoration(
-                          helperText: "helperTxt",
+                          helperText: "کد تایید را وارد نمایید",
                           prefixIcon: Icon(
                             Icons.account_circle,
                             color: Colors.black45,
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(28.0),
-                            borderSide: BorderSide(
-                              color: Colors.green,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(28.0),
-                            borderSide: BorderSide(
-                              color: Colors.green,
-                            ),
-                          ),
-                          hintText: "کد تایید را وارد کنید",
                         ),
                       )
                     ],
@@ -426,7 +422,16 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
         color: Colors.green,
         textColor: Colors.white,
         child: Text(AppLocalizations.of(context).translate('register_info')),
-        onPressed: () {});
+        onPressed: () async {
+          appComponent
+              .getRepository()
+              .verificationCodePhone(
+                  _newNumberController.text, _verificationCodeController.text)
+              .then((value) async {
+            _userStore.getUser();
+            Navigator.pop(context);
+          });
+        });
   }
 
   _showErrorMessage(String message) {

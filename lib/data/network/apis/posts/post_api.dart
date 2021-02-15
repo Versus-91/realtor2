@@ -135,7 +135,7 @@ class PostApi {
 
   Future changeUserInfo(ChangeUserInfo changeUserInfo) async {
     try {
-      final res = await _dioClient.put(Endpoints.changeUserInfo,
+      final res = await _dioClient.put(Endpoints.updateUser,
           data: changeUserInfo.toMap());
       return res["result"];
     } catch (e) {

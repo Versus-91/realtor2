@@ -335,25 +335,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 if (value == true) {
                   _formStore
                       .changePhoneNumber(_numberController.text)
-                      .then((value) async {})
-                      .catchError((error) {
-                    _showErrorMessage(
-                      "خطا در تایید شماره همراه",
-                    );
-                  });
-                  var result = await Navigator.of(context).pushNamed(
-                      Routes.phoneNumberVerificationCode,
-                      arguments: {
-                        'phone': _numberController.text,
-                        'fromRegister': true
+                      .then((value) async {
+                    var result = await Navigator.of(context).pushNamed(
+                        Routes.phoneNumberVerificationCode,
+                        arguments: {
+                          'phone': _numberController.text,
+                          'fromRegister': true
+                        });
+                    if (result != null) {
+                      Future.delayed(Duration(seconds: 1), () {
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamedAndRemoveUntil(
+                                Routes.home, (Route<dynamic> route) => false);
                       });
-                  if (result != null) {
+                    }
+                  }).catchError((error) {
                     Future.delayed(Duration(seconds: 1), () {
                       Navigator.of(context, rootNavigator: true)
                           .pushNamedAndRemoveUntil(
                               Routes.home, (Route<dynamic> route) => false);
                     });
-                  }
+                  });
 
                   // _showSuccessMessage(
                   //     AppLocalizations.of(context).translate('succes_signup'));
