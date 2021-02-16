@@ -1018,71 +1018,62 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       builder: (context) {
         if (_cityStore.cityList != null) {
           return Container(
+            width: MediaQuery.of(context).size.width,
             height: 50,
-            child: Row(
-              children: [
-                Flexible(
-                  child: DropdownSearch<String>(
-                    mode: Mode.MENU,
-                    maxHeight: 300,
-                    items: _cityStore.cityList.cities
-                        .map((city) => city.name)
-                        .toList(),
-                    isFilteredOnline: true,
-                    label: "شهر",
-                    onChanged: (String val) {
-                      FocusScope.of(context).requestFocus(new FocusNode());
-                      if (val != cityDropdownValue) {
-                        setState(() {
-                          cityDropdownValue = val;
-                        });
+            child: DropdownSearch<String>(
+              mode: Mode.MENU,
+              maxHeight: 300,
+              items:
+                  _cityStore.cityList.cities.map((city) => city.name).toList(),
+              isFilteredOnline: true,
+              label: "شهر",
+              onChanged: (String val) {
+                FocusScope.of(context).requestFocus(new FocusNode());
+                if (val != cityDropdownValue) {
+                  setState(() {
+                    cityDropdownValue = val;
+                  });
 
-                        _areaStore.getAreasByCityid(_cityStore.cityList.cities
-                            .firstWhere(
-                                (city) => city.name == cityDropdownValue)
-                            ?.id);
-                      }
-                    },
-                    selectedItem: cityDropdownValue,
-                    showSearchBox: true,
-                    autoFocusSearchBox: true,
-                    searchBoxDecoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                      labelText: "جست و جو شهر",
-                    ),
-                    popupShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      ),
-                    ),
-                  ),
+                  _areaStore.getAreasByCityid(_cityStore.cityList.cities
+                      .firstWhere((city) => city.name == cityDropdownValue)
+                      ?.id);
+                }
+              },
+              selectedItem: cityDropdownValue,
+              showSearchBox: true,
+              autoFocusSearchBox: true,
+              searchBoxDecoration: InputDecoration(
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                labelText: "جست و جو شهر",
+              ),
+              popupShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
                 ),
-              ],
+              ),
             ),
           );
         } else {
-          return Flexible(
-            child: Opacity(
-              opacity: 0.8,
-              child: Shimmer.fromColors(
-                child: Container(
-                    padding: EdgeInsets.only(top: 10, bottom: 15),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          AppLocalizations.of(context).translate('city'),
-                          style: TextStyle(
-                            fontSize: 20.0,
-                          ),
-                        )
-                      ],
-                    )),
-                baseColor: Colors.black12,
-                highlightColor: Colors.white,
-                loop: 30,
-              ),
+          return Opacity(
+            opacity: 0.8,
+            child: Shimmer.fromColors(
+              child: Container(
+                  padding: EdgeInsets.only(top: 10, bottom: 15),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        AppLocalizations.of(context).translate('city'),
+                        style: TextStyle(
+                          fontSize: 20.0,
+                        ),
+                      )
+                    ],
+                  )),
+              baseColor: Colors.black12,
+              highlightColor: Colors.white,
+              loop: 30,
             ),
           );
         }
