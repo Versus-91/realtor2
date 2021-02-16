@@ -15,7 +15,7 @@ class Endpoints {
   static const String getCities = baseUrl + "/api/services/app/City/GetAll";
   static const String getAreas = baseUrl + "/api/services/app/Area/GetAll";
   static const String getAreasById =
-      baseUrl + "/api/services/app/District/GetByAreaId";
+      baseUrl + "/api/services/app/Area/GetAreaByCityId";
   static const String getDistricts =
       baseUrl + "/api/services/app/District/GetAll";
   static const String getDistrictsById =

@@ -4,8 +4,9 @@
   "email": "ایمیل",
   "user_name":"نام کاربری ",
   "Name":"نام ",
+  "locality":"ناحیه ",
   "exchange":"معاوضه ",
-
+"notfound_area":"ناحیه یافت نشد",
   "report":"گزارش",
   "family":"نام خانوادگی ",
   "user_password": "رمز",

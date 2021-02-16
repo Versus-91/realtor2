@@ -247,6 +247,16 @@ class Repository {
     }).catchError((error) => error);
   }
 
+  Future<AreaList> getAreasByCityId(int id) async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _postApi.getAreasByCityId(id).then((areasList) {
+      return areasList;
+    }).catchError((error) => error);
+  }
+
+
   Future<void> uploadImages(List<MultipartFile> files, String id) {
     return _postApi.uploadImages(files, id);
   }

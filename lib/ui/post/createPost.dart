@@ -6,6 +6,7 @@ import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
+import 'package:boilerplate/stores/area/area_store.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
@@ -39,6 +40,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   int selectedItem;
   String cityDropdownValue;
+  String localityDropdownValue;
   int _value;
   int _propertyTypevalue;
   final _imagePicker = ImagePicker();
@@ -89,6 +91,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   //stores:---------------------------------------------------------------------
   CityStore _cityStore;
   DistrictStore _districtStore;
+  AreaStore _areaStore;
   CategoryStore _categoryStore;
   TypeStore _typeStore;
   AmenityStore _amenityStore;
@@ -143,13 +146,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // get an instance of store class
+
     _cityStore = Provider.of<CityStore>(context);
     _districtStore = Provider.of<DistrictStore>(context);
     _categoryStore = Provider.of<CategoryStore>(context);
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
-    //start api request if it's not started
+    _areaStore = Provider.of<AreaStore>(context);
+
     if (_store.fetchFormData == false) loadDataFields();
   }
 
@@ -233,11 +237,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 child: Stack(
                   children: <Widget>[
                     _handleErrorMessage(),
-                    Column(
-                      children: <Widget>[
-                        _buildRightSide(),
-                      ],
-                    ),
+                    _buildRightSide(),
                     Observer(
                       builder: (context) {
                         return _store.success
@@ -264,9 +264,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       child: Column(
         children: <Widget>[
           _buildCategoryField(),
+          _buildCitylistField(),
+          SizedBox(height: 10),
           Row(
             children: [
-              _buildCitylistField(),
+              _buildArealistField(),
               VerticalDivider(),
               _buildDistrictlistField(),
             ],
@@ -469,6 +471,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       _paths = null;
       _propertyTypevalue = null;
       cityDropdownValue = null;
+      localityDropdownValue = null;
       _store = PostFormStore(appComponent.getRepository());
     });
   }
@@ -871,7 +874,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Widget _buildDistrictlistField() {
     return Observer(
       builder: (context) {
-        if (_districtStore.districtList != null && cityDropdownValue != null) {
+        if (_districtStore.districtList != null &&
+            localityDropdownValue != null) {
           return Flexible(
             child: _districtStore.loading == true
                 ? LinearProgressIndicator()
@@ -903,8 +907,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           ),
                         ),
                       )
-                    : Text(AppLocalizations.of(context)
-                        .translate('notfound_district'))),
+                    : Text(
+                        AppLocalizations.of(context)
+                            .translate('notfound_district'),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      )),
           );
         } else {
           return Flexible(
@@ -1007,136 +1016,159 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Widget _buildCitylistField() {
     return Observer(
       builder: (context) {
-        return _cityStore.cityList != null
-            ? Flexible(
-                child: DropdownSearch<String>(
-                  mode: Mode.MENU,
-                  maxHeight: 300,
-                  items: _cityStore.cityList.cities
-                      .map((city) => city.name)
-                      .toList(),
-                  isFilteredOnline: true,
-                  label: "شهر",
-                  onChanged: (String val) {
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                    if (val != cityDropdownValue) {
-                      setState(() {
-                        cityDropdownValue = val;
-                      });
-                      _districtStore.getDistrictsByCityid(_cityStore
-                          .cityList.cities
-                          .firstWhere((city) => city.name == cityDropdownValue)
-                          ?.id);
-                    }
-                  },
-                  selectedItem: cityDropdownValue,
-                  showSearchBox: true,
-                  autoFocusSearchBox: true,
-                  searchBoxDecoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                    labelText: "جست و جو شهر",
-                  ),
-                  popupShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
+        if (_cityStore.cityList != null) {
+          return Container(
+            height: 50,
+            child: Row(
+              children: [
+                Flexible(
+                  child: DropdownSearch<String>(
+                    mode: Mode.MENU,
+                    maxHeight: 300,
+                    items: _cityStore.cityList.cities
+                        .map((city) => city.name)
+                        .toList(),
+                    isFilteredOnline: true,
+                    label: "شهر",
+                    onChanged: (String val) {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      if (val != cityDropdownValue) {
+                        setState(() {
+                          cityDropdownValue = val;
+                        });
+
+                        _areaStore.getAreasByCityid(_cityStore.cityList.cities
+                            .firstWhere(
+                                (city) => city.name == cityDropdownValue)
+                            ?.id);
+                      }
+                    },
+                    selectedItem: cityDropdownValue,
+                    showSearchBox: true,
+                    autoFocusSearchBox: true,
+                    searchBoxDecoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                      labelText: "جست و جو شهر",
+                    ),
+                    popupShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
                     ),
                   ),
                 ),
-              )
-            : Flexible(
-                child: Opacity(
-                  opacity: 0.8,
-                  child: Shimmer.fromColors(
-                    child: Container(
-                        padding: EdgeInsets.only(top: 10, bottom: 15),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              AppLocalizations.of(context).translate('city'),
-                              style: TextStyle(
-                                fontSize: 20.0,
-                              ),
-                            )
-                          ],
-                        )),
-                    baseColor: Colors.black12,
-                    highlightColor: Colors.white,
-                    loop: 30,
-                  ),
-                ),
-              );
+              ],
+            ),
+          );
+        } else {
+          return Flexible(
+            child: Opacity(
+              opacity: 0.8,
+              child: Shimmer.fromColors(
+                child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 15),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('city'),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
+                        )
+                      ],
+                    )),
+                baseColor: Colors.black12,
+                highlightColor: Colors.white,
+                loop: 30,
+              ),
+            ),
+          );
+        }
       },
     );
   }
 
-Widget _buildArealistField() {
+  Widget _buildArealistField() {
     return Observer(
       builder: (context) {
-        return _cityStore.cityList != null
-            ? Flexible(
-                child: DropdownSearch<String>(
-                  mode: Mode.MENU,
-                  maxHeight: 300,
-                  items: _cityStore.cityList.cities
-                      .map((city) => city.name)
-                      .toList(),
-                  isFilteredOnline: true,
-                  label: "شهر",
-                  onChanged: (String val) {
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                    if (val != cityDropdownValue) {
-                      setState(() {
-                        cityDropdownValue = val;
-                      });
-                      _districtStore.getDistrictsByCityid(_cityStore
-                          .cityList.cities
-                          .firstWhere((city) => city.name == cityDropdownValue)
-                          ?.id);
-                    }
-                  },
-                  selectedItem: cityDropdownValue,
-                  showSearchBox: true,
-                  autoFocusSearchBox: true,
-                  searchBoxDecoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                    labelText: "جست و جو شهر",
-                  ),
-                  popupShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                  ),
-                ),
-              )
-            : Flexible(
-                child: Opacity(
-                  opacity: 0.8,
-                  child: Shimmer.fromColors(
-                    child: Container(
-                        padding: EdgeInsets.only(top: 10, bottom: 15),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              AppLocalizations.of(context).translate('city'),
-                              style: TextStyle(
-                                fontSize: 20.0,
-                              ),
-                            )
-                          ],
-                        )),
-                    baseColor: Colors.black12,
-                    highlightColor: Colors.white,
-                    loop: 30,
-                  ),
-                ),
-              );
+        if (_areaStore.areaList != null && cityDropdownValue != null) {
+          return Flexible(
+            child: _areaStore.loading == true
+                ? LinearProgressIndicator()
+                : (_areaStore.areaList.areas.length > 0
+                    ? DropdownSearch<String>(
+                        mode: Mode.MENU,
+                        maxHeight: 300,
+                        items: _areaStore.areaList.areas
+                            .map((area) => area.name)
+                            .toList(),
+                        isFilteredOnline: true,
+                        label: "ناحیه",
+                        onChanged: (String val) {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          if (val != localityDropdownValue) {
+                            setState(() {
+                              localityDropdownValue = val;
+                            });
+                            _districtStore.getDistrictsByCityid(_areaStore
+                                .areaList.areas
+                                .firstWhere((area) =>
+                                    area.name == localityDropdownValue)
+                                ?.id);
+                          }
+                        },
+                        selectedItem: localityDropdownValue,
+                        showSearchBox: true,
+                        autoFocusSearchBox: true,
+                        searchBoxDecoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                          labelText: "جست و جو ناحیه",
+                        ),
+                        popupShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                        ),
+                      )
+                    : Text(
+                        AppLocalizations.of(context).translate('notfound_area'),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      )),
+          );
+        } else {
+          return Flexible(
+            child: Opacity(
+              opacity: 0.8,
+              child: Shimmer.fromColors(
+                child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 15, right: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('locality'),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ],
+                    )),
+                baseColor: Colors.black12,
+                highlightColor: Colors.white,
+                loop: 30,
+              ),
+            ),
+          );
+        }
       },
     );
   }
+
   _getItems() {
     _cityStore.cityList.cities.map((item) {
       return DropdownMenuItem<int>(

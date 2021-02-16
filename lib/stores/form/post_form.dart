@@ -73,6 +73,8 @@ abstract class _PostFormStore with Store {
   @observable
   int selectedDistrict;
   @observable
+  int selectedLocality;
+  @observable
   String description = "";
   @observable
   int area;
@@ -127,6 +129,11 @@ abstract class _PostFormStore with Store {
   @action
   void setDistrict(int value) {
     selectedDistrict = value;
+  }
+
+  @action
+  void setLocality(int value) {
+    selectedLocality = value;
   }
 
   @action
@@ -196,7 +203,7 @@ abstract class _PostFormStore with Store {
     validateLng(longitude);
     validateDistrict(selectedDistrict);
     validateAge(ageHome);
- 
+
     validateDescription(description);
     validateTypeHome(propertyHomeTypeId);
   }

@@ -6,6 +6,7 @@ import 'package:boilerplate/di/modules/netwok_module.dart';
 import 'package:boilerplate/di/modules/preference_module.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
+import 'package:boilerplate/stores/area/area_store.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
   final ThemeStore _themeStore = ThemeStore(appComponent.getRepository());
   final PostStore _postStore = PostStore(appComponent.getRepository());
   final CityStore _cityStore = CityStore(appComponent.getRepository());
+  final AreaStore _areaStore = AreaStore(appComponent.getRepository());
   final _filterStore = FilterFormStore();
   final AmenityStore _amenityStore = AmenityStore(appComponent.getRepository());
   final DistrictStore _districtStore =
@@ -85,6 +87,7 @@ class MyApp extends StatelessWidget {
         Provider<ThemeStore>(create: (_) => _themeStore),
         Provider<CityStore>(create: (_) => _cityStore),
         Provider<PostStore>(create: (_) => _postStore),
+        Provider<AreaStore>(create: (_) => _areaStore),
         Provider<FilterFormStore>(create: (_) => _filterStore),
         Provider<DistrictStore>(create: (_) => _districtStore),
         Provider<CategoryStore>(create: (_) => _categoryStore),

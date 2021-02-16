@@ -50,4 +50,16 @@ abstract class _AreaStore with Store {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }
+
+  @action
+  Future getAreasByCityid(int id) async {
+    final future = _repository.getAreasByCityId(id);
+    fetchAreasFuture = ObservableFuture(future);
+
+    future.then((item) {
+      this.areaList = item;
+    }).catchError((error) {
+      errorStore.errorMessage = DioErrorUtil.handleError(error);
+    });
+  }
 }
