@@ -388,7 +388,7 @@ abstract class _PostFormStore with Store {
   @action
   void validateDistrict(int districtId) {
     if (districtId == null) {
-      formErrorStore.district = "منطقه انتخاب نشده است";
+      formErrorStore.district = "محله انتخاب نشده است";
     } else {
       formErrorStore.district = null;
     }

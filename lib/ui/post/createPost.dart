@@ -44,7 +44,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   int _value;
   int _propertyTypevalue;
   final _imagePicker = ImagePicker();
-
+  int _ageHomeselected;
   String _categoryText = '';
   String _fileName;
   List<PlatformFile> _paths;
@@ -465,8 +465,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       _rentPriceController.clear();
       _buyPriceController.clear();
       _areaController.clear();
+      _ageHomeselected = null;
       amenityList = [];
-      // isSelected = false;
       _value = null;
       _paths = null;
       _propertyTypevalue = null;
@@ -871,80 +871,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
-  Widget _buildDistrictlistField() {
-    return Observer(
-      builder: (context) {
-        if (_districtStore.districtList != null &&
-            localityDropdownValue != null) {
-          return Flexible(
-            child: _districtStore.loading == true
-                ? LinearProgressIndicator()
-                : (_districtStore.districtList.districts.length > 0
-                    ? DropdownSearch<String>(
-                        mode: Mode.MENU,
-                        maxHeight: 300,
-                        items: _districtStore.districtList.districts
-                            .map((district) => district.name)
-                            .toList(),
-                        isFilteredOnline: true,
-                        label: "منطقه",
-                        onChanged: (String val) {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          _store.setDistrict(int.parse(val));
-                        },
-                        selectedItem: "منطقه",
-                        showSearchBox: true,
-                        autoFocusSearchBox: true,
-                        searchBoxDecoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                          labelText: "جست و جو منطقه",
-                        ),
-                        popupShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          ),
-                        ),
-                      )
-                    : Text(
-                        AppLocalizations.of(context)
-                            .translate('notfound_district'),
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      )),
-          );
-        } else {
-          return Flexible(
-            child: Opacity(
-              opacity: 0.8,
-              child: Shimmer.fromColors(
-                child: Container(
-                    padding: EdgeInsets.only(top: 10, bottom: 15),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          AppLocalizations.of(context).translate('district'),
-                          style: TextStyle(
-                            fontSize: 20.0,
-                          ),
-                        ),
-                      ],
-                    )),
-                baseColor: Colors.black12,
-                highlightColor: Colors.white,
-                loop: 30,
-              ),
-            ),
-          );
-        }
-      },
-    );
-
-    //
-  }
-
   Widget _buildAgeField() {
     return Observer(
       builder: (context) {
@@ -968,11 +894,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                 .translate('age_home'),
                             contentPadding: EdgeInsets.all(10),
                           ),
+                          value: _ageHomeselected,
                           onChanged: (int val) {
                             FocusScope.of(context)
                                 .requestFocus(new FocusNode());
 
                             _store.setAge(val);
+                            _ageHomeselected = val;
                           },
                           items: List.generate(5, (index) {
                             if (index != 4) {
@@ -1089,39 +1017,44 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             child: _areaStore.loading == true
                 ? LinearProgressIndicator()
                 : (_areaStore.areaList.areas.length > 0
-                    ? DropdownSearch<String>(
-                        mode: Mode.MENU,
-                        maxHeight: 300,
-                        items: _areaStore.areaList.areas
-                            .map((area) => area.name)
-                            .toList(),
-                        isFilteredOnline: true,
-                        label: "ناحیه",
-                        onChanged: (String val) {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          if (val != localityDropdownValue) {
-                            setState(() {
-                              localityDropdownValue = val;
-                            });
-                            _districtStore.getDistrictsByCityid(_areaStore
-                                .areaList.areas
-                                .firstWhere((area) =>
-                                    area.name == localityDropdownValue)
-                                ?.id);
-                          }
-                        },
-                        selectedItem: localityDropdownValue,
-                        showSearchBox: true,
-                        autoFocusSearchBox: true,
-                        searchBoxDecoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                          labelText: "جست و جو ناحیه",
-                        ),
-                        popupShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
+                    ? Container(
+                        height: 50,
+                        child: DropdownSearch<String>(
+                          mode: Mode.MENU,
+                          maxHeight: 300,
+                          items: _areaStore.areaList.areas
+                              .map((area) => area.name)
+                              .toList(),
+                          isFilteredOnline: true,
+                          label: "ناحیه",
+                          onChanged: (String val) {
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
+                            if (val != localityDropdownValue) {
+                              setState(() {
+                                _store.setLocality(int.parse(val));
+                                localityDropdownValue = val;
+                              });
+                              _districtStore.getDistrictsByAreaid(_areaStore
+                                  .areaList.areas
+                                  .firstWhere((area) =>
+                                      area.name == localityDropdownValue)
+                                  ?.id);
+                            }
+                          },
+                          selectedItem: localityDropdownValue,
+                          showSearchBox: true,
+                          autoFocusSearchBox: true,
+                          searchBoxDecoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                            labelText: "جست و جو ناحیه",
+                          ),
+                          popupShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
                           ),
                         ),
                       )
@@ -1158,6 +1091,89 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         }
       },
     );
+  }
+
+  Widget _buildDistrictlistField() {
+    return Observer(
+      builder: (context) {
+        if (_districtStore.districtList != null &&
+            localityDropdownValue != null) {
+          return Flexible(
+            child: _districtStore.loading == true
+                ? LinearProgressIndicator()
+                : (_districtStore.districtList.districts.length > 0
+                    ? Container(
+                        height: 50,
+                        child: DropdownSearch<String>(
+                          mode: Mode.MENU,
+                          maxHeight: 300,
+                          items: _districtStore.districtList.districts
+                              .map((district) => district.name)
+                              .toList(),
+                          isFilteredOnline: true,
+                          label: "محله",
+                          onChanged: (String val) {
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
+                            int selectDistrict = _districtStore
+                                .districtList.districts
+                                .firstWhere((district) => district.name == val)
+                                .id;
+
+                            _store.setDistrict(selectDistrict);
+                          },
+                          selectedItem: "محله",
+                          showSearchBox: true,
+                          autoFocusSearchBox: true,
+                          searchBoxDecoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                            labelText: "جست و جو محله",
+                          ),
+                          popupShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Text(
+                        AppLocalizations.of(context)
+                            .translate('notfound_district'),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      )),
+          );
+        } else {
+          return Flexible(
+            child: Opacity(
+              opacity: 0.8,
+              child: Shimmer.fromColors(
+                child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 15),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('district'),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ],
+                    )),
+                baseColor: Colors.black12,
+                highlightColor: Colors.white,
+                loop: 30,
+              ),
+            ),
+          );
+        }
+      },
+    );
+
+    //
   }
 
   _getItems() {

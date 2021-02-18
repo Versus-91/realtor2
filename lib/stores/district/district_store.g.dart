@@ -69,13 +69,13 @@ mixin _$DistrictStore on _DistrictStore, Store {
     return _$getDistrictsAsyncAction.run(() => super.getDistricts());
   }
 
-  final _$getDistrictsByCityidAsyncAction =
-      AsyncAction('_DistrictStore.getDistrictsByCityid');
+  final _$getDistrictsByAreaidAsyncAction =
+      AsyncAction('_DistrictStore.getDistrictsByAreaid');
 
   @override
-  Future<dynamic> getDistrictsByCityid(int id) {
-    return _$getDistrictsByCityidAsyncAction
-        .run(() => super.getDistrictsByCityid(id));
+  Future<dynamic> getDistrictsByAreaid(int id) {
+    return _$getDistrictsByAreaidAsyncAction
+        .run(() => super.getDistrictsByAreaid(id));
   }
 
   @override

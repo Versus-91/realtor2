@@ -8,18 +8,17 @@ class Endpoints {
   static const String getAmenities =
       baseUrl + "/api/services/app/Amenity/GetAll";
   static const String getPosts = baseUrl + "/api/services/app/Post/GetAll";
-
   static const String createPosts = baseUrl + "/api/services/app/Post/create";
   static const String saveFirebaseId =
       baseUrl + "/api/services/app/notification/create";
   static const String getCities = baseUrl + "/api/services/app/City/GetAll";
   static const String getAreas = baseUrl + "/api/services/app/Area/GetAll";
-  static const String getAreasById =
+  static const String getAreasByCityId =
       baseUrl + "/api/services/app/Area/GetAreaByCityId";
   static const String getDistricts =
       baseUrl + "/api/services/app/District/GetAll";
-  static const String getDistrictsById =
-      baseUrl + "/api/services/app/District/GetByCityId";
+  static const String getDistrictsByAreaId =
+      baseUrl + "/api/services/app/District/GetByAreaId";
   static const String authenticate = baseUrl + "/api/TokenAuth/Authenticate";
   static const String getCategories =
       baseUrl + "/api/services/app/category/GetAll";

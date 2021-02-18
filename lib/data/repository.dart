@@ -70,21 +70,14 @@ class Repository {
 
   // city: ---------------------------------------------------------------------
   Future<CityList> getCities() async {
-    // check to see if posts are present in database, then fetch from database
-    // else make a network call to get all posts, store them into database for
-    // later use
     return await _postApi.getCities().then((citiesList) {
-      // citiesList.cities.forEach((post) {
-      //   _cityDataSource.insert(post);
-      // });
-
       return citiesList;
     }).catchError((error) => throw error);
   }
 
   Future<AreaList> getAreas() async {
-    return await _postApi.getAreas().then((areasList) {
-      return areasList;
+    return await _postApi.getAreas().then((areaList) {
+      return areaList;
     }).catchError((error) => throw error);
   }
 
@@ -238,24 +231,17 @@ class Repository {
     }).catchError((error) => error);
   }
 
-  Future<DistrictList> getDistrictsByCityId(int id) async {
-    // check to see if posts are present in database, then fetch from database
-    // else make a network call to get all posts, store them into database for
-    // later use
-    return await _postApi.getDistrictsByCityId(id).then((districtList) {
+  Future<DistrictList> getDistrictsByAreaId(int id) async {
+    return await _postApi.getDistrictsByAreaId(id).then((districtList) {
       return districtList;
     }).catchError((error) => error);
   }
 
   Future<AreaList> getAreasByCityId(int id) async {
-    // check to see if posts are present in database, then fetch from database
-    // else make a network call to get all posts, store them into database for
-    // later use
     return await _postApi.getAreasByCityId(id).then((areasList) {
       return areasList;
     }).catchError((error) => error);
   }
-
 
   Future<void> uploadImages(List<MultipartFile> files, String id) {
     return _postApi.uploadImages(files, id);

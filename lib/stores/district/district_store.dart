@@ -49,8 +49,8 @@ abstract class _DistrictStore with Store {
   }
 
   @action
-  Future getDistrictsByCityid(int id) async {
-    final future = _repository.getDistrictsByCityId(id);
+  Future getDistrictsByAreaid(int id) async {
+    final future = _repository.getDistrictsByAreaId(id);
     fetchDistrictFuture = ObservableFuture(future);
 
     future.then((item) {

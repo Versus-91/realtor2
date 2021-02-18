@@ -68,6 +68,14 @@ mixin _$AreaStore on _AreaStore, Store {
     return _$getAreasAsyncAction.run(() => super.getAreas());
   }
 
+  final _$getAreasByCityidAsyncAction =
+      AsyncAction('_AreaStore.getAreasByCityid');
+
+  @override
+  Future<dynamic> getAreasByCityid(int id) {
+    return _$getAreasByCityidAsyncAction.run(() => super.getAreasByCityid(id));
+  }
+
   @override
   String toString() {
     return '''

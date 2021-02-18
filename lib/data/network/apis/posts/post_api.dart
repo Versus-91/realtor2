@@ -85,26 +85,25 @@ class PostApi {
     }
   }
 
-  Future<DistrictList> getDistrictsByCityId(int id) async {
+  Future<DistrictList> getDistrictsByAreaId(int id) async {
     try {
       final res = await _dioClient
-          .get(Endpoints.getDistrictsById + "?id=" + id.toString());
+          .get(Endpoints.getDistrictsByAreaId + "?id=" + id.toString());
       return DistrictList.fromJson(res["result"]);
     } catch (e) {
       throw e;
     }
   }
 
-Future<AreaList> getAreasByCityId(int id) async {
+  Future<AreaList> getAreasByCityId(int id) async {
     try {
       final res = await _dioClient
-          .get(Endpoints.getAreasById + "?id=" + id.toString());
-      return AreaList.fromJson(res["result"]);
+          .get(Endpoints.getAreasByCityId + "?cityid=" + id.toString());
+      return AreaList.fromJson(res["result"]["items"]);
     } catch (e) {
       throw e;
     }
   }
-
 
   Future<User> getUser() async {
     try {
@@ -193,6 +192,7 @@ Future<AreaList> getAreasByCityId(int id) async {
       throw e;
     }
   }
+
   Future<AreaList> getAreas() async {
     try {
       final res = await _dioClient.get(Endpoints.getAreas);

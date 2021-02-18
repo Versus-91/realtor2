@@ -62,7 +62,7 @@
   "hight_area": "بیشترین مساحت",
   "low_area": "کمترین مساحت",
   "age_home": "سن بنا",
-  "notfound_district": "منطقه ای یافت نشد",
+  "notfound_district": "محله ای یافت نشد",
 
   "area": "مساحت",
   "area_range": "(مترمربع)",
@@ -84,7 +84,7 @@
 
   
   "city": "شهر",
-  "district": "منطقه",
+  "district": "محله",
   "bed": "اطاق خواب",
   "type_home": "نوع ملک",
   "post_id": "شناسه اعلان",

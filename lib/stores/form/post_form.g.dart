@@ -205,6 +205,21 @@ mixin _$PostFormStore on _PostFormStore, Store {
     });
   }
 
+  final _$selectedLocalityAtom = Atom(name: '_PostFormStore.selectedLocality');
+
+  @override
+  int get selectedLocality {
+    _$selectedLocalityAtom.reportRead();
+    return super.selectedLocality;
+  }
+
+  @override
+  set selectedLocality(int value) {
+    _$selectedLocalityAtom.reportWrite(value, super.selectedLocality, () {
+      super.selectedLocality = value;
+    });
+  }
+
   final _$descriptionAtom = Atom(name: '_PostFormStore.description');
 
   @override
@@ -432,6 +447,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
         name: '_PostFormStore.setDistrict');
     try {
       return super.setDistrict(value);
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setLocality(int value) {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.setLocality');
+    try {
+      return super.setLocality(value);
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
@@ -695,6 +721,7 @@ longitude: ${longitude},
 point: ${point},
 selectedCity: ${selectedCity},
 selectedDistrict: ${selectedDistrict},
+selectedLocality: ${selectedLocality},
 description: ${description},
 area: ${area},
 rahnPrice: ${rahnPrice},

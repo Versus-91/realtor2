@@ -298,7 +298,8 @@ class _PropertyCradState extends State<PropertyCrad>
                                 color: Colors.blue[200],
                               ),
                               onPressed: () async {
-                                await Share.share(Endpoints.baseUrl);
+                                await Share.share(Endpoints.baseUrl + '/ads/'
+                                + widget.post.id.toString());
                               },
                             ),
                             widget.isEdditing == true

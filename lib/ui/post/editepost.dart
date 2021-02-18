@@ -8,6 +8,7 @@ import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/postimages/postimages.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
+import 'package:boilerplate/stores/area/area_store.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';
@@ -38,6 +39,7 @@ class EditPostScreen extends StatefulWidget {
 
 class _EditPostScreenState extends State<EditPostScreen> {
   bool _isVisible = true;
+  String localityDropdownValue;
   int selectedItem;
   String cityDropdownValue;
   int _value;
@@ -89,6 +91,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   CategoryStore _categoryStore;
   TypeStore _typeStore;
   AmenityStore _amenityStore;
+  AreaStore _areaStore;
   //focus node:-----------------------------------------------------------------
 
   //stores:---------------------------------------------------------------------
@@ -143,6 +146,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
     _categoryStore = Provider.of<CategoryStore>(context);
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
+    _areaStore = Provider.of<AreaStore>(context);
+
     _store.amenities = widget.post.amenities.map((e) => e.id).toList();
     if (_categoryStore.categoryList?.categories != null) {
       loadDataFields().then((value) {
@@ -266,6 +271,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
               child: Row(
                 children: [
                   _buildCitylistField(),
+                  VerticalDivider(),
+                  _buildArealistField(),
                   VerticalDivider(),
                   _buildDistrictlistField(),
                 ],
@@ -833,7 +840,12 @@ class _EditPostScreenState extends State<EditPostScreen> {
           ),
           DataColumn(
             label: Text(
-              'منطقه',
+              'ناحیه',
+            ),
+          ),
+          DataColumn(
+            label: Text(
+              'محله',
             ),
           ),
           DataColumn(
@@ -851,6 +863,10 @@ class _EditPostScreenState extends State<EditPostScreen> {
               )),
               DataCell(Text(
                 widget.post.district.name,
+                style: TextStyle(fontStyle: FontStyle.italic),
+              )),
+              DataCell(Text(
+                widget.post.district.city.name,
                 style: TextStyle(fontStyle: FontStyle.italic),
               )),
               DataCell(
@@ -888,18 +904,18 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             .map((district) => district.name)
                             .toList(),
                         isFilteredOnline: true,
-                        label: "منطقه",
+                        label: "محله",
                         onChanged: (String val) {
                           FocusScope.of(context).requestFocus(new FocusNode());
                           _store.setDistrict(int.parse(val));
                         },
-                        selectedItem: "منطقه",
+                        selectedItem: "محله",
                         showSearchBox: true,
                         autoFocusSearchBox: true,
                         searchBoxDecoration: InputDecoration(
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                          labelText: "انتخاب منطقه",
+                          labelText: "انتخاب محله",
                         ),
                         popupShape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
@@ -1026,8 +1042,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       setState(() {
                         cityDropdownValue = val;
                       });
-                      _districtStore.getDistrictsByCityid(_cityStore
-                          .cityList.cities
+                      _areaStore.getAreasByCityid(_cityStore.cityList.cities
                           .firstWhere((city) => city.name == cityDropdownValue)
                           ?.id);
                     }
@@ -1047,34 +1062,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     ),
                   ),
                 ),
-
-                //  DropdownButtonFormField<int>(
-                //   value: cityDropdownValue,
-                //   decoration: InputDecoration(
-                //     border: OutlineInputBorder(
-                //         borderSide: BorderSide(color: Colors.transparent)),
-                //     labelText: AppLocalizations.of(context).translate('city'),
-                //     fillColor: Color(0xfff3f3f4),
-                //     filled: true,
-                //     hintText: AppLocalizations.of(context).translate('city'),
-                //     contentPadding: EdgeInsets.all(10),
-                //   ),
-                // onChanged: (int val) {
-                //   FocusScope.of(context).requestFocus(new FocusNode());
-                //   if (val != cityDropdownValue) {
-                //     setState(() {
-                //       cityDropdownValue = val;
-                //     });
-                //     _districtStore.getDistrictsByCityid(val);
-                //   }
-                // },
-                //   items: _cityStore.cityList.cities.map((item) {
-                //     return DropdownMenuItem<int>(
-                //       child: Text(item.name),
-                //       value: item.id,
-                //     );
-                //   }).toList(),
-                // ),
               )
             : Flexible(
                 child: Opacity(
@@ -1098,6 +1085,92 @@ class _EditPostScreenState extends State<EditPostScreen> {
                   ),
                 ),
               );
+      },
+    );
+  }
+
+  Widget _buildArealistField() {
+    return Observer(
+      builder: (context) {
+        if (_areaStore.areaList != null && cityDropdownValue != null) {
+          return Flexible(
+            child: _areaStore.loading == true
+                ? LinearProgressIndicator()
+                : (_areaStore.areaList.areas.length > 0
+                    ? Flexible(
+                        child: Container(
+                          height: 50,
+                          child: DropdownSearch<String>(
+                            mode: Mode.MENU,
+                            maxHeight: 300,
+                            items: _areaStore.areaList.areas
+                                .map((area) => area.name)
+                                .toList(),
+                            isFilteredOnline: true,
+                            label: "ناحیه",
+                            onChanged: (String val) {
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
+                              if (val != localityDropdownValue) {
+                                setState(() {
+                                  _store.setLocality(int.parse(val));
+                                  localityDropdownValue = val;
+                                });
+                                _districtStore.getDistrictsByAreaid(_areaStore
+                                    .areaList.areas
+                                    .firstWhere((area) =>
+                                        area.name == localityDropdownValue)
+                                    ?.id);
+                              }
+                            },
+                            selectedItem: localityDropdownValue,
+                            showSearchBox: true,
+                            autoFocusSearchBox: true,
+                            searchBoxDecoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                              labelText: "جست و جو ناحیه",
+                            ),
+                            popupShape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Text(
+                        AppLocalizations.of(context).translate('notfound_area'),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      )),
+          );
+        } else {
+          return Flexible(
+            child: Opacity(
+              opacity: 0.8,
+              child: Shimmer.fromColors(
+                child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 15, right: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('locality'),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ],
+                    )),
+                baseColor: Colors.black12,
+                highlightColor: Colors.white,
+                loop: 30,
+              ),
+            ),
+          );
+        }
       },
     );
   }
