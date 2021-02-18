@@ -268,10 +268,15 @@ class _EditPostScreenState extends State<EditPostScreen> {
             _buildCategoryField(),
             Visibility(
               visible: !_isVisible,
+              child: _buildCitylistField(),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Visibility(
+              visible: !_isVisible,
               child: Row(
                 children: [
-                  _buildCitylistField(),
-                  VerticalDivider(),
                   _buildArealistField(),
                   VerticalDivider(),
                   _buildDistrictlistField(),
@@ -1027,7 +1032,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return Observer(
       builder: (context) {
         return _cityStore.cityList != null
-            ? Flexible(
+            ? Container(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
                 child: DropdownSearch<String>(
                   mode: Mode.MENU,
                   maxHeight: 300,
@@ -1063,26 +1070,24 @@ class _EditPostScreenState extends State<EditPostScreen> {
                   ),
                 ),
               )
-            : Flexible(
-                child: Opacity(
-                  opacity: 0.8,
-                  child: Shimmer.fromColors(
-                    child: Container(
-                        padding: EdgeInsets.only(top: 10, bottom: 15),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              AppLocalizations.of(context).translate('city'),
-                              style: TextStyle(
-                                fontSize: 20.0,
-                              ),
-                            )
-                          ],
-                        )),
-                    baseColor: Colors.black12,
-                    highlightColor: Colors.white,
-                    loop: 30,
-                  ),
+            : Opacity(
+                opacity: 0.8,
+                child: Shimmer.fromColors(
+                  child: Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 15),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            AppLocalizations.of(context).translate('city'),
+                            style: TextStyle(
+                              fontSize: 20.0,
+                            ),
+                          )
+                        ],
+                      )),
+                  baseColor: Colors.black12,
+                  highlightColor: Colors.white,
+                  loop: 30,
                 ),
               );
       },
@@ -1093,60 +1098,58 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return Observer(
       builder: (context) {
         if (_areaStore.areaList != null && cityDropdownValue != null) {
-          return Flexible(
-            child: _areaStore.loading == true
-                ? LinearProgressIndicator()
-                : (_areaStore.areaList.areas.length > 0
-                    ? Flexible(
-                        child: Container(
-                          height: 50,
-                          child: DropdownSearch<String>(
-                            mode: Mode.MENU,
-                            maxHeight: 300,
-                            items: _areaStore.areaList.areas
-                                .map((area) => area.name)
-                                .toList(),
-                            isFilteredOnline: true,
-                            label: "ناحیه",
-                            onChanged: (String val) {
-                              FocusScope.of(context)
-                                  .requestFocus(new FocusNode());
-                              if (val != localityDropdownValue) {
-                                setState(() {
-                                  _store.setLocality(int.parse(val));
-                                  localityDropdownValue = val;
-                                });
-                                _districtStore.getDistrictsByAreaid(_areaStore
-                                    .areaList.areas
-                                    .firstWhere((area) =>
-                                        area.name == localityDropdownValue)
-                                    ?.id);
-                              }
-                            },
-                            selectedItem: localityDropdownValue,
-                            showSearchBox: true,
-                            autoFocusSearchBox: true,
-                            searchBoxDecoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                              labelText: "جست و جو ناحیه",
-                            ),
-                            popupShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                              ),
+          return _areaStore.loading == true
+              ? LinearProgressIndicator()
+              : (_areaStore.areaList.areas.length > 0
+                  ? Flexible(
+                      child: Container(
+                        height: 50,
+                        child: DropdownSearch<String>(
+                          mode: Mode.MENU,
+                          maxHeight: 300,
+                          items: _areaStore.areaList.areas
+                              .map((area) => area.name)
+                              .toList(),
+                          isFilteredOnline: true,
+                          label: "ناحیه",
+                          onChanged: (String val) {
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
+                            if (val != localityDropdownValue) {
+                              setState(() {
+                                // _store.setLocality(int.parse(val));
+                                localityDropdownValue = val;
+                              });
+                              _districtStore.getDistrictsByAreaid(_areaStore
+                                  .areaList.areas
+                                  .firstWhere((area) =>
+                                      area.name == localityDropdownValue)
+                                  ?.id);
+                            }
+                          },
+                          selectedItem: localityDropdownValue,
+                          showSearchBox: true,
+                          autoFocusSearchBox: true,
+                          searchBoxDecoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                            labelText: "جست و جو ناحیه",
+                          ),
+                          popupShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
                             ),
                           ),
                         ),
-                      )
-                    : Text(
-                        AppLocalizations.of(context).translate('notfound_area'),
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      )),
-          );
+                      ),
+                    )
+                  : Text(
+                      AppLocalizations.of(context).translate('notfound_area'),
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ));
         } else {
           return Flexible(
             child: Opacity(
