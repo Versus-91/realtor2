@@ -913,6 +913,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                         onChanged: (String val) {
                           FocusScope.of(context).requestFocus(new FocusNode());
                           _store.setDistrict(int.parse(val));
+                        
                         },
                         selectedItem: "محله",
                         showSearchBox: true,

@@ -1032,7 +1032,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                 .requestFocus(new FocusNode());
                             if (val != localityDropdownValue) {
                               setState(() {
-                                _store.setLocality(int.parse(val));
+                                // _store.setLocality(int.parse(val));اینومیذارم خراب میشه
                                 localityDropdownValue = val;
                               });
                               _districtStore.getDistrictsByAreaid(_areaStore
@@ -1098,7 +1098,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       builder: (context) {
         if (_districtStore.districtList != null &&
             localityDropdownValue != null) {
-          return Flexible(
+          return 
+          Flexible(
             child: _districtStore.loading == true
                 ? LinearProgressIndicator()
                 : (_districtStore.districtList.districts.length > 0
