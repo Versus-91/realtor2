@@ -58,6 +58,8 @@ abstract class _PostFormStore with Store {
   @observable
   int categoryId;
   @observable
+  String categoryName;
+  @observable
   int postId;
   @observable
   int propertyHomeTypeId;
@@ -94,6 +96,11 @@ abstract class _PostFormStore with Store {
   @action
   void setLatitude(double value) {
     latitude = value;
+  }
+
+  @action
+  void setCategoryName(String name) {
+    categoryName = name;
   }
 
   @action
@@ -190,9 +197,21 @@ abstract class _PostFormStore with Store {
   void addFile(Postimages image) {
     var foundFile = postImages.where((element) =>
         element.path == image.path &&
-        element.isfromNetwork == image.isfromNetwork);
+        element.isfromNetwork == image.isfromNetwork &&
+        element.id == image.id);
     if (foundFile == null || foundFile.isEmpty) {
       postImages.add(image);
+    }
+  }
+
+  @action
+  void removeFile(Postimages image) {
+    var foundFile = postImages.where((element) =>
+        element.path == image.path &&
+        element.isfromNetwork == image.isfromNetwork &&
+        element.id == image.id);
+    if (foundFile == null || foundFile.isEmpty) {
+      postImages.remove(image);
     }
   }
 
@@ -236,6 +255,7 @@ abstract class _PostFormStore with Store {
   void setFormValues(Post post) {
     ageHome = post.age;
     categoryId = post.categoryId;
+    categoryName = post.category.name;
     postId = post.id;
     propertyHomeTypeId = post.typeId;
     latitude = post.latitude;
@@ -249,7 +269,9 @@ abstract class _PostFormStore with Store {
     countbedroom = post.bedroom;
     var images = post.images
         .map((e) => Postimages(
-            path: Endpoints.baseUrl + "/" + e.path, isfromNetwork: true))
+            id: e.id,
+            path: Endpoints.baseUrl + "/" + e.path,
+            isfromNetwork: true))
         .toList();
     for (var image in images) {
       addFile(image);
@@ -289,10 +311,11 @@ abstract class _PostFormStore with Store {
   }
 
   @action
-  Future updatePost() async {
+  Future updatePost(int id) async {
     validateCreatePost();
     if (formErrorStore.isValid == true) {
       var post = Post(
+        id: id,
         longitude: this.longitude,
         latitude: this.latitude,
         description: this.description,

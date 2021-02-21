@@ -225,7 +225,7 @@ class PostApi {
   Future updatePost(Post post) async {
     try {
       final res =
-          await _dioClient.post(Endpoints.updatePost, data: post.toMap());
+          await _dioClient.put(Endpoints.updatePost, data: post.toMap());
       return res["result"];
     } catch (e) {
       throw e;
@@ -240,6 +240,18 @@ class PostApi {
     try {
       final res = await _dioClient.post(Endpoints.uploadImages + '/' + id,
           data: imageFormData);
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future removePostImage(int id) async {
+    try {
+      final res = await _dioClient
+          .post(Endpoints.removePostImages + '/' + id.toString(), data: {
+        "?id": id,
+      });
       return res;
     } catch (e) {
       throw e;

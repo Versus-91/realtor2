@@ -42,9 +42,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
   String localityDropdownValue;
   int selectedItem;
   String cityDropdownValue;
-  int _value;
-  String _categoryText = '';
   String _fileName;
+  bool setFotm = false;
   String _extension;
   bool _multiPick = true;
   bool hasErrorInloading = false;
@@ -140,25 +139,23 @@ class _EditPostScreenState extends State<EditPostScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     _cityStore = Provider.of<CityStore>(context);
     _districtStore = Provider.of<DistrictStore>(context);
     _categoryStore = Provider.of<CategoryStore>(context);
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
     _areaStore = Provider.of<AreaStore>(context);
-
     _store.amenities = widget.post.amenities.map((e) => e.id).toList();
-    if (_categoryStore.categoryList?.categories != null) {
+    if (setFotm == false) {
       loadDataFields().then((value) {
         _store.setFormValues(widget.post);
-        isSelected[(_store.countbedroom) - 1] = true;
+        isSelected[(_store.countbedroom)] = true;
         _areaController.text = _store.area.toString();
         _descriptionController.text = _store.description;
         _rahnPriceController.text = _store.rahnPrice.toString();
         _rentPriceController.text = _store.rentPrice.toString();
         _buyPriceController.text = _store.buyPrice.toString();
-        _value = _store.categoryId;
+        setFotm = true;
       });
     }
   }
@@ -249,6 +246,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
             child: RaisedButton.icon(
                 onPressed: () {
                   loadDataFields();
+                  CircularProgressIndicator();
                 },
                 icon: Icon(Icons.refresh),
                 label: Text("تلاش مجدد")),
@@ -404,12 +402,11 @@ class _EditPostScreenState extends State<EditPostScreen> {
   Widget _submitbotton() {
     return InkWell(
       onTap: () async {
-        _store
-            .updatePost()
-            .then((value) => successPost(
-                  AppLocalizations.of(context).translate('send_editepost'),
-                ))
-            .catchError((error) {
+        _store.updatePost(widget.post.id).then((value) {
+          successPost(AppLocalizations.of(context).translate('send_editepost'));
+
+          Navigator.of(context).pop();
+        }).catchError((error) {
           _showErrorMessage(
             "خطا در ویرایش پست",
           );
@@ -493,6 +490,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             (index) {
                           return GridTile(
                             child: Card(
+                                shadowColor: Colors.black,
                                 color: Colors.white,
                                 child: Stack(
                                   children: [
@@ -509,18 +507,57 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                             width: double.infinity,
                                           ),
                                     Positioned(
-                                      left: 0,
-                                      top: 0,
+                                      left: -12,
+                                      top: -12,
                                       child: IconButton(
+                                          tooltip: "حذف تصویر",
                                           icon: Icon(
                                             Icons.delete,
                                             color: Colors.redAccent,
                                           ),
-                                          onPressed: () {
-                                            // setState(() {
-                                            //   _paths.removeWhere((item) =>
-                                            //       item.path == _paths[index].path);
-                                            // });
+                                          onPressed: () async {
+                                            _store.postImages[index]
+                                                        .isfromNetwork ==
+                                                    false
+                                                ? setState(() {
+                                                    _store.postImages
+                                                        .removeWhere((item) =>
+                                                            item.path ==
+                                                            _store
+                                                                .postImages[
+                                                                    index]
+                                                                .path);
+                                                  })
+                                                : appComponent
+                                                    .getRepository()
+                                                    .removePostImage(_store
+                                                        .postImages[index].id)
+                                                    .then((value) {
+                                                    successPost(
+                                                        AppLocalizations.of(
+                                                                context)
+                                                            .translate(
+                                                                'sendpicture'));
+                                                    setState(() {
+                                                      _store.removeFile(
+                                                        Postimages(
+                                                            id: _store
+                                                                .postImages[
+                                                                    index]
+                                                                .id,
+                                                            path: _store
+                                                                .postImages[
+                                                                    index]
+                                                                .path,
+                                                            isfromNetwork:
+                                                                false),
+                                                      );
+                                                    });
+                                                  }).catchError((error) {
+                                                    _showErrorMessage(
+                                                      "تصویر حذف نشد",
+                                                    );
+                                                  });
                                           }),
                                     ),
                                   ],
@@ -638,17 +675,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
         })
       ],
     );
-  }
-
-  upload(int id) async {
-    // List<MultipartFile> multipart = List<MultipartFile>();
-    // for (int i = 0; i < _paths.length; i++) {
-    //   multipart.add(await MultipartFile.fromFile(_paths[i].path,
-    //       filename: _paths[i].name));
-    // }
-    // _store
-    //     .uploadImages(multipart, id.toString())
-    //     .then((value) => _store.setPostId(null));
   }
 
   Widget _buildRangeAreaField() {
@@ -845,14 +871,14 @@ class _EditPostScreenState extends State<EditPostScreen> {
           ),
           DataColumn(
             label: Text(
-              'ناحیه',
-            ),
-          ),
-          DataColumn(
-            label: Text(
               'محله',
             ),
           ),
+          // DataColumn(
+          //   label: Text(
+          //     'محله',
+          //   ),
+          // ),
           DataColumn(
             label: Text(
               'ویرایش',
@@ -870,10 +896,10 @@ class _EditPostScreenState extends State<EditPostScreen> {
                 widget.post.district.name,
                 style: TextStyle(fontStyle: FontStyle.italic),
               )),
-              DataCell(Text(
-                widget.post.district.city.name,
-                style: TextStyle(fontStyle: FontStyle.italic),
-              )),
+              // DataCell(Text(
+              //   localityDropdownValue,
+              //   style: TextStyle(fontStyle: FontStyle.italic),
+              // )),
               DataCell(
                 IconButton(
                   icon: Icon(
@@ -892,75 +918,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
         ],
       ),
     );
-  }
-
-  Widget _buildDistrictlistField() {
-    return Observer(
-      builder: (context) {
-        if (_districtStore.districtList != null) {
-          return Flexible(
-            child: _districtStore.loading == true
-                ? LinearProgressIndicator()
-                : (_districtStore.districtList.districts.length > 0
-                    ? DropdownSearch<String>(
-                        mode: Mode.MENU,
-                        maxHeight: 300,
-                        items: _districtStore.districtList.districts
-                            .map((district) => district.name)
-                            .toList(),
-                        isFilteredOnline: true,
-                        label: "محله",
-                        onChanged: (String val) {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          _store.setDistrict(int.parse(val));
-                        
-                        },
-                        selectedItem: "محله",
-                        showSearchBox: true,
-                        autoFocusSearchBox: true,
-                        searchBoxDecoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                          labelText: "انتخاب محله",
-                        ),
-                        popupShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          ),
-                        ),
-                      )
-                    : Text(AppLocalizations.of(context)
-                        .translate('notfound_district'))),
-          );
-        } else {
-          return Flexible(
-            child: Opacity(
-              opacity: 0.8,
-              child: Shimmer.fromColors(
-                child: Container(
-                    padding: EdgeInsets.only(top: 10, bottom: 15),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          AppLocalizations.of(context).translate('district'),
-                          style: TextStyle(
-                            fontSize: 20.0,
-                          ),
-                        )
-                      ],
-                    )),
-                baseColor: Colors.black12,
-                highlightColor: Colors.white,
-                loop: 30,
-              ),
-            ),
-          );
-        }
-      },
-    );
-
-    //
   }
 
   Widget _buildAgeField() {
@@ -1099,11 +1056,11 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return Observer(
       builder: (context) {
         if (_areaStore.areaList != null && cityDropdownValue != null) {
-          return _areaStore.loading == true
-              ? LinearProgressIndicator()
-              : (_areaStore.areaList.areas.length > 0
-                  ? Flexible(
-                      child: Container(
+          return Flexible(
+            child: _areaStore.loading == true
+                ? LinearProgressIndicator()
+                : (_areaStore.areaList.areas.length > 0
+                    ? Container(
                         height: 50,
                         child: DropdownSearch<String>(
                           mode: Mode.MENU,
@@ -1143,14 +1100,13 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             ),
                           ),
                         ),
-                      ),
-                    )
-                  : Text(
-                      AppLocalizations.of(context).translate('notfound_area'),
-                      style: TextStyle(
-                        fontSize: 16.0,
-                      ),
-                    ));
+                      )
+                    : Text(
+                        AppLocalizations.of(context).translate('notfound_area'),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ))),
+          );
         } else {
           return Flexible(
             child: Opacity(
@@ -1177,6 +1133,80 @@ class _EditPostScreenState extends State<EditPostScreen> {
         }
       },
     );
+  }
+
+  Widget _buildDistrictlistField() {
+    return Observer(
+      builder: (context) {
+        if (_districtStore.districtList != null &&
+            localityDropdownValue != null) {
+          return Flexible(
+            child: _districtStore.loading == true
+                ? LinearProgressIndicator()
+                : (_districtStore.districtList.districts.length > 0
+                    ? DropdownSearch<String>(
+                        mode: Mode.MENU,
+                        maxHeight: 300,
+                        items: _districtStore.districtList.districts
+                            .map((district) => district.name)
+                            .toList(),
+                        isFilteredOnline: true,
+                        label: "محله",
+                        onChanged: (String val) {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          int selectDistrict = _districtStore
+                              .districtList.districts
+                              .firstWhere((district) => district.name == val)
+                              .id;
+
+                          _store.setDistrict(selectDistrict);
+                        },
+                        selectedItem: "محله",
+                        showSearchBox: true,
+                        autoFocusSearchBox: true,
+                        searchBoxDecoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                          labelText: "انتخاب محله",
+                        ),
+                        popupShape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                        ),
+                      )
+                    : Text(AppLocalizations.of(context)
+                        .translate('notfound_district'))),
+          );
+        } else {
+          return Flexible(
+            child: Opacity(
+              opacity: 0.8,
+              child: Shimmer.fromColors(
+                child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 15),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('district'),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
+                        )
+                      ],
+                    )),
+                baseColor: Colors.black12,
+                highlightColor: Colors.white,
+                loop: 30,
+              ),
+            ),
+          );
+        }
+      },
+    );
+
+    //
   }
 
   Widget _buildCategoryField() {
@@ -1206,27 +1236,18 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             (index) {
                               var category =
                                   _categoryStore.categoryList.categories[index];
-                              if (_value == null) {
-                                _value = category.id;
-                                _categoryText = category.name;
-                                _store.setCategory(category.id);
-                              }
-                              return Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: chipOne(category.name, () {
-                                    if (_value != category.id) {
-                                      setState(() {
-                                        _categoryText = category.name;
-                                        _value = category.id;
-                                        resetPrice(category);
-                                      });
-                                    }
-                                    _categoryText = category.name;
-                                    _store.setCategory(category.id);
-                                  },
-                                      active: _value == category.id
-                                          ? true
-                                          : false));
+
+                              return Observer(builder: (ctx) {
+                                return Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: chipOne(category.name, () {
+                                      _store.setCategory(category.id);
+                                      _store.setCategoryName(category.name);
+                                    },
+                                        active: _store.categoryId == category.id
+                                            ? true
+                                            : false));
+                              });
                             },
                           ).toList(),
                         ),
@@ -1235,33 +1256,42 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    if (_categoryText.contains(
-                      AppLocalizations.of(context).translate('rahn'),
-                    )) ...[
-                      Row(
-                        children: [
+
+                    //  String  selectCategory = _categoryStore
+                    // .categoryList.categories
+                    // .firstWhere((district) => category.id == _value)
+                    // .name,
+                    Observer(builder: (ctx) {
+                      if (_store.categoryName != null &&
+                          _store.categoryName.contains(
+                            AppLocalizations.of(context).translate('rahn'),
+                          )) {
+                        return Row(children: [
                           Flexible(
                             child: _buildRentPriceField(),
                           ),
                           VerticalDivider(),
                           Flexible(child: _buildEjarePriceField()),
-                        ],
-                      ),
-                    ],
-                    if (_categoryText.contains(
-                      AppLocalizations.of(context).translate('rent'),
-                    )) ...[
-                      Row(
-                        children: [
-                          Flexible(child: _buildEjarePriceField()),
-                        ],
-                      ),
-                    ],
-                    if (_categoryText.contains(
-                      AppLocalizations.of(context).translate('buy'),
-                    )) ...[
-                      _buildBuyPriceField(),
-                    ],
+                        ]);
+                      }
+                      if (_store.categoryName != null &&
+                          _store.categoryName.contains(
+                            AppLocalizations.of(context).translate('rent'),
+                          )) {
+                        return Row(
+                          children: [
+                            Flexible(child: _buildEjarePriceField()),
+                          ],
+                        );
+                      }
+                      if (_store.categoryName != null &&
+                          _store.categoryName.contains(
+                            AppLocalizations.of(context).translate('buy'),
+                          )) {
+                        return _buildBuyPriceField();
+                      }
+                      return SizedBox.shrink();
+                    }),
                   ],
                 )
               : Opacity(
@@ -1332,7 +1362,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
         return _typeStore.typeList != null &&
                 _typeStore.typeList.types.length > 0
             ? Flexible(
-                // width: MediaQuery.of(context).size.width / 2.4,
                 child: DropdownButtonFormField<int>(
                   decoration: InputDecoration(
                       helperText: '',
@@ -1407,7 +1436,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
               children: List.generate(22, (index) {
                 return Text(
                   AppLocalizations.of(context)
-                      .transformNumbers((index + 1).toString()),
+                      .transformNumbers((index).toString()),
                 );
               }),
               onPressed: (int index) {
@@ -1421,7 +1450,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       isSelected[buttonIndex] = false;
                     }
                   }
-                  _store.setcountbedroom(index + 1);
+                  _store.setcountbedroom(index);
                 });
               },
               isSelected: isSelected,

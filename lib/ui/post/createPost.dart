@@ -540,8 +540,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                   width: double.infinity,
                                 ),
                                 Positioned(
-                                  left: 0,
-                                  top: 0,
+                                  left: -12,
+                                  top: -12,
                                   child: IconButton(
                                       icon: Icon(
                                         Icons.delete,
@@ -1032,7 +1032,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                 .requestFocus(new FocusNode());
                             if (val != localityDropdownValue) {
                               setState(() {
-                                // _store.setLocality(int.parse(val));اینومیذارم خراب میشه
+                                // _store.setLocality(int.parse(val));
                                 localityDropdownValue = val;
                               });
                               _districtStore.getDistrictsByAreaid(_areaStore
@@ -1098,8 +1098,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       builder: (context) {
         if (_districtStore.districtList != null &&
             localityDropdownValue != null) {
-          return 
-          Flexible(
+          return Flexible(
             child: _districtStore.loading == true
                 ? LinearProgressIndicator()
                 : (_districtStore.districtList.districts.length > 0
@@ -1175,15 +1174,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
 
     //
-  }
-
-  _getItems() {
-    _cityStore.cityList.cities.map((item) {
-      return DropdownMenuItem<int>(
-        child: Text(item.name),
-        value: item.id,
-      );
-    }).toList();
   }
 
   Widget _buildCategoryField() {
@@ -1410,7 +1400,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               children: List.generate(22, (index) {
                 return Text(
                   AppLocalizations.of(context)
-                      .transformNumbers((index + 1).toString()),
+                      .transformNumbers((index).toString()),
                 );
               }),
               onPressed: (int index) {
@@ -1424,7 +1414,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       isSelected[buttonIndex] = false;
                     }
                   }
-                  _store.setcountbedroom(index + 1);
+                  _store.setcountbedroom(index);
                 });
               },
               isSelected: isSelected,

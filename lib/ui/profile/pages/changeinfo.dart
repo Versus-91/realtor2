@@ -1,4 +1,5 @@
 import 'package:boilerplate/main.dart';
+import 'package:boilerplate/models/user/changuserinfo.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
 import 'package:boilerplate/ui/authorization/login/custom_button.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -329,24 +330,23 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     text:
                         AppLocalizations.of(context).translate('register_info'),
                     onPressed: () async {
-                      _alertDialog();
-                      // if (_formKey.currentState.validate()) {
-                      //   _userStore
-                      //       .changeUserInfo(ChangeUserInfo(
-                      //           name: _nameController.text,
-                      //           surname: _familyController.text,
-                      //           emailAddress: _emailController.text,
-                      //           phonenumber: _newNumberController.text,
-                      //           id: _userStore.user.id))
-                      //       .then((value) async {
-                      //     successMessage('اطلاعات با موفقیت تغییر کرد.');
-                      //     // _newNumberController.text = result;
-                      //   }).catchError((error) {
-                      //     _showErrorMessage(
-                      //       "خطا در تغییر اطلاعات",
-                      //     );
-                      //   });
-                      // }
+                      if (_formKey.currentState.validate()) {
+                        _userStore
+                            .changeUserInfo(ChangeUserInfo(
+                                name: _nameController.text,
+                                surname: _familyController.text,
+                                emailAddress: _emailController.text,
+                                phonenumber: _newNumberController.text,
+                                id: _userStore.user.id))
+                            .then((value) async {
+                          successMessage('اطلاعات با موفقیت تغییر کرد.');
+                          // _newNumberController.text = result;
+                        }).catchError((error) {
+                          _showErrorMessage(
+                            "خطا در تغییر اطلاعات",
+                          );
+                        });
+                      }
                     },
                   ),
                 ),
@@ -463,6 +463,11 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _nameController.dispose();
+    _familyController.dispose();
+    _newNumberController.dispose();
+    _emailController.dispose();
+    _verificationCodeController.dispose();
     super.dispose();
   }
 }

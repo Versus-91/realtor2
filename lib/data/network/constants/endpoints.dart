@@ -28,6 +28,7 @@ class Endpoints {
   static const String updateUser = baseUrl + "/api/services/app/account/update";
   static const String getTypes = baseUrl + "/api/services/app/type/GetAll";
   static const String uploadImages = baseUrl + "/upload";
+  static const String removePostImages = baseUrl + "/upload/remove";
   static const String uploadAvatarImage = baseUrl + "/upload/avatar";
   static const String changepassword =
       baseUrl + "/api/services/app/account/changePassword";

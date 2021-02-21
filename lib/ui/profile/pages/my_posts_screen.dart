@@ -119,7 +119,11 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                     return Column(
                       children: [
                         PropertyCrad(
-                            post: _postStore.userPostList.posts[index]),
+                            post: _postStore.userPostList.posts[index],
+                            isEdditing: true
+                            //  _postStore
+                            //     .userPostList.posts[index].isVerified
+                            ),
                         PlaceholderPostCard()
                       ],
                     );
@@ -127,6 +131,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                   return PropertyCrad(
                     post: _postStore.userPostList.posts[index],
                     isEdditing: true,
+                    // _postStore.userPostList.posts[index].isVerified
                   );
                 },
               ),

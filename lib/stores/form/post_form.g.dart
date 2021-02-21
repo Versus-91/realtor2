@@ -99,6 +99,21 @@ mixin _$PostFormStore on _PostFormStore, Store {
     });
   }
 
+  final _$categoryNameAtom = Atom(name: '_PostFormStore.categoryName');
+
+  @override
+  String get categoryName {
+    _$categoryNameAtom.reportRead();
+    return super.categoryName;
+  }
+
+  @override
+  set categoryName(String value) {
+    _$categoryNameAtom.reportWrite(value, super.categoryName, () {
+      super.categoryName = value;
+    });
+  }
+
   final _$postIdAtom = Atom(name: '_PostFormStore.postId');
 
   @override
@@ -350,8 +365,8 @@ mixin _$PostFormStore on _PostFormStore, Store {
   final _$updatePostAsyncAction = AsyncAction('_PostFormStore.updatePost');
 
   @override
-  Future<dynamic> updatePost() {
-    return _$updatePostAsyncAction.run(() => super.updatePost());
+  Future<dynamic> updatePost(int id) {
+    return _$updatePostAsyncAction.run(() => super.updatePost(id));
   }
 
   final _$uploadImagesAsyncAction = AsyncAction('_PostFormStore.uploadImages');
@@ -370,6 +385,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
         name: '_PostFormStore.setLatitude');
     try {
       return super.setLatitude(value);
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setCategoryName(String name) {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.setCategoryName');
+    try {
+      return super.setCategoryName(name);
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
@@ -714,6 +740,7 @@ ageHome: ${ageHome},
 loading: ${loading},
 fetchFormData: ${fetchFormData},
 categoryId: ${categoryId},
+categoryName: ${categoryName},
 postId: ${postId},
 propertyHomeTypeId: ${propertyHomeTypeId},
 latitude: ${latitude},

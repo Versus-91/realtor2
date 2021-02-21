@@ -250,7 +250,9 @@ class Repository {
   Future uploadAvatarImage(MultipartFile avatarImage) {
     return _postApi.uploadAvatarImage(avatarImage);
   }
-
+ Future removePostImage(int id) {
+    return _postApi.removePostImage(id);
+  }
   Future<void> changepassword(ChangePassword passwords) {
     return _postApi.changepassword(passwords);
   }
