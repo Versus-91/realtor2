@@ -330,6 +330,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     text:
                         AppLocalizations.of(context).translate('register_info'),
                     onPressed: () async {
+                      FocusScope.of(context).requestFocus(FocusNode());
                       if (_formKey.currentState.validate()) {
                         _userStore
                             .changeUserInfo(ChangeUserInfo(
@@ -339,6 +340,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                                 phonenumber: _newNumberController.text,
                                 id: _userStore.user.id))
                             .then((value) async {
+                          _userStore.getUser();
                           successMessage('اطلاعات با موفقیت تغییر کرد.');
                           // _newNumberController.text = result;
                         }).catchError((error) {

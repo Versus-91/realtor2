@@ -63,6 +63,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage>
               ))
                   .then((value) async {
                 successMessage('رمز با موفقیت تغییر کرد.');
+                Navigator.of(context).pop();
                 // _newNumberController.text = result;
               }).catchError((error) {
                 if (error?.response?.data.toString().contains("not match")) {
