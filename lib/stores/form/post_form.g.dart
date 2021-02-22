@@ -611,6 +611,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
   }
 
   @override
+  void removeFile(Postimages image) {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.removeFile');
+    try {
+      return super.removeFile(image);
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic validateCreatePost() {
     final _$actionInfo = _$_PostFormStoreActionController.startAction(
         name: '_PostFormStore.validateCreatePost');

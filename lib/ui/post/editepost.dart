@@ -43,7 +43,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   int selectedItem;
   String cityDropdownValue;
   String _fileName;
-  bool setFotm = false;
+  bool setform = false;
   String _extension;
   bool _multiPick = true;
   bool hasErrorInloading = false;
@@ -146,7 +146,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     _amenityStore = Provider.of<AmenityStore>(context);
     _areaStore = Provider.of<AreaStore>(context);
     _store.amenities = widget.post.amenities.map((e) => e.id).toList();
-    if (setFotm == false) {
+    if (setform == false) {
       loadDataFields().then((value) {
         _store.setFormValues(widget.post);
         isSelected[(_store.countbedroom)] = true;
@@ -155,7 +155,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
         _rahnPriceController.text = _store.rahnPrice.toString();
         _rentPriceController.text = _store.rentPrice.toString();
         _buyPriceController.text = _store.buyPrice.toString();
-        setFotm = true;
+        setform = true;
       });
     }
   }

@@ -156,37 +156,39 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                     },
                   ),
                 ),
-
-              
               ],
             ),
           ),
           _handleErrorMessage(),
-          Visibility(
-            visible: _postStore.postList != null,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: EdgeInsets.only(
-                    right: 15, bottom: MediaQuery.of(context).size.height / 12),
-                child: FloatingActionButton(
-                  heroTag: 'saveSearchButton',
-                  child: Icon(Icons.save),
-                  onPressed: () {
-                    var request = _filterForm.applyFilters();
-                    appComponent
-                        .getRepository()
-                        .saveSearch(request)
-                        .then((value) {
-                      FlushbarHelper.createSuccess(message: 'ذخیره شد.');
-                    }).catchError((err) {
-                      FlushbarHelper.createError(message: 'خطا در ذخیره سازی');
-                    });
-                  },
-                ),
-              ),
-            ),
-          ),
+          Observer(builder: (cnx) {
+            return _postStore.postList != null &&
+                    _postStore.postList.totalCount > 0
+                ? Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          right: 15,
+                          bottom: MediaQuery.of(context).size.height / 12),
+                      child: FloatingActionButton(
+                        heroTag: 'saveSearchButton',
+                        child: Icon(Icons.save),
+                        onPressed: () {
+                          var request = _filterForm.applyFilters();
+                          appComponent
+                              .getRepository()
+                              .saveSearch(request)
+                              .then((value) {
+                            FlushbarHelper.createSuccess(message: 'ذخیره شد.');
+                          }).catchError((err) {
+                            FlushbarHelper.createError(
+                                message: 'خطا در ذخیره سازی');
+                          });
+                        },
+                      ),
+                    ),
+                  )
+                : SizedBox.shrink();
+          })
         ],
       ),
     );
