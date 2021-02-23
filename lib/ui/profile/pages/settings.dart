@@ -181,23 +181,23 @@ class _SettingsScreenState extends State<SettingsScreen>
                   )
                 ],
               ),
-              SettingsSection(
-                tiles: [
-                  SettingsTile.switchTile(
-                    switchActiveColor: Colors.lightGreen,
-                    title:
-                        AppLocalizations.of(context).translate("notifications"),
-                    enabled: true,
-                    leading: Icon(Icons.notifications_active),
-                    switchValue: _isActive,
-                    onToggle: (value) {
-                      setState(() {
-                        _isActive = !_isActive;
-                      });
-                    },
-                  ),
-                ],
-              ),
+              // SettingsSection(
+              //   tiles: [
+              //     SettingsTile.switchTile(
+              //       switchActiveColor: Colors.lightGreen,
+              //       title:
+              //           AppLocalizations.of(context).translate("notifications"),
+              //       enabled: true,
+              //       leading: Icon(Icons.notifications_active),
+              //       switchValue: _isActive,
+              //       onToggle: (value) {
+              //         setState(() {
+              //           _isActive = !_isActive;
+              //         });
+              //       },
+              //     ),
+              //   ],
+              // ),
               SettingsSection(
                 title: 'مدیریت آگهی',
                 tiles: [

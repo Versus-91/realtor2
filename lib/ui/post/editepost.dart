@@ -1308,7 +1308,21 @@ class _EditPostScreenState extends State<EditPostScreen> {
                           Padding(
                             padding: const EdgeInsets.all(18),
                             child: Text(
-                              "رهن و گروی",
+                              "کرای",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "معاوضه",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "گروی",
                               style: TextStyle(fontSize: 18),
                             ),
                           ),

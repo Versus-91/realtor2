@@ -30,9 +30,7 @@ class _MyPostsScreenState extends State<MyPostsScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     _postStore = Provider.of(context);
-    // check to see if already called api
     if (!_postStore.loadingUserPosts) {
       _postStore.getUserPosts();
     }

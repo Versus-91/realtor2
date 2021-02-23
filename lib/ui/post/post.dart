@@ -47,7 +47,6 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // initializing stores
   }
 
   @override
@@ -83,7 +82,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
               ),
               FlatButton.icon(
                 onPressed: () async {
-                  await Share.share('sdasdas');
+                  await Share.share(
+                      Endpoints.baseUrl + '/ads/' + widget.post.id.toString());
                 },
                 label: Text(
                   AppLocalizations.of(context).translate('send'),
