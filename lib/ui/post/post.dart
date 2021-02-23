@@ -301,7 +301,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                           Column(
                             children: [
                               Text(AppLocalizations.of(context)
-                                  .translate('bed')),
+                                  .translate('count_room')),
                               Text(AppLocalizations.of(context)
                                   .transformNumbers(
                                       widget.post.bedroom.toString()))

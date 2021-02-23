@@ -13,9 +13,9 @@ import 'package:progressive_image/progressive_image.dart';
 import 'package:share/share.dart';
 
 class PropertyCrad extends StatefulWidget {
-  PropertyCrad({this.post, this.isEdditing});
+  PropertyCrad({this.post, this.canEdit = false});
   final Post post;
-  final bool isEdditing;
+  final bool canEdit;
   @override
   _PropertyCradState createState() => _PropertyCradState();
 }
@@ -308,7 +308,7 @@ class _PropertyCradState extends State<PropertyCrad>
                             ),
 
                             Visibility(
-                              visible: widget.isEdditing == true,
+                              visible: widget.canEdit,
                               child: IconButton(
                                 icon: Icon(
                                   Icons.edit,
@@ -375,7 +375,7 @@ class _PropertyCradState extends State<PropertyCrad>
                       Column(
                         children: [
                           Text(
-                            AppLocalizations.of(context).translate('bed'),
+                            AppLocalizations.of(context).translate('count_room'),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.withOpacity(1)),
