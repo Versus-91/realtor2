@@ -6,7 +6,6 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/plugin/cropper.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/user/user_store.dart';
-import 'package:boilerplate/ui/profile/pages/aboute.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:dio/dio.dart';
 import 'package:flushbar/flushbar.dart';
@@ -217,11 +216,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                   //     leading: Icon(Icons.collections_bookmark)),
                   SettingsTile(
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => AboutScreen(),
-                          ),
-                        );
+                        Navigator.of(context, rootNavigator: true)
+                            .pushNamed(Routes.about);
                       },
                       title: AppLocalizations.of(context).translate("about_us"),
                       leading: Icon(Icons.info)),

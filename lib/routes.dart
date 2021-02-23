@@ -7,6 +7,7 @@ import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/post/createPost.dart';
 import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/ui/profile/favorites_screen.dart';
+import 'package:boilerplate/ui/profile/pages/aboute.dart';
 import 'package:boilerplate/ui/profile/pages/change_password.dart';
 import 'package:boilerplate/ui/profile/pages/changeinfo.dart';
 import 'package:boilerplate/ui/profile/pages/my_posts_screen.dart';
@@ -30,6 +31,7 @@ class Routes {
   static const String post = '/post';
   static const String map = '/map';
   static const String crop = '/crop';
+  static const String about = '/about';
   static const String changeInfo = '/changeInfo';
   static const String changeUserPass = '/changeUserPass';
   static const String phoneNumberVerificationCode = '/phoneverification';
@@ -53,5 +55,6 @@ class Routes {
     changeInfo: (BuildContext context) => ChangeInfo(),
     changeUserPass: (BuildContext context) => ChangePasswordPage(),
     userPosts: (BuildContext context) => MyPostsScreen(),
+    about: (BuildContext context) => AboutScreen(),
   };
 }

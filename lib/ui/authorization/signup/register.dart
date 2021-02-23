@@ -76,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Row(
           children: <Widget>[
             Text(AppLocalizations.of(context).translate('back'),
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
             Icon(Icons.keyboard_arrow_left, color: Colors.black),
           ],
         ),
