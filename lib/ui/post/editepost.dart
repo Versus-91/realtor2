@@ -405,9 +405,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
   Widget _submitbotton() {
     return InkWell(
       onTap: () async {
-        _store.updatePost(widget.post.id).then((value) {
-          upload(widget.post.id);
+        _store.updatePost(widget.post.id).then((value) async {
           successPost(AppLocalizations.of(context).translate('send_editepost'));
+          await upload(widget.post.id);
           Navigator.of(context).pop();
         }).catchError((error) {
           _showErrorMessage(
@@ -628,21 +628,21 @@ class _EditPostScreenState extends State<EditPostScreen> {
     });
   }
 
-  upload(int id) async {
+  Future upload(int id) async {
     List<MultipartFile> multipartFiles = List<MultipartFile>();
     for (var pic in _store.postImages) {
       if (pic.isfromNetwork == false) {
+        var pathSegments = pic.path.split("/");
         multipartFiles.add(await MultipartFile.fromFile(pic.path,
-            filename: "image_" + id.toString()));
+            filename: pathSegments[pathSegments.length - 1]));
       }
     }
     if (multipartFiles.length > 0) {
-      _store.uploadImages(multipartFiles, id.toString()).then((value) {
+      return _store.uploadImages(multipartFiles, id.toString()).then((value) {
         FilePicker.platform.clearTemporaryFiles().then((result) {});
-        successPost(
-          AppLocalizations.of(context).translate('succes_send'),
-        );
       });
+    } else {
+      return true;
     }
   }
 

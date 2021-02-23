@@ -229,7 +229,10 @@ class _PropertyCradState extends State<PropertyCrad>
                     child: post.images.length > 0
                         ? ProgressiveImage(
                             image: NetworkImage(
-                              Endpoints.baseUrl + "/" + post.images[0]?.path,
+                              Endpoints.baseUrl +
+                                  "/" +
+                                  post.images[0]?.path +
+                                  '?height=192&width=192',
                             ),
                             fit: BoxFit.cover,
                             height: 128,
