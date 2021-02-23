@@ -120,18 +120,15 @@ class _MyPostsScreenState extends State<MyPostsScreen>
                       children: [
                         PropertyCrad(
                             post: _postStore.userPostList.posts[index],
-                            isEdditing: true
-                            //  _postStore
-                            //     .userPostList.posts[index].isVerified
-                            ),
+                            isEdditing: _postStore
+                                .userPostList.posts[index].isVerified),
                         PlaceholderPostCard()
                       ],
                     );
                   }
                   return PropertyCrad(
                     post: _postStore.userPostList.posts[index],
-                    isEdditing: true,
-                    // _postStore.userPostList.posts[index].isVerified
+                    isEdditing: _postStore.userPostList.posts[index].isVerified,
                   );
                 },
               ),
