@@ -45,6 +45,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   String _fileName;
   bool setform = false;
   String _extension;
+  int ageHome = 0;
   bool _multiPick = true;
   bool hasErrorInloading = false;
   FileType _pickingType = FileType.image;
@@ -155,6 +156,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
         _rahnPriceController.text = _store.rahnPrice.toString();
         _rentPriceController.text = _store.rentPrice.toString();
         _buyPriceController.text = _store.buyPrice.toString();
+        ageHome = _store.ageHome;
         setform = true;
       });
     }
@@ -404,7 +406,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
       onTap: () async {
         _store.updatePost(widget.post.id).then((value) {
           successPost(AppLocalizations.of(context).translate('send_editepost'));
-
           Navigator.of(context).pop();
         }).catchError((error) {
           _showErrorMessage(
@@ -923,65 +924,68 @@ class _EditPostScreenState extends State<EditPostScreen> {
   Widget _buildAgeField() {
     return Observer(
       builder: (context) {
-        return _cityStore.cityList != null
-            ? Container(
-                padding: EdgeInsets.only(top: 5, bottom: 15),
-                child: Row(
-                  children: <Widget>[
-                    Flexible(
-                      child: DropdownButtonFormField<int>(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.transparent)),
-                            labelText: AppLocalizations.of(context)
-                                .translate('age_home'),
-                            fillColor: Color(0xfff3f3f4),
-                            filled: true,
-                            hintText: AppLocalizations.of(context)
-                                .translate('age_home'),
-                            contentPadding: EdgeInsets.all(10),
-                          ),
-                          value: _store.ageHome,
-                          onChanged: (int val) {
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
-
-                            _store.setAge(val);
-                          },
-                          items: List.generate(5, (index) {
-                            if (index != 4) {
-                              return DropdownMenuItem<int>(
-                                child: Text((index + 1).toString() + " سال"),
-                                value: index,
-                              );
-                            }
-                            return DropdownMenuItem<int>(
-                                child: Text("بیش از 5 سال"), value: index);
-                          })),
-                    ),
-                  ],
-                ))
-            : Opacity(
-                opacity: 0.8,
-                child: Shimmer.fromColors(
-                  child: Container(
-                      padding: EdgeInsets.only(top: 10, bottom: 15),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
+        return Container(
+            padding: EdgeInsets.only(top: 5, bottom: 15),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: DropdownButtonFormField<int>(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                        labelText:
                             AppLocalizations.of(context).translate('age_home'),
-                            style: TextStyle(
-                              fontSize: 20.0,
-                            ),
-                          )
-                        ],
-                      )),
-                  baseColor: Colors.black12,
-                  highlightColor: Colors.white,
-                  loop: 30,
+                        fillColor: Color(0xfff3f3f4),
+                        filled: true,
+                        hintText:
+                            AppLocalizations.of(context).translate('age_home'),
+                        contentPadding: EdgeInsets.all(10),
+                      ),
+                      value: ageHome > 5 ? 5 : ageHome,
+                      onChanged: (int val) {
+                        setState(() {
+                          ageHome = val;
+                        });
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        _store.setAge(val);
+                      },
+                      items: List.generate(6, (index) {
+                        if (index == 0) {
+                          return DropdownMenuItem<int>(
+                              child: Text("ندارد"), value: index);
+                        }
+                        if (index != 5) {
+                          return DropdownMenuItem<int>(
+                            child: Text((index).toString() + " سال"),
+                            value: index,
+                          );
+                        }
+                        return DropdownMenuItem<int>(
+                            child: Text("بیش از 5 سال"), value: index);
+                      })),
                 ),
-              );
+              ],
+            ));
+        // : Opacity(
+        //     opacity: 0.8,
+        //     child: Shimmer.fromColors(
+        //       child: Container(
+        //           padding: EdgeInsets.only(top: 10, bottom: 15),
+        //           child: Row(
+        //             children: <Widget>[
+        //               Text(
+        //                 AppLocalizations.of(context).translate('age_home'),
+        //                 style: TextStyle(
+        //                   fontSize: 20.0,
+        //                 ),
+        //               )
+        //             ],
+        //           )),
+        //       baseColor: Colors.black12,
+        //       highlightColor: Colors.white,
+        //       loop: 30,
+        //     ),
+        //   );
       },
     );
   }

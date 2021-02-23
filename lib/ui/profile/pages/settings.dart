@@ -149,10 +149,15 @@ class _SettingsScreenState extends State<SettingsScreen>
                         : () {},
                     title: AppLocalizations.of(context).translate("my_details"),
                     leading: Icon(Icons.person),
-                    // trailing: IconButton(
-                    //   icon: Icon(Icons.keyboard_arrow_left),
-                    //   onPressed: () {},
-                    // ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.keyboard_arrow_left),
+                      onPressed: _userStore.user != null
+                          ? () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .pushNamed(Routes.changeInfo);
+                            }
+                          : () {},
+                    ),
                   )
                 ],
               ),

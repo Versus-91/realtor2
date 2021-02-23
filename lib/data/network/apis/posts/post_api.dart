@@ -224,8 +224,8 @@ class PostApi {
 
   Future updatePost(Post post) async {
     try {
-      final res =
-          await _dioClient.put(Endpoints.updatePost, data: post.toMap());
+      final res = await _dioClient.put(Endpoints.updatePost,
+          data: post.toMap(apiCall: true));
       return res["result"];
     } catch (e) {
       throw e;
