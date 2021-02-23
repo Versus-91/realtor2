@@ -183,9 +183,6 @@ abstract class _FormStore with Store {
     } else if (username.length < 4) {
       formErrorStore.username = 'نام کاربری باید بیشتر از 4 کاراکتر باشد';
       return;
-    } else if (username.length > 4) {
-      formErrorStore.username = '';
-      return;
     }
     _usernameCheck = ObservableFuture(_repository.checkUsername(username));
     _usernameCheck.then((result) {
@@ -411,13 +408,14 @@ abstract class _FormErrorStore with Store {
   bool get hasErrorsInLogin => usernameOrEmail != null || password != null;
 
   @computed
-  bool get hasErrorsInRegister =>
-      email != null ||
-      password != null ||
-      name != null ||
-      username != null ||
-      family != null ||
-      number != null;
+  bool get hasErrorsInRegister {
+    return email != null ||
+        password != null ||
+        name != null ||
+        username != null ||
+        family != null ||
+        number != null;
+  }
 
   @computed
   bool get hasErrorInForgotPassword => username != null;

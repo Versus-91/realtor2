@@ -465,7 +465,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       _rentPriceController.clear();
       _buyPriceController.clear();
       _areaController.clear();
-      _ageHomeselected = null;
+      _ageHomeselected = 0;
       amenityList = [];
       _value = null;
       _paths = null;
@@ -874,69 +874,50 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   Widget _buildAgeField() {
     return Observer(
       builder: (context) {
-        return _cityStore.cityList != null
-            ? Container(
-                padding: EdgeInsets.only(top: 5, bottom: 15),
-                child: Row(
-                  children: <Widget>[
-                    Flexible(
-                      child: DropdownButtonFormField<int>(
-                          decoration: InputDecoration(
-                            errorText: _store.formErrorStore.age,
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.transparent)),
-                            labelText: AppLocalizations.of(context)
-                                .translate('age_home'),
-                            fillColor: Color(0xfff3f3f4),
-                            filled: true,
-                            hintText: AppLocalizations.of(context)
-                                .translate('age_home'),
-                            contentPadding: EdgeInsets.all(10),
-                          ),
-                          value: _ageHomeselected,
-                          onChanged: (int val) {
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
-
-                            _store.setAge(val);
-                            _ageHomeselected = val;
-                          },
-                          items: List.generate(5, (index) {
-                            if (index != 4) {
-                              return DropdownMenuItem<int>(
-                                child: Text((index + 1).toString() + " سال"),
-                                value: index,
-                              );
-                            }
-                            return DropdownMenuItem<int>(
-                              child: Text("بیش از 5 سال"),
-                              value: index,
-                            );
-                          })),
-                    ),
-                  ],
-                ))
-            : Opacity(
-                opacity: 0.8,
-                child: Shimmer.fromColors(
-                  child: Container(
-                      padding: EdgeInsets.only(top: 10, bottom: 15),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
+        return Container(
+            padding: EdgeInsets.only(top: 5, bottom: 15),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: DropdownButtonFormField<int>(
+                      decoration: InputDecoration(
+                        errorText: _store.formErrorStore.age,
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                        labelText:
                             AppLocalizations.of(context).translate('age_home'),
-                            style: TextStyle(
-                              fontSize: 20.0,
-                            ),
-                          )
-                        ],
-                      )),
-                  baseColor: Colors.black12,
-                  highlightColor: Colors.white,
-                  loop: 30,
+                        fillColor: Color(0xfff3f3f4),
+                        filled: true,
+                        hintText:
+                            AppLocalizations.of(context).translate('age_home'),
+                        contentPadding: EdgeInsets.all(10),
+                      ),
+                      value: _ageHomeselected,
+                      onChanged: (int val) {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+
+                        _store.setAge(val);
+                        setState(() {
+                          _ageHomeselected = val;
+                        });
+                      },
+                      items: List.generate(6, (index) {
+                        if (index == 0) {
+                          return DropdownMenuItem<int>(
+                              child: Text("ندارد"), value: index);
+                        }
+                        if (index != 5) {
+                          return DropdownMenuItem<int>(
+                            child: Text((index).toString() + " سال"),
+                            value: index,
+                          );
+                        }
+                        return DropdownMenuItem<int>(
+                            child: Text("بیش از 5 سال"), value: index);
+                      })),
                 ),
-              );
+              ],
+            ));
       },
     );
   }

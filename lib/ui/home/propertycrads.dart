@@ -248,7 +248,7 @@ class _PropertyCradState extends State<PropertyCrad>
               ),
               Padding(
                 padding:
-                    const EdgeInsets.only(left: 0.0, right: 0.0, bottom: 5.0),
+                    const EdgeInsets.only(left: 0.0, right: 10.0, bottom: 5.0),
                 child: IntrinsicHeight(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -256,7 +256,7 @@ class _PropertyCradState extends State<PropertyCrad>
                     children: [
                       Flexible(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             FutureBuilder(
                               future: isSelected(widget.post.id),
@@ -298,46 +298,47 @@ class _PropertyCradState extends State<PropertyCrad>
                                 color: Colors.blue[200],
                               ),
                               onPressed: () async {
-                                await Share.share(Endpoints.baseUrl + '/ads/'
-                                + widget.post.id.toString());
+                                await Share.share(Endpoints.baseUrl +
+                                    '/ads/' +
+                                    widget.post.id.toString());
                               },
                             ),
-                            widget.isEdditing == true
-                                ? IconButton(
-                                    icon: Icon(
-                                      Icons.edit,
-                                      color: Colors.purple[200],
-                                    ),
-                                    onPressed: () async {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context,
-                                                    {rootNavigator: true}) =>
-                                                EditPostScreen(
-                                                  post: post,
-                                                )),
-                                      );
-                                    },
-                                  )
-                                : Container(
-                                    width: 0,
-                                    height: 0,
-                                  ),
-                            widget.isEdditing == true
-                                ? Flexible(
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Colors.red[200],
-                                      ),
-                                      onPressed: () {},
-                                    ),
-                                  )
-                                : Container(
-                                    width: 0,
-                                    height: 0,
-                                  ),
+
+                            Visibility(
+                              visible: widget.isEdditing == true,
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Colors.purple[200],
+                                ),
+                                onPressed: () async {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context,
+                                                {rootNavigator: true}) =>
+                                            EditPostScreen(
+                                              post: post,
+                                            )),
+                                  );
+                                },
+                              ),
+                            )
+
+                            // widget.isEdditing == true
+                            //     ? Flexible(
+                            //         child: IconButton(
+                            //           icon: Icon(
+                            //             Icons.delete,
+                            //             color: Colors.red[200],
+                            //           ),
+                            //           onPressed: () {},
+                            //         ),
+                            //       )
+                            //     : Container(
+                            //         width: 0,
+                            //         height: 0,
+                            //       ),
                           ],
                         ),
                       ),

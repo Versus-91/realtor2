@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
         textColor: kWhite,
         text: AppLocalizations.of(context).translate('login_btn_sign_in'),
         onPressed: () {
-          FocusScope.of(context).unfocus();
+          FocusScope.of(context).requestFocus(FocusNode());
           widget.formStore.login().then((value) async {
             if (value == true) {
               var token = await _firebaseService.fcmToken;
@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   SizedBox(height: height * .2),
                   _title(),
-                   SizedBox(height: 20),
+                  SizedBox(height: 20),
                   Container(
                     height: height / 1.7,
                     child: Column(

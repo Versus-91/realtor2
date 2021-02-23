@@ -326,6 +326,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _submitButton() {
     return InkWell(
       onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode());
         if (!_formStore.formErrorStore.hasErrorsInRegister) {
           _formStore.register().then((result) {
             if (result == true) {

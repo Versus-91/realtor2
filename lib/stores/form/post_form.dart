@@ -210,7 +210,7 @@ abstract class _PostFormStore with Store {
         element.path == image.path &&
         element.isfromNetwork == image.isfromNetwork &&
         element.id == image.id);
-    if (foundFile == null || foundFile.isEmpty) {
+    if (foundFile != null) {
       postImages.remove(image);
     }
   }
@@ -340,7 +340,7 @@ abstract class _PostFormStore with Store {
         throw error;
       });
     }
-    throw "invalid form";
+    throw "فرم نامعتبر است";
   }
 
   @action

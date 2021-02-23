@@ -18,6 +18,7 @@ import 'package:boilerplate/ui/post/user_map_screen.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/progress_indicator_widget.dart';
+import 'package:dio/dio.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flushbar/flushbar_helper.dart';
@@ -405,6 +406,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return InkWell(
       onTap: () async {
         _store.updatePost(widget.post.id).then((value) {
+          upload(widget.post.id);
           successPost(AppLocalizations.of(context).translate('send_editepost'));
           Navigator.of(context).pop();
         }).catchError((error) {
@@ -471,114 +473,95 @@ class _EditPostScreenState extends State<EditPostScreen> {
           height: MediaQuery.of(context).size.height * 0.23,
           child: Scrollbar(
             child: Observer(builder: (_) {
-              return _store.postImages.length > 0
-                  ? GridView.count(
-                      crossAxisCount: 4,
-                      children: [
-                        GridTile(
-                          child: InkWell(
-                            onTap: () {
-                              _openFileExplorer();
-                            },
-                            child: Card(
-                                color: Colors.white,
-                                child: Center(
-                                  child: Icon(Icons.camera_alt_rounded),
-                                )),
-                          ),
-                        ),
-                        ...List<Widget>.generate(_store.postImages.length,
-                            (index) {
-                          return GridTile(
-                            child: Card(
-                                shadowColor: Colors.black,
-                                color: Colors.white,
-                                child: Stack(
-                                  children: [
-                                    _store.postImages[index].isfromNetwork ==
-                                            false
-                                        ? Image.file(
-                                            File(_store.postImages[index].path),
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,
-                                          )
-                                        : Image.network(
-                                            _store.postImages[index].path,
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,
-                                          ),
-                                    Positioned(
-                                      left: -12,
-                                      top: -12,
-                                      child: IconButton(
-                                          tooltip: "حذف تصویر",
-                                          icon: Icon(
-                                            Icons.delete,
-                                            color: Colors.redAccent,
-                                          ),
-                                          onPressed: () async {
-                                            _store.postImages[index]
-                                                        .isfromNetwork ==
-                                                    false
-                                                ? setState(() {
-                                                    _store.postImages
-                                                        .removeWhere((item) =>
-                                                            item.path ==
-                                                            _store
-                                                                .postImages[
-                                                                    index]
-                                                                .path);
-                                                  })
-                                                : appComponent
-                                                    .getRepository()
-                                                    .removePostImage(_store
-                                                        .postImages[index].id)
-                                                    .then((value) {
-                                                    successPost(
-                                                        AppLocalizations.of(
-                                                                context)
-                                                            .translate(
-                                                                'sendpicture'));
-                                                    setState(() {
-                                                      _store.removeFile(
-                                                        Postimages(
-                                                            id: _store
-                                                                .postImages[
-                                                                    index]
-                                                                .id,
-                                                            path: _store
-                                                                .postImages[
-                                                                    index]
-                                                                .path,
-                                                            isfromNetwork:
-                                                                false),
-                                                      );
-                                                    });
-                                                  }).catchError((error) {
-                                                    _showErrorMessage(
-                                                      "تصویر حذف نشد",
-                                                    );
-                                                  });
-                                          }),
-                                    ),
-                                  ],
-                                )),
-                          );
-                        })
-                      ],
-                    )
-                  : RaisedButton(
-                      color: Color(0xfff3f3f4),
-                      child: Image.asset(
-                        "assets/images/camera.png",
-                        fit: BoxFit.fitHeight,
-                        width: 100,
-                        height: 100,
+              if (_store.postImages.length > 0) {
+                return GridView.count(
+                  crossAxisCount: 4,
+                  children: [
+                    GridTile(
+                      child: InkWell(
+                        onTap: () {
+                          _openFileExplorer();
+                        },
+                        child: Card(
+                            color: Colors.white,
+                            child: Center(
+                              child: Icon(Icons.camera_alt_rounded),
+                            )),
                       ),
-                      onPressed: () {
-                        _openFileExplorer();
-                      },
-                    );
+                    ),
+                    ...List<Widget>.generate(_store.postImages.length, (index) {
+                      return GridTile(
+                        child: Card(
+                            shadowColor: Colors.black,
+                            color: Colors.white,
+                            child: Stack(
+                              children: [
+                                if (_store.postImages[index].isfromNetwork ==
+                                    false)
+                                  Image.file(
+                                    File(_store.postImages[index].path),
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  )
+                                else
+                                  Image.network(
+                                    _store.postImages[index].path,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                  ),
+                                Positioned(
+                                    left: -12,
+                                    top: -12,
+                                    child: IconButton(
+                                        tooltip: "حذف تصویر",
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Colors.redAccent,
+                                        ),
+                                        onPressed: () async {
+                                          if (_store.postImages[index]
+                                                  .isfromNetwork ==
+                                              false) {
+                                            _store.removeFile(
+                                                _store.postImages[index]);
+                                          } else {
+                                            appComponent
+                                                .getRepository()
+                                                .removePostImage(
+                                                    _store.postImages[index].id)
+                                                .then((value) {
+                                              successPost(AppLocalizations.of(
+                                                      context)
+                                                  .translate('sendpicture'));
+                                              _store.removeFile(
+                                                  _store.postImages[index]);
+                                            }).catchError((error) {
+                                              _showErrorMessage(
+                                                "تصویر حذف نشد",
+                                              );
+                                            });
+                                          }
+                                        })),
+                              ],
+                            )),
+                      );
+                    })
+                  ],
+                );
+              } else {
+                return RaisedButton(
+                  color: Color(0xfff3f3f4),
+                  child: Image.asset(
+                    "assets/images/camera.png",
+                    fit: BoxFit.fitHeight,
+                    width: 100,
+                    height: 100,
+                  ),
+                  onPressed: () {
+                    _openFileExplorer();
+                  },
+                );
+              }
             }),
           ),
         ));
@@ -643,6 +626,24 @@ class _EditPostScreenState extends State<EditPostScreen> {
               ),
             );
     });
+  }
+
+  upload(int id) async {
+    List<MultipartFile> multipartFiles = List<MultipartFile>();
+    for (var pic in _store.postImages) {
+      if (pic.isfromNetwork == false) {
+        multipartFiles.add(await MultipartFile.fromFile(pic.path,
+            filename: "image_" + id.toString()));
+      }
+    }
+    if (multipartFiles.length > 0) {
+      _store.uploadImages(multipartFiles, id.toString()).then((value) {
+        FilePicker.platform.clearTemporaryFiles().then((result) {});
+        successPost(
+          AppLocalizations.of(context).translate('succes_send'),
+        );
+      });
+    }
   }
 
   Widget _buildDescriptionField() {

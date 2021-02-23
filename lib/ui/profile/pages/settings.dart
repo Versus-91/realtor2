@@ -65,13 +65,14 @@ class _SettingsScreenState extends State<SettingsScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    getUserLogin();
     _userStore = Provider.of<UserStore>(context);
   }
 
   @override
   void initState() {
     super.initState();
-    getUserLogin();
+
     _rippleAnimationController = AnimationController(
       vsync: this,
       duration: kRippleAnimationDuration,
