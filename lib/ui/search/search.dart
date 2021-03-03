@@ -776,6 +776,13 @@ class _SearchScreenState extends State<SearchScreen> {
                         .firstWhere((city) => city.name == cityDropdownValue)
                         ?.id);
                   }
+                  widget.filterForm.setArea(null, null);
+                  widget.filterForm.setDistrict(null, null);
+                  widget.filterForm.setCity(
+                      _cityStore.cityList.cities
+                          .firstWhere((city) => city.name == cityDropdownValue)
+                          ?.id,
+                      cityDropdownValue);
                 },
                 selectedItem: cityDropdownValue,
                 showSearchBox: true,
@@ -854,6 +861,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                         area.name == localityDropdownValue)
                                     ?.id);
                               }
+                              widget.filterForm.setArea(
+                                  _areaStore.areaList.areas
+                                      .firstWhere((area) =>
+                                          area.name == localityDropdownValue)
+                                      ?.id,
+                                  localityDropdownValue);
+                              widget.filterForm.setDistrict(null, null);
+                              widget.filterForm.setCity(null, null);
                             },
                             selectedItem: localityDropdownValue,
                             showSearchBox: true,
@@ -933,11 +948,19 @@ class _SearchScreenState extends State<SearchScreen> {
                                   .requestFocus(new FocusNode());
                               int selectDistrict = _districtStore
                                   .districtList.districts
+         
                                   .firstWhere(
                                       (district) => district.name == val)
                                   .id;
 
-                              // _store.setDistrict(selectDistrict);
+                              widget.filterForm.setArea(null, null);
+                              widget.filterForm.setDistrict(
+                                  _districtStore.districtList.districts
+                                      .firstWhere(
+                                          (district) => district.name == val)
+                                      .id,
+                                  null);
+                              widget.filterForm.setCity(null, null);
                             },
                             selectedItem: "محله",
                             showSearchBox: true,
