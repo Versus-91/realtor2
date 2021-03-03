@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:boilerplate/stores/area/area_store.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/category/category.dart';
@@ -14,6 +14,7 @@ import 'package:boilerplate/stores/form/filter_form.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -52,11 +53,15 @@ class _SearchScreenState extends State<SearchScreen> {
   var data;
   String dataurl = Endpoints.baseUrl + "/api/services/app/District/Find";
   CityStore _cityStore;
+  AreaStore _areaStore;
   DistrictStore _districtStore;
   CategoryStore _categoryStore;
   TypeStore _typeStore;
   AmenityStore _amenityStore;
+  String cityDropdownValue;
+  String localityDropdownValue;
   final List<bool> isSelected = [
+    false,
     false,
     false,
     false,
@@ -76,6 +81,7 @@ class _SearchScreenState extends State<SearchScreen> {
     super.didChangeDependencies();
     _cityStore = Provider.of<CityStore>(context);
     _districtStore = Provider.of<DistrictStore>(context);
+    _areaStore = Provider.of<AreaStore>(context);
     _categoryStore = Provider.of<CategoryStore>(context);
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
@@ -84,6 +90,8 @@ class _SearchScreenState extends State<SearchScreen> {
       _cityStore.getCities();
     if (!_districtStore.loading && _districtStore.districtList == null)
       _districtStore.getDistricts();
+    if (!_areaStore.loading && _areaStore.areaList == null)
+      _areaStore.getAreas();
     if (!_categoryStore.loading && _categoryStore.categoryList == null)
       _categoryStore.getCategories();
     if (!_typeStore.loading && _typeStore.typeList == null)
@@ -175,6 +183,16 @@ class _SearchScreenState extends State<SearchScreen> {
               children: <Widget>[
                 getAppBarUI(),
                 searchField(),
+                SizedBox(height: 10),
+                _buildCitylistField(),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    _buildArealistField(),
+                    VerticalDivider(),
+                    _buildDistrictlistField(),
+                  ],
+                ),
                 _buildCategoryField(),
                 popularFilter(),
                 _buildBedroomCountField(),
@@ -227,44 +245,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                   }
                                   widget.filterForm
                                       .setCategory(category.id, category.name);
-                                }, active: _value == category.id ? true : false)
-
-                                // GestureDetector(
-                                //   onTap: () {
-                                //     if (_value != category.id) {
-                                //       setState(() {
-                                //         _value = category.id;
-                                //         resetPrice(category);
-                                //       });
-                                //     }
-                                //     widget.filterForm
-                                //         .setCategory(category.id, category.name);
-                                //   },
-                                //   child: Container(
-                                //     decoration: BoxDecoration(
-                                //       border: _value == category.id
-                                //           ? Border(
-                                //               bottom: BorderSide(
-                                //                   width: 2.0,
-                                //                   color: Colors.redAccent),
-                                //             )
-                                //           : Border(
-                                //               bottom: BorderSide(
-                                //                   width: 2.0,
-                                //                   color: Colors.transparent),
-                                //             ),
-                                //     ),
-                                //     child: Text(
-                                //       category.name,
-                                //       style: TextStyle(
-                                //           fontSize: 18,
-                                //           color: _value == category.id
-                                //               ? Colors.redAccent
-                                //               : Colors.black),
-                                //     ),
-                                //   ),
-                                // ),
-                                );
+                                },
+                                    active:
+                                        _value == category.id ? true : false));
                           },
                         ).toList(),
                       ),
@@ -295,19 +278,6 @@ class _SearchScreenState extends State<SearchScreen> {
                       priceBarFilter(
                           AppLocalizations.of(context).translate('price_scope'))
                     ],
-
-                    // Visibility(
-                    //     visible: widget.filterForm.category.name != null &&
-                    //         widget.filterForm.category.name.contains(
-                    //             AppLocalizations.of(context).translate('rent')),
-                    //     child: Column(
-                    //       children: [
-                    // depositPriceBarFilter(AppLocalizations.of(context)
-                    //     .translate('rahn_scope')),
-                    // rentPriceBarFilter(AppLocalizations.of(context)
-                    //     .translate('rent_scope'))
-                    //       ],
-                    //     )),
                   ],
                 )
               : Opacity(
@@ -401,6 +371,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     onPressed: () {
                       widget.filterForm.setDistrict(null, null);
                       widget.filterForm.setCity(null, null);
+                      widget.filterForm.setArea(null, null);
                       _typeAheadController.clear();
                     },
                     icon: _typeAheadController.text != null
@@ -460,7 +431,9 @@ class _SearchScreenState extends State<SearchScreen> {
           validator: (value) => value.isEmpty
               ? AppLocalizations.of(context).translate('insert_district')
               : null,
-          onSaved: (value) => this._selectedCity = value,
+          onSaved: (value) {
+            return this._selectedCity = value;
+          },
         ),
       ),
     );
@@ -775,6 +748,252 @@ class _SearchScreenState extends State<SearchScreen> {
     return noList;
   }
 
+  Widget _buildCitylistField() {
+    return Observer(
+      builder: (context) {
+        if (_cityStore.cityList != null) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 0, left: 14, right: 14),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              child: DropdownSearch<String>(
+                mode: Mode.MENU,
+                maxHeight: 300,
+                items: _cityStore.cityList.cities
+                    .map((city) => city.name)
+                    .toList(),
+                isFilteredOnline: true,
+                label: "شهر",
+                onChanged: (String val) {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                  if (val != cityDropdownValue) {
+                    setState(() {
+                      cityDropdownValue = val;
+                    });
+
+                    _areaStore.getAreasByCityid(_cityStore.cityList.cities
+                        .firstWhere((city) => city.name == cityDropdownValue)
+                        ?.id);
+                  }
+                },
+                selectedItem: cityDropdownValue,
+                showSearchBox: true,
+                autoFocusSearchBox: true,
+                searchBoxDecoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                  labelText: "جست و جو شهر",
+                ),
+                popupShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else {
+          return Opacity(
+            opacity: 0.8,
+            child: Shimmer.fromColors(
+              child: Container(
+                  padding: EdgeInsets.only(top: 10, bottom: 15),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        AppLocalizations.of(context).translate('city'),
+                        style: TextStyle(
+                          fontSize: 20.0,
+                        ),
+                      )
+                    ],
+                  )),
+              baseColor: Colors.black12,
+              highlightColor: Colors.white,
+              loop: 30,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildArealistField() {
+    return Observer(
+      builder: (context) {
+        if (_areaStore.areaList != null && cityDropdownValue != null) {
+          return Flexible(
+            child: _areaStore.loading == true
+                ? LinearProgressIndicator()
+                : (_areaStore.areaList.areas.length > 0
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 14),
+                        child: Container(
+                          height: 50,
+                          child: DropdownSearch<String>(
+                            mode: Mode.MENU,
+                            maxHeight: 300,
+                            items: _areaStore.areaList.areas
+                                .map((area) => area.name)
+                                .toList(),
+                            isFilteredOnline: true,
+                            label: "ناحیه",
+                            onChanged: (String val) {
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
+                              if (val != localityDropdownValue) {
+                                setState(() {
+                                  // _store.setLocality(int.parse(val));
+                                  localityDropdownValue = val;
+                                });
+                                _districtStore.getDistrictsByAreaid(_areaStore
+                                    .areaList.areas
+                                    .firstWhere((area) =>
+                                        area.name == localityDropdownValue)
+                                    ?.id);
+                              }
+                            },
+                            selectedItem: localityDropdownValue,
+                            showSearchBox: true,
+                            autoFocusSearchBox: true,
+                            searchBoxDecoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                              labelText: "جست و جو ناحیه",
+                            ),
+                            popupShape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Text(
+                        AppLocalizations.of(context).translate('notfound_area'),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      )),
+          );
+        } else {
+          return Flexible(
+            child: Opacity(
+              opacity: 0.8,
+              child: Shimmer.fromColors(
+                child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 15, right: 10),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('locality'),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ],
+                    )),
+                baseColor: Colors.black12,
+                highlightColor: Colors.white,
+                loop: 30,
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildDistrictlistField() {
+    return Observer(
+      builder: (context) {
+        if (_districtStore.districtList != null &&
+            localityDropdownValue != null) {
+          return Flexible(
+            child: _districtStore.loading == true
+                ? LinearProgressIndicator()
+                : (_districtStore.districtList.districts.length > 0
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 0, left: 14),
+                        child: Container(
+                          height: 50,
+                          child: DropdownSearch<String>(
+                            mode: Mode.MENU,
+                            maxHeight: 300,
+                            items: _districtStore.districtList.districts
+                                .map((district) => district.name)
+                                .toList(),
+                            isFilteredOnline: true,
+                            label: "محله",
+                            onChanged: (String val) {
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
+                              int selectDistrict = _districtStore
+                                  .districtList.districts
+                                  .firstWhere(
+                                      (district) => district.name == val)
+                                  .id;
+
+                              // _store.setDistrict(selectDistrict);
+                            },
+                            selectedItem: "محله",
+                            showSearchBox: true,
+                            autoFocusSearchBox: true,
+                            searchBoxDecoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                              labelText: "جست و جو محله",
+                            ),
+                            popupShape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Text(
+                        AppLocalizations.of(context)
+                            .translate('notfound_district'),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      )),
+          );
+        } else {
+          return Flexible(
+            child: Opacity(
+              opacity: 0.8,
+              child: Shimmer.fromColors(
+                child: Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 15),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          AppLocalizations.of(context).translate('district'),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ],
+                    )),
+                baseColor: Colors.black12,
+                highlightColor: Colors.white,
+                loop: 30,
+              ),
+            ),
+          );
+        }
+      },
+    );
+
+    //
+  }
+
   Widget _buildBedroomCountField() {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
@@ -791,64 +1010,72 @@ class _SearchScreenState extends State<SearchScreen> {
           Center(
             child: Padding(
               padding: const EdgeInsets.only(top: 16),
-              child: ToggleButtons(
-                children: <Widget>[
-                  Text(
-                    "+" +
-                        AppLocalizations.of(context)
-                            .transformNumbers(1.toString()),
-                  ),
-                  Text(
-                    "+" +
-                        AppLocalizations.of(context)
-                            .transformNumbers(2.toString()),
-                  ),
-                  Text(
-                    "+" +
-                        AppLocalizations.of(context)
-                            .transformNumbers(3.toString()),
-                  ),
-                  Text(
-                    "+" +
-                        AppLocalizations.of(context)
-                            .transformNumbers(4.toString()),
-                  ),
-                  Text(
-                    "+" +
-                        AppLocalizations.of(context)
-                            .transformNumbers(5.toString()),
-                  ),
-                  Text(
-                    "+" +
-                        AppLocalizations.of(context)
-                            .transformNumbers(10.toString()),
-                  ),
-                  Text(
-                    "+" +
-                        AppLocalizations.of(context)
-                            .transformNumbers(20.toString()),
-                  ),
-                ],
-                onPressed: (int index) {
-                  setState(() {
-                    for (int buttonIndex = 0;
-                        buttonIndex < isSelected.length;
-                        buttonIndex++) {
-                      if (buttonIndex == index) {
-                        if (isSelected[buttonIndex] != true) {
-                          isSelected[buttonIndex] = true;
-                          widget.filterForm.setBedCount(index + 1);
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ToggleButtons(
+                  children: <Widget>[
+                    Text(
+                      "+" +
+                          AppLocalizations.of(context)
+                              .transformNumbers(0.toString()),
+                    ),
+                    Text(
+                      "+" +
+                          AppLocalizations.of(context)
+                              .transformNumbers(1.toString()),
+                    ),
+                    Text(
+                      "+" +
+                          AppLocalizations.of(context)
+                              .transformNumbers(2.toString()),
+                    ),
+                    Text(
+                      "+" +
+                          AppLocalizations.of(context)
+                              .transformNumbers(3.toString()),
+                    ),
+                    Text(
+                      "+" +
+                          AppLocalizations.of(context)
+                              .transformNumbers(4.toString()),
+                    ),
+                    Text(
+                      "+" +
+                          AppLocalizations.of(context)
+                              .transformNumbers(5.toString()),
+                    ),
+                    Text(
+                      "+" +
+                          AppLocalizations.of(context)
+                              .transformNumbers(10.toString()),
+                    ),
+                    Text(
+                      "+" +
+                          AppLocalizations.of(context)
+                              .transformNumbers(20.toString()),
+                    ),
+                  ],
+                  onPressed: (int index) {
+                    setState(() {
+                      for (int buttonIndex = 0;
+                          buttonIndex < isSelected.length;
+                          buttonIndex++) {
+                        if (buttonIndex == index) {
+                          if (isSelected[buttonIndex] != true) {
+                            isSelected[buttonIndex] = true;
+                            widget.filterForm.setBedCount(index);
+                          } else {
+                            isSelected[buttonIndex] = false;
+                            widget.filterForm.setBedCount(null);
+                          }
                         } else {
                           isSelected[buttonIndex] = false;
-                          widget.filterForm.setBedCount(null);
                         }
-                      } else {
-                        isSelected[buttonIndex] = false;
                       }
-                    }
-                  });
-                },
-                isSelected: isSelected,
+                    });
+                  },
+                  isSelected: isSelected,
+                ),
               ),
             ),
           )

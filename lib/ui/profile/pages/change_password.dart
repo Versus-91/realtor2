@@ -18,10 +18,24 @@ class _ChangePasswordPageState extends State<ChangePasswordPage>
   UserStore _userStore;
 
   bool _obscureText = true;
+  bool _obscureText2 = true;
+  bool _obscureText3 = true;
   // Toggles the password show status
   void _toggle() {
     setState(() {
       _obscureText = !_obscureText;
+    });
+  }
+
+  void _toggle2() {
+    setState(() {
+      _obscureText2 = !_obscureText2;
+    });
+  }
+
+  void _toggle3() {
+    setState(() {
+      _obscureText3 = !_obscureText3;
     });
   }
 
@@ -135,21 +149,20 @@ class _ChangePasswordPageState extends State<ChangePasswordPage>
                   },
                   obscureText: _obscureText,
                 ),
-
                 SizedBox(
                   height: 10,
                 ),
-                // Align(
-                //   alignment: Alignment.bottomRight,
-                //   child: FlatButton(
-                //     onPressed: () {},
-                //     child: Text(
-                //       AppLocalizations.of(context)
-                //           .translate('login_btn_forgot_password'),
-                //       style: TextStyle(color: Colors.blue, fontSize: 10),
-                //     ),
-                //   ),
-                // ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: FlatButton(
+                    onPressed: () {},
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate('login_btn_forgot_password'),
+                      style: TextStyle(color: Colors.blue, fontSize: 10),
+                    ),
+                  ),
+                ),
                 TextFormField(
                   controller: _newPasswordController,
                   decoration: InputDecoration(
@@ -163,13 +176,19 @@ class _ChangePasswordPageState extends State<ChangePasswordPage>
                     ),
                     border: UnderlineInputBorder(),
                     errorText: _userStore.userErrorStore.newPassword,
-                    suffix: Icon(Icons.lock),
+                    suffix: IconButton(
+                      icon: _obscureText2 == true
+                          ? Icon(Icons.visibility_off)
+                          : Icon(Icons.visibility),
+                      onPressed: _toggle2,
+                    ),
                     labelText:
                         AppLocalizations.of(context).translate('new_password'),
                   ),
                   onChanged: (value) {
                     _userStore.setNewPassword(value.toString());
                   },
+                  obscureText: _obscureText2,
                 ),
                 SizedBox(
                   height: 10,
@@ -186,7 +205,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage>
                       //  when the TextFormField in focused
                     ),
                     border: UnderlineInputBorder(),
-                    suffix: Icon(Icons.lock),
+                    suffix: IconButton(
+                      icon: _obscureText3 == true
+                          ? Icon(Icons.visibility_off)
+                          : Icon(Icons.visibility),
+                      onPressed: _toggle3,
+                    ),
                     errorText: _userStore.userErrorStore.confrimPassword,
                     // border: OutlineInputBorder(),
                     labelText: AppLocalizations.of(context)
@@ -195,43 +219,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage>
                   onChanged: (value) {
                     _userStore.setConfirmPassword(value.toString());
                   },
+                  obscureText: _obscureText3,
                 ),
-
-                // Container(
-                //   width: MediaQuery.of(context).size.width,
-                //   padding: EdgeInsets.symmetric(vertical: 15),
-                //   alignment: Alignment.center,
-                //   child: CustomButton(
-                //     color: Colors.green,
-                //     textColor: Colors.white,
-                //     text:
-                //         AppLocalizations.of(context).translate('register_info'),
-                //     onPressed: () async {
-                //       _userStore
-                //           .changePass(ChangePassword(
-                //         oldPassword: _oldPasswordController.text,
-                //         newPassword: _newPasswordController.text,
-                //         confirmPassword: _confirmPasswordController.text,
-                //       ))
-                //           .then((value) async {
-                //         successMessage('رمز با موفقیت تغییر کرد.');
-                //         // _newNumberController.text = result;
-                //       }).catchError((error) {
-                //         if (error?.response?.data
-                //             .toString()
-                //             .contains("not match")) {
-                //           _showErrorMessage(
-                //             "رمز فعلی اشتباه وارد شده است.",
-                //           );
-                //         } else {
-                //           _showErrorMessage(
-                //             "خطا در تغییر رمز",
-                //           );
-                //         }
-                //       });
-                //     },
-                //   ),
-                // ),
               ]),
             ),
           ),

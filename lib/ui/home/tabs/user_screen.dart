@@ -42,7 +42,6 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
     setState(() {
       loggedIn = isLoggedIn;
     });
-  
   }
 
   @override
@@ -53,6 +52,8 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false
+      ,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -68,8 +69,8 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
           Padding(
             padding:
                 const EdgeInsets.only(top: 20, right: 10, left: 10, bottom: 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   AppLocalizations.of(context).translate('recent_search'),
@@ -79,8 +80,7 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
                   height: 15,
                 ),
                 Container(
-               
-                  height: MediaQuery.of(context).size.height /1.5,
+                  height: MediaQuery.of(context).size.height / 1.5,
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment.topRight,
                   child: _buildListView(),
