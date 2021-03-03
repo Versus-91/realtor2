@@ -182,7 +182,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Column(
               children: <Widget>[
                 getAppBarUI(),
-                searchField(),
+                // searchField(),
                 SizedBox(height: 10),
                 _buildCitylistField(),
                 SizedBox(height: 10),
@@ -359,85 +359,85 @@ class _SearchScreenState extends State<SearchScreen> {
             ));
   }
 
-  Widget searchField() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 14, right: 14),
-      child: Container(
-        height: 55,
-        child: TypeAheadFormField(
-          textFieldConfiguration: TextFieldConfiguration(
-            decoration: InputDecoration(
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      widget.filterForm.setDistrict(null, null);
-                      widget.filterForm.setCity(null, null);
-                      widget.filterForm.setArea(null, null);
-                      _typeAheadController.clear();
-                    },
-                    icon: _typeAheadController.text != null
-                        ? Icon(Icons.clear)
-                        : Icon(Icons.search)),
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent)),
-                labelText: AppLocalizations.of(context)
-                    .translate('search_in_district'),
-                fillColor: Color(0xfff3f3f4),
-                filled: true,
-                hintText: AppLocalizations.of(context)
-                    .translate('search_in_district')),
-            controller: this._typeAheadController,
-          ),
-          suggestionsCallback: (pattern) {
-            if (pattern.trim().length >= 2 && pattern.trim() != _selectedCity) {
-              return getSuggestion(pattern);
-            }
-            return null;
-          },
-          itemBuilder: (context, suggestion) {
-            return ListTile(
-              title: Text(suggestion),
-            );
-          },
-          noItemsFoundBuilder: (context) {
-            return Container(
-              height: 45,
-              child: Padding(
-                padding: EdgeInsets.only(top: 5, right: 10),
-                child: Text(
-                  AppLocalizations.of(context).translate('no_result'),
-                  style: TextStyle(fontSize: 20, color: Colors.grey[400]),
-                ),
-              ),
-            );
-          },
-          transitionBuilder: (context, suggestionsBox, controller) {
-            return suggestionsBox;
-          },
-          onSuggestionSelected: (suggestion) {
-            this._typeAheadController.text = suggestion;
-            var selectedLocation = _locations
-                .where((element) => suggestion.contains(element.name))
-                ?.first;
-            if (selectedLocation != null) {
-              if (selectedLocation.isCity) {
-                widget.filterForm.setDistrict(null, null);
-                widget.filterForm.setCity(selectedLocation.id, suggestion);
-              } else {
-                widget.filterForm.setCity(null, null);
-                widget.filterForm.setDistrict(selectedLocation.id, suggestion);
-              }
-            }
-          },
-          validator: (value) => value.isEmpty
-              ? AppLocalizations.of(context).translate('insert_district')
-              : null,
-          onSaved: (value) {
-            return this._selectedCity = value;
-          },
-        ),
-      ),
-    );
-  }
+  // Widget searchField() {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(top: 20, left: 14, right: 14),
+  //     child: Container(
+  //       height: 55,
+  //       child: TypeAheadFormField(
+  //         textFieldConfiguration: TextFieldConfiguration(
+  //           decoration: InputDecoration(
+  //               suffixIcon: IconButton(
+  //                   onPressed: () {
+  //                     widget.filterForm.setDistrict(null, null);
+  //                     widget.filterForm.setCity(null, null);
+  //                     widget.filterForm.setArea(null, null);
+  //                     _typeAheadController.clear();
+  //                   },
+  //                   icon: _typeAheadController.text != null
+  //                       ? Icon(Icons.clear)
+  //                       : Icon(Icons.search)),
+  //               border: OutlineInputBorder(
+  //                   borderSide: BorderSide(color: Colors.transparent)),
+  //               labelText: AppLocalizations.of(context)
+  //                   .translate('search_in_district'),
+  //               fillColor: Color(0xfff3f3f4),
+  //               filled: true,
+  //               hintText: AppLocalizations.of(context)
+  //                   .translate('search_in_district')),
+  //           controller: this._typeAheadController,
+  //         ),
+  //         suggestionsCallback: (pattern) {
+  //           if (pattern.trim().length >= 2 && pattern.trim() != _selectedCity) {
+  //             return getSuggestion(pattern);
+  //           }
+  //           return null;
+  //         },
+  //         itemBuilder: (context, suggestion) {
+  //           return ListTile(
+  //             title: Text(suggestion),
+  //           );
+  //         },
+  //         noItemsFoundBuilder: (context) {
+  //           return Container(
+  //             height: 45,
+  //             child: Padding(
+  //               padding: EdgeInsets.only(top: 5, right: 10),
+  //               child: Text(
+  //                 AppLocalizations.of(context).translate('no_result'),
+  //                 style: TextStyle(fontSize: 20, color: Colors.grey[400]),
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //         transitionBuilder: (context, suggestionsBox, controller) {
+  //           return suggestionsBox;
+  //         },
+  //         onSuggestionSelected: (suggestion) {
+  //           this._typeAheadController.text = suggestion;
+  //           var selectedLocation = _locations
+  //               .where((element) => suggestion.contains(element.name))
+  //               ?.first;
+  //           if (selectedLocation != null) {
+  //             if (selectedLocation.isCity) {
+  //               widget.filterForm.setDistrict(null, null);
+  //               widget.filterForm.setCity(selectedLocation.id, suggestion);
+  //             } else {
+  //               widget.filterForm.setCity(null, null);
+  //               widget.filterForm.setDistrict(selectedLocation.id, suggestion);
+  //             }
+  //           }
+  //         },
+  //         validator: (value) => value.isEmpty
+  //             ? AppLocalizations.of(context).translate('insert_district')
+  //             : null,
+  //         onSaved: (value) {
+  //           return this._selectedCity = value;
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Future<List> getSuggestion(String pattern) async {
     //get suggestion function
@@ -764,7 +764,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     .map((city) => city.name)
                     .toList(),
                 isFilteredOnline: true,
-                label: "شهر",
+                label: "  جست و جوی شهر",
                 onChanged: (String val) {
                   FocusScope.of(context).requestFocus(new FocusNode());
                   if (val != cityDropdownValue) {
@@ -846,7 +846,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 .map((area) => area.name)
                                 .toList(),
                             isFilteredOnline: true,
-                            label: "ناحیه",
+                            label: "  ناحیه",
                             onChanged: (String val) {
                               FocusScope.of(context)
                                   .requestFocus(new FocusNode());
@@ -876,7 +876,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             searchBoxDecoration: InputDecoration(
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                              labelText: "جست و جو ناحیه",
+                              labelText: " جست و جو ناحیه",
                             ),
                             popupShape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
@@ -942,13 +942,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                 .map((district) => district.name)
                                 .toList(),
                             isFilteredOnline: true,
-                            label: "محله",
+                            label: "  محله",
                             onChanged: (String val) {
                               FocusScope.of(context)
                                   .requestFocus(new FocusNode());
                               int selectDistrict = _districtStore
                                   .districtList.districts
-         
                                   .firstWhere(
                                       (district) => district.name == val)
                                   .id;
@@ -962,13 +961,13 @@ class _SearchScreenState extends State<SearchScreen> {
                                   null);
                               widget.filterForm.setCity(null, null);
                             },
-                            selectedItem: "محله",
+                            selectedItem: " محله",
                             showSearchBox: true,
                             autoFocusSearchBox: true,
                             searchBoxDecoration: InputDecoration(
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                              labelText: "جست و جو محله",
+                              labelText: " جست و جو محله",
                             ),
                             popupShape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
