@@ -124,9 +124,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                                     widget.post.images[index].path,
                                 fit: BoxFit.cover,
                               );
-                            })
-                            // Photo from https://unsplash.com/photos/BVd8jS5H7VU
-                            ,
+                            }),
                             dotSize: 4.0,
                             dotSpacing: 15.0,
                             autoplay: false,
@@ -376,7 +374,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                               Divider(
                                 endIndent:
                                     MediaQuery.of(context).size.width / 1.5,
-                                color: Colors.blue,
+                                color: Colors.blueGrey,
                                 thickness: 1,
                               ),
                               Column(
