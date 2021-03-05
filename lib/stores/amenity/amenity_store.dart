@@ -1,6 +1,5 @@
 import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/models/amenity/amenity_list.dart';
-
 import 'package:boilerplate/stores/error/error_store.dart';
 import 'package:boilerplate/utils/dio/dio_error_util.dart';
 import 'package:mobx/mobx.dart';
@@ -42,10 +41,11 @@ abstract class _AmenityStore with Store {
     final future = _repository.getAmenities();
     fetchAmenitiesFuture = ObservableFuture(future);
 
-    future.then((item) {
+    return future.then((item) {
       this.amenityList = item;
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
+      throw error;
     });
   }
 }

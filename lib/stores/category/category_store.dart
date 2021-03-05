@@ -41,10 +41,11 @@ abstract class _CategoryStore with Store {
     final future = _repository.getCategories();
     fetchcategoriesFuture = ObservableFuture(future);
 
-    future.then((item) {
+    return future.then((item) {
       this.categoryList = item;
     }).catchError((error) {
       errorStore.errorMessage = DioErrorUtil.handleError(error);
+      throw error;
     });
   }
 }

@@ -170,6 +170,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
       _typeStore.getTypes(),
       _amenityStore.getAmenities()
     ]).then((res) {
+      setState(() {
+        hasErrorInloading = false;
+      });
       _store.loadedDataFields();
       return true;
     }).catchError((error) {

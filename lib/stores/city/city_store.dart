@@ -41,13 +41,14 @@ abstract class _CityStore with Store {
     final future = _repository.getCities();
     fetchCitiesFuture = ObservableFuture(future);
 
-    future.then((item) {
+    return future.then((item) {
       errorStore.errorMessage = '';
       success = true;
       this.cityList = item;
     }).catchError((error) {
       success = false;
       errorStore.errorMessage = DioErrorUtil.handleError(error);
+      throw error;
     });
   }
 }

@@ -41,11 +41,11 @@ abstract class _TypeStore with Store {
     final future = _repository.getTypes();
     fetchTypeFuture = ObservableFuture(future);
 
-    future.then((item) {
+    return future.then((item) {
       this.typeList = item;
     }).catchError((error) {
-        errorStore.errorMessage = DioErrorUtil.handleError(error);
-      
+      errorStore.errorMessage = DioErrorUtil.handleError(error);
+      throw error;
     });
   }
 }

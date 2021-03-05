@@ -164,6 +164,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       _typeStore.getTypes(),
       _amenityStore.getAmenities()
     ]).then((res) {
+      setState(() {
+        hasErrorInloading = false;
+      });
       _store.loadedDataFields();
       return true;
     }).catchError((error) {
