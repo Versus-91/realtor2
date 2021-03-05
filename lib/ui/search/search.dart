@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:dropdown_search/dropdown_search.dart';
+
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/category/category.dart';
@@ -480,8 +480,8 @@ class _SearchScreenState extends State<SearchScreen> {
             .toList();
         data = data.map((item) {
           var locationLabel = item["isCity"] == true
-              ? AppLocalizations.of(context).translate('district')
-              : AppLocalizations.of(context).translate('city');
+              ? AppLocalizations.of(context).translate('city')
+              : AppLocalizations.of(context).translate('district');
           return locationLabel + " " + item["name"];
         }).toList();
         //update data value and UI
