@@ -8,7 +8,6 @@ import 'package:boilerplate/ui/post/editepost.dart';
 import 'package:boilerplate/ui/post/post.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:progressive_image/progressive_image.dart';
 import 'package:share/share.dart';
@@ -355,38 +354,35 @@ class _PropertyCradState extends State<PropertyCrad>
                           )
                         ],
                       ),
-                      Observer(builder: (contex) {
-                        return post.bedroom != 0
-                            ? VerticalDivider(
-                                color: Colors.grey,
-                                width: 10,
-                                endIndent: 4,
-                              )
-                            : SizedBox.shrink();
-                      }),
-                      Observer(builder: (contex) {
-                        return post.bedroom != 0
-                            ? Column(
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)
-                                        .translate('count_room'),
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey.withOpacity(1)),
-                                  ),
-                                  Text(
-                                    AppLocalizations.of(context)
-                                        .transformNumbers(
-                                            post.bedroom.toString()),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : SizedBox.shrink();
-                      }),
+                      if (post.bedroom != 0) ...[
+                        VerticalDivider(
+                          color: Colors.grey,
+                          width: 10,
+                          endIndent: 4,
+                        )
+                      ],
+                      if (post.bedroom != 0) ...{
+                        Column(
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('count_room'),
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey.withOpacity(1)),
+                            ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .transformNumbers(post.bedroom.toString()),
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        )
+                      } else ...{
+                        SizedBox.shrink()
+                      },
                       VerticalDivider(
                         color: Colors.grey,
                         width: 10,

@@ -340,7 +340,9 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                                 phonenumber: _newNumberController.text,
                                 id: _userStore.user.id))
                             .then((value) async {
-                          _userStore.getUser();
+                          _userStore.getUser().then((res) {
+                            Navigator.pop(context);
+                          });
                           successMessage('اطلاعات با موفقیت تغییر کرد.');
                           // _newNumberController.text = result;
                         }).catchError((error) {
@@ -430,7 +432,7 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
               .verificationCodePhone(
                   _newNumberController.text, _verificationCodeController.text)
               .then((value) async {
-            _userStore.getUser();
+            await _userStore.getUser();
             Navigator.pop(context);
           });
         });
