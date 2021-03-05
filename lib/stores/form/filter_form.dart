@@ -1,3 +1,4 @@
+import 'package:boilerplate/models/area/area.dart';
 import 'package:boilerplate/models/category/category.dart';
 import 'package:boilerplate/models/city/city.dart';
 import 'package:boilerplate/models/district/district.dart';
@@ -56,6 +57,8 @@ abstract class _FilterFormStore with Store {
   District district = District();
   @observable
   City city = City();
+  @observable
+  Area area = Area();
   @observable
   ObservableList<int> amenities = new ObservableList<int>();
   PostRequest prevRequest;
@@ -123,6 +126,12 @@ abstract class _FilterFormStore with Store {
   }
 
   @action
+  void setArea(int value, String name) {
+    area.name = name;
+    area.id = value;
+  }
+
+  @action
   void setCity(int value, String name) {
     city.name = name;
     city.id = value;
@@ -147,6 +156,8 @@ abstract class _FilterFormStore with Store {
         maxArea: maxArea?.floor(),
         district: district.id,
         districtName: district.name,
+        area: area.id,
+        areaName: area.name,
         city: city.id,
         cityName: city.name,
         bedCount: bedCount,
@@ -192,6 +203,7 @@ abstract class _FilterFormStore with Store {
     bedCount = request.bedCount;
     category = Category(id: request.category, name: request.categoryName);
     district = District(id: request.district, name: request.districtName);
+    area = Area(id: request.area, name: request.areaName);
     city = City(id: request.city, name: request.cityName);
     if (request.types != null) {
       propertyTypes = ObservableList.of(request.types);

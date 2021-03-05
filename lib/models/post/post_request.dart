@@ -14,6 +14,8 @@ class PostRequest {
   int maxArea;
   int district;
   String districtName;
+  int area;
+  String areaName;
   int city;
   String cityName;
   int category;
@@ -28,6 +30,8 @@ class PostRequest {
       this.pageSize,
       this.districtName,
       this.categoryName,
+      this.area,
+      this.areaName,
       this.cityName,
       this.minPrice,
       this.maxPrice,

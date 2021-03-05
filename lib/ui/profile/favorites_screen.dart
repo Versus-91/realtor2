@@ -50,8 +50,7 @@ class _FavoritesScreenState extends State<FavoritesScreen>
     return Stack(
       children: <Widget>[
         Padding(
-          padding:
-              const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 10),
+          padding: const EdgeInsets.only(left: 8, right: 8, bottom: 50),
           child: Material(
             child: _buildListView(),
           ),

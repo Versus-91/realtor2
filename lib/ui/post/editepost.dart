@@ -898,10 +898,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
                 widget.post.district.name,
                 style: TextStyle(fontStyle: FontStyle.italic),
               )),
-              // DataCell(Text(
-              //   localityDropdownValue,
-              //   style: TextStyle(fontStyle: FontStyle.italic),
-              // )),
               DataCell(
                 IconButton(
                   icon: Icon(
