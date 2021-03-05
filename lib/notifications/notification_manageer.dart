@@ -1,8 +1,11 @@
 import 'package:boilerplate/main.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class PushNotificationsManager {
   PushNotificationsManager._();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   factory PushNotificationsManager() {
     _instance.init();
     return _instance;
@@ -25,6 +28,20 @@ class PushNotificationsManager {
     // Or do other work.
   }
 
+  Future<void> _showNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+            'your channel id', 'your channel name', 'your channel description',
+            importance: Importance.max,
+            priority: Priority.high,
+            ticker: 'ticker');
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'plain title', 'plain body', platformChannelSpecifics,
+        payload: 'item x');
+  }
+
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   bool _initialized = false;
   Future<String> get fcmToken => _firebaseMessaging.getToken();
@@ -35,6 +52,7 @@ class PushNotificationsManager {
       _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
           print("onMessage: $message");
+          // await _showNotification();
           //_showItemDialog(message);
         },
         onBackgroundMessage: myBackgroundMessageHandler,
