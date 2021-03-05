@@ -204,6 +204,21 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
     });
   }
 
+  final _$areaAtom = Atom(name: '_FilterFormStore.area');
+
+  @override
+  Area get area {
+    _$areaAtom.reportRead();
+    return super.area;
+  }
+
+  @override
+  set area(Area value) {
+    _$areaAtom.reportWrite(value, super.area, () {
+      super.area = value;
+    });
+  }
+
   final _$amenitiesAtom = Atom(name: '_FilterFormStore.amenities');
 
   @override
@@ -355,6 +370,17 @@ mixin _$FilterFormStore on _FilterFormStore, Store {
   }
 
   @override
+  void setArea(int value, String name) {
+    final _$actionInfo = _$_FilterFormStoreActionController.startAction(
+        name: '_FilterFormStore.setArea');
+    try {
+      return super.setArea(value, name);
+    } finally {
+      _$_FilterFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setCity(int value, String name) {
     final _$actionInfo = _$_FilterFormStoreActionController.startAction(
         name: '_FilterFormStore.setCity');
@@ -436,6 +462,7 @@ category: ${category},
 bedCount: ${bedCount},
 district: ${district},
 city: ${city},
+area: ${area},
 amenities: ${amenities}
     ''';
   }
