@@ -1015,7 +1015,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               .map((area) => area.name)
                               .toList(),
                           isFilteredOnline: true,
-                          label: "ناحیه",
+                          label: "  ناحیه",
                           onChanged: (String val) {
                             FocusScope.of(context)
                                 .requestFocus(new FocusNode());
@@ -1100,7 +1100,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               .map((district) => district.name)
                               .toList(),
                           isFilteredOnline: true,
-                          label: "محله",
+                          label: "  محله",
                           onChanged: (String val) {
                             FocusScope.of(context)
                                 .requestFocus(new FocusNode());
