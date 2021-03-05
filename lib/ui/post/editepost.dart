@@ -1142,35 +1142,39 @@ class _EditPostScreenState extends State<EditPostScreen> {
             child: _districtStore.loading == true
                 ? LinearProgressIndicator()
                 : (_districtStore.districtList.districts.length > 0
-                    ? DropdownSearch<String>(
-                        mode: Mode.MENU,
-                        maxHeight: 300,
-                        items: _districtStore.districtList.districts
-                            .map((district) => district.name)
-                            .toList(),
-                        isFilteredOnline: true,
-                        label: "  محله",
-                        onChanged: (String val) {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          int selectDistrict = _districtStore
-                              .districtList.districts
-                              .firstWhere((district) => district.name == val)
-                              .id;
+                    ? Container(
+                        height: 50,
+                        child: DropdownSearch<String>(
+                          mode: Mode.MENU,
+                          maxHeight: 300,
+                          items: _districtStore.districtList.districts
+                              .map((district) => district.name)
+                              .toList(),
+                          isFilteredOnline: true,
+                          label: "  محله",
+                          onChanged: (String val) {
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
+                            int selectDistrict = _districtStore
+                                .districtList.districts
+                                .firstWhere((district) => district.name == val)
+                                .id;
 
-                          _store.setDistrict(selectDistrict);
-                        },
-                        selectedItem: "محله",
-                        showSearchBox: true,
-                        autoFocusSearchBox: true,
-                        searchBoxDecoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                          labelText: " جست و جوی محله",
-                        ),
-                        popupShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
+                            _store.setDistrict(selectDistrict);
+                          },
+                          selectedItem: "محله",
+                          showSearchBox: true,
+                          autoFocusSearchBox: true,
+                          searchBoxDecoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                            labelText: " جست و جوی محله",
+                          ),
+                          popupShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
                           ),
                         ),
                       )
