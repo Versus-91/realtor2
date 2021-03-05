@@ -164,19 +164,19 @@ class _EditPostScreenState extends State<EditPostScreen> {
   }
 
   Future<bool> loadDataFields() async {
-    return _categoryStore.getCategories().then((value) {
-      if (!_cityStore.loading) {
-        _cityStore.getCities().then((value) {
-          if (!_typeStore.loading)
-            _typeStore.getTypes().then((value) {
-              if (!_amenityStore.loading)
-                _amenityStore.getAmenities().then((value) {
-                  return true;
-                }).catchError((_) => false);
-            }).catchError((_) => false);
-        }).catchError((_) => false);
-      }
-    }).catchError((_) => false);
+    return Future.wait([
+      _categoryStore.getCategories(),
+      _cityStore.getCities(),
+      _typeStore.getTypes(),
+      _amenityStore.getAmenities()
+    ]).then((res) {
+      _store.loadedDataFields();
+      return true;
+    }).catchError((error) {
+      setState(() {
+        hasErrorInloading = true;
+      });
+    });
   }
 
   @override
@@ -232,10 +232,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     Observer(
                       builder: (context) {
                         return _store.success
-                            ? successPost(
-                                AppLocalizations.of(context)
-                                    .translate('succes_send'),
-                              )
+                            ? SizedBox.shrink()
                             : _showErrorMessage(_store.errorStore.errorMessage);
                       },
                     ),

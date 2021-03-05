@@ -103,7 +103,6 @@ abstract class _UserStore with Store {
     }
   }
 
-
   @action
   void validateConfrimPassword(String value) {
     if (confirmPassword.length >= 8) {
@@ -137,14 +136,13 @@ abstract class _UserStore with Store {
     return future;
   }
 
- @action
+  @action
   Future changeEmailAdderss(String email) async {
     final future = _repository.addEmailAddress(email);
     fetchFuture = ObservableFuture(future);
 
     return future;
   }
-
 
   @action
   Future changePass(ChangePassword passwords) async {
@@ -165,13 +163,13 @@ abstract class _UserStore with Store {
   @action
   Future uploadAvatarImage(MultipartFile imageAvatar) async {
     avatarloading = true;
-    _repository.uploadAvatarImage(imageAvatar).then((result) {
+    return _repository.uploadAvatarImage(imageAvatar).then((result) {
       avatarloading = false;
       success = true;
       return true;
     }).catchError((error) {
       avatarloading = false;
-      return false;
+      throw error;
     });
   }
 

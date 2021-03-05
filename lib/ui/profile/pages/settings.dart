@@ -43,9 +43,9 @@ class _SettingsScreenState extends State<SettingsScreen>
     var multiPartAvatarImage = await MultipartFile.fromFile(result.path);
 
     _userStore.uploadAvatarImage(multiPartAvatarImage).then((value) async {
-      Future.delayed(Duration(seconds: 1), () async {
+      if (value == true) {
         await _userStore.getUser();
-      });
+      }
     }).catchError((error) => Flushbar(
           message:
               AppLocalizations.of(context).translate('error_upload_avatar'),

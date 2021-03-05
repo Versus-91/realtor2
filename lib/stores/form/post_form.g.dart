@@ -69,18 +69,18 @@ mixin _$PostFormStore on _PostFormStore, Store {
     });
   }
 
-  final _$fetchFormDataAtom = Atom(name: '_PostFormStore.fetchFormData');
+  final _$loadDataFieldsAtom = Atom(name: '_PostFormStore.loadDataFields');
 
   @override
-  bool get fetchFormData {
-    _$fetchFormDataAtom.reportRead();
-    return super.fetchFormData;
+  bool get loadDataFields {
+    _$loadDataFieldsAtom.reportRead();
+    return super.loadDataFields;
   }
 
   @override
-  set fetchFormData(bool value) {
-    _$fetchFormDataAtom.reportWrite(value, super.fetchFormData, () {
-      super.fetchFormData = value;
+  set loadDataFields(bool value) {
+    _$loadDataFieldsAtom.reportWrite(value, super.loadDataFields, () {
+      super.loadDataFields = value;
     });
   }
 
@@ -402,22 +402,11 @@ mixin _$PostFormStore on _PostFormStore, Store {
   }
 
   @override
-  void startLoadingData() {
+  void loadedDataFields() {
     final _$actionInfo = _$_PostFormStoreActionController.startAction(
-        name: '_PostFormStore.startLoadingData');
+        name: '_PostFormStore.loadedDataFields');
     try {
-      return super.startLoadingData();
-    } finally {
-      _$_PostFormStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void finishedLoadingData() {
-    final _$actionInfo = _$_PostFormStoreActionController.startAction(
-        name: '_PostFormStore.finishedLoadingData');
-    try {
-      return super.finishedLoadingData();
+      return super.loadedDataFields();
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
@@ -749,7 +738,7 @@ title: ${title},
 success: ${success},
 ageHome: ${ageHome},
 loading: ${loading},
-fetchFormData: ${fetchFormData},
+loadDataFields: ${loadDataFields},
 categoryId: ${categoryId},
 categoryName: ${categoryName},
 postId: ${postId},
@@ -773,13 +762,6 @@ postImages: ${postImages}
 }
 
 mixin _$PostFormErrorStore on _PostFormErrorStore, Store {
-  Computed<bool> _$hasErrorInForgotPasswordComputed;
-
-  @override
-  bool get hasErrorInForgotPassword => (_$hasErrorInForgotPasswordComputed ??=
-          Computed<bool>(() => super.hasErrorInForgotPassword,
-              name: '_PostFormErrorStore.hasErrorInForgotPassword'))
-      .value;
   Computed<bool> _$isValidComputed;
 
   @override
@@ -950,7 +932,6 @@ age: ${age},
 map: ${map},
 description: ${description},
 typeHome: ${typeHome},
-hasErrorInForgotPassword: ${hasErrorInForgotPassword},
 isValid: ${isValid}
     ''';
   }

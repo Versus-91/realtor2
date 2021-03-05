@@ -54,7 +54,7 @@ abstract class _PostFormStore with Store {
   @observable
   bool loading = false;
   @observable
-  bool fetchFormData = false;
+  bool loadDataFields = true;
   @observable
   int categoryId;
   @observable
@@ -104,13 +104,8 @@ abstract class _PostFormStore with Store {
   }
 
   @action
-  void startLoadingData() {
-    fetchFormData = true;
-  }
-
-  @action
-  void finishedLoadingData() {
-    fetchFormData = false;
+  void loadedDataFields() {
+    loadDataFields = false;
   }
 
   @action
@@ -475,8 +470,6 @@ abstract class _PostFormErrorStore with Store {
   String description;
   @observable
   String typeHome;
-  @computed
-  bool get hasErrorInForgotPassword => titel != null;
   @computed
   bool get isValid =>
       titel == null &&
