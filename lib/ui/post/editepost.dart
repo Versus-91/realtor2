@@ -1001,7 +1001,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       .map((city) => city.name)
                       .toList(),
                   isFilteredOnline: true,
-                  label: "شهر",
+                  label: "  شهر",
                   onChanged: (String val) {
                     FocusScope.of(context).requestFocus(new FocusNode());
                     if (val != cityDropdownValue) {
@@ -1019,7 +1019,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                   searchBoxDecoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                    labelText: "انتخاب شهر",
+                    labelText: " جست و جوی شهر",
                   ),
                   popupShape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -1070,7 +1070,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                               .map((area) => area.name)
                               .toList(),
                           isFilteredOnline: true,
-                          label: "ناحیه",
+                          label: "  ناحیه",
                           onChanged: (String val) {
                             FocusScope.of(context)
                                 .requestFocus(new FocusNode());
@@ -1092,7 +1092,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                           searchBoxDecoration: InputDecoration(
                             border: OutlineInputBorder(),
                             contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                            labelText: "جست و جو ناحیه",
+                            labelText: " جست و جو ناحیه",
                           ),
                           popupShape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
@@ -1152,7 +1152,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                             .map((district) => district.name)
                             .toList(),
                         isFilteredOnline: true,
-                        label: "محله",
+                        label: "  محله",
                         onChanged: (String val) {
                           FocusScope.of(context).requestFocus(new FocusNode());
                           int selectDistrict = _districtStore
@@ -1168,7 +1168,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                         searchBoxDecoration: InputDecoration(
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                          labelText: "انتخاب محله",
+                          labelText: " جست و جوی محله",
                         ),
                         popupShape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(

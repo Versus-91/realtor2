@@ -482,7 +482,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: Center(child: Text("گزارش ملک")),
+              title: Center(child: Text("گزارش خطا")),
               content: isSendigReport == true
                   ? CircularProgressIndicator()
                   : SingleChildScrollView(
