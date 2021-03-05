@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/category/category.dart';
@@ -14,7 +15,6 @@ import 'package:boilerplate/stores/form/filter_form.dart';
 import 'package:boilerplate/stores/post/post_store.dart';
 import 'package:boilerplate/stores/type/type_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -182,17 +182,8 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Column(
               children: <Widget>[
                 getAppBarUI(),
-                // searchField(),
+                searchField(),
                 SizedBox(height: 10),
-                _buildCitylistField(),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    _buildArealistField(),
-                    VerticalDivider(),
-                    _buildDistrictlistField(),
-                  ],
-                ),
                 _buildCategoryField(),
                 popularFilter(),
                 _buildBedroomCountField(),
@@ -359,85 +350,84 @@ class _SearchScreenState extends State<SearchScreen> {
             ));
   }
 
-  // Widget searchField() {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(top: 20, left: 14, right: 14),
-  //     child: Container(
-  //       height: 55,
-  //       child: TypeAheadFormField(
-  //         textFieldConfiguration: TextFieldConfiguration(
-  //           decoration: InputDecoration(
-  //               suffixIcon: IconButton(
-  //                   onPressed: () {
-  //                     widget.filterForm.setDistrict(null, null);
-  //                     widget.filterForm.setCity(null, null);
-  //                     widget.filterForm.setArea(null, null);
-  //                     _typeAheadController.clear();
-  //                   },
-  //                   icon: _typeAheadController.text != null
-  //                       ? Icon(Icons.clear)
-  //                       : Icon(Icons.search)),
-  //               border: OutlineInputBorder(
-  //                   borderSide: BorderSide(color: Colors.transparent)),
-  //               labelText: AppLocalizations.of(context)
-  //                   .translate('search_in_district'),
-  //               fillColor: Color(0xfff3f3f4),
-  //               filled: true,
-  //               hintText: AppLocalizations.of(context)
-  //                   .translate('search_in_district')),
-  //           controller: this._typeAheadController,
-  //         ),
-  //         suggestionsCallback: (pattern) {
-  //           if (pattern.trim().length >= 2 && pattern.trim() != _selectedCity) {
-  //             return getSuggestion(pattern);
-  //           }
-  //           return null;
-  //         },
-  //         itemBuilder: (context, suggestion) {
-  //           return ListTile(
-  //             title: Text(suggestion),
-  //           );
-  //         },
-  //         noItemsFoundBuilder: (context) {
-  //           return Container(
-  //             height: 45,
-  //             child: Padding(
-  //               padding: EdgeInsets.only(top: 5, right: 10),
-  //               child: Text(
-  //                 AppLocalizations.of(context).translate('no_result'),
-  //                 style: TextStyle(fontSize: 20, color: Colors.grey[400]),
-  //               ),
-  //             ),
-  //           );
-  //         },
-  //         transitionBuilder: (context, suggestionsBox, controller) {
-  //           return suggestionsBox;
-  //         },
-  //         onSuggestionSelected: (suggestion) {
-  //           this._typeAheadController.text = suggestion;
-  //           var selectedLocation = _locations
-  //               .where((element) => suggestion.contains(element.name))
-  //               ?.first;
-  //           if (selectedLocation != null) {
-  //             if (selectedLocation.isCity) {
-  //               widget.filterForm.setDistrict(null, null);
-  //               widget.filterForm.setCity(selectedLocation.id, suggestion);
-  //             } else {
-  //               widget.filterForm.setCity(null, null);
-  //               widget.filterForm.setDistrict(selectedLocation.id, suggestion);
-  //             }
-  //           }
-  //         },
-  //         validator: (value) => value.isEmpty
-  //             ? AppLocalizations.of(context).translate('insert_district')
-  //             : null,
-  //         onSaved: (value) {
-  //           return this._selectedCity = value;
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget searchField() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, left: 14, right: 14),
+      child: Container(
+        height: 55,
+        child: TypeAheadFormField(
+          textFieldConfiguration: TextFieldConfiguration(
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      widget.filterForm.setDistrict(null, null);
+                      widget.filterForm.setCity(null, null);
+                      _typeAheadController.clear();
+                    },
+                    icon: _typeAheadController.text != null
+                        ? Icon(Icons.clear)
+                        : Icon(Icons.search)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent)),
+                labelText: AppLocalizations.of(context)
+                    .translate('search_in_district'),
+                fillColor: Color(0xfff3f3f4),
+                filled: true,
+                hintText: AppLocalizations.of(context)
+                    .translate('search_in_district')),
+            controller: this._typeAheadController,
+          ),
+          suggestionsCallback: (pattern) {
+            if (pattern.trim().length >= 2 && pattern.trim() != _selectedCity) {
+              return getSuggestion(pattern);
+            }
+            return null;
+          },
+          itemBuilder: (context, suggestion) {
+            return ListTile(
+              title: Text(suggestion),
+            );
+          },
+          noItemsFoundBuilder: (context) {
+            return Container(
+              height: 45,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5, right: 10),
+                child: Text(
+                  AppLocalizations.of(context).translate('no_result'),
+                  style: TextStyle(fontSize: 20, color: Colors.grey[400]),
+                ),
+              ),
+            );
+          },
+          transitionBuilder: (context, suggestionsBox, controller) {
+            return suggestionsBox;
+          },
+          onSuggestionSelected: (suggestion) {
+            this._typeAheadController.text = suggestion;
+            var selectedLocation = _locations
+                .where((element) => suggestion.contains(element.name))
+                ?.first;
+            if (selectedLocation != null) {
+              if (selectedLocation.isCity) {
+                widget.filterForm.setDistrict(null, null);
+                widget.filterForm.setCity(selectedLocation.id, suggestion);
+              } else {
+                widget.filterForm.setCity(null, null);
+                widget.filterForm.setDistrict(selectedLocation.id, suggestion);
+              }
+            }
+          },
+          validator: (value) => value.isEmpty
+              ? AppLocalizations.of(context).translate('insert_district')
+              : null,
+          onSaved: (value) {
+            return this._selectedCity = value;
+          },
+        ),
+      ),
+    );
+  }
 
   Future<List> getSuggestion(String pattern) async {
     //get suggestion function
@@ -746,274 +736,6 @@ class _SearchScreenState extends State<SearchScreen> {
       ));
     }
     return noList;
-  }
-
-  Widget _buildCitylistField() {
-    return Observer(
-      builder: (context) {
-        if (_cityStore.cityList != null) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 0, left: 14, right: 14),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 50,
-              child: DropdownSearch<String>(
-                mode: Mode.MENU,
-                maxHeight: 300,
-                items: _cityStore.cityList.cities
-                    .map((city) => city.name)
-                    .toList(),
-                isFilteredOnline: true,
-                label: "  جست و جوی شهر",
-                onChanged: (String val) {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                  if (val != cityDropdownValue) {
-                    setState(() {
-                      cityDropdownValue = val;
-                    });
-
-                    _areaStore.getAreasByCityid(_cityStore.cityList.cities
-                        .firstWhere((city) => city.name == cityDropdownValue)
-                        ?.id);
-                  }
-                  widget.filterForm.setArea(null, null);
-                  widget.filterForm.setDistrict(null, null);
-                  widget.filterForm.setCity(
-                      _cityStore.cityList.cities
-                          .firstWhere((city) => city.name == cityDropdownValue)
-                          ?.id,
-                      cityDropdownValue);
-                },
-                selectedItem: cityDropdownValue,
-                showSearchBox: true,
-                autoFocusSearchBox: true,
-                searchBoxDecoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                  labelText: "جست و جو شهر",
-                ),
-                popupShape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else {
-          return Opacity(
-            opacity: 0.8,
-            child: Shimmer.fromColors(
-              child: Container(
-                  padding: EdgeInsets.only(top: 10, bottom: 15),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        AppLocalizations.of(context).translate('city'),
-                        style: TextStyle(
-                          fontSize: 20.0,
-                        ),
-                      )
-                    ],
-                  )),
-              baseColor: Colors.black12,
-              highlightColor: Colors.white,
-              loop: 30,
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  Widget _buildArealistField() {
-    return Observer(
-      builder: (context) {
-        if (_areaStore.areaList != null && cityDropdownValue != null) {
-          return Flexible(
-            child: _areaStore.loading == true
-                ? LinearProgressIndicator()
-                : (_areaStore.areaList.areas.length > 0
-                    ? Padding(
-                        padding: const EdgeInsets.only(right: 14),
-                        child: Container(
-                          height: 50,
-                          child: DropdownSearch<String>(
-                            mode: Mode.MENU,
-                            maxHeight: 300,
-                            items: _areaStore.areaList.areas
-                                .map((area) => area.name)
-                                .toList(),
-                            isFilteredOnline: true,
-                            label: "  ناحیه",
-                            onChanged: (String val) {
-                              FocusScope.of(context)
-                                  .requestFocus(new FocusNode());
-                              if (val != localityDropdownValue) {
-                                setState(() {
-                                  // _store.setLocality(int.parse(val));
-                                  localityDropdownValue = val;
-                                });
-                                _districtStore.getDistrictsByAreaid(_areaStore
-                                    .areaList.areas
-                                    .firstWhere((area) =>
-                                        area.name == localityDropdownValue)
-                                    ?.id);
-                              }
-                              widget.filterForm.setArea(
-                                  _areaStore.areaList.areas
-                                      .firstWhere((area) =>
-                                          area.name == localityDropdownValue)
-                                      ?.id,
-                                  localityDropdownValue);
-                              widget.filterForm.setDistrict(null, null);
-                              widget.filterForm.setCity(null, null);
-                            },
-                            selectedItem: localityDropdownValue,
-                            showSearchBox: true,
-                            autoFocusSearchBox: true,
-                            searchBoxDecoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                              labelText: " جست و جو ناحیه",
-                            ),
-                            popupShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    : Text(
-                        AppLocalizations.of(context).translate('notfound_area'),
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      )),
-          );
-        } else {
-          return Flexible(
-            child: Opacity(
-              opacity: 0.8,
-              child: Shimmer.fromColors(
-                child: Container(
-                    padding: EdgeInsets.only(top: 10, bottom: 15, right: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          AppLocalizations.of(context).translate('locality'),
-                          style: TextStyle(
-                            fontSize: 20.0,
-                          ),
-                        ),
-                      ],
-                    )),
-                baseColor: Colors.black12,
-                highlightColor: Colors.white,
-                loop: 30,
-              ),
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  Widget _buildDistrictlistField() {
-    return Observer(
-      builder: (context) {
-        if (_districtStore.districtList != null &&
-            localityDropdownValue != null) {
-          return Flexible(
-            child: _districtStore.loading == true
-                ? LinearProgressIndicator()
-                : (_districtStore.districtList.districts.length > 0
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 0, left: 14),
-                        child: Container(
-                          height: 50,
-                          child: DropdownSearch<String>(
-                            mode: Mode.MENU,
-                            maxHeight: 300,
-                            items: _districtStore.districtList.districts
-                                .map((district) => district.name)
-                                .toList(),
-                            isFilteredOnline: true,
-                            label: "  محله",
-                            onChanged: (String val) {
-                              FocusScope.of(context)
-                                  .requestFocus(new FocusNode());
-                              int selectDistrict = _districtStore
-                                  .districtList.districts
-                                  .firstWhere(
-                                      (district) => district.name == val)
-                                  .id;
-
-                              widget.filterForm.setArea(null, null);
-                              widget.filterForm.setDistrict(
-                                  _districtStore.districtList.districts
-                                      .firstWhere(
-                                          (district) => district.name == val)
-                                      .id,
-                                  null);
-                              widget.filterForm.setCity(null, null);
-                            },
-                            selectedItem: " محله",
-                            showSearchBox: true,
-                            autoFocusSearchBox: true,
-                            searchBoxDecoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
-                              labelText: " جست و جو محله",
-                            ),
-                            popupShape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    : Text(
-                        AppLocalizations.of(context)
-                            .translate('notfound_district'),
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
-                      )),
-          );
-        } else {
-          return Flexible(
-            child: Opacity(
-              opacity: 0.8,
-              child: Shimmer.fromColors(
-                child: Container(
-                    padding: EdgeInsets.only(top: 10, bottom: 15),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          AppLocalizations.of(context).translate('district'),
-                          style: TextStyle(
-                            fontSize: 20.0,
-                          ),
-                        ),
-                      ],
-                    )),
-                baseColor: Colors.black12,
-                highlightColor: Colors.white,
-                loop: 30,
-              ),
-            ),
-          );
-        }
-      },
-    );
-
-    //
   }
 
   Widget _buildBedroomCountField() {
