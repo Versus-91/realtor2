@@ -40,6 +40,51 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(
+          AppLocalizations.of(context).translate('posts'),
+          style: TextStyle(
+              fontSize: 20, color: Colors.black, fontWeight: FontWeight.normal),
+        ),
+        actions: [
+          Row(
+            children: [
+              Observer(
+                builder: (context) {
+                  return _postStore.postList != null
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                    .translate('count_post') +
+                                AppLocalizations.of(context).transformNumbers(
+                                    _postStore.postList.totalCount.toString()),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w200,
+                              fontSize: 18,
+                            ),
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                    .translate('count_post') +
+                                '${'N/A'}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w200,
+                              fontSize: 16,
+                            ),
+                          ));
+                },
+              ),
+              SizedBox(width: 8,),
+            ],
+          )
+        ],
+        backgroundColor: Colors.red,
+      ),
       body: Stack(
         children: <Widget>[
           InkWell(
@@ -52,7 +97,6 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
             },
             child: Column(
               children: <Widget>[
-                getAppBarUI(),
                 Expanded(
                   child: Observer(
                     builder: (context) {
@@ -78,11 +122,11 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                             },
                             body: RefreshIndicator(
                               child: Padding(
-                                padding: const EdgeInsets.only(bottom:50),
+                                padding: const EdgeInsets.only(bottom: 70),
                                 child: IncrementallyLoadingListView(
                                   loadMore: () async {
-                                    var request =
-                                        _filterForm.applyFilters(paginate: true);
+                                    var request = _filterForm.applyFilters(
+                                        paginate: true);
                                     await _postStore.loadNextPage(
                                         request: request);
                                   },
@@ -162,35 +206,6 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
             ),
           ),
           _handleErrorMessage(),
-          Observer(builder: (cnx) {
-            return _postStore.postList != null &&
-                    _postStore.postList.totalCount > 0
-                ? Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          right: 15,
-                          bottom: MediaQuery.of(context).size.height / 12),
-                      child: FloatingActionButton(
-                        heroTag: 'saveSearchButton',
-                        child: Icon(Icons.save),
-                        onPressed: () {
-                          var request = _filterForm.applyFilters();
-                          appComponent
-                              .getRepository()
-                              .saveSearch(request)
-                              .then((value) {
-                            FlushbarHelper.createSuccess(message: 'ذخیره شد.');
-                          }).catchError((err) {
-                            FlushbarHelper.createError(
-                                message: 'خطا در ذخیره سازی');
-                          });
-                        },
-                      ),
-                    ),
-                  )
-                : SizedBox.shrink();
-          })
         ],
       ),
     );
@@ -223,36 +238,6 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                 const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
             child: Row(
               children: <Widget>[
-                Expanded(child: Observer(
-                  builder: (context) {
-                    return _postStore.postList != null
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              AppLocalizations.of(context)
-                                      .translate('count_post') +
-                                  AppLocalizations.of(context).transformNumbers(
-                                      _postStore.postList.totalCount
-                                          .toString()),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w200,
-                                fontSize: 18,
-                              ),
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              AppLocalizations.of(context)
-                                      .translate('count_post') +
-                                  '${'N/A'}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w200,
-                                fontSize: 16,
-                              ),
-                            ));
-                  },
-                )),
                 Material(
                   color: Colors.transparent,
                   child: InkWell(
@@ -266,25 +251,67 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                     onTap: () {
                       openFilterScreen();
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              AppLocalizations.of(context).translate('filter'),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w100,
-                                fontSize: 16,
-                              ),
+                    child: Row(
+                      children: <Widget>[
+                        _postStore.postList != null &&
+                                _postStore.postList.totalCount > 0
+                            ? RaisedButton.icon(
+                                onPressed: () {
+                                  var request = _filterForm.applyFilters();
+                                  appComponent
+                                      .getRepository()
+                                      .saveSearch(request)
+                                      .then((value) {
+                                    FlushbarHelper.createSuccess(
+                                        message: 'ذخیره شد.');
+                                  }).catchError((err) {
+                                    FlushbarHelper.createError(
+                                        message: 'خطا در ذخیره سازی');
+                                  });
+                                },
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0))),
+                                label: Text(
+                                  AppLocalizations.of(context)
+                                      .translate('savesearch'),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w100,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                icon: Icon(
+                                  Icons.bookmark,
+                                  color: Colors.blue,
+                                ),
+                                textColor: Colors.black,
+                                splashColor: Colors.blue,
+                                color: Colors.white,
+                              )
+                            : SizedBox.shrink(),
+                        RaisedButton.icon(
+                          onPressed: () {
+                            print('Button Clicked.');
+                          },
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                          label: Text(
+                            AppLocalizations.of(context).translate('filter'),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w100,
+                              fontSize: 16,
                             ),
                           ),
-                          Icon(Icons.tune,
-                              color:
-                                  HotelAppTheme.buildLightTheme().primaryColor),
-                        ],
-                      ),
+                          icon: Icon(
+                            Icons.tune,
+                            color: HotelAppTheme.buildLightTheme().primaryColor,
+                          ),
+                          textColor: Colors.black,
+                          splashColor: Colors.red,
+                          color: Colors.red[50],
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -312,36 +339,6 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
           filterForm: _filterForm,
           postStore: _postStore,
         ));
-  }
-
-  Widget getAppBarUI() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.red,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              offset: const Offset(0, 2),
-              blurRadius: 4.0),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, left: 8, right: 10),
-        child: Row(
-          children: <Widget>[
-            Text(
-              AppLocalizations.of(context).translate('posts'),
-              style: TextStyle(fontSize: 20, color: Colors.black),
-            ),
-            Container(
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-            )
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _handleErrorMessage() {

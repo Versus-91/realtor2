@@ -47,8 +47,7 @@ class _PropertyCradState extends State<PropertyCrad>
     return Stack(
       children: <Widget>[
         Padding(
-          padding:
-              const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 8),
+          padding: const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 8),
           child: Material(
             child: _buildListItem(widget.post),
           ),
@@ -185,10 +184,6 @@ class _PropertyCradState extends State<PropertyCrad>
                           )) ...[
                             Row(
                               children: [
-                                Icon(
-                                  Icons.monetization_on,
-                                  color: Colors.greenAccent,
-                                ),
                                 Text(
                                   AppLocalizations.of(context)
                                           .translate('price') +
@@ -246,7 +241,7 @@ class _PropertyCradState extends State<PropertyCrad>
                     children: [
                       Flexible(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             FutureBuilder(
                               future: isSelected(widget.post.id),
