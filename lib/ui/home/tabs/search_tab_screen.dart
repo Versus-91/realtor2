@@ -6,6 +6,7 @@ import 'package:boilerplate/ui/search/list_theme.dart';
 import 'package:boilerplate/ui/search/search.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/post_placeholder.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -79,7 +80,9 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                           ));
                 },
               ),
-              SizedBox(width: 8,),
+              SizedBox(
+                width: 8,
+              ),
             ],
           )
         ],
@@ -240,79 +243,67 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
               children: <Widget>[
                 Material(
                   color: Colors.transparent,
-                  child: InkWell(
-                    focusColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    splashColor: Colors.grey.withOpacity(0.2),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(4.0),
-                    ),
-                    onTap: () {
-                      openFilterScreen();
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        _postStore.postList != null &&
-                                _postStore.postList.totalCount > 0
-                            ? RaisedButton.icon(
-                                onPressed: () {
-                                  var request = _filterForm.applyFilters();
-                                  appComponent
-                                      .getRepository()
-                                      .saveSearch(request)
-                                      .then((value) {
-                                    FlushbarHelper.createSuccess(
-                                        message: 'ذخیره شد.');
-                                  }).catchError((err) {
-                                    FlushbarHelper.createError(
-                                        message: 'خطا در ذخیره سازی');
-                                  });
-                                },
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10.0))),
-                                label: Text(
-                                  AppLocalizations.of(context)
-                                      .translate('savesearch'),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w100,
-                                    fontSize: 16,
-                                  ),
+                  child: Row(
+                    children: <Widget>[
+                      _postStore.postList != null &&
+                              _postStore.postList.totalCount > 0
+                          ? RaisedButton.icon(
+                              onPressed: () {
+                                var request = _filterForm.applyFilters();
+                                appComponent
+                                    .getRepository()
+                                    .saveSearch(request)
+                                    .then((value) {
+                                  FlushbarHelper.createSuccess(
+                                      message: 'ذخیره شد.');
+                                }).catchError((err) {
+                                  FlushbarHelper.createError(
+                                      message: 'خطا در ذخیره سازی');
+                                });
+                              },
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0))),
+                              label: Text(
+                                AppLocalizations.of(context)
+                                    .translate('savesearch'),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 16,
                                 ),
-                                icon: Icon(
-                                  Icons.bookmark,
-                                  color: Colors.blue,
-                                ),
-                                textColor: Colors.black,
-                                splashColor: Colors.blue,
-                                color: Colors.white,
-                              )
-                            : SizedBox.shrink(),
-                        RaisedButton.icon(
-                          onPressed: () {
-                            print('Button Clicked.');
-                          },
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0))),
-                          label: Text(
-                            AppLocalizations.of(context).translate('filter'),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w100,
-                              fontSize: 16,
-                            ),
+                              ),
+                              icon: Icon(
+                                Icons.bookmark,
+                                color: Colors.blue,
+                              ),
+                              textColor: Colors.black,
+                              splashColor: Colors.blue,
+                              color: Colors.white,
+                            )
+                          : SizedBox.shrink(),
+                      RaisedButton.icon(
+                        onPressed: () {
+                          openFilterScreen();
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0))),
+                        label: Text(
+                          AppLocalizations.of(context).translate('filter'),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w100,
+                            fontSize: 16,
                           ),
-                          icon: Icon(
-                            Icons.tune,
-                            color: HotelAppTheme.buildLightTheme().primaryColor,
-                          ),
-                          textColor: Colors.black,
-                          splashColor: Colors.red,
-                          color: Colors.red[50],
                         ),
-                      ],
-                    ),
+                        icon: Icon(
+                          Icons.tune,
+                          color: HotelAppTheme.buildLightTheme().primaryColor,
+                        ),
+                        textColor: Colors.black,
+                        splashColor: Colors.red,
+                        color: Colors.red[50],
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -356,10 +347,17 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
   _showErrorMessage(String message) {
     Future.delayed(Duration(milliseconds: 0), () {
       if (message != null && message.isNotEmpty) {
-        FlushbarHelper.createError(
-          message: message,
+        Flushbar(
+          flushbarPosition:FlushbarPosition.TOP,
           title: AppLocalizations.of(context).translate('home_tv_error'),
-          duration: Duration(seconds: 3),
+          message: message,
+          icon: Icon(
+            Icons.warning,
+            size: 28.0,
+            color: Colors.red[300],
+          ),
+          leftBarIndicatorColor: Colors.red[300],
+          duration: const Duration(seconds: 3),
         )..show(context);
       }
     });
