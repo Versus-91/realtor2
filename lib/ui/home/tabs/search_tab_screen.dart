@@ -6,7 +6,6 @@ import 'package:boilerplate/ui/search/list_theme.dart';
 import 'package:boilerplate/ui/search/search.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/widgets/post_placeholder.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

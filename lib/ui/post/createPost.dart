@@ -191,7 +191,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     CircularProgressIndicator();
                   },
                   icon: Icon(Icons.refresh),
-                  label: Text("تلاش مجدد")),
+                  label: Text("تلاش دوباره")),
             ),
     );
   }
