@@ -77,45 +77,48 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
                               ];
                             },
                             body: RefreshIndicator(
-                              child: IncrementallyLoadingListView(
-                                loadMore: () async {
-                                  var request =
-                                      _filterForm.applyFilters(paginate: true);
-                                  await _postStore.loadNextPage(
-                                      request: request);
-                                },
-                                onLoadMore: () {
-                                  setState(() {
-                                    _loadingMore = true;
-                                  });
-                                },
-                                onLoadMoreFinished: () {
-                                  setState(() {
-                                    _loadingMore = false;
-                                  });
-                                },
-                                hasMore: () =>
-                                    _postStore.postList.posts.length <
-                                    _postStore.postList.totalCount,
-                                itemCount: () =>
-                                    _postStore.postList.posts.length,
-                                itemBuilder: (context, index) {
-                                  if (index ==
-                                          _postStore.postList.posts.length -
-                                              1 &&
-                                      (_loadingMore ?? false)) {
-                                    return Column(
-                                      children: [
-                                        PropertyCrad(
-                                            post: _postStore
-                                                .postList.posts[index]),
-                                        PlaceholderPostCard()
-                                      ],
-                                    );
-                                  }
-                                  return PropertyCrad(
-                                      post: _postStore.postList.posts[index]);
-                                },
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom:50),
+                                child: IncrementallyLoadingListView(
+                                  loadMore: () async {
+                                    var request =
+                                        _filterForm.applyFilters(paginate: true);
+                                    await _postStore.loadNextPage(
+                                        request: request);
+                                  },
+                                  onLoadMore: () {
+                                    setState(() {
+                                      _loadingMore = true;
+                                    });
+                                  },
+                                  onLoadMoreFinished: () {
+                                    setState(() {
+                                      _loadingMore = false;
+                                    });
+                                  },
+                                  hasMore: () =>
+                                      _postStore.postList.posts.length <
+                                      _postStore.postList.totalCount,
+                                  itemCount: () =>
+                                      _postStore.postList.posts.length,
+                                  itemBuilder: (context, index) {
+                                    if (index ==
+                                            _postStore.postList.posts.length -
+                                                1 &&
+                                        (_loadingMore ?? false)) {
+                                      return Column(
+                                        children: [
+                                          PropertyCrad(
+                                              post: _postStore
+                                                  .postList.posts[index]),
+                                          PlaceholderPostCard()
+                                        ],
+                                      );
+                                    }
+                                    return PropertyCrad(
+                                        post: _postStore.postList.posts[index]);
+                                  },
+                                ),
                               ),
                               onRefresh: () async {
                                 await _postStore.getPosts(
@@ -201,7 +204,7 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
           left: 0,
           right: 0,
           child: Container(
-            height: 24,
+            height: 20,
             decoration: BoxDecoration(
               color: HotelAppTheme.buildLightTheme().backgroundColor,
               boxShadow: <BoxShadow>[
@@ -289,14 +292,14 @@ class _SearchTabScreenState extends State<SearchTabScreen> {
             ),
           ),
         ),
-        const Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Divider(
-            height: 1,
-          ),
-        )
+        // const Positioned(
+        //   top: 0,
+        //   left: 0,
+        //   right: 0,
+        //   child: Divider(
+        //     height: 1,
+        //   ),
+        // )
       ],
     );
   }

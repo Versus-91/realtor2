@@ -48,7 +48,7 @@ class _PropertyCradState extends State<PropertyCrad>
       children: <Widget>[
         Padding(
           padding:
-              const EdgeInsets.only(top: 20, left: 8, right: 8, bottom: 10),
+              const EdgeInsets.only(top: 0, left: 8, right: 8, bottom: 8),
           child: Material(
             child: _buildListItem(widget.post),
           ),
