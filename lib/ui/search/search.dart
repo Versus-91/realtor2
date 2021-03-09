@@ -53,7 +53,6 @@ class _SearchScreenState extends State<SearchScreen> {
   var data;
   String dataurl = Endpoints.baseUrl + "/api/services/app/District/Find";
   CityStore _cityStore;
-  AreaStore _areaStore;
   DistrictStore _districtStore;
   CategoryStore _categoryStore;
   TypeStore _typeStore;
@@ -81,7 +80,6 @@ class _SearchScreenState extends State<SearchScreen> {
     super.didChangeDependencies();
     _cityStore = Provider.of<CityStore>(context);
     _districtStore = Provider.of<DistrictStore>(context);
-    _areaStore = Provider.of<AreaStore>(context);
     _categoryStore = Provider.of<CategoryStore>(context);
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
@@ -90,8 +88,6 @@ class _SearchScreenState extends State<SearchScreen> {
       _cityStore.getCities();
     if (!_districtStore.loading && _districtStore.districtList == null)
       _districtStore.getDistricts();
-    if (!_areaStore.loading && _areaStore.areaList == null)
-      _areaStore.getAreas();
     if (!_categoryStore.loading && _categoryStore.categoryList == null)
       _categoryStore.getCategories();
     if (!_typeStore.loading && _typeStore.typeList == null)

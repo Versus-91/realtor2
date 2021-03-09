@@ -4,7 +4,6 @@ import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/optionreport/optionReport.dart';
 import 'package:boilerplate/models/post/post.dart';
 import 'package:boilerplate/models/report/report.dart';
-
 import 'package:boilerplate/ui/map/map.dart';
 import 'package:boilerplate/ui/search/model/pop_list.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -83,7 +82,8 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
               FlatButton.icon(
                 onPressed: () async {
                   await Share.share(
-                      Endpoints.baseUrl + '/ads/' + widget.post.id.toString());
+                    "http://kamyabhouse.com/ads/53",
+                  );
                 },
                 label: Text(
                   AppLocalizations.of(context).translate('send'),

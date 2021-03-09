@@ -52,7 +52,7 @@ class PushNotificationsManager {
       _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
           print("onMessage: $message");
-          // await _showNotification();
+          await _showNotification();
           //_showItemDialog(message);
         },
         onBackgroundMessage: myBackgroundMessageHandler,
