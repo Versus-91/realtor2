@@ -217,6 +217,7 @@ abstract class _PostFormStore with Store {
     validateLng(longitude);
     validateDistrict(selectedDistrict);
     validateAge(ageHome);
+    validateLattitude(latitude);
 
     validateDescription(description);
     validateTypeHome(propertyHomeTypeId);
@@ -379,7 +380,7 @@ abstract class _PostFormStore with Store {
   @action
   void validateRentPrice(double value) {
     if (value == null) {
-      formErrorStore.rentPrice = "فیلد را وارد کنید";
+      formErrorStore.rentPrice = "قیمت کرای را وارد کنید";
     } else {
       formErrorStore.rentPrice = null;
     }
@@ -388,7 +389,7 @@ abstract class _PostFormStore with Store {
   @action
   void validateRahnPrice(double value) {
     if (value == null || value <= 0) {
-      formErrorStore.rahnPrice = "فیلد را وارد کنید";
+      formErrorStore.rahnPrice = "قیمت گروی را وارد کنید";
     } else {
       formErrorStore.rahnPrice = null;
     }
@@ -397,7 +398,7 @@ abstract class _PostFormStore with Store {
   @action
   void validateDescription(String value) {
     if (value == null || value.isEmpty) {
-      formErrorStore.description = "فیلد را وارد کنید";
+      formErrorStore.description = "توضیحات را وارد کنید";
     } else {
       formErrorStore.description = null;
     }
@@ -430,7 +431,7 @@ abstract class _PostFormStore with Store {
   void validateLattitude(double latitude) {
     if (latitude == null && latitude != 0 ||
         longitude == null && latitude != 0) {
-      formErrorStore.map = "محل را انتخاب کنید";
+      formErrorStore.map = "نقشه را انتخاب کنید";
     } else {
       formErrorStore.map = null;
     }
@@ -439,7 +440,7 @@ abstract class _PostFormStore with Store {
   void validateLng(double longitude) {
     if (latitude == null && latitude != 0 ||
         longitude == null && latitude != 0) {
-      formErrorStore.map = "محل را انتخاب کنید";
+      formErrorStore.map = "نقشه را انتخاب کنید";
     } else {
       formErrorStore.map = null;
     }
@@ -462,6 +463,7 @@ abstract class _PostFormErrorStore with Store {
   String rahnPrice;
   @observable
   String district;
+
   @observable
   String age;
   @observable
@@ -479,6 +481,7 @@ abstract class _PostFormErrorStore with Store {
       buyPrice == null &&
       rentPrice == null &&
       age == null &&
+      map == null &&
       rahnPrice == null &&
       description == null;
 }

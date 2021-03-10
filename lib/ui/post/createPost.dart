@@ -284,6 +284,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               _buildDistrictlistField(),
             ],
           ),
+          _store.formErrorStore.district != null
+              ? Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "محله یا منطقه وارد نشده است",
+                      style: TextStyle(color: Colors.red),
+                    )
+                  ],
+                )
+              : SizedBox.shrink(),
           SizedBox(
             height: 10,
           ),
@@ -1012,6 +1025,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ? Container(
                         height: 50,
                         child: DropdownSearch<String>(
+                          // errorBuilder: _store.formErrorStore.age,
                           mode: Mode.MENU,
                           maxHeight: 300,
                           items: _areaStore.areaList.areas

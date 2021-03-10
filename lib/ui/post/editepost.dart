@@ -1102,11 +1102,15 @@ class _EditPostScreenState extends State<EditPostScreen> {
                           ),
                         ),
                       )
-                    : Text(
-                        AppLocalizations.of(context).translate('notfound_area'),
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ))),
+                    : Container(
+                        width: MediaQuery.of(context).size.width / 2.2,
+                        child: Text(
+                            AppLocalizations.of(context)
+                                .translate('notfound_area'),
+                            style: TextStyle(
+                              fontSize: 16.0,
+                            )),
+                      )),
           );
         } else {
           return Flexible(
