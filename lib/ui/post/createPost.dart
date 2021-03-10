@@ -1051,7 +1051,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         ),
                       )
                     : Container(
-                     
                         width: MediaQuery.of(context).size.width / 2,
                         child: Text(
                           AppLocalizations.of(context)
