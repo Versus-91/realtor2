@@ -39,6 +39,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   int selectedItem;
+  String districtDropdownValue;
   String cityDropdownValue;
   String localityDropdownValue;
   int _value;
@@ -965,6 +966,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 if (val != cityDropdownValue) {
                   setState(() {
                     cityDropdownValue = val;
+                    districtDropdownValue = null;
+                    localityDropdownValue = null;
                   });
 
                   _areaStore.getAreasByCityid(_cityStore.cityList.cities
@@ -1125,6 +1128,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           onChanged: (String val) {
                             FocusScope.of(context)
                                 .requestFocus(new FocusNode());
+                            if (val != districtDropdownValue) {
+                              setState(() {
+                                districtDropdownValue = val;
+                              });
+                            }
+
                             int selectDistrict = _districtStore
                                 .districtList.districts
                                 .firstWhere((district) => district.name == val)
@@ -1132,7 +1141,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
                             _store.setDistrict(selectDistrict);
                           },
-                          selectedItem: "محله",
+                          selectedItem: districtDropdownValue,
                           showSearchBox: true,
                           autoFocusSearchBox: true,
                           searchBoxDecoration: InputDecoration(

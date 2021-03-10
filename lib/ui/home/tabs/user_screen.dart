@@ -52,8 +52,8 @@ class _UserScreenState extends State<UserScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false
-      ,
+      resizeToAvoidBottomPadding: false,
+      // resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         automaticallyImplyLeading: false,

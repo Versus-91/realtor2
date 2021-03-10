@@ -187,6 +187,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
+      
       appBar: _buildAppBar(),
       body: _buildBody(),
     );
@@ -1007,6 +1008,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     if (val != cityDropdownValue) {
                       setState(() {
                         cityDropdownValue = val;
+                        localityDropdownValue = null;
                       });
                       _areaStore.getAreasByCityid(_cityStore.cityList.cities
                           .firstWhere((city) => city.name == cityDropdownValue)
