@@ -1050,10 +1050,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           ),
                         ),
                       )
-                    : Text(
-                        AppLocalizations.of(context).translate('notfound_area'),
-                        style: TextStyle(
-                          fontSize: 16.0,
+                    : Container(
+                     
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: Text(
+                          AppLocalizations.of(context)
+                              .translate('notfound_area'),
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
                         ),
                       )),
           );
