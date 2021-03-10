@@ -186,8 +186,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      resizeToAvoidBottomPadding: false,
-      
+      // resizeToAvoidBottomPadding: false,
+
       appBar: _buildAppBar(),
       body: _buildBody(),
     );
