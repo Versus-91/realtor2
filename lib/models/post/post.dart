@@ -4,6 +4,7 @@ import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/image/image.dart';
 
 class Post {
+  bool favotiteSync;
   int categoryId;
   String description;
   bool isFeatured;
@@ -27,6 +28,7 @@ class Post {
 
   Post(
       {this.age,
+      this.favotiteSync,
       this.categoryId,
       this.description,
       this.isFeatured,

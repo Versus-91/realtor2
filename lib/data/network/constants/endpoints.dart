@@ -3,8 +3,8 @@ class Endpoints {
 
   // base url
   static const String baseUrl = "http://www.kamyabhouse.com";
-  static const int receiveTimeout = 5000;
-  static const int connectionTimeout = 3000;
+  static const int receiveTimeout = 12000;
+  static const int connectionTimeout = 8000;
   static const String getAmenities =
       baseUrl + "/api/services/app/Amenity/GetAll";
   static const String getPosts = baseUrl + "/api/services/app/Post/GetAll";

@@ -20,16 +20,20 @@ class District {
     this.city,
   });
 
-  factory District.fromMap(Map<String, dynamic> json) => District(
-        id: json["id"],
-        name: json["name"],
-        cityId: json["cityId"],
-        lastModificationTime: json["lastModificationTime"],
-        lastModifierUserId: json["lastModifierUserId"],
-        creationTime: json["creationTime"],
-        creatorUserId: json["creatorUserId"],
-        city: json["city"] != null ? City.fromMap(json["city"]) : null,
-      );
+  factory District.fromMap(Map<String, dynamic> json) {
+    return District(
+      id: json["id"],
+      name: json["name"],
+      cityId: json["area"] != null ? json["area"]["cityId"] : null,
+      lastModificationTime: json["lastModificationTime"],
+      lastModifierUserId: json["lastModifierUserId"],
+      creationTime: json["creationTime"],
+      creatorUserId: json["creatorUserId"],
+      city: (json["area"] != null && json["area"]["city"] != null)
+          ? City.fromMap(json["area"]["city"])
+          : null,
+    );
+  }
 
   Map<String, dynamic> toMap() => {
         "city": city.toMap(),
