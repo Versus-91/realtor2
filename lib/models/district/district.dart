@@ -1,41 +1,39 @@
-import 'package:boilerplate/models/city/city.dart';
+import 'package:boilerplate/models/area/area.dart';
 
 class District {
   int id;
   String name;
-  int cityId;
   String lastModificationTime;
   int lastModifierUserId;
   String creationTime;
   int creatorUserId;
-  City city;
+  Area area;
   District({
+    this.area,
     this.id,
     this.name,
-    this.cityId,
     this.lastModificationTime,
     this.lastModifierUserId,
     this.creationTime,
     this.creatorUserId,
-    this.city,
   });
 
-  factory District.fromMap(Map<String, dynamic> json) => District(
-        id: json["id"],
-        name: json["name"],
-        cityId: json["cityId"],
-        lastModificationTime: json["lastModificationTime"],
-        lastModifierUserId: json["lastModifierUserId"],
-        creationTime: json["creationTime"],
-        creatorUserId: json["creatorUserId"],
-        city: json["city"] != null ? City.fromMap(json["city"]) : null,
-      );
+  factory District.fromMap(Map<String, dynamic> json) {
+    return District(
+      id: json["id"],
+      name: json["name"],
+      area: json["area"] != null ? Area.fromMap(json["area"]) : null,
+      lastModificationTime: json["lastModificationTime"],
+      lastModifierUserId: json["lastModifierUserId"],
+      creationTime: json["creationTime"],
+      creatorUserId: json["creatorUserId"],
+    );
+  }
 
   Map<String, dynamic> toMap() => {
-        "city": city.toMap(),
+        "area": area.toMap(),
         "id": id,
         "name": name,
-        "cityId": cityId,
         "lastModificationTime": lastModificationTime,
         "lastModifierUserId": lastModifierUserId,
         "creationTime": creationTime,

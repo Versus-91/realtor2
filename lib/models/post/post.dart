@@ -4,6 +4,7 @@ import 'package:boilerplate/models/district/district.dart';
 import 'package:boilerplate/models/image/image.dart';
 
 class Post {
+  bool favotiteSync;
   int categoryId;
   String description;
   bool isFeatured;
@@ -27,6 +28,7 @@ class Post {
 
   Post(
       {this.age,
+      this.favotiteSync,
       this.categoryId,
       this.description,
       this.isFeatured,
@@ -55,8 +57,8 @@ class Post {
           description: json["description"],
           isFeatured: json["isFeatured"],
           isVerified: json["isVerified"],
-          area: json["area"],
           bedroom: json["bedroom"],
+          area: json["area"],
           districtId: json["districtId"],
           typeId: json["typeId"],
           latitude: json["latitude"],

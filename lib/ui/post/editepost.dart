@@ -892,7 +892,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
           DataRow(
             cells: <DataCell>[
               DataCell(Text(
-                widget.post.district.city.name,
+                widget.post.district.area.city.name,
                 style: TextStyle(fontStyle: FontStyle.italic),
               )),
               DataCell(Text(

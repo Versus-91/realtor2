@@ -124,7 +124,7 @@ class _PropertyCradState extends State<PropertyCrad>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${post.district.city.name},${post.district.name}',
+                            '${post.district.area.city?.name},${post.district.name}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             softWrap: false,
