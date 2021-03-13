@@ -54,7 +54,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
         appBar: AppBar(
           backgroundColor: Colors.blueGrey[700],
           title: Text(
-            ' ${widget.post.district.city.name} - ${widget.post.district.name} ',
+            ' ${widget.post.district.area.city.name} - ${widget.post.district.name} ',
             style: TextStyle(
                 fontSize: 20,
                 color: Colors.white,

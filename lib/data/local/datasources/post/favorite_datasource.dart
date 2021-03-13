@@ -20,7 +20,8 @@ class FavoriteDataSource {
   // DB functions:--------------------------------------------------------------
   Future<int> insert(Post post) async {
     try {
-      return await _citiesStore.record(post.id).add(await _db, post.toMap());
+      var item = post.toMap();
+      return await _citiesStore.record(post.id).add(await _db, item);
     } catch (e) {
       throw e;
     }
