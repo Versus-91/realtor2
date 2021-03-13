@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/optionreport/optionReport.dart';
@@ -16,31 +17,26 @@ import 'package:url_launcher/url_launcher.dart';
 class PostScreen extends StatefulWidget {
   PostScreen({this.post});
   final Post post;
+  final Repository repository = appComponent.getRepository();
   @override
   _PostScreen createState() => _PostScreen();
 }
 
-class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
+class _PostScreen extends State<PostScreen> {
   List<OptionReport> options;
   AnimationController animationController;
   TextEditingController _descriptionController = TextEditingController();
   int _chosenValue;
-  Animation animation;
-  int currentState = 0;
+
   Future getOptions;
   bool isSendigReport = false;
+  bool liked = false;
+  int favoriteId;
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
-
-    animationController =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
-    animation = Tween(begin: 0, end: 60).animate(animationController)
-      ..addListener(() {
-        setState(() {});
-      });
-    getOptions = appComponent.getRepository().getOptionsReport();
+    getOptions = widget.repository.getOptionsReport();
   }
 
   @override
@@ -167,7 +163,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                         color: Colors.black,
                       );
                     } else {
-                      if (snapshot.data == true) {
+                      if (snapshot.data != 0) {
                         return Icon(
                           Icons.favorite,
                           color: Colors.redAccent,
@@ -181,25 +177,24 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
                   },
                 ),
                 onPressed: () async {
-                  var post = await appComponent
-                      .getRepository()
-                      .findFavoriteById(widget.post.id);
-                  if (currentState == 0) {
-                    animationController.forward();
-                    currentState = 1;
-                  } else {
-                    animationController.reverse();
-                    currentState = 0;
-                  }
-                  if (post == null) {
-                    await appComponent.getRepository().addFavorite(widget.post);
-                  } else {
-                    await appComponent
-                        .getRepository()
-                        .removeFavorite(widget.post);
-                  }
-                  setState(() {
-                    isSelected(widget.post.id);
+                  await isSelected(widget.post.id).then((res) {
+                    if (res == 0) {
+                      widget.repository
+                          .addFavoriteInServer(widget.post.id)
+                          .then((value) async {
+                        setState(() {
+                          isSelected(widget.post.id);
+                        });
+                      });
+                    } else {
+                      widget.repository
+                          .removeFavoriteInServer(res)
+                          .then((value) async {
+                        setState(() {
+                          isSelected(widget.post.id);
+                        });
+                      });
+                    }
                   });
                 },
               ),
@@ -467,11 +462,13 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
   }
 
   Future isSelected(int id) async {
-    var post = await appComponent.getRepository().findFavoriteById(id);
-    if (post != null) {
-      return true;
+    var post = await widget.repository.getFavoriteInStatus(id);
+    print('triggered' + post["id"].toString());
+
+    if (post["isLiked"] == true) {
+      return post["id"];
     }
-    return false;
+    return 0;
   }
 
   void _showDecline() {

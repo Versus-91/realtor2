@@ -253,31 +253,6 @@ class _PropertyCradState extends State<PropertyCrad>
                                   onTap: () async {
                                     var post = await widget.repository
                                         .findFavoriteById(widget.post.id);
-
-                                    if (post == null) {
-                                      widget.repository
-                                          .addFavoriteInServer(widget.post.id)
-                                          .then((value) async {
-                                        widget.post.favoriteId =
-                                            value["result"]["id"];
-                                        await widget.repository
-                                            .addFavorite(widget.post);
-                                        setState(() {
-                                          isSelected(widget.post.id);
-                                        });
-                                      });
-                                    } else {
-                                      widget.repository
-                                          .removeFavoriteInServer(
-                                              widget.post.favoriteId)
-                                          .then((value) async {
-                                        await widget.repository
-                                            .removeFavorite(widget.post);
-                                        setState(() {
-                                          isSelected(widget.post.id);
-                                        });
-                                      });
-                                    }
                                   },
                                   child: snapshot.data == true
                                       ? Icon(

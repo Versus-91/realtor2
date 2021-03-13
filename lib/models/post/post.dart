@@ -24,10 +24,8 @@ class Post {
   Category category;
   List<Image> images;
   List<Amenity> amenities;
-  int favoriteId;
   Post(
       {this.age,
-      this.favoriteId,
       this.categoryId,
       this.description,
       this.isFeatured,
@@ -64,7 +62,6 @@ class Post {
           longitude: json["longitude"],
           creationTime: json["creationTime"],
           id: json["id"],
-          favoriteId: json["favoriteId"],
           deposit: json["deposit"],
           rent: json["rent"],
           price: json["price"],
@@ -91,7 +88,6 @@ class Post {
       "latitude": latitude,
       "longitude": longitude,
       "id": id,
-      "favoriteId": favoriteId,
       if (deposit != null) ...{
         "deposit": deposit,
       },

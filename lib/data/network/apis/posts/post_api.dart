@@ -259,10 +259,19 @@ class PostApi {
 
   Future removeFavoriteInServer(int id) async {
     try {
-      final res = await _dioClient.delete(Endpoints.deleteFavorite, data: {
-        "Id": id,
-      });
+      final res = await _dioClient
+          .delete(Endpoints.deleteFavorite + "?id=" + id.toString());
       return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future getFavoriteInServer(int id) async {
+    try {
+      final res = await _dioClient
+          .get(Endpoints.getFavorite + "?postId=" + id.toString());
+      return res["result"];
     } catch (e) {
       throw e;
     }

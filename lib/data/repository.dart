@@ -170,6 +170,12 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
+  Future getFavoriteInStatus(int postId) async {
+    return _postApi.getFavoriteInServer(postId).then((result) {
+      return result;
+    }).catchError((error) => throw error);
+  }
+
   Future<List<Post>> findPostById(int id) {
     //creating filter
     List<Filter> filters = List();

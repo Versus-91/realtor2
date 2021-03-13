@@ -13,6 +13,8 @@ class Endpoints {
       baseUrl + "/api/services/app/favorite/create";
   static const String deleteFavorite =
       baseUrl + "/api/services/app/favorite/delete";
+  static const String getFavorite =
+      baseUrl + "/api/services/app/favorite/GetFavorite";
   static const String saveFirebaseId =
       baseUrl + "/api/services/app/notification/create";
   static const String getCities = baseUrl + "/api/services/app/City/GetAll";
