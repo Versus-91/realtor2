@@ -82,8 +82,7 @@ class _PostScreen extends State<PostScreen> with TickerProviderStateMixin {
               FlatButton.icon(
                 onPressed: () async {
                   await Share.share(
-                    "http://kamyabhouse.com/ads/53",
-                  );
+                      Endpoints.baseUrl + '/ads/' + widget.post.id.toString());
                 },
                 label: Text(
                   AppLocalizations.of(context).translate('send'),
