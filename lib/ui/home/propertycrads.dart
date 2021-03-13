@@ -1,4 +1,5 @@
 import 'package:boilerplate/data/network/constants/endpoints.dart';
+import 'package:boilerplate/data/repository.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/post/post.dart';
 // ignore: unused_import
@@ -16,6 +17,8 @@ class PropertyCrad extends StatefulWidget {
   PropertyCrad({this.post, this.canEdit = false});
   final Post post;
   final bool canEdit;
+  final Repository repository = appComponent.getRepository();
+
   @override
   _PropertyCradState createState() => _PropertyCradState();
 }
@@ -248,22 +251,33 @@ class _PropertyCradState extends State<PropertyCrad>
                               builder: (context, snapshot) {
                                 return GestureDetector(
                                   onTap: () async {
-                                    var post = await appComponent
-                                        .getRepository()
+                                    var post = await widget.repository
                                         .findFavoriteById(widget.post.id);
 
                                     if (post == null) {
-                                      await appComponent
-                                          .getRepository()
-                                          .addFavorite(widget.post);
+                                      widget.repository
+                                          .addFavoriteInServer(widget.post.id)
+                                          .then((value) async {
+                                        widget.post.favoriteId =
+                                            value["result"]["id"];
+                                        await widget.repository
+                                            .addFavorite(widget.post);
+                                        setState(() {
+                                          isSelected(widget.post.id);
+                                        });
+                                      });
                                     } else {
-                                      await appComponent
-                                          .getRepository()
-                                          .removeFavorite(widget.post);
+                                      widget.repository
+                                          .removeFavoriteInServer(
+                                              widget.post.favoriteId)
+                                          .then((value) async {
+                                        await widget.repository
+                                            .removeFavorite(widget.post);
+                                        setState(() {
+                                          isSelected(widget.post.id);
+                                        });
+                                      });
                                     }
-                                    setState(() {
-                                      isSelected(widget.post.id);
-                                    });
                                   },
                                   child: snapshot.data == true
                                       ? Icon(

@@ -9,7 +9,10 @@ class Endpoints {
       baseUrl + "/api/services/app/Amenity/GetAll";
   static const String getPosts = baseUrl + "/api/services/app/Post/GetAll";
   static const String createPosts = baseUrl + "/api/services/app/Post/create";
-  static const String favarite = baseUrl + "/api/services/app/favarite";
+  static const String addFavorite =
+      baseUrl + "/api/services/app/favorite/create";
+  static const String deleteFavorite =
+      baseUrl + "/api/services/app/favorite/delete";
   static const String saveFirebaseId =
       baseUrl + "/api/services/app/notification/create";
   static const String getCities = baseUrl + "/api/services/app/City/GetAll";

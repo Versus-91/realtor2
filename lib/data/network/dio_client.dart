@@ -100,4 +100,33 @@ class DioClient {
       throw e;
     }
   }
+
+  //delet
+  Future<dynamic> delete(
+    String uri, {
+    data,
+    Map<String, dynamic> queryParameters,
+    Options options,
+    CancelToken cancelToken,
+    ProgressCallback onSendProgress,
+    ProgressCallback onReceiveProgress,
+  }) async {
+    try {
+      final Response response = await _dio.delete(
+        uri,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      );
+      return response.data;
+    } catch (e) {
+      if (e?.response?.statusCode == 401) {
+        appComponent.getRepository().logOut().then((res) {
+          NavigationService.instance.navigateToRemoevUntil(Routes.login);
+        });
+      }
+      throw e;
+    }
+  }
 }

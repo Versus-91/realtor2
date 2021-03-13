@@ -246,6 +246,28 @@ class PostApi {
     }
   }
 
+  Future addFavoriteInServer(int id) async {
+    try {
+      final res = await _dioClient.post(Endpoints.addFavorite, data: {
+        "PostId": id,
+      });
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future removeFavoriteInServer(int id) async {
+    try {
+      final res = await _dioClient.delete(Endpoints.deleteFavorite, data: {
+        "Id": id,
+      });
+      return res;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future removePostImage(int id) async {
     try {
       final res = await _dioClient

@@ -158,6 +158,18 @@ class Repository {
     return await _favoriteDataSource.findById(id);
   }
 
+  Future addFavoriteInServer(int id) async {
+    return _postApi.addFavoriteInServer(id).then((result) {
+      return result;
+    }).catchError((error) => throw error);
+  }
+
+  Future removeFavoriteInServer(int favoriteId) async {
+    return _postApi.removeFavoriteInServer(favoriteId).then((result) {
+      return result;
+    }).catchError((error) => throw error);
+  }
+
   Future<List<Post>> findPostById(int id) {
     //creating filter
     List<Filter> filters = List();
@@ -250,9 +262,11 @@ class Repository {
   Future uploadAvatarImage(MultipartFile avatarImage) {
     return _postApi.uploadAvatarImage(avatarImage);
   }
- Future removePostImage(int id) {
+
+  Future removePostImage(int id) {
     return _postApi.removePostImage(id);
   }
+
   Future<void> changepassword(ChangePassword passwords) {
     return _postApi.changepassword(passwords);
   }

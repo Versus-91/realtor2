@@ -64,6 +64,7 @@ class FavoriteDataSource {
 
   Future<List<Post>> getPostsFromDb() async {
     // fetching data
+    //await deleteAll();
     final recordSnapshots = await _citiesStore.find(await _db);
     List<Post> posts;
     // Making a List<Post> out of List<RecordSnapshot>
