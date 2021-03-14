@@ -277,6 +277,22 @@ class PostApi {
     }
   }
 
+  Future<PostList> getFavorites(int page, {int size = 10}) async {
+    try {
+      int skipCount = (page - 1) * size;
+      String uri =
+          Endpoints.getAllFavorite + "?maxResultCount=" + size.toString();
+      if (skipCount > 0) {
+        uri += "&skipCount=" + skipCount.toString();
+      }
+      final res = await _dioClient.get(uri);
+      return PostList.fromFavoriteJson(
+          res["result"]["items"], res["result"]["totalCount"]);
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future removePostImage(int id) async {
     try {
       final res = await _dioClient

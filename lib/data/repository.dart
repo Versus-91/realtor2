@@ -130,16 +130,11 @@ class Repository {
     return await _sharedPrefsHelper.logOut();
   }
 
-  Future addFavorite(Post post) async {
-    await _favoriteDataSource.insert(post);
-  }
-
-  Future removeFavorite(Post post) async {
-    await _favoriteDataSource.delete(post);
-  }
-
-  Future getFavoritesList() async {
-    return await _favoriteDataSource.getPostsFromDb();
+  Future getFavoritesList(int page, int size) async {
+    return _postApi
+        .getFavorites(page, size: size)
+        .then((res) => res.posts)
+        .catchError((err) => throw err);
   }
 
   Future getSearchesList() async {
