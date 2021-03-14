@@ -177,25 +177,23 @@ class _PostScreen extends State<PostScreen> {
                   },
                 ),
                 onPressed: () async {
-                  await isSelected(widget.post.id).then((res) {
-                    if (res == 0) {
-                      widget.repository
-                          .addFavoriteInServer(widget.post.id)
-                          .then((value) async {
-                        setState(() {
-                          isSelected(widget.post.id);
-                        });
+                  if (favoriteId == 0) {
+                    widget.repository
+                        .addFavoriteInServer(widget.post.id)
+                        .then((value) async {
+                      setState(() {
+                        isSelected(widget.post.id);
                       });
-                    } else {
-                      widget.repository
-                          .removeFavoriteInServer(res)
-                          .then((value) async {
-                        setState(() {
-                          isSelected(widget.post.id);
-                        });
+                    });
+                  } else {
+                    widget.repository
+                        .removeFavoriteInServer(favoriteId)
+                        .then((value) async {
+                      setState(() {
+                        isSelected(widget.post.id);
                       });
-                    }
-                  });
+                    });
+                  }
                 },
               ),
             ),
@@ -463,11 +461,12 @@ class _PostScreen extends State<PostScreen> {
 
   Future isSelected(int id) async {
     var post = await widget.repository.getFavoriteInStatus(id);
-    print('triggered' + post["id"].toString());
-
+    print('trigger');
     if (post["isLiked"] == true) {
+      favoriteId = post["id"];
       return post["id"];
     }
+    favoriteId = 0;
     return 0;
   }
 
