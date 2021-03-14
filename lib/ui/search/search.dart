@@ -7,7 +7,6 @@ import 'package:boilerplate/models/location/locations.dart';
 import 'package:boilerplate/models/post/post_request.dart';
 import 'package:boilerplate/models/type/type.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
-import 'package:boilerplate/stores/area/area_store.dart';
 import 'package:boilerplate/stores/category/category_store.dart';
 import 'package:boilerplate/stores/city/city_store.dart';
 import 'package:boilerplate/stores/district/district_store.dart';

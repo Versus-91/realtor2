@@ -16,7 +16,11 @@ class PostList {
   }
   factory PostList.fromFavoriteJson(List<dynamic> json, dynamic totalCount) {
     List<Post> posts = List<Post>();
-    posts = json.map((favorite) => Post.fromMap(favorite["post"])).toList();
+    posts = json.map((favorite) {
+      var post = Post.fromMap(favorite["post"]);
+      post.favId = favorite["id"];
+      return post;
+    }).toList();
     var total = totalCount;
     return PostList(
       totalCount: total,

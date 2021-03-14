@@ -246,26 +246,15 @@ class _PropertyCradState extends State<PropertyCrad>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            FutureBuilder(
-                              future: isSelected(widget.post.id),
-                              builder: (context, snapshot) {
-                                return GestureDetector(
-                                  onTap: () async {
-                                    var post = await widget.repository
-                                        .findFavoriteById(widget.post.id);
-                                  },
-                                  child: snapshot.data == true
-                                      ? Icon(
-                                          Icons.favorite,
-                                          color: Colors.redAccent,
-                                        )
-                                      : Icon(
-                                          Icons.favorite,
-                                          color: Colors.grey,
-                                        ),
-                                );
-                              },
-                            ),
+                            GestureDetector(
+                                onTap: () async {
+                                  print(widget.post.favId.toString());
+                                },
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Colors.redAccent,
+                                )),
+
                             IconButton(
                               icon: Icon(
                                 Icons.share,
@@ -398,14 +387,6 @@ class _PropertyCradState extends State<PropertyCrad>
         ),
       ),
     );
-  }
-
-  Future isSelected(int id) async {
-    var post = await appComponent.getRepository().findFavoriteById(id);
-    if (post != null) {
-      return true;
-    }
-    return false;
   }
 
   @override
