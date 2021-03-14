@@ -246,17 +246,17 @@ class _PropertyCradState extends State<PropertyCrad>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Visibility(
-                              visible: widget.post.favId != null,
-                              child: GestureDetector(
-                                  onTap: () async {
-                                    print(widget.post.favId.toString());
-                                  },
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Colors.redAccent,
-                                  )),
-                            ),
+                            // Visibility(
+                            //   visible: widget.post.favId != null,
+                            //   child: GestureDetector(
+                            //       onTap: () async {
+                            //         print(widget.post.favId.toString());
+                            //       },
+                            //       child: Icon(
+                            //         Icons.delete,
+                            //         color: Colors.redAccent,
+                            //       )),
+                            // ),
 
                             IconButton(
                               icon: Icon(
