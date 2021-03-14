@@ -247,7 +247,7 @@ class _PropertyCradState extends State<PropertyCrad>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Visibility(
-                              visible: widget.favId != null,
+                              visible: widget.post.favId != null,
                               child: GestureDetector(
                                   onTap: () async {
                                     print(widget.post.favId.toString());

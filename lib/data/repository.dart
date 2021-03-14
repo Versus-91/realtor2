@@ -97,6 +97,15 @@ class Repository {
     }).catchError((error) => throw error);
   }
 
+  Future<String> getNumber(String number) async {
+    // check to see if posts are present in database, then fetch from database
+    // else make a network call to get all posts, store them into database for
+    // later use
+    return await _postApi.getNumber(number).then((number) {
+      return number;
+    }).catchError((error) => throw error);
+  }
+
 //category------------------------------------------------------------------------
   Future<CategoryList> getCategories() async {
     // check to see if posts are present in database, then fetch from database

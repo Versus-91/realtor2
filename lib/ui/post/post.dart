@@ -89,7 +89,13 @@ class _PostScreen extends State<PostScreen> {
                 ),
               ),
               FlatButton.icon(
-                onPressed: () => launch("tel://21213123123"),
+                onPressed: () async {
+                  await widget.repository
+                      .getNumber(widget.post.creatorUserId.toString())
+                      .then((res) {
+                    return launch("tel://" + res.toString());
+                  });
+                },
                 label: Text(
                   AppLocalizations.of(context).translate('call'),
                 ),

@@ -61,14 +61,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         backgroundColor: Colors.red,
         elevation: 0.0,
       ),
-      body: PagedListView<int, Post>(
-        pagingController: _pagingController,
-        builderDelegate: PagedChildBuilderDelegate<Post>(
-          itemBuilder: (context, item, index) {
-            return PropertyCrad(
-              post: item,
-            );
-          },
+      body: RefreshIndicator(
+        onRefresh: () => Future.sync(
+          () => _pagingController.refresh(),
+        ),
+        child: PagedListView<int, Post>(
+          pagingController: _pagingController,
+          builderDelegate: PagedChildBuilderDelegate<Post>(
+            itemBuilder: (context, item, index) {
+              return PropertyCrad(
+                post: item,
+              );
+            },
+          ),
         ),
       ),
     );

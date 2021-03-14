@@ -23,11 +23,13 @@ class Post {
   double price;
   District district;
   Category category;
+  int creatorUserId;
   List<Image> images;
   List<Amenity> amenities;
   Post(
       {this.age,
       this.favId,
+      this.creatorUserId,
       this.categoryId,
       this.description,
       this.isFeatured,
@@ -52,6 +54,7 @@ class Post {
     try {
       return Post(
           age: json["age"],
+          creatorUserId: json["creatorUserId"],
           categoryId: json["categoryId"],
           description: json["description"],
           isFeatured: json["isFeatured"],

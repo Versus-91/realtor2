@@ -114,6 +114,16 @@ class PostApi {
     }
   }
 
+  Future<String> getNumber(String number) async {
+    try {
+      final res =
+          await _dioClient.post(Endpoints.getUserNumber + "?userId=" + number);
+      return res["result"];
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future createUser(User user) async {
     try {
       final res =
