@@ -42,12 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _maxPriceController = TextEditingController();
   final TextEditingController _minAreaController = TextEditingController();
   final TextEditingController _maxAreaController = TextEditingController();
-  final TextEditingController _minDepositController = TextEditingController();
-  final TextEditingController _maxDepositController = TextEditingController();
-  // final TextEditingController _minRentController = TextEditingController();
-  final TextEditingController _maxRentController = TextEditingController();
 
-  final _minRentController = TextEditingController();
   String _selectedCity;
   var data;
   String dataurl = Endpoints.baseUrl + "/api/services/app/District/Find";
@@ -112,18 +107,6 @@ class _SearchScreenState extends State<SearchScreen> {
     }
     if (widget.filterForm.maxArea != null) {
       _maxAreaController.text = widget.filterForm.maxArea.toString();
-    }
-    if (widget.filterForm.minDepositPrice != null) {
-      _minDepositController.text = widget.filterForm.minDepositPrice.toString();
-    }
-    if (widget.filterForm.maxDepositPrice != null) {
-      _maxDepositController.text = widget.filterForm.maxDepositPrice.toString();
-    }
-    if (widget.filterForm.minRentPrice != null) {
-      _minRentController.text = widget.filterForm.minRentPrice.toString();
-    }
-    if (widget.filterForm.maxRentPrice != null) {
-      _maxRentController.text = widget.filterForm.maxRentPrice.toString();
     }
   }
 
@@ -238,32 +221,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         ).toList(),
                       ),
                     ),
-                    if (widget.filterForm.category.name.contains(
-                      AppLocalizations.of(context).translate('rahn'),
-                    )) ...[
-                      depositPriceBarFilter(
-                          AppLocalizations.of(context).translate('rahn_scope')),
-                      rentPriceBarFilter(
-                          AppLocalizations.of(context).translate('rent_scope')),
-                    ],
-                    if (widget.filterForm.category.name.contains(
-                      AppLocalizations.of(context).translate('rent'),
-                    )) ...[
-                      Row(
-                        children: [
-                          Flexible(
-                              child: rentPriceBarFilter(
-                                  AppLocalizations.of(context)
-                                      .translate('rent_scope'))),
-                        ],
-                      ),
-                    ],
-                    if (widget.filterForm.category.name.contains(
-                      AppLocalizations.of(context).translate('buy'),
-                    )) ...[
-                      priceBarFilter(
-                          AppLocalizations.of(context).translate('price_scope'))
-                    ],
+                    priceBarFilter(
+                        AppLocalizations.of(context).translate('price_scope'))
                   ],
                 )
               : Opacity(
@@ -319,11 +278,6 @@ class _SearchScreenState extends State<SearchScreen> {
       _maxPriceController.clear();
     } else {
       widget.filterForm.resetPrice();
-
-      _minDepositController.clear();
-      _maxDepositController.clear();
-      _minRentController.clear();
-      _maxRentController.clear();
     }
   }
 
@@ -886,158 +840,6 @@ class _SearchScreenState extends State<SearchScreen> {
                           filled: true,
                           labelText: AppLocalizations.of(context)
                               .translate('highest_price'),
-                          hintText: AppLocalizations.of(context)
-                              .translate('highest_price'),
-                          contentPadding: EdgeInsets.all(10))),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget rentPriceBarFilter(String label) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                    fontWeight: FontWeight.normal),
-              ),
-              Text(
-                AppLocalizations.of(context).translate('currency_type'),
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
-                    fontWeight: FontWeight.normal),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: Row(
-              children: <Widget>[
-                Flexible(
-                  child: TextField(
-                      controller: _minRentController,
-                      onChanged: (value) {
-                        widget.filterForm.setMinRentPrice(double.parse(value));
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          fillColor: Color(0xfff3f3f4),
-                          labelText: AppLocalizations.of(context)
-                              .translate('lowest_price'),
-                          filled: true,
-                          hintText: AppLocalizations.of(context)
-                              .translate('lowest_price'),
-                          contentPadding: EdgeInsets.all(10))),
-                ),
-                VerticalDivider(),
-                Flexible(
-                  child: TextField(
-                      controller: _maxRentController,
-                      onChanged: (value) {
-                        widget.filterForm.setMaxRentPrice(double.parse(value));
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          fillColor: Color(0xfff3f3f4),
-                          filled: true,
-                          labelText: AppLocalizations.of(context)
-                              .translate('highest_price'),
-                          hintText: AppLocalizations.of(context)
-                              .translate('highest_price'),
-                          contentPadding: EdgeInsets.all(10))),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget depositPriceBarFilter(String label) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                    fontWeight: FontWeight.normal),
-              ),
-              Text(
-                AppLocalizations.of(context).translate('currency_type'),
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
-                    fontWeight: FontWeight.normal),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: Row(
-              children: <Widget>[
-                Flexible(
-                  child: TextField(
-                      controller: _minDepositController,
-                      onChanged: (value) {
-                        widget.filterForm
-                            .setMinDepositPrice(double.parse(value));
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          fillColor: Color(0xfff3f3f4),
-                          filled: true,
-                          labelText: AppLocalizations.of(context)
-                              .translate('lowest_price'),
-                          hintText: AppLocalizations.of(context)
-                              .translate('lowest_price'),
-                          contentPadding: EdgeInsets.all(10))),
-                ),
-                VerticalDivider(),
-                Flexible(
-                  child: TextField(
-                      controller: _maxDepositController,
-                      onChanged: (value) {
-                        widget.filterForm
-                            .setMaxDepositPrice(double.parse(value));
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          fillColor: Color(0xfff3f3f4),
-                          labelText: AppLocalizations.of(context)
-                              .translate('highest_price'),
-                          filled: true,
                           hintText: AppLocalizations.of(context)
                               .translate('highest_price'),
                           contentPadding: EdgeInsets.all(10))),

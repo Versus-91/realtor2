@@ -229,46 +229,14 @@ class _PostScreen extends State<PostScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      widget.post.category.name.contains(
-                              AppLocalizations.of(context).translate('sell'))
-                          ? Text(
-                              AppLocalizations.of(context)
-                                  .transformCurrency(widget.post.price),
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            )
-                          : Row(
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)
-                                          .translate('rahn') +
-                                      ":  " +
-                                      AppLocalizations.of(context)
-                                          .transformCurrency(
-                                              widget.post.deposit),
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Text(
-                                  AppLocalizations.of(context)
-                                          .translate('rent') +
-                                      ":  " +
-                                      AppLocalizations.of(context)
-                                          .transformCurrency(widget.post.rent),
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
+                      Text(
+                        AppLocalizations.of(context)
+                            .transformCurrency(widget.post.price),
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      )
                     ],
                   ),
                   IntrinsicHeight(

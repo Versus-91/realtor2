@@ -80,8 +80,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
   //text controllers:-----------------------------------------------------------
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _rahnPriceController = TextEditingController();
-  TextEditingController _rentPriceController = TextEditingController();
   TextEditingController _buyPriceController = TextEditingController();
   TextEditingController _areaController = TextEditingController();
   TextEditingController _bedroomCountController = TextEditingController();
@@ -154,8 +152,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
         isSelected[(_store.countbedroom)] = true;
         _areaController.text = _store.area.toString();
         _descriptionController.text = _store.description;
-        _rahnPriceController.text = _store.rahnPrice.toString();
-        _rentPriceController.text = _store.rentPrice.toString();
         _buyPriceController.text = _store.buyPrice.toString();
         ageHome = _store.ageHome;
         setform = true;
@@ -731,93 +727,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
           );
   }
 
-  Widget _buildRentPriceField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          children: [
-            Text(AppLocalizations.of(context).translate('rahne'),
-                style: TextStyle(color: Colors.red[300])),
-            Text(
-              AppLocalizations.of(context).translate('currency_type'),
-              style: TextStyle(
-                  color: Colors.red,
-                  fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
-                  fontWeight: FontWeight.normal),
-            ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            Flexible(
-              child: TextField(
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  controller: _rahnPriceController,
-                  onChanged: (value) {
-                    _store.setRahnPrice(
-                        double.tryParse(_rahnPriceController.text));
-                  },
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      errorText: _store.formErrorStore.rahnPrice,
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent)),
-                      fillColor: Color(0xfff3f3f4),
-                      filled: true,
-                      hintText:
-                          AppLocalizations.of(context).translate('rahn_price'),
-                      contentPadding: EdgeInsets.all(10))),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEjarePriceField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          children: [
-            Text(AppLocalizations.of(context).translate('rente'),
-                style: TextStyle(color: Colors.red[300])),
-            Text(
-              AppLocalizations.of(context).translate('currency_type'),
-              style: TextStyle(
-                  color: Colors.red,
-                  fontSize: MediaQuery.of(context).size.width > 360 ? 13 : 13,
-                  fontWeight: FontWeight.normal),
-            ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            Flexible(
-              child: TextField(
-                  controller: _rentPriceController,
-                  onChanged: (value) {
-                    _store.setRentPrice(
-                        double.tryParse(_rentPriceController.text));
-                  },
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      errorText: _store.formErrorStore.rentPrice,
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent)),
-                      fillColor: Color(0xfff3f3f4),
-                      filled: true,
-                      hintText:
-                          AppLocalizations.of(context).translate('rent_price'),
-                      contentPadding: EdgeInsets.all(10))),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
   Widget _buildBuyPriceField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1273,35 +1182,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     // .firstWhere((district) => category.id == _value)
                     // .name,
                     Observer(builder: (ctx) {
-                      if (_store.categoryName != null &&
-                          _store.categoryName.contains(
-                            AppLocalizations.of(context).translate('rahn'),
-                          )) {
-                        return Row(children: [
-                          Flexible(
-                            child: _buildRentPriceField(),
-                          ),
-                          VerticalDivider(),
-                          Flexible(child: _buildEjarePriceField()),
-                        ]);
-                      }
-                      if (_store.categoryName != null &&
-                          _store.categoryName.contains(
-                            AppLocalizations.of(context).translate('rent'),
-                          )) {
-                        return Row(
-                          children: [
-                            Flexible(child: _buildEjarePriceField()),
-                          ],
-                        );
-                      }
-                      if (_store.categoryName != null &&
-                          _store.categoryName.contains(
-                            AppLocalizations.of(context).translate('buy'),
-                          )) {
-                        return _buildBuyPriceField();
-                      }
-                      return SizedBox.shrink();
+                      return _buildBuyPriceField();
                     }),
                   ],
                 )
@@ -1351,16 +1232,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   }
 
   void resetPrice(Category category) {
-    if (category.name.contains("گروی")) {
-      _store.resetPrice();
-
-      _buyPriceController.clear();
-    } else {
-      _store.resetPrice();
-
-      _rahnPriceController.clear();
-      _rentPriceController.clear();
-    }
+    _store.resetPrice();
   }
 
   Widget chipOne(String title, Function clickAction, {bool active = false}) {
@@ -1568,8 +1440,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
     // Clean up the controller when the Widget is removed from the Widget tree
     _titleController.dispose();
     _descriptionController.dispose();
-    _rahnPriceController.dispose();
-    _rentPriceController.dispose();
     _buyPriceController.dispose();
     _areaController.dispose();
     _bedroomCountController.dispose();

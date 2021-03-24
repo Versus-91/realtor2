@@ -132,77 +132,22 @@ class _PropertyCradState extends State<PropertyCrad>
                             overflow: TextOverflow.ellipsis,
                             softWrap: false,
                           ),
-                          if (post.category.name.contains(
-                            AppLocalizations.of(context).translate('rahn'),
-                          )) ...[
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)
-                                          .translate('rahn') +
-                                      ":" +
-                                      AppLocalizations.of(context)
-                                          .transformCurrency(post.deposit ?? 0),
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16),
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                ),
-                                Text(
-                                  AppLocalizations.of(context)
-                                          .translate('rent') +
-                                      ":" +
-                                      AppLocalizations.of(context)
-                                          .transformCurrency(post.rent),
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16),
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                ),
-                              ],
-                            )
-                          ],
-                          if (post.category.name.contains(
-                            AppLocalizations.of(context).translate('rent'),
-                          )) ...[
-                            Text(
-                              AppLocalizations.of(context).translate('rent') +
-                                  ":" +
-                                  AppLocalizations.of(context)
-                                      .transformCurrency(post.rent),
-                              maxLines: 1,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700, fontSize: 16),
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
-                            ),
-                          ],
-                          if (post.category.name.contains(
-                            AppLocalizations.of(context).translate('buy'),
-                          )) ...[
-                            Row(
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)
-                                          .translate('price') +
-                                      ":" +
-                                      AppLocalizations.of(context)
-                                          .transformCurrency(post.price),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 16),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                ),
-                              ],
-                            ),
-                          ],
+                          Row(
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)
+                                        .translate('price') +
+                                    ":" +
+                                    AppLocalizations.of(context)
+                                        .transformCurrency(post.price),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 16),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),

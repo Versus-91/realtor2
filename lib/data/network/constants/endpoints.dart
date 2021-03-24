@@ -2,7 +2,7 @@ class Endpoints {
   Endpoints._();
 
   // base url
-  static const String baseUrl = "http://www.kamyabhouse.com";
+  static const String baseUrl = "https://kamyabhouse.com";
   static const int receiveTimeout = 12000;
   static const int connectionTimeout = 8000;
   static const String getAmenities =

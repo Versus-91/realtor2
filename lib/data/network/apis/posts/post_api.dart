@@ -27,7 +27,7 @@ class PostApi {
   // rest-client instance
   final RestClient _restClient;
   var plusSign = '+';
-  var baseAddress = Endpoints.baseUrl.replaceFirst("http://", "");
+  var baseAddress = Endpoints.baseUrl.replaceFirst("https://", "");
 
   // injecting dio instance
   PostApi(this._dioClient, this._restClient);
@@ -38,10 +38,11 @@ class PostApi {
       Uri uri = Uri();
       if (request != null) {
         uri = Uri(
-            scheme: 'http',
+            scheme: 'https',
             host: baseAddress,
             path: '/api/services/app/Post/GetAll',
             queryParameters: request.toJson());
+        print(uri);
       } else {
         uri = Uri.http(baseAddress, '/api/services/app/Post/GetAll');
       }

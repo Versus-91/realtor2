@@ -259,8 +259,6 @@ abstract class _PostFormStore with Store {
     selectedDistrict = post.districtId;
     description = post.description;
     area = post.area;
-    rahnPrice = post.deposit;
-    rentPrice = post.rent;
     buyPrice = post.price;
     countbedroom = post.bedroom;
     var images = post.images
@@ -283,8 +281,6 @@ abstract class _PostFormStore with Store {
         latitude: this.latitude,
         description: this.description,
         typeId: this.propertyHomeTypeId,
-        rent: this.rentPrice,
-        deposit: this.rahnPrice,
         price: this.buyPrice,
         area: this.area,
         age: this.ageHome,
@@ -316,8 +312,6 @@ abstract class _PostFormStore with Store {
         latitude: this.latitude,
         description: this.description,
         typeId: this.propertyHomeTypeId,
-        rent: this.rentPrice,
-        deposit: this.rahnPrice,
         price: this.buyPrice,
         area: this.area,
         age: this.ageHome,

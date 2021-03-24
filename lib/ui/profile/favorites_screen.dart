@@ -68,6 +68,26 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         child: PagedListView<int, Post>(
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<Post>(
+            noItemsFoundIndicatorBuilder: (context) {
+              return Center(
+                child: Text("موردی پیدا نشد"),
+              );
+            },
+            firstPageErrorIndicatorBuilder: (context) {
+              return Column(
+                children: [
+                  Padding(padding: ,),
+                  RaisedButton.icon(
+                    icon:Icon(Icons.refresh),
+                    label: Text('تلاش مجدد'),
+                    onPressed: () => _pagingController.refresh(),
+                  ),
+                  Center(
+                    child: Text("خطا در دریافت اطلاعات"),
+                  ),
+                ],
+              );
+            },
             itemBuilder: (context, item, index) {
               return PropertyCrad(
                 post: item,
