@@ -51,6 +51,7 @@ class _SearchScreenState extends State<SearchScreen> {
   CategoryStore _categoryStore;
   TypeStore _typeStore;
   AmenityStore _amenityStore;
+  bool hasErrorInloading = false;
   String cityDropdownValue;
   String localityDropdownValue;
   final List<bool> isSelected = [
@@ -78,16 +79,7 @@ class _SearchScreenState extends State<SearchScreen> {
     _typeStore = Provider.of<TypeStore>(context);
     _amenityStore = Provider.of<AmenityStore>(context);
 
-    if (!_cityStore.loading && _cityStore.cityList == null)
-      _cityStore.getCities();
-    if (!_districtStore.loading && _districtStore.districtList == null)
-      _districtStore.getDistricts();
-    if (!_categoryStore.loading && _categoryStore.categoryList == null)
-      _categoryStore.getCategories();
-    if (!_typeStore.loading && _typeStore.typeList == null)
-      _typeStore.getTypes();
-    if (!_amenityStore.loading && _amenityStore.amenityList == null)
-      _amenityStore.getAmenities();
+    if (!_cityStore.loading && _cityStore.cityList == null) loadDataFields();
 
     _typeAheadController.text = widget.filterForm?.district?.name == null
         ? widget.filterForm?.city?.name
@@ -110,6 +102,26 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
+  Future<bool> loadDataFields() async {
+    return Future.wait([
+      _categoryStore.getCategories(),
+      _cityStore.getCities(),
+      _typeStore.getTypes(),
+      _amenityStore.getAmenities()
+    ]).then((res) {
+      if (hasErrorInloading == true) {
+        setState(() {
+          hasErrorInloading = false;
+        });
+      }
+      return true;
+    }).catchError((error) {
+      setState(() {
+        hasErrorInloading = true;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -117,60 +129,73 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
-        bottomNavigationBar: Padding(
-            padding:
-                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width - 20,
-                  height: 50,
-                  child: FlatButton.icon(
-                    color: Colors.red,
-                    splashColor: Colors.red[100],
-                    icon: const Icon(
-                      FontAwesomeIcons.search,
-                      size: 18,
-                      color: Colors.white,
+        bottomNavigationBar: hasErrorInloading == false
+            ? Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 10, bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width - 20,
+                      height: 50,
+                      child: FlatButton.icon(
+                        color: Colors.red,
+                        splashColor: Colors.red[100],
+                        icon: const Icon(
+                          FontAwesomeIcons.search,
+                          size: 18,
+                          color: Colors.white,
+                        ),
+                        label: Text(
+                            AppLocalizations.of(context).translate('search'),
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 20)),
+                        onPressed: () {
+                          _filterRequest = widget.filterForm.applyFilters();
+                          if (_filterRequest != null) {
+                            widget.postStore.getPosts(request: _filterRequest);
+                          }
+                          Future.delayed(Duration(milliseconds: 2), () {
+                            Navigator.pop(context);
+                          });
+                        },
+                      ),
                     ),
-                    label: Text(
-                        AppLocalizations.of(context).translate('search'),
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
-                    onPressed: () {
-                      _filterRequest = widget.filterForm.applyFilters();
-                      if (_filterRequest != null) {
-                        widget.postStore.getPosts(request: _filterRequest);
-                      }
-                      Future.delayed(Duration(milliseconds: 2), () {
-                        Navigator.pop(context);
-                      });
-                    },
-                  ),
-                ),
-              ],
-            )),
+                  ],
+                ))
+            : SizedBox.shrink(),
         backgroundColor: Colors.transparent,
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          reverse: false,
-          child: Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Column(
-              children: <Widget>[
-                getAppBarUI(),
-                searchField(),
-                SizedBox(height: 10),
-                _buildCategoryField(),
-                popularFilter(),
-                _buildBedroomCountField(),
-                areaViewUI(AppLocalizations.of(context).translate('area')),
-                propertyTypes()
-              ],
-            ),
-          ),
-        ),
+        body: hasErrorInloading == false
+            ? SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                reverse: false,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Column(
+                    children: <Widget>[
+                      getAppBarUI(),
+                      searchField(),
+                      SizedBox(height: 10),
+                      _buildCategoryField(),
+                      popularFilter(),
+                      _buildBedroomCountField(),
+                      areaViewUI(
+                          AppLocalizations.of(context).translate('area')),
+                      propertyTypes()
+                    ],
+                  ),
+                ))
+            : Center(
+                child: RaisedButton.icon(
+                    onPressed: () {
+                      loadDataFields();
+                      CircularProgressIndicator();
+                    },
+                    icon: Icon(Icons.refresh),
+                    label: Text("تلاش دوباره")),
+              ),
       ),
     );
   }

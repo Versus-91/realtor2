@@ -70,15 +70,16 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           builderDelegate: PagedChildBuilderDelegate<Post>(
             noItemsFoundIndicatorBuilder: (context) {
               return Center(
-                child: Text("موردی پیدا نشد"),
+                child: Text("ایتمی پیدا نشد"),
               );
             },
             firstPageErrorIndicatorBuilder: (context) {
               return Column(
                 children: [
-                  Padding(padding: ,),
+                  Padding(padding: const EdgeInsets.all(8.0)),
                   RaisedButton.icon(
-                    icon:Icon(Icons.refresh),
+                    color: Colors.lightBlueAccent,
+                    icon: Icon(Icons.refresh),
                     label: Text('تلاش مجدد'),
                     onPressed: () => _pagingController.refresh(),
                   ),
