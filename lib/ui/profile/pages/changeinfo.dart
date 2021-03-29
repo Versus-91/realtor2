@@ -145,7 +145,6 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     Flexible(
                       flex: 4,
                       child: Container(
-                        height: 40,
                         child: TextField(
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly
@@ -172,34 +171,38 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     ),
                     Flexible(
                       flex: 1,
-                      child: CustomButton(
-                        textColor: Colors.white,
-                        color: Colors.green,
-                        text: AppLocalizations.of(context).translate('submit'),
-                        onPressed: () async {
-                          var snackBar =
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                            // duration:  Duration(seconds: 4),
-                            content: Row(
-                              children: <Widget>[
-                                CircularProgressIndicator(),
-                                Text(" درحال دریافت اطلاعات")
-                              ],
-                            ),
-                          ));
-                          _userStore
-                              .changePhoneNumber(_newNumberController.text)
-                              .then((value) async {
-                            _alertDialog();
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: CustomButton(
+                          textColor: Colors.white,
+                          color: Colors.green,
+                          text:
+                              AppLocalizations.of(context).translate('submit'),
+                          onPressed: () async {
+                            var snackBar =
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                              // duration:  Duration(seconds: 4),
+                              content: Row(
+                                children: <Widget>[
+                                  CircularProgressIndicator(),
+                                  Text(" درحال دریافت اطلاعات")
+                                ],
+                              ),
+                            ));
+                            _userStore
+                                .changePhoneNumber(_newNumberController.text)
+                                .then((value) async {
+                              _alertDialog();
 
-                            snackBar.close();
-                          }).catchError((error) {
-                            snackBar.close();
-                            _showErrorMessage(
-                              "خطا در سرور",
-                            );
-                          });
-                        },
+                              snackBar.close();
+                            }).catchError((error) {
+                              snackBar.close();
+                              _showErrorMessage(
+                                "خطا در سرور",
+                              );
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -235,7 +238,6 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     Flexible(
                       flex: 4,
                       child: Container(
-                        height: 55,
                         child: TextFormField(
                           focusNode: _emailFocusNode,
                           controller: _emailController,
@@ -262,34 +264,38 @@ class _ChangeInfoState extends State<ChangeInfo> with TickerProviderStateMixin {
                     ),
                     Flexible(
                       flex: 1,
-                      child: CustomButton(
-                        textColor: Colors.white,
-                        color: Colors.green,
-                        text: AppLocalizations.of(context).translate('submit'),
-                        onPressed: () async {
-                          var snackBar =
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                            // duration:  Duration(seconds: 4),
-                            content: Row(
-                              children: <Widget>[
-                                CircularProgressIndicator(),
-                                Text(" درحال دریافت اطلاعات")
-                              ],
-                            ),
-                          ));
-                          _userStore
-                              .changeEmailAdderss(_emailController.text)
-                              .then((value) async {
-                            _alertDialog();
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: CustomButton(
+                          textColor: Colors.white,
+                          color: Colors.green,
+                          text:
+                              AppLocalizations.of(context).translate('submit'),
+                          onPressed: () async {
+                            var snackBar =
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                              // duration:  Duration(seconds: 4),
+                              content: Row(
+                                children: <Widget>[
+                                  CircularProgressIndicator(),
+                                  Text(" درحال دریافت اطلاعات")
+                                ],
+                              ),
+                            ));
+                            _userStore
+                                .changeEmailAdderss(_emailController.text)
+                                .then((value) async {
+                              _alertDialog();
 
-                            snackBar.close();
-                          }).catchError((error) {
-                            snackBar.close();
-                            _showErrorMessage(
-                              "خطا در سرور",
-                            );
-                          });
-                        },
+                              snackBar.close();
+                            }).catchError((error) {
+                              snackBar.close();
+                              _showErrorMessage(
+                                "خطا در سرور",
+                              );
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ],

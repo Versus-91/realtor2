@@ -18,6 +18,7 @@ class Post {
   double longitude;
   String creationTime;
   int id;
+  int realEstateId;
   double price;
   District district;
   Category category;
@@ -27,6 +28,7 @@ class Post {
   Post(
       {this.age,
       this.favId,
+      this.realEstateId,
       this.creatorUserId,
       this.categoryId,
       this.description,
@@ -55,6 +57,7 @@ class Post {
           description: json["description"],
           isFeatured: json["isFeatured"],
           isVerified: json["isVerified"],
+          realEstateId: json["realEstateId"],
           bedroom: json["bedroom"],
           area: json["area"],
           districtId: json["districtId"],
@@ -90,7 +93,9 @@ class Post {
       if (price != null) ...{
         "price": price,
       },
-
+      if (realEstateId != null) ...{
+        "realEstateId": realEstateId,
+      },
       if (district != null) ...{"district": district.toMap()},
       if (category != null) ...{
         "category": category.toMap(),

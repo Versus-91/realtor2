@@ -89,6 +89,8 @@ abstract class _PostFormStore with Store {
   @observable
   int countbedroom;
   @observable
+  int realEstateId;
+  @observable
   List<int> amenities = new List<int>();
   @observable
   var postImages = ObservableList<Postimages>();
@@ -101,6 +103,11 @@ abstract class _PostFormStore with Store {
   @action
   void setCategoryName(String name) {
     categoryName = name;
+  }
+
+  @action
+  void setRealEstateId(int id) {
+    realEstateId = id;
   }
 
   @action
@@ -261,6 +268,7 @@ abstract class _PostFormStore with Store {
     area = post.area;
     buyPrice = post.price;
     countbedroom = post.bedroom;
+
     var images = post.images
         .map((e) => Postimages(
             id: e.id,
@@ -282,6 +290,7 @@ abstract class _PostFormStore with Store {
         description: this.description,
         typeId: this.propertyHomeTypeId,
         price: this.buyPrice,
+        realEstateId: this.realEstateId,
         area: this.area,
         age: this.ageHome,
         bedroom: this.countbedroom,
