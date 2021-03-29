@@ -325,6 +325,21 @@ mixin _$PostFormStore on _PostFormStore, Store {
     });
   }
 
+  final _$realEstateIdAtom = Atom(name: '_PostFormStore.realEstateId');
+
+  @override
+  int get realEstateId {
+    _$realEstateIdAtom.reportRead();
+    return super.realEstateId;
+  }
+
+  @override
+  set realEstateId(int value) {
+    _$realEstateIdAtom.reportWrite(value, super.realEstateId, () {
+      super.realEstateId = value;
+    });
+  }
+
   final _$amenitiesAtom = Atom(name: '_PostFormStore.amenities');
 
   @override
@@ -396,6 +411,17 @@ mixin _$PostFormStore on _PostFormStore, Store {
         name: '_PostFormStore.setCategoryName');
     try {
       return super.setCategoryName(name);
+    } finally {
+      _$_PostFormStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setRealEstateId(int id) {
+    final _$actionInfo = _$_PostFormStoreActionController.startAction(
+        name: '_PostFormStore.setRealEstateId');
+    try {
+      return super.setRealEstateId(id);
     } finally {
       _$_PostFormStoreActionController.endAction(_$actionInfo);
     }
@@ -755,6 +781,7 @@ rahnPrice: ${rahnPrice},
 rentPrice: ${rentPrice},
 buyPrice: ${buyPrice},
 countbedroom: ${countbedroom},
+realEstateId: ${realEstateId},
 amenities: ${amenities},
 postImages: ${postImages}
     ''';

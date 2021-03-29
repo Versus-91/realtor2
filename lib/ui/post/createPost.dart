@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/main.dart';
 import 'package:boilerplate/models/amenity/amenity.dart';
 import 'package:boilerplate/models/category/category.dart';
+import 'package:boilerplate/models/location/locations.dart';
 import 'package:boilerplate/routes.dart';
 import 'package:boilerplate/stores/amenity/amenity_store.dart';
 import 'package:boilerplate/stores/area/area_store.dart';
@@ -24,10 +27,12 @@ import 'package:flushbar/flushbar_route.dart' as route;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:http/http.dart' as http;
 
 class CreatePostScreen extends StatefulWidget {
   CreatePostScreen({Key key}) : super(key: key);
@@ -37,10 +42,13 @@ class CreatePostScreen extends StatefulWidget {
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  int _selectedAgency;
+  var data;
+  String dataurl = Endpoints.baseUrl + "/api/services/app/realestate/Find";
   int selectedItem;
   String districtDropdownValue;
   String cityDropdownValue;
+  String realEstateDropdownValue;
   String localityDropdownValue;
   int _value;
   int _propertyTypevalue;
@@ -80,12 +88,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     false,
     false
   ];
+  List<dynamic> _locations;
 
   //text controllers:-----------------------------------------------------------
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _buyPriceController = TextEditingController();
   TextEditingController _areaController = TextEditingController();
+  final TextEditingController _typeAheadController = TextEditingController();
 
   //stores:---------------------------------------------------------------------
   CityStore _cityStore;
@@ -276,6 +286,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       child: Column(
         children: <Widget>[
           _buildCategoryField(),
+          _searchRealstateNameField(),
+          SizedBox(height: 10),
           _buildCitylistField(),
           SizedBox(height: 10),
           Row(
@@ -871,7 +883,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               items:
                   _cityStore.cityList.cities.map((city) => city.name).toList(),
               isFilteredOnline: true,
-              label: "شهر",
+              label: " شهر",
               onChanged: (String val) {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 if (val != cityDropdownValue) {
@@ -926,6 +938,98 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         }
       },
     );
+  }
+
+  Widget _searchRealstateNameField() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Container(
+        height: 55,
+        child: TypeAheadFormField(
+          textFieldConfiguration: TextFieldConfiguration(
+            decoration: InputDecoration(
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      _store.setRealEstateId(null);
+                      _typeAheadController.clear();
+                    },
+                    icon: _typeAheadController.text != null
+                        ? Icon(Icons.clear)
+                        : Icon(Icons.search)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent)),
+                labelText: AppLocalizations.of(context)
+                    .translate('search_in_district'),
+                fillColor: Color(0xfff3f3f4),
+                filled: true,
+                hintText: AppLocalizations.of(context)
+                    .translate('search_in_district')),
+            controller: this._typeAheadController,
+          ),
+          suggestionsCallback: (pattern) {
+            if (pattern.trim().length >= 2 &&
+                pattern.trim() != _selectedAgency.toString()) {
+              return getSuggestion(pattern);
+            }
+            return null;
+          },
+          itemBuilder: (context, suggestion) {
+            return ListTile(
+              title: Text(suggestion),
+            );
+          },
+          noItemsFoundBuilder: (context) {
+            return Container(
+              height: 45,
+              child: Padding(
+                padding: EdgeInsets.only(top: 5, right: 10),
+                child: Text(
+                  AppLocalizations.of(context).translate('no_result'),
+                  style: TextStyle(fontSize: 20, color: Colors.grey[400]),
+                ),
+              ),
+            );
+          },
+          transitionBuilder: (context, suggestionsBox, controller) {
+            return suggestionsBox;
+          },
+          onSuggestionSelected: (suggestion) {
+            this._typeAheadController.text = suggestion;
+            var selectedLocation = _locations
+                .where((element) => suggestion.contains(element.name))
+                ?.first;
+            if (selectedLocation != null) {
+              _store.setRealEstateId(int.tryParse(suggestion));
+            }
+          },
+          validator: (value) => value.isEmpty
+              ? AppLocalizations.of(context).translate('insert_district')
+              : null,
+          onSaved: (value) {
+            return this._selectedAgency = int.tryParse(value);
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<List> getSuggestion(String pattern) async {
+    //get suggestion function
+    var res = await http.get(dataurl + "?term=" + Uri.encodeComponent(pattern));
+    //in query there might be unwant character so, we encode the query to url
+    if (res.statusCode == 200) {
+      setState(() {
+        data = json.decode(res.body)["result"];
+        _locations = data
+            .map((item) => Location(name: item["name"], id: item["id"]))
+            .toList();
+        data = data.map((item) {
+          return item["name"];
+        }).toList();
+        //update data value and UI
+      });
+    }
+    return data.toList();
   }
 
   Widget _buildArealistField() {
