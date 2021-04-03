@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 class AppLocalizations {
   // localization variables
   final Locale locale;
-  final _currencyformat = NumberFormat.currency(locale: "fa", symbol: "\$");
+  final _currencyformat = NumberFormat.currency(locale: "fa", symbol: "؋");
   Map<String, String> localizedStrings;
 
   // Static member to have a simple access to the delegate from the MaterialApp
